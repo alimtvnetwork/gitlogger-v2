@@ -144,7 +144,11 @@ def check_all(overview: Path, ac_file: Path) -> tuple[int, list[str]]:
             f"AC-ADS-UI-04 surface absent (as={len(as_rows)} bind={len(bind_rows)} ac={'yes' if ac_block else 'no'})"
         ]
 
-    # Clause 1: matrix presence + shape + AS-IDs unique + contiguous from AS-01
+    # Clause 1: matrix presence + ≥8 floor + shape + AS-IDs unique + contiguous from AS-01
+    if len(as_rows) < 8:
+        errors.append(
+            f"clause-1: AS-NN matrix has only {len(as_rows)} rows (≥8 required: AS-01..AS-08)"
+        )
     seen: set[str] = set()
     for row in as_rows:
         if row["id"] in seen:
