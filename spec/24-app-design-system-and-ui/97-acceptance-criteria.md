@@ -1,7 +1,7 @@
 # Acceptance Criteria — 24 App Design System & UI
 
-**Version:** 3.3.0
-**Updated:** 2026-05-10 (Session 23 audit-task A-01 — added **AC-ADS-15** `[critical]` §22 operational-pattern inheritance for runtime token & component contracts: ErrorEnvelope (§22 AC-30) + AuditTrail (§22 AC-21) + sink-side observability rule (§22 AC-04) inherited by namespace extension (`GL-*` → `ADS-*`); §07 boundary preserved — `ADS-*` codes MUST NOT name §07 primitive tokens. Closes Phase 4 forced guesses G24-4 (token-loader had no error contract) + G24-7 (Phase 78 Module Run Audit Schema had no §22 inheritance binding). AC count 14 → 15.)
+**Version:** 3.4.0
+**Updated:** 2026-05-10 (Session 27 audit-task A-05 — added **AC-ADS-16** `[critical]` §07 dependency boundary promoted to normative + `restate_forbidden: true` front-matter binding; 5 binding rules + 4 test invariants. AC count 15 → 16.)
 **Updated-prev:** 2026-05-06 (Phase 154 C-Sweep — added **AC-ADS-14** `[critical]` Cross-Module Externalized Citation Map per Lessons #36 + #37; explicit normative anchor table for 2 externalized citations: spec/07 (primitive token registry), spec/27 (script gates). Mirror of spec/22 AC-79 pattern. AC count 13 → 14. spec/24's small citation surface reflects the strict-additive-overlay relationship to spec/07 — almost all design-system contracts already live in spec/07 by construction.)
 **Scope:** `spec/24-app-design-system-and-ui/`
 **Generated:** Hand-authored alongside the v4.0.0 overview (Phase 39a). Supersedes the auto-extracted v2.0.0 set.
