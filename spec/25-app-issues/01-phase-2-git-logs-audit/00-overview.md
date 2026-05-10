@@ -631,7 +631,7 @@ DEL-03  Re-audit cadence: quarterly OR when §22 spec version minor-bumps
   "additionalProperties": false,
   "properties": {
     "issue_id":  { "type": "string", "pattern": "^P2-GLA-\\d{3}$" },
-    "severity":  { "enum": ["blocker", "major", "minor", "info"] },
+    "severity":  { "enum": ["blocker", "major", "minor", "info"] },  // FROZEN historical Phase-50 enum; canonical issue-record severity = {Critical,High,Medium,Low} (parent §97 AC-AI-14, sub-01 §97 AC-09)
     "status":    { "enum": ["open", "in-progress", "resolved", "deferred", "wontfix"] },
     "summary":   { "type": "string", "minLength": 1, "maxLength": 200 },
     "details":   { "type": "string" },
