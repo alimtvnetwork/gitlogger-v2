@@ -112,3 +112,9 @@ These slots are immutable once shipped (per project memory rule). If content nee
 - New "REST / RPC Contract" section added between Q4 and Migration Template; AC-ADB-REST-01 minted.
 - Regression-grep: `rg -nc '^## REST / RPC Contract|AC-ADB-REST-01' spec/23-app-database/00-overview.md` MUST return ≥2.
 - Wire contract uses PRIMARY-lane PascalCase keys; boolean parity (true/false ↔ INTEGER 0/1) enforced at API boundary (R-4 invariant 2).
+
+### v2.1.7 — 2026-05-10 — A-57: AC-ADB-13 seed-ID parity table pinned (T-10)
+
+- Seed block rewritten to explicit `(AppLinkTypeId, Name) VALUES (1,'GitProfile'),(2,'Repo')` form for both lanes; 5-row parity matrix + 3-row Forbidden shapes table added.
+- Regression-grep: `rg -nc "VALUES \(1,'GitProfile'\),\(2,'Repo'\)" spec/23-app-database/00-overview.md` MUST return ≥1; `rg -nc "INSERT OR IGNORE INTO AppLinkType\(Name\)" spec/23-app-database/00-overview.md` MUST return 0 (forbidden shape).
+- Closes the line-106 deferred annotation; remediation status now "shipped v4.9.0".

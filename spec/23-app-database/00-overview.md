@@ -103,7 +103,7 @@ This file is the **single source of truth** for the App table family. Cross-refe
 > **Cross-cuts pinned here so a 1-section read cannot miss them:**
 > - **Boolean policy (AC-ADB-11 + Convention recap below):** PRIMARY lane uses `INTEGER 0/1 + Is` prefix. REFERENCE lane's `boolean NOT NULL DEFAULT true` is a snake_case-PG idiomatic restate, NOT an alternate boolean policy. Any code emitting `boolean` on the App database is a violation regardless of which DDL block it cites.
 > - **Timestamp parity (AC-ADB-16):** both lanes expose `INTEGER` Unix-seconds UTC at the application boundary. REFERENCE lane's `timestamptz` MUST be wrapped (`EXTRACT(EPOCH FROM …)::bigint` on read, `to_timestamp($1)` on write) — never surfaced as ISO-8601.
-> - **Seed ID parity (AC-ADB-13):** `AppLinkType.Name='GitProfile' ⇒ AppLinkTypeId=1`, `Name='Repo' ⇒ AppLinkTypeId=2`. Both lanes MUST honour these locked IDs even though `INSERT OR IGNORE` (PRIMARY) and `ON CONFLICT DO NOTHING` (REFERENCE) do not pin them by themselves — explicit `INSERT … VALUES (1,'GitProfile'),(2,'Repo')` is the only conformant seed shape (T-10 remediation pending).
+> - **Seed ID parity (AC-ADB-13):** `AppLinkType.Name='GitProfile' ⇒ AppLinkTypeId=1`, `Name='Repo' ⇒ AppLinkTypeId=2`. Both lanes MUST honour these locked IDs even though `INSERT OR IGNORE` (PRIMARY) and `ON CONFLICT DO NOTHING` (REFERENCE) do not pin them by themselves — explicit `INSERT … VALUES (1,'GitProfile'),(2,'Repo')` is the only conformant seed shape (T-10 remediation shipped v4.9.0).
 >
 > **AI-walker contract:** if a reader reaches any DDL fence in this file without first passing this precedence pin, treat the read as a **partial-context violation** and re-anchor. The §00 Quick-Nav guarantees this pin is reached on a TOC walk.
 
@@ -196,12 +196,48 @@ CREATE INDEX IF NOT EXISTS IX_AppLink_TargetGitProfileId ON AppLink(TargetGitPro
 CREATE INDEX IF NOT EXISTS IX_AppLink_Active             ON AppLink(AppId, IsActive);
 ```
 
-### Seed data (lookup tables)
+### Seed data (lookup tables) — locked-ID parity (AC-ADB-13, T-10 remediation)
+
+The following seed shape is the **only conformant form** for both lanes.
+`INSERT OR IGNORE` (PRIMARY) and `ON CONFLICT DO NOTHING` (REFERENCE)
+without explicit IDs would let the database assign rowids and silently
+break AC-ADB-13's locked-ID contract (1=GitProfile, 2=Repo) referenced
+by the CHECK constraint, the Discriminator binding table, and Q1.
+
+**PRIMARY lane (SQLite — MATERIALISE):**
 
 ```sql
-INSERT OR IGNORE INTO AppStatus  (Name) VALUES ('Active'), ('Disabled'), ('Archived');
-INSERT OR IGNORE INTO AppLinkType(Name) VALUES ('GitProfile'), ('Repo');
+-- AppStatus: order is part of the contract; do not reorder.
+INSERT OR IGNORE INTO AppStatus  (AppStatusId, Name) VALUES (1,'Active'),(2,'Disabled'),(3,'Archived');
+-- AppLinkType: IDs 1/2 are LOCKED by AC-ADB-13; CHECK constraints depend on these literals.
+INSERT OR IGNORE INTO AppLinkType(AppLinkTypeId, Name) VALUES (1,'GitProfile'),(2,'Repo');
 ```
+
+**REFERENCE lane (PostgreSQL — DO NOT MATERIALISE; shown for parity audit only):**
+
+```sql
+INSERT INTO app_status   (app_status_id, name) VALUES (1,'Active'),(2,'Disabled'),(3,'Archived')
+  ON CONFLICT (app_status_id) DO NOTHING;
+INSERT INTO app_link_type(app_link_type_id, name) VALUES (1,'GitProfile'),(2,'Repo')
+  ON CONFLICT (app_link_type_id) DO NOTHING;
+```
+
+**Seed-ID parity matrix (binding):**
+
+| Lookup table   | Locked ID | Locked Name  | PRIMARY lane shape                | REFERENCE lane shape                  | Consumed by                            |
+|----------------|-----------|--------------|-----------------------------------|---------------------------------------|----------------------------------------|
+| `AppLinkType`  | `1`       | `GitProfile` | `INSERT OR IGNORE … VALUES (1,…)` | `INSERT … ON CONFLICT (id) DO NOTHING`| AppLink CHECK, Discriminator table, Q1 |
+| `AppLinkType`  | `2`       | `Repo`       | `INSERT OR IGNORE … VALUES (2,…)` | `INSERT … ON CONFLICT (id) DO NOTHING`| AppLink CHECK, Discriminator table, Q1 |
+| `AppStatus`    | `1`       | `Active`     | `INSERT OR IGNORE … VALUES (1,…)` | `INSERT … ON CONFLICT (id) DO NOTHING`| App.AppStatusId default, Q4 filter     |
+| `AppStatus`    | `2`       | `Disabled`   | `INSERT OR IGNORE … VALUES (2,…)` | `INSERT … ON CONFLICT (id) DO NOTHING`| Admin disable flow                     |
+| `AppStatus`    | `3`       | `Archived`   | `INSERT OR IGNORE … VALUES (3,…)` | `INSERT … ON CONFLICT (id) DO NOTHING`| Admin archive flow                     |
+
+**Forbidden seed shapes (binding — emit any of these and the CHECK constraint silently de-anchors):**
+
+1. `INSERT OR IGNORE INTO AppLinkType(Name) VALUES ('GitProfile'),('Repo');` — omits `AppLinkTypeId`; SQLite assigns rowid which MAY be 1/2 on a fresh DB but is NOT guaranteed across reseeds, restores, or partial-failure replays. ❌
+2. Reordering the VALUES tuples (`(2,'Repo'),(1,'GitProfile')`) — order is documentation, not enforcement; the IDs are the contract. The reordered form is technically conformant but invalidates this AC's regression-grep. ⚠
+3. Mixing the two lane shapes within the same migration file — pick PRIMARY (this repo) or REFERENCE (downstream PG mirror), never both in one fence. ❌
+
 
 ---
 
