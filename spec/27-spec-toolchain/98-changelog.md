@@ -1,7 +1,7 @@
 # Changelog — Spec Toolchain
 
 **Version:** 4.62.0
-**Updated:** 2026-05-10 (Sess-66 G-6r — slot 50 `validate-guidelines.py` phantom-cleared; `--self-test` synthetic-fixture probe wired as gate #41; phantom 9 → 8; banner-triple recount goes 23 → **24**)
+**Updated:** 2026-05-10 (Sess-66 G-6r — slot 50 `validate-guidelines.py` phantom-cleared; `--self-test` synthetic-fixture probe wired as gate #44; phantom 9 → 8; banner-triple recount goes 23 → **24**)
 **Total active gates: 24**
 
 ### 4.62.0 — 2026-05-10 — Sess-66 G-6r: slot 50 `validate-guidelines.py` load-proven (gate #41; `--self-test` synthetic CODE-RED-002 probe; phantom 9 → 8; resumes paired-validator track ahead of slot 51)

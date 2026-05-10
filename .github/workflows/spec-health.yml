@@ -803,7 +803,7 @@ jobs:
           python3 linter-scripts/check-no-out-of-scope-spec-folder-link.py --self-test
           python3 linter-scripts/check-no-out-of-scope-spec-folder-link.py
 
-      - name: validate-guidelines.py load-proven gate (#41 / G-6r / slot 50)
+      - name: validate-guidelines.py load-proven gate (#44 / G-6r / slot 50)
         # Sess-66 G-6r — phantom-clearing for slot 50. The cross-language
         # coding-guidelines validator (Go/PHP/TS/Rust) had a §27 §00 entry +
         # 99-ledger row but no CI invocation, leaving the script unwired.
