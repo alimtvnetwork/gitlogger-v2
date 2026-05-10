@@ -19,7 +19,7 @@ produced_for:
 
 # App Issues
 
-**Version:** 3.7.0  
+**Version:** 3.8.0  
 <!-- h10-verified-phase: 153 -->
 **Updated:** 2026-05-10 (Session 49 audit-task A-29 — added `produced_for:` producer-side front-matter binding child trackers (02-consolidated, 01-phase-2) to §22 AC-78/AC-79/AC-22-CE1. Mirrors §26→§22 producer-side (A-27 Sess-47) and §28 producer-side (A-29 same-session twin). Resolved by §27 gate #10 dual-key contract (A-28 Sess-48). Lesson #29 tracker exemption preserved. Prior: Phase 153 Task S25-02.)
 **AI Confidence:** Production-Ready  

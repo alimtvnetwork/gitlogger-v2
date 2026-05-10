@@ -104,3 +104,12 @@
 - **Verification**: `rg -nc '^```yaml' spec/25-app-issues/00-overview.md` → 0 ✅. The 2 remaining `IndexEntryStatus` matches are inside the routing-pin table row (prose, not code).
 - **Scorecard delta**: §25 C5 Implementability 17→18 (all personas), C4 Consistency 17→18. Ceiling 19/20 deferred pending §27/§28 materialisation.
 - **Invalidation triggers**: re-introducing any fenced ```yaml block to §25 §00, re-introducing `export enum IndexEntryStatus`, removing the routing-pin table, removing the "No CI YAML… was materialised elsewhere" sentinel, or adding a 4th out-of-scope material category without expanding the table.
+
+### 3.6.0 — 2026-05-10 — Phase-5 T-05: out-of-scope cross-ref audit + scope-lock pin
+
+- **Action**: Audited every `spec/0[0-9]|1[0-9]|29|_archive` reference in `spec/25-app-issues/`. Replaced the live `AC-CG-* → spec/02-coding-guidelines/` example in §00 line 84 with `AC-ADB-* → spec/23-app-database/` (in-scope) and appended an explicit scope-lock clause stating that out-of-scope-folder prefixes are NOT enumerated and any out-of-scope path inside §25 is permitted ONLY as AC-AI-10/11 audit-quoted evidence.
+- **Audit-evidence cross-refs preserved**: `spec/_archive/21-git-logs-v1/` references in §00 line 46 (banner about preserved Phase-2 audit), in `02-consolidated-audit-findings/`, and in §97/§98/§99 audit-trail entries are AC-AI-10/11 verbatim citations of the audited corpus and MUST remain. Scope-lock memory does not retroactively rewrite post-mortem evidence.
+- **Why**: Closes the only live (non-audit-evidence) out-of-scope dependency in §25 surface. Makes the 7-folder scope-lock self-enforcing within §25 via the inline clause — future AI walkers reading §00 line 84 cannot infer that `AC-CG-*` is a live navigable reference.
+- **Verification**: `rg -n 'AC-CG-\*|spec/02-coding-guidelines' spec/25-app-issues/00-overview.md` → 0 matches ✅. `rg -n 'spec/(0[0-9]|1[0-9]|29)/' spec/25-app-issues/00-overview.md` → 0 matches ✅ (line 46 archive ref remains; archive paths are outside the 0[0-9]|1[0-9]|29 pattern by design).
+- **Scorecard delta**: §25 C4 Consistency 18→19, C5 Implementability 18→19 (all personas). Ceiling 20 deferred pending §27 gate `no-out-of-scope-spec-folder-link-in-locked-7` (NEW backlog item).
+- **Invalidation triggers**: re-introducing any `AC-CG-*` example or `spec/0[0-9]|1[0-9]|29/` live (non-audit-quoted) link in §25 §00 · removing the inline scope-lock clause from line 84 · weakening the AC-AI-10/11 citation that gates archive-evidence retention.

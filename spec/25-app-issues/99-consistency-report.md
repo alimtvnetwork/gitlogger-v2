@@ -91,3 +91,10 @@
 - 5 `spec-gate-stage-*` YAML blocks and `IndexEntryStatus`/`IndexEntry` TS block removed from §00; replaced with normative routing pin to §27/§28.
 - Regression-grep: `rg -nc '^```yaml|export enum IndexEntryStatus' spec/25-app-issues/00-overview.md` MUST return 0 for both patterns.
 - §00 banner 3.4.3 → 3.5.0; §98 3.4.3 → 3.5.0; §99 1.3.1 → 1.3.2.
+
+### v1.3.3 — 2026-05-10 — A-56: scope-lock cross-ref pin (T-05)
+
+- §00 line 84: `AC-CG-*` → `spec/02-coding-guidelines/` example replaced with in-scope `AC-ADB-*` → `spec/23-app-database/` + inline scope-lock clause.
+- Audit-evidence references to `spec/_archive/21-git-logs-v1/` preserved (AC-AI-10/11 contract).
+- Regression-grep: `rg -n 'AC-CG-\*|spec/02-coding-guidelines/|spec/0[0-9]/|spec/1[0-9]/|spec/29/' spec/25-app-issues/00-overview.md` MUST return 0.
+- §00 banner 3.7.0 → 3.8.0; §98 3.5.0 → 3.6.0; §99 1.3.2 → 1.3.3.
