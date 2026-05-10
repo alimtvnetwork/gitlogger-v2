@@ -119,7 +119,9 @@ def _is_structurally_exempt(path: Path) -> bool:
     rel = str(path.relative_to(REPO_ROOT) if path.is_absolute() else path).replace("\\", "/")
     if rel in STRUCTURAL_EXEMPT_FILES:
         return True
-    return any(rel.startswith(prefix) for prefix in STRUCTURAL_EXEMPT_PREFIXES)
+    if any(rel.startswith(prefix) for prefix in STRUCTURAL_EXEMPT_PREFIXES):
+        return True
+    return any(rel.endswith(suffix) for suffix in STRUCTURAL_EXEMPT_SUFFIXES)
 
 
 def _has_adjacency(line: str) -> bool:
