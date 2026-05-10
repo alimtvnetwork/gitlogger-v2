@@ -1,8 +1,17 @@
 # Changelog — Gitlogs Diagrams
 
-**Version:** 3.8.0
-**Updated:** 2026-05-10 (Session 13 — added AC-DG-23 narrative-header contract for `.mmd` sources + Session-13 self-application pass: corrected AC key spelling to `%% Authoritative source:` (matches shipped v2.0.0 convention) and patched 6 `.mmd` files missing `%% Audience:` line; full compliance verified across all 9 active sources)
+**Version:** 3.9.0
+**Updated:** 2026-05-10 (Session 32 A-11 — added `consumes:` front-matter on §00 binding each `.mmd` to its §22 source-of-truth AC/file, mirroring the §28→§27 (A-09) and §25→§27 (A-10) consumer-binding pattern)
 **Scope:** `spec/26-gitlogs-diagrams/`
+
+---
+
+## [3.9.0] — 2026-05-10 — Session 32 (A-11): §22 source-of-truth binding via `consumes:` front-matter
+
+- **Added** `consumes:` block to `00-overview.md` front-matter — 7 entries, one per active `.mmd` (slots 01, 05, 06, 07, 08, 09, 10), each citing the canonical §22 file + AC/section the diagram depicts.
+- **Why:** Mirror-pair with §28→§27 (A-09, Sess 31) and §25→§27 (A-10, Sess 31) — establishes spec/26 as a *consumer* of §22's normative architecture so deferred lint rule §27 D9 `consumes-frontmatter-resolves` has a parseable signal for spec/26. Drift between any `.mmd` and its cited `source` is now classified under existing AC-DG-01 (table-coverage) / AC-DG-02 (cardinality-alignment).
+- **Banners:** §00 v3.7.1 → **v3.8.0** (minor — new front-matter contract surface); §98 v3.8.0 → **v3.9.0** (this entry).
+- **No** new AC, **no** §97 bump, **no** CI workflow change, **no** restatement of §22 invariants here (Lesson #36).
 
 ---
 

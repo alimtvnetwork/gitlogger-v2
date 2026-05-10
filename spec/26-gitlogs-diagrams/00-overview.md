@@ -8,11 +8,29 @@ axis_reclassification:
   to: normative-contract
   phase: 153-A24-fu34
   reason: "Misclassification per Lesson #69 + Lesson #29 strict definition. spec/26 §97 contains 22+ GWT-style normative ACs (AC-DG-01..22+) defining diagram invariants — implementer obligation falls on diagram authors. The diagrams DEPICT spec/22 architecture but spec/26 OWNS the diagrams as artifacts; this is normative-contract (defines invariants), not audit-corpus (describes other specs). Sibling spec/03 lifted 82 → 94 in fu33 under same reclassification pattern. d2=20 (max) + d3=17 are exactly the dimensions audit-corpus penalises ×0.5; cap=95 silently dragged the score."
+consumes:
+  # Per-diagram source-of-truth bindings. Each .mmd DEPICTS the listed §22 AC(s);
+  # mismatch between diagram and cited AC = AC-DG-01/02 (cardinality/coverage) breach.
+  # See A-11 (Session 32) — mirror of §28→§27 (A-09) and §25→§27 (A-10) binding pattern.
+  - file: 01-er-diagram.mmd
+    source: spec/22-git-logs-v2/02-database-schema.md "ER + ShaRegistry split-DB boundary"
+  - file: 05-auth-validation.mmd
+    source: spec/22-git-logs-v2/05-auth-tempttoken.md "TempToken Lane A 10-step validation"
+  - file: 06-permission-flow.mmd
+    source: spec/22-git-logs-v2/06-rbac-permissions.md "Profile→Role→Permission union resolution"
+  - file: 07-rate-limit-flow.mmd
+    source: spec/22-git-logs-v2/07-rate-limiting.md "per-Profile token-bucket + 429/Retry-After"
+  - file: 08-encryption-v3-flow.mmd
+    source: spec/22-git-logs-v2/08-encryption-v3.md "MasterKey→DataKey→LookupKey + MigrationState (deferred)"
+  - file: 09-endpoints-mindmap.mmd
+    source: spec/22-git-logs-v2/04-rest-api.md "all 8 endpoints — verb/path/body/response/perms/audit/errors"
+  - file: 10-ssh-auth-validation.mmd
+    source: spec/22-git-logs-v2/60-app-cohort-integration.md "Lane B SSH-key 10-step validation + GL-SSH-*/GL-AUTH-*/GL-APP-* rejects"
 ---
 # Gitlogs Diagrams
 
-**Version:** 3.7.1
-**Updated:** 2026-05-10 (Session 13 banner cascade — §00 3.7.0 → 3.7.1 patch to acknowledge that the "AI Implementer Quickstart" rule #2 (4-line `.mmd` narrative header) is now AC-pinned in §97 v3.8.0 as **AC-DG-23**. No content change to this file. Mirror of the §97 minor bump per Lesson #25 SemVer-track unification.)
+**Version:** 3.8.0
+**Updated:** 2026-05-10 (Session 32 A-11 — §00 3.7.1 → 3.8.0 minor bump adds `consumes:` front-matter mapping each `.mmd` source to the exact §22 AC/file it depicts. Mirrors §28→§27 (A-09, Sess 31) and §25→§27 (A-10, Sess 31) binding pattern: spec/26 is a *consumer* of §22's normative architecture; the listed `source` field is the canonical authority for what each diagram MUST stay synchronised with. Drift between any `.mmd` and its cited source = AC-DG-01 (table-coverage) or AC-DG-02 (cardinality-alignment) breach. Unblocks deferred lint rule §27 D9 `consumes-frontmatter-resolves` for spec/26.)
 <!-- h10-verified-phase: 153 -->
 
 Authoritative source: [`../22-git-logs-v2/00-overview.md`](../22-git-logs-v2/00-overview.md).
