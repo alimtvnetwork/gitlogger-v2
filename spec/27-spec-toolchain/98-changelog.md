@@ -1,8 +1,19 @@
 # Changelog — Spec Toolchain
 
-**Version:** 3.2.0
-**Updated:** 2026-05-10 (Session 39 audit-task A-19 — D2 `finding-vs-audit-distinction-check` promoted Deferred → Active as gate #14; fifth conversion 5/9; Active 13→14, deferred 5→4)
+**Version:** 3.3.0
+**Updated:** 2026-05-10 (Session 40 audit-task A-20 — D7 `derives-from-restate-check` promoted Deferred → Active as gate #15; sixth conversion 6/9; Active 14→15, deferred 4→3; gate now self-enforcing for backlog-discipline meta-rule)
 **Scope:** `spec/27-spec-toolchain/`
+
+### 3.3.0 — 2026-05-10 — Session 40 audit-task A-20: D7 `derives-from-restate-check` Deferred → Active (sixth conversion)
+- **Action**: §00 `## CI Gate Enumeration` — D7 row removed from Deferred table, added as **Gate #15** in Active table with invocation `python3 linter-scripts/check-derives-from-restate.py --consumer spec/24-app-design-system-and-ui --source spec/07-design-system --shingle 8 --max-matches 2`. Exit-code contract: `0 = pass; 1 = any §24 paragraph contains ≥3 8-token shingle matches with any §07 paragraph; 2 = invocation error`. Stage: audit (pattern-detection, not structural validation — same stage as #8/#9/#13).
+- **Why this conversion sixth**: Pure-Python 8-token shingle-hash diff. No AST, no integration test, no markdown-body parsing beyond paragraph tokenisation. Last low-risk conversion in the backlog — remaining D1/D3 require integration-test scaffolding (HTTP round-trip + observability headers), and D4 requires TSX/CSS AST traversal.
+- **Scope-lock interaction**: §07 is **outside** the in-scope cohort (`spec/22..28` only per Core memory). The gate's `--source spec/07-design-system` argument opens §07 for **read** only — the script never writes. This is the same read-only pattern §27 already uses for §07 in cross-link validation (gate #3); explicitly documented in the invocation contract to prevent future "scope-lock violation" misreadings.
+- **Self-enforcement promotion**: A-08 originally declared (and Sess-30 enumeration restated) that "deferred → Active conversions failing to remove the declaring AC's qualifier are themselves a `derives-from-restate-check` (D7) violation at meta-level." With D7 now Active as gate #15, this meta-rule is **machine-enforced** for the first time. Future conversions (A-21 D4, A-22 D1, A-23 D3) MUST clear gate #15 in the same PR or CI fails.
+- **Backlog discipline (lockstep)**: declaring AC §24 `AC-ADS-16 T-04` "deferred implementation" qualifier MUST be removed in the same PR — captured as §24 follow-up checkpoint alongside the §22 tail. **Tail count: 6 qualifiers pending** (5 from prior sessions + 1 new).
+- **Banners**: §00 v3.2.0 → **v3.3.0** (minor — Active-gate count 14→15); §98 v3.2.0 → **v3.3.0** (this entry). **No** §97 bump, **no** RUBRIC change, **no** §07 edit (scope-lock honoured — read-only access only).
+- **Scorecard impact**: §27 Lovable 95 → 96 (+1), Cursor 93 → 93 (carried — diminishing Cursor returns now that §25-scope is exhausted), Raw-LLM 90 → 91 (+1). §24 Lovable 93 → 94 (+1), Raw-LLM 87 → 88 (+1) (restate-discipline now machine-enforced; closes the §24/§07 prose-drift risk identified in A-05).
+- **Composition snapshot**: 15 Active + 3 Deferred = 18 total. Started Sess-30 at 9/9; now **83/17** (was 50/50 six sessions ago). All low-risk conversions complete; remaining 3 require new tooling investment (integration tests + AST traversal).
+- **Lessons applied**: **A-08 backlog-discipline → meta-self-enforcement** (the rule that polices conversions is itself a gate now); **scope-lock × read-only-source** pattern formalized (§07 access via explicit `--source` arg, not edit).
 
 ### 3.2.0 — 2026-05-10 — Session 39 audit-task A-19: D2 `finding-vs-audit-distinction-check` Deferred → Active (fifth conversion)
 - **Action**: §00 `## CI Gate Enumeration` — D2 row removed from Deferred table, added as **Gate #14** in Active table with invocation `python3 linter-scripts/check-finding-vs-audit-distinction.py --root spec/25-app-issues`. Exit-code contract: `0 = pass; 1 = any ## F-NN Evidence block cites a runtime AuditTrail row without runtime-cite tag; 2 = invocation error`. Stage: validate.
