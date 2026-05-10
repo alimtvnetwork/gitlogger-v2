@@ -1,6 +1,8 @@
 ---
 content_axis: normative-contract
 axis_rationale: "Universal CI binary behavioural ACs"
+consumes:
+  - spec/22-git-logs-v2 §97 AC-23  # PascalCase + AUTOINCREMENT PK + CHECK-constraint catalog (schema-drift gate; A-07 cross-flag, Sess-29) — CI binary emits drift-warning rows when server schema diverges
 ---
 
 # Universal CI CLI — Spec Overview
