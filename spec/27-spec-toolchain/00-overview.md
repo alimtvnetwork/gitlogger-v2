@@ -40,6 +40,38 @@ If you delete a script, you MUST also delete its file here and add a §98 change
 
 ---
 
+## AI Quick-Nav Map (Lesson #88 — sprawl navigation aid; mirror of §22 §00 pattern)
+
+> 50+ slot files / ~909 KB / 513 ACs. Grouped by **role in the toolchain** so a context-bounded agent (Lovable / Cursor / Raw-LLM) can locate the right slot in one glance without loading the full bundle. Pure index — no normative content; canonical contracts remain in §97 and the cited slot files.
+
+| Theme | Slot files | Purpose |
+|---|---|---|
+| **Cross-link & path validators** | `01-check-spec-cross-links.md`, `02-check-spec-folder-refs.md`, `03-check-forbidden-strings.md`, `04-check-forbidden-spec-paths.md` | Reject broken/forbidden refs in `spec/` and READMEs |
+| **Tree-health & README guards** | `05-check-tree-health.md`, `06-check-root-readme.md`, `07-check-readme-canonicals.md`, `08-check-readme-install-section.md`, `09-check-memory-mirror-drift.md` | Top-level docs + memory-mirror integrity |
+| **Generators (read-only producers)** | `10-generate-spec-index.md`, `11-generate-dashboard-data.md`, `12-suggest-spec-cross-link-fixes.md`, `13-generate-gwt-acceptance.md`, `14-generate-trace-map.md`, `15-generate-fix-checklist.md`, `16-generate-gate-report.md` | Build derived artifacts (index, dashboard, trace-map, gate report) |
+| **Trace-map & memo regression** | `17-check-trace-map-regression.md`, `19-check-memo-retrospective-headings.md` | Drift guards for derived artifacts and phase memos |
+| **Mermaid & diagram syntax** | `18-check-mermaid-syntax.md` | `.mmd` validation (links to §26 corpus) |
+| **Spec-content fillers** | `20-fill-missing-acceptance-criteria.md`, `21-fill-missing-changelogs.md`, `22-fill-missing-consistency-reports.md` | LLM-assisted gap-fillers for §97/§98/§99 |
+| **Scaffolders & deepeners** | `23-scaffold-spec-module.md`, `25-deepen-consistency-reports.md` | New-module scaffolding + §99 enrichment |
+| **Lockstep & freshness gates** | `24-check-lockstep.md`, `26-check-99-summary-freshness.md`, `27-check-99-stamp-bump.md`, `29-check-version-parity.md` | Banner/version cascades and stamp freshness |
+| **Runtime & archive guards** | `28-check-archive-exclusion-runtime.md` | Walker-cap and `_archive/` exclusion enforcement |
+| **AI-implementability auditors** | `30-audit-spec-vs-code.md`, `31-audit-spec-vs-code-v2.md`, `32-check-truncated-prose.md`, `33-check-ai-confidence.md`, `34-audit-ai-implementability.md`, `35-audit-bundle-budget.md` | Scoring rubrics, confidence checks, bundle-budget walkers |
+| **Runner shells** | `40-run-sh.md`, `41-run-ps1.md` | Bash + PowerShell entry points |
+| **Foreign-language validators** | `50-validate-guidelines-py.md`, `51-validate-guidelines-go.md`, `52-check-axios-version.md` | Python / Go guideline validators + axios pin |
+| **Allowlists & TOML configs** | `60-forbidden-strings-toml.md`, `61-spec-cross-links-allowlist.md`, `62-spec-folder-refs-allowlist.md`, `63-readme-cross-links-md.md` | Static allowlist/configuration data |
+| **GitHub workflow specs** | `70-spec-health-yml.md`, `71-spec-monthly-audit-yml.md` | Per-workflow spec mirrors |
+| **Diagrams & traces** | `lifecycle-27-spec-toolchain.mmd`, `trace-map.md` | Toolchain lifecycle diagram + cross-folder trace |
+| **Authoritative & meta** | `97-acceptance-criteria.md`, `98-changelog.md`, `99-consistency-report.md` | All 513 ACs · version history · health report |
+
+**Entry-point heuristics:**
+- New to §27? Read `00-overview.md` (this file) → `97-acceptance-criteria.md` head + AC-T-29/30/31 (delegation contract) → `99-consistency-report.md`.
+- Adding a new linter? Start at `23-scaffold-spec-module.md` → pick the next free slot number → mirror an existing slot in the same theme row.
+- Debugging an audit finding? Read the Walker-Pin block above (AC-T-29/30/31) before assuming a gap exists.
+
+**Operating-mode note (2026-05-10):** Slot 34 (`audit-ai-implementability.md`) remains specced for future re-enablement, but the active scorecard source-of-truth is the **hand-scoring rubric** documented in `mem://preferences/scorecard-ritual`. Do NOT call the auditor script for scoring; do NOT read `.lovable/cache/audit-ai/*.json` (folder deleted 2026-05-10). The slot's AC-34-* family remains binding for the day the script is re-enabled.
+
+---
+
 ## Inventory
 
 Numbering convention inside this module:
