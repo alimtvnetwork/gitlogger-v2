@@ -79,6 +79,29 @@
   "weighted_total": 87.8,
   "total_v7": 88,
   "total": 88,
+  "per_chunk_v7": [
+    {
+      "v7": 89,
+      "axis": "normative-contract",
+      "bytes": 136969
+    },
+    {
+      "v7": 89,
+      "axis": "normative-contract",
+      "bytes": 127746
+    },
+    {
+      "v7": 82,
+      "axis": "normative-contract",
+      "bytes": 95213
+    },
+    {
+      "v7": 94,
+      "axis": "normative-contract",
+      "bytes": 82365
+    }
+  ],
+  "per_chunk_weighted_v7": 88,
   "band": "GOOD",
   "rubric": "v7"
 }

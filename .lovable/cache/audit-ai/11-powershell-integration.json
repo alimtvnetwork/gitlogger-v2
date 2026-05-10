@@ -1,20 +1,20 @@
 {
   "d1": 19,
-  "d2": 18,
+  "d2": 17,
   "d3": 18,
-  "d4": 16,
-  "d5": 19,
+  "d4": 17,
+  "d5": 18,
   "issues": [],
   "findings": [],
   "module": "11-powershell-integration",
-  "files_used": 18,
+  "files_used": 16,
   "files_total": 19,
   "bytes_used": 140000,
-  "bundle_sha": "ed6fee2984494502",
+  "bundle_sha": "c8d09b5414dbae40",
   "chunks": [
     {
       "tier": "T2",
-      "bundle_sha_chunk": "9102b706156bf9f7",
+      "bundle_sha_chunk": "92e8eb02dd7fea56",
       "files": [
         "spec/11-powershell-integration/00-overview.md",
         "spec/11-powershell-integration/97-acceptance-criteria.md",
@@ -29,11 +29,11 @@
         "spec/11-powershell-integration/06-php-known-issues.md",
         "spec/11-powershell-integration/07-runner-interface.md"
       ],
-      "bytes_used": 117364
+      "bytes_used": 123997
     },
     {
       "tier": "T3",
-      "bundle_sha_chunk": "2444c4fc1bb154b1",
+      "bundle_sha_chunk": "154f9078bae8491c",
       "files": [
         "spec/11-powershell-integration/00-overview.md",
         "spec/11-powershell-integration/97-acceptance-criteria.md",
@@ -47,11 +47,11 @@
         "spec/11-powershell-integration/schemas/powershell.schema.json",
         "spec/11-powershell-integration/templates/powershell.json"
       ],
-      "bytes_used": 94991
+      "bytes_used": 101624
     }
   ],
   "chunked_path": true,
-  "total_v6": 90,
+  "total_v6": 89,
   "axis": "integration-spec",
   "axis_multipliers": {
     "d1": 0.9259,
@@ -61,9 +61,22 @@
     "d5": 1.1111
   },
   "axis_cap": 95,
-  "weighted_total": 89.4,
+  "weighted_total": 88.8,
   "total_v7": 89,
   "total": 89,
+  "per_chunk_v7": [
+    {
+      "v7": 85,
+      "axis": "integration-spec",
+      "bytes": 123997
+    },
+    {
+      "v7": 94,
+      "axis": "integration-spec",
+      "bytes": 101624
+    }
+  ],
+  "per_chunk_weighted_v7": 89,
   "band": "GOOD",
   "rubric": "v7"
 }

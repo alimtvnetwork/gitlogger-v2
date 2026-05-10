@@ -455,6 +455,144 @@
   "weighted_total": 92.9,
   "total_v7": 93,
   "total": 93,
+  "per_chunk_v7": [
+    {
+      "v7": 92,
+      "axis": "normative-contract",
+      "bytes": 133566
+    },
+    {
+      "v7": 84,
+      "axis": "normative-contract",
+      "bytes": 135627
+    },
+    {
+      "v7": 95,
+      "axis": "normative-contract",
+      "bytes": 136463
+    },
+    {
+      "v7": 92,
+      "axis": "normative-contract",
+      "bytes": 137175
+    },
+    {
+      "v7": 98,
+      "axis": "normative-contract",
+      "bytes": 131510
+    },
+    {
+      "v7": 90,
+      "axis": "normative-contract",
+      "bytes": 137280
+    },
+    {
+      "v7": 89,
+      "axis": "normative-contract",
+      "bytes": 137317
+    },
+    {
+      "v7": 98,
+      "axis": "normative-contract",
+      "bytes": 136080
+    },
+    {
+      "v7": 92,
+      "axis": "normative-contract",
+      "bytes": 129504
+    },
+    {
+      "v7": 97,
+      "axis": "normative-contract",
+      "bytes": 132757
+    },
+    {
+      "v7": 93,
+      "axis": "normative-contract",
+      "bytes": 138192
+    },
+    {
+      "v7": 92,
+      "axis": "normative-contract",
+      "bytes": 135124
+    },
+    {
+      "v7": 85,
+      "axis": "normative-contract",
+      "bytes": 132478
+    },
+    {
+      "v7": 92,
+      "axis": "normative-contract",
+      "bytes": 121707
+    },
+    {
+      "v7": 88,
+      "axis": "normative-contract",
+      "bytes": 124099
+    },
+    {
+      "v7": 90,
+      "axis": "normative-contract",
+      "bytes": 134988
+    },
+    {
+      "v7": 96,
+      "axis": "normative-contract",
+      "bytes": 134311
+    },
+    {
+      "v7": 81,
+      "axis": "normative-contract",
+      "bytes": 134724
+    },
+    {
+      "v7": 92,
+      "axis": "normative-contract",
+      "bytes": 134964
+    },
+    {
+      "v7": 98,
+      "axis": "normative-contract",
+      "bytes": 130355
+    },
+    {
+      "v7": 92,
+      "axis": "normative-contract",
+      "bytes": 137289
+    },
+    {
+      "v7": 90,
+      "axis": "normative-contract",
+      "bytes": 134207
+    },
+    {
+      "v7": 98,
+      "axis": "normative-contract",
+      "bytes": 107025
+    },
+    {
+      "v7": 97,
+      "axis": "normative-contract",
+      "bytes": 130568
+    },
+    {
+      "v7": 94,
+      "axis": "normative-contract",
+      "bytes": 129814
+    },
+    {
+      "v7": 92,
+      "axis": "normative-contract",
+      "bytes": 119165
+    },
+    {
+      "v7": 97,
+      "axis": "normative-contract",
+      "bytes": 121742
+    }
+  ],
+  "per_chunk_weighted_v7": 92,
   "band": "EXCELLENT",
   "rubric": "v7"
 }
