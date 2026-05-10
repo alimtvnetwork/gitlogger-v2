@@ -180,10 +180,14 @@ def check_all(ads_dir: Path, adb_overview: Path) -> tuple[int, list[str]]:
         r"^\|\s*ID\s*\|\s*Endpoint\s*\|\s*Method\s*\|\s*Path\s*\|", re.IGNORECASE
     )
     for md in sorted(ads_dir.rglob("*.md")):
+        try:
+            disp = md.relative_to(REPO)
+        except ValueError:
+            disp = md
         for i, ln in enumerate(_read(md).splitlines(), start=1):
             if forbidden_header_re.match(ln):
                 errors.append(
-                    f"clause-6: {md.relative_to(REPO)}:{i} declares §23 R-1 shape "
+                    f"clause-6: {disp}:{i} declares §23 R-1 shape "
                     "`| ID | Endpoint | Method | Path |` (Lesson #36 link-don't-restate)"
                 )
 
