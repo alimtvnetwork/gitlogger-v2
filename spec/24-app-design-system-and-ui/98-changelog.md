@@ -1,8 +1,20 @@
 # Changelog — App Design System & UI
 
-**Version:** 4.6.0
-**Updated:** 2026-05-10 (Session 55 audit-task A-37 — AC-ADS-16 walker-pin promotion to §00; mirror of §22 AC-78 pattern)
+**Version:** 4.7.0
+**Updated:** 2026-05-10 (Session 55 audit-task A-41 — per-AC Test invariant blocks added to AC-ADS-06/09/10; §24 C3 +1 across personas)
 **Scope:** `spec/24-app-design-system-and-ui/`
+
+---
+
+### 4.7.0 — 2026-05-10 — Session 55 audit-task A-41: per-AC Test invariant blocks for AC-ADS-06 / 09 / 10 (Testability lift)
+- **Action**: §97 v3.4.1 → **v3.5.0**. Added a `**Test invariant (T-ADS-NN-NN..):**` line under each of AC-ADS-06 (marketing-no-AppShell), AC-ADS-09 (ownership-matrix), AC-ADS-10 (status-tokens-app-only). Each block specifies 2-3 mechanical tests with explicit pass/fail conditions + a negative-fixture test that proves the scan is not vacuously passing. Format mirrors AC-ADS-15 (T-01..T-05) and AC-ADS-16 (T-01..T-04) shipped earlier. Tests landed: AC-ADS-06 → T-01 AST scan + T-02 negative fixture (`linter-scripts/fixtures/marketing-appshell-violation/`); AC-ADS-09 → T-01 set-intersection + T-02 composite-uses-primitive + T-03 negative fixture; AC-ADS-10 → T-01 regex grep + T-02 negative fixture.
+- **Why now**: A-36 (Sess-55) flagged AC-ADS-06/09/10 as "prose-only; no per-AC GWT" — the only Testability gap on §24 after AC-ADS-15/16 landed. Pinned by A-36 invalidation trigger (c) "Adding per-AC GWT for AC-ADS-06/09/10 → §24 C3 +1 across personas (lifts to 19/19/18)" — this is the literal execution of that trigger.
+- **Lesson #36 preservation**: Test stubs reference `linter-scripts/fixtures/...` paths but DO NOT inline fixture content. Fixture authoring is deferred to a follow-up linter-scripts task; the AC text only declares the contract surface. No §07 / §22 / §27 content restated.
+- **Cohort impact**: Testability is the only criterion lifted. Negative-fixture pattern (proves scan rejects synthetic violations) is the same pattern §27 gate #17/#18 use for fixture-replay engine — establishes precedent for cohort-wide testability uplift on small-grained ACs.
+- **Scorecard delta**: §24 C3 Testability +1 across all 3 personas (L 18→19, C 18→19, R 17→18). §24 totals: **L 114 / C 114 / R 109** (was 113/113/108 post-A-37; Δ +1/+1/+1). §24 no longer sole Raw-LLM cohort floor — sole floor reverts to §25 R108. Cohort means: L 114.6 → **114.7** (+0.1); C 113.6 → **113.7** (+0.1); R 110.9 → **111.0** (+0.1). §27 ceiling unchanged (120/120/120).
+- **Invalidation triggers post-A-41**: (a) Removing any T-ADS-06/09/10-NN test invariant → §24 C3 19→18 (and Raw-LLM 18→17). (b) Removing the negative-fixture test from any of the three ACs → §24 C3 −1 (negative fixtures are what raise Testability above prose-only). (c) Adding the matching fixture corpora under `linter-scripts/fixtures/marketing-appshell-violation/` + `linter-scripts/fixtures/ownership-matrix-collision/` + `linter-scripts/fixtures/status-token-leak/` and wiring CI invocation → §24 C3 to 20 across personas (would unlock first §24 ceiling-criterion via load-proven testability). (d) Restating §07 primitive token names inline in any T-ADS-NN block → §24 C4 19→17 (Lesson #36 + AC-ADS-16 violation).
+- **Carry-forward**: A-36 invalidation (c) "Adding per-AC GWT for AC-ADS-06/09/10 → §24 C3 +1" is now SHIPPED. A-37 invalidation triggers carry forward unchanged. A-39/A-40 (§28-side) carry forward unchanged.
+- **Lockstep**: §97 v3.4.1 → **v3.5.0** (minor — new normative test surface). §00 unchanged (banner pending next §00 touch). This file v4.6.0 → **v4.7.0** (this row). **No** §99 inventory change required (AC count unchanged at 16). **No** §22 / §27 / §28 / §26 / §25 / §23 edits, **no** scope-lock breach.
 
 ---
 

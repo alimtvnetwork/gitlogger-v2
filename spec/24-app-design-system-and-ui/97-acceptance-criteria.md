@@ -1,7 +1,8 @@
 # Acceptance Criteria — 24 App Design System & UI
 
-**Version:** 3.4.1
-**Updated:** 2026-05-10 (Session 44 audit-task A-24 — lockstep tail sweep: AC-ADS-16 "Verifies" line stale "deferred implementation" qualifier for `derives-from-restate-check` retired in-place — gate now Active #15 per §27 §00 since Sess-40 A-20. No AC text/contract change; editorial-only patch bump.)
+**Version:** 3.5.0
+**Updated:** 2026-05-10 (Session 55 audit-task A-41 — added per-AC Test invariant blocks (T-ADS-NN-NN) to AC-ADS-06, AC-ADS-09, AC-ADS-10 mirroring AC-ADS-15/16 format. Each AC gains 2-3 mechanical test stubs incl. negative-fixture proofs. No AC semantics change; minor version bump because new normative test surface.)
+**Updated-prev:** 2026-05-10 (Session 44 audit-task A-24 — lockstep tail sweep: AC-ADS-16 "Verifies" line stale "deferred implementation" qualifier for `derives-from-restate-check` retired in-place — gate now Active #15 per §27 §00 since Sess-40 A-20. No AC text/contract change; editorial-only patch bump.)
 **Updated-prev:** 2026-05-06 (Phase 154 C-Sweep — added **AC-ADS-14** `[critical]` Cross-Module Externalized Citation Map per Lessons #36 + #37; explicit normative anchor table for 2 externalized citations: spec/07 (primitive token registry), spec/27 (script gates). Mirror of spec/22 AC-79 pattern. AC count 13 → 14. spec/24's small citation surface reflects the strict-additive-overlay relationship to spec/07 — almost all design-system contracts already live in spec/07 by construction.)
 **Scope:** `spec/24-app-design-system-and-ui/`
 **Generated:** Hand-authored alongside the v4.0.0 overview (Phase 39a). Supersedes the auto-extracted v2.0.0 set.
@@ -90,6 +91,7 @@ Regex of forbidden substrings in `*.tsx` / `*.ts` / `*.css` under `src/component
 - **When** Imports are scanned.
 - **Then** None of these files MUST import from `src/components/app/AppShell`.
 - **Verifies:** `00-overview.md` § "Layout container — the App Shell" — App Shell is for authenticated routes only.
+- **Test invariant (T-ADS-06-01..T-ADS-06-02):** (T-01) Static AST scan of every `*.tsx`/`*.ts` file under `src/pages/(marketing)/**` (or the project's documented public-route folder) MUST find zero import specifiers resolving to `src/components/app/AppShell` or any re-export chain ending there. Failure is hard-fail at lint time. (T-02) Negative-fixture test: a synthetic marketing route file added under `linter-scripts/fixtures/marketing-appshell-violation/` that imports `AppShell` MUST be rejected by the same scan with exit code ≠ 0 — proves the scan is not vacuously passing.
 
 ### AC-ADS-07: Sidebar collapses below `md` breakpoint  `[medium]`
 - **Given** A rendered `<AppShell>` at viewport width 767px (just below `md`).
@@ -108,12 +110,14 @@ Regex of forbidden substrings in `*.tsx` / `*.ts` / `*.css` under `src/component
 - **When** Component names are compared.
 - **Then** No name MUST appear in both folders. App composites MUST be built from §07 primitives, not parallel re-implementations.
 - **Verifies:** `00-overview.md` § "Relationship to §07 (Core Design System)"
+- **Test invariant (T-ADS-09-01..T-ADS-09-03):** (T-01) Set-intersection check: `basename(*.tsx)` collected from `src/components/ui/**` ∩ `basename(*.tsx)` collected from `src/components/app/**` MUST be the empty set. Comparison is case-insensitive; `.test.tsx` / `.stories.tsx` siblings excluded. (T-02) Every component file under `src/components/app/**` MUST contain at least one import from `src/components/ui/**` OR from `@/components/ui/*` — proves composites are built from primitives, not built parallel. Files exempt: layout-only wrappers documented in a same-PR allowlist `linter-scripts/_lib/app-composite-allowlist.txt`. (T-03) Negative-fixture test: a synthetic `src/components/app/Button.tsx` (collides with §07 `Button`) MUST be rejected by T-01 with exit code ≠ 0.
 
 ### AC-ADS-10: Status tokens are app-scoped only  `[low]`
 - **Given** All references to `--app-status-*` tokens.
 - **When** Their usage is scanned in `src/`.
 - **Then** They MUST appear only inside `src/components/app/**` and `src/index.css`. They MUST NOT appear in `src/components/ui/**` (which is §07 territory).
 - **Verifies:** `00-overview.md` § "App-only semantic tokens" warning block
+- **Test invariant (T-ADS-10-01..T-ADS-10-02):** (T-01) Regex grep `\-\-app-status-[a-z0-9-]+` over `src/**` MUST yield zero matches whose containing file path begins with `src/components/ui/`. Allowed paths: `src/components/app/**`, `src/index.css`, `src/styles.css`. Any other path is hard-fail. (T-02) Negative-fixture test: a synthetic `src/components/ui/Banner.tsx` referencing `var(--app-status-error)` MUST be rejected by T-01 with exit code ≠ 0 — proves the scan is not vacuously passing.
 
 ### AC-ADS-11: §07 primitive token registry — inlined snippet  `[medium]`
 - **Given** This module is a "strict additive overlay" on §07 (per `00-overview.md` § "Relationship to §07").
