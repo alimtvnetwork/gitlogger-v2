@@ -1,9 +1,10 @@
 # 50 — validate-guidelines.py
 
-**Version:** 1.0.0  
-**Updated:** 2026-04-25  
+**Version:** 1.1.0  
+**Updated:** 2026-05-10 (Sess-66 G-6r — added `--self-test` synthetic-fixture probe; wired into `.github/workflows/spec-health.yml` as **gate #41** load-proven check; phantom 9 → 8)  
 **Source:** [`linter-scripts/validate-guidelines.py`](../../linter-scripts/validate-guidelines.py)  
-**Category:** Source validator (Python)
+**Category:** Source validator (Python)  
+**Status:** Active gate #44 (load-proven via `--self-test`; src-tree scan owned by §02 coding-guidelines workflow, not this gate)
 
 ---
 
