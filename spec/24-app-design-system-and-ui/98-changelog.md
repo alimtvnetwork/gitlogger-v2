@@ -1,8 +1,21 @@
 # Changelog — App Design System & UI
 
-**Version:** 4.9.0
-**Updated:** 2026-05-10 (Session 55 audit-task A-43 — §27 slot 36 / gate #19 wired in CI; §24 C3 Testability hits 20 on Lovable + Cursor)
+**Version:** 4.10.0
+**Updated:** 2026-05-10 (Session 55 audit-task A-44 — §00 Walker-Pin row for AC-ADS-06/09/10 added; §24 R C3 19→20; §24 reaches first Raw-LLM ceiling-criterion)
 **Scope:** `spec/24-app-design-system-and-ui/`
+
+---
+
+### 4.10.0 — 2026-05-10 — Session 55 audit-task A-44: §00 Walker-Pin row for AC-ADS-06/09/10 (Raw-LLM C3 ceiling)
+- **Action**: §00 v4.5.0 → **v4.6.0**. Added a fourth row to the §00 Walker-Pin block surfacing AC-ADS-06 (medium) / AC-ADS-09 (high) / AC-ADS-10 (low) collectively, citing §27 slot 36 `check-ads-boundaries.py` (gate #19, shipped Sess-55 A-43) + the workflow step + the three negative-fixture corpora. Row positioned after AC-ADS-14 (the externalized citation map row) — keeping severity ordering loose since these three are CI-gated rather than CRITICAL-by-content. Forbidden-remediation sub-list unchanged (the boundary-violation patterns are already implied by CI-fail behavior; no new prose forbidden patterns needed).
+- **Why now**: A-43 (Sess-55) lifted §24 C3 to 20 on Lovable + Cursor but stalled at 19 on Raw-LLM because a context-bounded walker reaching only §24 §00 + §97 head would not see gate #19's existence — the gate row lived in §27 §00 only. A-43 invalidation trigger (c) "Adding a §24 §00 Walker-Pin row citing gate #19 + slot 36 → §24 R C3 19→20" — this turn executes that trigger.
+- **Self-enforcement chain (now Raw-LLM-visible)**: Walker-Pin row → §27 slot 36 → `check-ads-boundaries.py` runtime check → `--self-test` against 3 negative fixtures → workflow step hard-fail. All four links now reachable from §24 §00 alone (≤30 KB walker bundle).
+- **Lesson #36 preservation**: Walker-Pin row cites AC-ADS-06/09/10 by ID + summarizes contract subject (one phrase each); does NOT restate the GWT bodies. Cites §27 slot 36 by slot number, NOT by reproducing the slot's contract text. Cites the workflow step by its name string only.
+- **Scorecard delta**: §24 C3 Testability **R 19→20** (Lovable + Cursor stayed at 20 from A-43). §24 totals: **L 115 / C 115 / R 111** (was 115/115/110 post-A-43; Δ 0/0/+1). **§24 reaches its first Raw-LLM criterion-20 ceiling.** Cohort means: L 115.0 unchanged; C 114.0 unchanged; R 111.1 → **111.3** (+0.2). Sole Raw-LLM cohort floor remains §25 R108.
+- **Cohort impact (qualitative)**: §24 now joins §27 as the second module with at least one ceiling-criterion (20) on every persona. The pattern §24 used (contract → fixture corpus → script → self-test → workflow step → §00 Walker-Pin row) becomes the **canonical 5-link chain** for any cohort module wanting to lift a Testability or Boundary criterion to 20. Carry to §22 / §28 / §25 as a template.
+- **Invalidation triggers post-A-44**: (a) Removing the AC-ADS-06/09/10 Walker-Pin row → §24 R C3 20→19 (loses Raw-LLM walker visibility into gate #19). (b) Removing the workflow step → A-43 trigger (a) reopens (drops L/C/R C3 by 1). (c) Restating the gate #19 contract body inline in the Walker-Pin row → C4 19→17 (Lesson #36 violation; row must stay pointer-only). (d) Adding a similar Walker-Pin row for AC-ADS-15 T-NN (already 4 invariants; CI gate not yet shipped) → no immediate score change (no gate to cite); waits on a §27 gate for runtime token-loader checks. (e) Removing the slot 36 R5 self-test contract → §24 C3 19→17 across all personas.
+- **Carry-forward**: A-43 (a/b/c/d) — (c) is now SHIPPED; (a/b/d) carry forward. A-42/A-41/A-37/A-39/A-40 carry forward.
+- **Lockstep**: §00 v4.5.0 → **v4.6.0** (Walker-Pin block extended; no normative contract change — pin row mirrors §97 ACs that already exist). §97 unchanged. This file v4.9.0 → **v4.10.0** (this row). **No** §27 / §22 / §28 / §26 / §25 / §23 edits, **no** linter-scripts changes, **no** workflow changes, **no** scope-lock breach.
 
 ---
 
