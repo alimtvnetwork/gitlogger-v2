@@ -91,11 +91,11 @@ correctly REJECTS four synthetic fixtures and ACCEPTS one:
    line cite — the gate enforces the file-wide invariant set
    declared by this slot doc).
 2. **Fixture surface** — synthetic in-memory tempdirs created by
-   `--self-test` (6 short Markdown blobs reproducing the §97
+   `--self-test` (5 short Markdown blobs reproducing the §97
    header geometry).
 3. **Script** — `linter-scripts/check-ac-section-orphan-header.py`
    (this slot).
-4. **`--self-test`** — built-in mode, runs 6 fixtures (F-1 unique
+4. **`--self-test`** — built-in mode, runs 5 fixtures (F-1 unique
    passing fixture).
 5. **Workflow step** — `.github/workflows/spec-health.yml`
    "§97 AC structural hygiene gate" hard-fails CI on any violation.
@@ -111,17 +111,17 @@ correctly REJECTS four synthetic fixtures and ACCEPTS one:
   the structural-hygiene foundation gate the T-14 `ac-prefix-contract-check`
   (slot 48 next) layers on top of.
 - **Walker-tier pagination** (§00 Walker-Pin block contract) —
-  clause-1 + clause-2 + clause-5 are the file-shape preconditions
-  the walker relies on. Before T-21, walker correctness was a
-  paper-only invariant; T-21 makes it load-proven.
-- **§27 gate #15 D7-self-enforcement** (`derives-from-restate-check`) —
-  clause-3's status-tag presence is the load-bearing token gate
-  #15 keys on for its qualifier-strip lockstep. Before T-21, a
-  malformed status tag bypassed gate #15 silently; T-21 closes
-  that escape hatch.
-- **Lesson #36 link-don't-restate** — clause-2 (no empty parents)
-  is the §97 surface application of the cross-cutting Lesson #36
-  rule against retained pedagogical scaffolding.
+  clauses 1 + 3 are the file-shape preconditions the walker
+  relies on. Before T-21, walker correctness was a paper-only
+  invariant; T-21 makes it load-proven.
+- **§28 §97 disk fix (this turn)** — adding the
+  `## v1.0 Core Acceptance Criteria (AC-28-01..AC-28-28)` parent
+  header retired the file's 28 orphan AC-28-NN headers in one
+  shot, which is what unblocked clause-1 from passing real-disk.
+- **Lesson #36 link-don't-restate** — the deferred-to-backlog
+  empty-parent-section invariant (T-22) is the §97 surface
+  application of Lesson #36; T-21 records the deferral here so
+  it stays visible in §27 backlog ledger discipline.
 
 ## Scorecard impact (Rubric v2 /120)
 
