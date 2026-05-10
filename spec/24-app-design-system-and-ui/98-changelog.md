@@ -1,8 +1,22 @@
 # Changelog — App Design System & UI
 
-**Version:** 4.7.0
-**Updated:** 2026-05-10 (Session 55 audit-task A-41 — per-AC Test invariant blocks added to AC-ADS-06/09/10; §24 C3 +1 across personas)
+**Version:** 4.8.0
+**Updated:** 2026-05-10 (Session 55 audit-task A-42 — fixture corpora + check-ads-boundaries.py shipped; AC-ADS-06/09/10 negative-fixture self-test green)
 **Scope:** `spec/24-app-design-system-and-ui/`
+
+---
+
+### 4.8.0 — 2026-05-10 — Session 55 audit-task A-42: fixture corpora + boundary scanner shipped (load-proven Testability)
+- **Action**: Authored three negative-fixture corpora under `linter-scripts/fixtures/` (`marketing-appshell-violation/`, `ownership-matrix-collision/`, `status-token-leak/`) — each contains a synthetic, intentionally-hostile source tree that violates the matching AC. Shipped `linter-scripts/check-ads-boundaries.py` (≈170 LOC) implementing the three Test invariants from A-41: `ac-ads-06` (regex AppShell-import scan over `pages/(marketing)/**`), `ac-ads-09` (set-intersection of basenames in `src/components/ui/**` ∩ `src/components/app/**`), `ac-ads-10` (regex `--app-status-*` grep under `src/components/ui/**`). Includes built-in `--self-test` mode that runs each check against its hostile fixture and asserts non-zero exit. Smoke-test green: all three fixtures correctly rejected (rc=1); self-test wrapper exits 0.
+- **Why now**: A-41 (Sess-55) added the per-AC Test invariant blocks but left fixture corpora pending. A-41 invalidation trigger (c) "Adding the matching fixture corpora + wiring CI invocation → §24 C3 to 20 across personas" — this turn ships the fixtures and the scanner; CI wiring (§27 slot 36 promotion) remains queued.
+- **Scope-lock discipline**: §27 gate promotion deferred to a follow-up turn that bumps §27 §97 + §99 + §00 cleanly. Shipping the scanner outside §27 first lets §24 cite a working artifact path without forcing a multi-folder lockstep cascade in one PR.
+- **Lesson #36 preservation**: Scanner code does NOT restate AC text — docstring cites AC-ADS-06/09/10 by ID and points to A-41. Fixture READMEs cite the owner AC + T-NN line by ID, do not restate the GWT body.
+- **Self-enforcement status**: Test invariants are now **load-proven** in isolation (the scanner runs and rejects synthetic violations), but **NOT yet CI-gated** (no `.github/workflows/` invocation). C3 lifts to 20 only after §27 promotion + workflow wiring. This turn moves §24 from contract-proven to load-proven; the 20-ceiling step is the §27 PR.
+- **Scorecard delta**: §24 C3 Testability **stays at 19/19/18** (load-proven without CI gate is still tier-19, not tier-20 — citing self-enforcing-mechanism rule). §24 totals: **L 114 / C 114 / R 109** unchanged. **What did change**: A-41 invalidation trigger (c) is now SHIPPED-PARTIAL — fixture corpora exist; remaining work is §27 slot 36 + workflow row. Tier-2 surface around §24 C3 is now machine-verifiable; reviewer load drops.
+- **Cohort impact**: No cohort score change this turn. The signal is **future-tense**: any §24 PR that breaks AC-ADS-06/09/10 boundaries will fail the local scanner if invoked manually; once §27 slot 36 + workflow row land (next turn), the gate becomes CI-enforced and §24 C3 lifts to 20.
+- **Invalidation triggers post-A-42**: (a) Removing any fixture corpus → A-41 trigger (c) reopens. (b) Modifying the scanner so any negative fixture passes → §24 C3 19→17 (vacuously-passing scanner is worse than no scanner). (c) Promoting `check-ads-boundaries.py` to §27 slot 36 (`36-check-ads-boundaries.md`) + adding workflow row + §27 §97 AC + §27 §00 gate-table row → §24 C3 to 20 across personas (first §24 ceiling-criterion). (d) Allowing positive (non-hostile) content to leak into any fixture corpus → fixture loses its "intentionally hostile" property; C3 −1.
+- **Carry-forward**: A-41 invalidation (a/b/d) carry forward unchanged. A-37 / A-39 / A-40 carry forward unchanged.
+- **Lockstep**: §97 unchanged this turn (T-ADS-NN test stubs already cite the fixture paths since A-41). §00 unchanged. This file v4.7.0 → **v4.8.0** (this row). New artifacts: `linter-scripts/check-ads-boundaries.py` + 3 fixture trees under `linter-scripts/fixtures/`. **No** §27 / §22 / §28 / §26 / §25 / §23 edits, **no** scope-lock breach.
 
 ---
 
