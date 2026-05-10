@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.30.0  
-**Updated:** 2026-05-10 (Phase-5 T-38 — P17 §28 floor-lift completion. AC-28-49 minted in §28 §97 (`glci --self-test` built-in harness contract) closing the placeholder opened in §27 v4.27.0; literal-cited via gate #40 (`linter-scripts/check-ci-cli-self-test-harness.py`, slot 62). §28 advances Lovable 119 → **120** and Cursor 117 → **120** — §28 reaches Lovable + Cursor ceiling; only Raw-LLM 118 remains below. Cohort now: §26 L120/C120/R118, §27 L120/C120/R120 (triple-ceiling), §28 L120/C120/R118. No new gate (42). Prior: T-37 — P16 C6 friction sweep × 5 folders.)
+**Version:** 4.31.0  
+**Updated:** 2026-05-10 (Phase-5 T-39 — P18 §24 floor-lift. AC-ADS-17 minted in §24 §97 (no-DDL boundary closure under new section "Acceptance Criteria — Boundary Closure"); literal-cited via gate #36 (`linter-scripts/check-no-sql-ddl-in-ui-folder.py`, slot 58, all 6 invariants T-ADS-17-01..06). §24 advances Lovable 118 → **120** and Cursor 116 → **120** — §24 reaches Lovable + Cursor ceiling. Cohort now: §22/§23/§25 hold prior, §24 L120/C120/R118, §26 L120/C120/R118, §27 L120/C120/R120 (triple-ceiling), §28 L120/C120/R118. No new gate (42). Prior: T-38 — P17 §28 floor-lift via gate #40.)
 
 > **Self-enforcing via §27 backlog gate `meta-verify-lockstep`** — Lesson #15 reflexivity pin for gate #42 (slot 64). Stripping this literal from §27 §00 fails clause-5 of the meta-verifier itself.
 <!-- h10-verified-phase: 158 -->

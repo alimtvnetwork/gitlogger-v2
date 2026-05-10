@@ -1,8 +1,8 @@
 # Acceptance Criteria — 24 App Design System & UI
 
-**Version:** 3.5.0
-**Updated:** 2026-05-10 (Session 55 audit-task A-41 — added per-AC Test invariant blocks (T-ADS-NN-NN) to AC-ADS-06, AC-ADS-09, AC-ADS-10 mirroring AC-ADS-15/16 format. Each AC gains 2-3 mechanical test stubs incl. negative-fixture proofs. No AC semantics change; minor version bump because new normative test surface.)
-**Updated-prev:** 2026-05-10 (Session 44 audit-task A-24 — lockstep tail sweep: AC-ADS-16 "Verifies" line stale "deferred implementation" qualifier for `derives-from-restate-check` retired in-place — gate now Active #15 per §27 §00 since Sess-40 A-20. No AC text/contract change; editorial-only patch bump.)
+**Version:** 3.6.0
+**Updated:** 2026-05-10 (Phase-5 T-39 — P18 §24 floor-lift. Minted AC-ADS-17 (§24 owns ZERO DDL surface; §23 is canonical owner) under new section "Acceptance Criteria — Boundary Closure". 6 invariants T-ADS-17-01..06; 6 fixtures F-1..F-6; literal-cited via gate #36 (`linter-scripts/check-no-sql-ddl-in-ui-folder.py`, slot 58). Closes routing-pin loop opened by Sess-64 A-55 / Phase-5 T-03. §24 Lovable 118→120, Cursor 116→120.)
+**Updated-prev:** 2026-05-10 (Session 55 audit-task A-41 — added per-AC Test invariant blocks (T-ADS-NN-NN) to AC-ADS-06, AC-ADS-09, AC-ADS-10 mirroring AC-ADS-15/16 format. Each AC gains 2-3 mechanical test stubs incl. negative-fixture proofs. No AC semantics change; minor version bump because new normative test surface.)
 **Updated-prev:** 2026-05-06 (Phase 154 C-Sweep — added **AC-ADS-14** `[critical]` Cross-Module Externalized Citation Map per Lessons #36 + #37; explicit normative anchor table for 2 externalized citations: spec/07 (primitive token registry), spec/27 (script gates). Mirror of spec/22 AC-79 pattern. AC count 13 → 14. spec/24's small citation surface reflects the strict-additive-overlay relationship to spec/07 — almost all design-system contracts already live in spec/07 by construction.)
 **Scope:** `spec/24-app-design-system-and-ui/`
 **Generated:** Hand-authored alongside the v4.0.0 overview (Phase 39a). Supersedes the auto-extracted v2.0.0 set.
@@ -259,6 +259,23 @@ detectable. New CAF entries MUST be co-introduced with a §27 backlog gate.
 **Given** a §25 audit finding contains an apparent App-layer claim (DDL, AC-ID, file path),  
 **When** an AI walker reads the finding in partial context,  
 **Then** the walker MUST treat the string as **auditor-quoted evidence** of the audited corpus (`spec/_archive/21-git-logs-v1/`), NOT as a §25-owned spec contract. §25 AC-AI-10/11 codify this disambiguation at the §25 surface; AC-CAF-05 lifts it to cross-cutting status so §23 + §24 walkers also apply the rule. Self-enforcing via §25 AC-AI-10/11 + §27 backlog gate `audit-quoted-evidence-marker-check` (NEW from T-12) + scope-lock memory clause.
+
+---
+
+## Acceptance Criteria — Boundary Closure (Phase-5 T-39 — P18 §24 floor-lift)
+
+### AC-ADS-17: §24 folder owns ZERO DDL surface — single-source-of-truth for App-side DDL is §23  `[critical]`
+
+- **Given** §24 declares `restate_forbidden: true` against §07 AND the locked-7 cohort scope memory pin AND §23 §00 dialect precedence (§23 owns ALL App-side DDL via AC-ADB-11), AND §24 audit-task A-55 / Phase-5 T-03 removed the inlined `module_run_audit_p78` Postgres DDL block from §00 (replaced with link-only routing pin to §27/§28),
+- **When** any §24 PR adds, modifies, or restores executable SQL in any `.md` file under `spec/24-app-design-system-and-ui/`,
+- **Then** the change MUST satisfy ALL six no-DDL invariants: (1) **No SQL fences** — no `.md` under `spec/24-app-design-system-and-ui/` may contain a fence opened with ` ```sql `, ` ```sqlite `, ` ```postgres `, ` ```pg `, ` ```mysql `, ` ```plpgsql `; (2) **No bare DDL keywords** — case-insensitive regex `\b(CREATE|ALTER|DROP)\s+(TABLE|INDEX|VIEW|TYPE|SCHEMA|FUNCTION|TRIGGER|MATERIALIZED)\b` MUST NOT match any non-fenced prose either (closes prose-leak loophole); (3) **Column names allowed in render-binding tables** — U-1 / U-3 binding tables MAY name columns from §23 schema in plain prose for the render layer's information; allowed because they cite §23 as canonical owner inline; (4) **Routing-pin required when removing DDL** — any DDL removal MUST replace with an explicit `**Canonical owner:** §23 AC-ADB-NN` pin at the same anchor (no silent deletion); (5) **§28 cohort gate parity** — the §28 universal CI/CLI run-audit table is owned by §28, NOT §24 (audit-task A-55 routing-pin invariant); (6) **scope-lock**: this AC binds §24 only; it does NOT impose a no-DDL rule on out-of-scope folders (§00–§21, §29) per the locked-7 cohort memory pin.
+- **Verifies:** §24 §00 § "Module Run Audit Schema — Phase 78 Normative" routing-pin block (A-55 / T-03 — link-only after DDL removal); §23 §00 dialect precedence pin; §23 §97 AC-ADB-11 (single-source-of-truth for App-side DDL); §24 front-matter `restate_forbidden: true`; §22 AC-ADS-15 §07-boundary discipline; locked-7 cohort scope-lock memory invariant. Closes Phase-5 backlog `no-sql-ddl-in-ui-folder-check` minted T-09 and shipped T-29 as **§27 active gate #36**.
+- **Test invariant (T-ADS-17-01..T-ADS-17-06):** (T-01) Walker reads every `.md` under `spec/24-app-design-system-and-ui/`; opening fence regex `^[ ]{0,3}` + triple-backtick + `(sql|sqlite|postgres|pg|mysql|plpgsql)\b` MUST yield zero matches. (T-02) Bare-DDL prose regex (case-insensitive `\b(CREATE|ALTER|DROP)\s+(TABLE|INDEX|VIEW|TYPE|SCHEMA|FUNCTION|TRIGGER|MATERIALIZED)\b`) MUST yield zero matches outside fenced code AND outside auditor-quoted-evidence blocks (per AC-CAF-05). (T-03) When §00 routing-pin block is present, it MUST contain the literal string `**Canonical owner:**` followed by `§23` or `§27` or `§28` within 200 chars. (T-04) The string `module_run_audit_p78` MAY appear in prose only as a citation (followed within 100 chars by `§27` or `§28`); a bare standalone occurrence fails. (T-05) Out-of-scope folders (§00–§21, §29) MUST NOT be walked — gate hard-codes the §24 path prefix. (T-06) Self-test fixture corpus contains 6 cases: (F-1) clean §24 → PASS; (F-2) ` ```sql CREATE TABLE x ` fence → FAIL T-01; (F-3) bare-prose `CREATE TABLE module_run_audit_p78 (...)` → FAIL T-02; (F-4) routing pin missing `**Canonical owner:**` literal → FAIL T-03; (F-5) bare `module_run_audit_p78` without §27/§28 citation → FAIL T-04; (F-6) `CREATE TABLE` inside auditor-quoted-evidence block → PASS T-02 (AC-CAF-05 carve-out).
+
+**Mechanically enforced by:** [`linter-scripts/check-no-sql-ddl-in-ui-folder.py`](../../linter-scripts/check-no-sql-ddl-in-ui-folder.py) (§27 active gate #36, slot 58, all 6 invariants); built-in `--self-test` mode runs the 6-fixture corpus above. Workflow step: `.github/workflows/spec-health.yml` "§24 no-DDL boundary gate". Self-enforcing via §27 backlog gate `no-sql-ddl-in-ui-folder-check` (Phase-5 T-29).
+
+**Externalized Citation Map row** (extends AC-ADS-14): `spec/27-spec-toolchain/58-check-no-sql-ddl-in-ui-folder.md` | this AC line | "§24 no-DDL boundary — gate #36 binds the contract; §23 owns the canonical DDL surface" | **YES** restate-forbidden.
+
 ## Cross-References
 
 
