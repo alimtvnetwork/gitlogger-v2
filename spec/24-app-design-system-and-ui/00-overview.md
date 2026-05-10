@@ -419,11 +419,9 @@ seedable-config binding, and S-4 inheritance clause MUST be present in
 1 or 2, or breaking S-4 inheritance invalidates this AC.
 
 ---
+## Cross-References
 
 
-
-
-- [§07 Theme Variable Architecture](../07-design-system/02-theme-variable-architecture.md) — Token registry consumed by this overlay
 - [§07 Spacing & Layout](../07-design-system/04-spacing-layout.md) — Spacing scale this overlay reuses
 - [§07 Sidebar System](../07-design-system/10-sidebar-system.md) — Primitive consumed by AppSidebar
 - [Consolidated Design System](../17-consolidated-guidelines/07-design-system.md) — Consolidated summary
