@@ -166,6 +166,7 @@
 - **When** `linter-scripts/test/test-overview-inventory-parity.sh` and `node linter-scripts/check-tree-health.cjs --strict` run,
 - **Then** both MUST exit 0 with the script counted as specced; AND the §00 inventory row in the Fillers table MUST point at the slot-25 spec; AND slot 25 satisfies the kind-range bijection (filler in 20-29 band) — no exception note required.
 - **Verifies:** INV-01, INV-02, INV-08, Phase 21 deepen-sweep origin, Phase 107 ledger row O3 (now marked migrated), Phase 108-full retrospective.
+- **Worked example:** `test -f spec/27-spec-toolchain/25-deepen-consistency-reports.md && grep -Fq 'linter-scripts/deepen-consistency-reports.py' spec/27-spec-toolchain/25-deepen-consistency-reports.md && grep -Fq '25-deepen-consistency-reports.md' spec/27-spec-toolchain/00-overview.md` MUST exit `0`; slot 25 ∈ [20,29] satisfies the kind-band so `awk -F- '$1==25 {print "OK filler-band"}' <<< "25-deepen"` confirms no exception note needed.
 
 ### AC-T-25 — Spec-index drift gate MUST be strict (Phase 30)
 - **Given** the `Spec-index drift gate` step in `.github/workflows/spec-health.yml` (Phase 29 root-cause: previously named "Regenerate spec-index.md (drift check)" and exited 0 with a `⚠️` warning when `git status --porcelain spec/` reported a delta after `node linter-scripts/generate-spec-index.cjs`),
