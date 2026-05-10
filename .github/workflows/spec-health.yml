@@ -504,6 +504,26 @@ jobs:
           python3 linter-scripts/check-rest-boolean-parity.py --self-test
           python3 linter-scripts/check-rest-boolean-parity.py
 
+      - name: §22+§23 dialect-precedence banner gate
+        # Slot 55 / Gate #33 — Phase-5 G-6c. Six clauses: §23 §00
+        # precedence heading position, lane-table closed-set discipline,
+        # cross-cuts pin literals (incl. AC-ADB-11/16/13 + EXTRACT +
+        # locked-ID INSERT), AI-walker contract literals, per-fence lane
+        # marker discipline (4-form whitelist), §22 single-dialect row.
+        # Disk run wired warn-only initially: §23 §00 carries 13 + §97 1
+        # SQL fences inside lane-marker-bearing sections that the
+        # 30-line lookback regex doesn't span (long DDL bodies push the
+        # marker outside the window). Reconciliation backlog ticket
+        # G-6c-followup will reflow §23 to either tighten section
+        # boundaries or restate the lane marker per-fence — same pattern
+        # as G-6a → G-6a-followup. Disk run flips warn-only → hard-fail
+        # when G-6c-followup ships. `--self-test` IS hard from day one.
+        # Spec: spec/27-spec-toolchain/55-check-dialect-precedence-banner-present.md
+        run: |
+          python3 linter-scripts/check-dialect-precedence-banner-present.py --self-test
+          python3 linter-scripts/check-dialect-precedence-banner-present.py || \
+            echo "::warning::§22+§23 dialect-precedence banner gate disk-run violations — G-6c-followup pending"
+
       - name: §22+§23+§24 boolean uniformity (PRIMARY-lane) gate
         # Slot 43 / Gate #24 — closes the 3-surface boolean parity triple
         # alongside gates #34 (PascalCase) + #35 (REST boolean). Five
