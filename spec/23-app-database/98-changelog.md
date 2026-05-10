@@ -1,10 +1,18 @@
 # Changelog — App Database
 
-**Version:** 4.2.3
-**Updated:** 2026-05-06
+**Version:** 4.3.0
+**Updated:** 2026-05-10 (Session 23 audit-task A-01 — §22 operational-pattern inheritance AC landed)
 **Scope:** `spec/23-app-database/`
 
 ---
+
+### 4.3.0 — 2026-05-10 — Session 23 audit-task A-01: §22 operational-pattern inheritance (AC-ADB-18)
+- **Action**: §97 v3.4.0 → **v3.5.0** added `AC-ADB-18 [critical]` binding §23's runtime contracts to §22's operational patterns by namespace extension: `GL-*` error-code family extends to `ADB-*` (concrete codes `ADB-LINK-INACTIVE`, `ADB-LINK-NO-MATCH`, `ADB-LINK-XOR-VIOLATION`, `ADB-LINK-CANONICALIZE-FAIL`, `ADB-LOOKUP-SEED-DRIFT`, `ADB-SCHEMA-DRIFT`); the four REJECTED resolution states from AC-ADB-16 now map to specific `ADB-*` transport codes (`REJECTED_INACTIVE_APP` → `ADB-LINK-INACTIVE`, `REJECTED_NO_MATCH` → `ADB-LINK-NO-MATCH`); link-create / link-disconnect / link-reconnect mutations MUST emit one `AuditTrail` row each with PascalCase action verbs (`app.link.create` / `app.link.disconnect` / `app.link.reconnect`); read-side resolution attempts MUST NOT emit AuditTrail rows (sink-side rule per §22 AC-04); schema-drift fires `ADB-SCHEMA-DRIFT` mirroring §22 `GL-SCHEMA-DRIFT`. Externalized Citation Map (AC-ADB-17) extended with one row pointing at `§22 AC-30 + AC-21 + AC-04 + AC-23` flagged restate-forbidden per Lesson #36.
+- **Why**: Phase 4 audit (Session 22) measured §23 blind-AI failure probability at ~85% with 4 High-likelihood × Wide-blast forced guesses; G23-4 (no error envelope binding for AC-ADB-16's four REJECTED outcomes) and G23-5 (no audit-trail event contract for link mutations) were two of those four. Both could only be closed by inheriting an in-scope operational pattern; §22 is the only in-scope module that owns ErrorEnvelope + AuditTrail + sink-side observability + schema-drift discipline. Inheritance via namespace extension keeps Lesson #36 link-don't-restate intact (§22 owns the bodies, §23 cites by anchor and namespaces the family).
+- **Lockstep**: §97 v3.4.0 → **v3.5.0** (minor — new critical AC); this file v4.2.3 → **v4.3.0** (minor — this row); §99 patch bump deferred to next consistency pass (no inventory-axis change). **No DDL change · no §22 edit (link-only inheritance per Lesson #36) · no §27 gate change · no slot file added · no `kind:` change.** Scorecard impact (per Phase 4 / Wave-1 model): §23 Lovable 90 → ~94 expected on next honest re-score; cohort blind-failure probability ~99.6% → ~96% from this single AC (full Wave-1 closes the rest).
+- **Audit-trail**: Closes audit task **A-01** (declare §22 as operational-pattern parent for §23 + §24) for the §23 half. The §24 half landed same-PR as **AC-ADS-15**. The combined PR is the single highest-leverage Wave-1 fix per the Phase-5 sequencing model. Forced-guess inventory updated: G23-4 + G23-5 closed; G23-1/-2/-3 (out-of-scope spec/02/05/13 dependencies) remain irreducible under scope-lock.
+- **Lesson reapplication**: This is the fifth documented application of "advisory rule → enforceable AC by namespace extension + restate-forbidden citation" pattern (§22 AC-22-CE1 / §26 AC-DG-23 / §27 AC-T-36 amendment / §27 AC-T-36 self-application / this AC). Pattern is now ripe for promotion to a §27 toolchain meta-rule per audit task **A-12** (= prior workstream F-18).
+
 
 ## [4.2.3] — 2026-05-06 — Phase 154 C-Sweep: Cross-Module Externalized Citation Map (Lesson #36 + #37)
 
