@@ -1,0 +1,20 @@
+{
+  "fixture_id": "glci-exec-runner-crashed",
+  "owning_ac": "AC-28-29",
+  "owning_test_invariant": "T-28-29",
+  "runner": "./runner.sh",
+  "invocation": "glci ts-test --fixture . --json",
+  "expected": {
+    "exit_code": 1,
+    "stderr_envelope": {
+      "ErrorCode": "GLCI-EXEC-RUNNER-CRASHED",
+      "Signal": "SIGKILL",
+      "RequestId": "<non-empty>"
+    }
+  },
+  "must_not": {
+    "stderr_envelope": {
+      "ErrorCode": ["GLCI-EXEC-TIMEOUT", "GLCI-EXEC-NONZERO-EXIT"]
+    }
+  }
+}
