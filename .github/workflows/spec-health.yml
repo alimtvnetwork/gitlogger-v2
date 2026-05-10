@@ -605,6 +605,29 @@ jobs:
         run: |
           python3 linter-scripts/check-audit-quoted-evidence-marker.py --self-test
           python3 linter-scripts/check-audit-quoted-evidence-marker.py
+
+      - name: §97 AC structural hygiene gate (#28 / T-21)
+        # Phase-5 T-21 / Slot 47 — closes §27 backlog ticket
+        # `ac-section-orphan-header-check` (T-13, oldest un-shipped
+        # structural-hygiene entry). Walks every
+        # `97-acceptance-criteria.md` under the seven in-scope folders
+        # and asserts three load-bearing structural invariants:
+        # clause-1 no-orphan-ac (every `### AC-…` MUST have a `## `
+        # parent earlier in the file), clause-2 ac-id-uniqueness
+        # (no duplicate `### AC-…` IDs within a file), clause-3
+        # section-name-uniqueness (no duplicate `## ` titles within a
+        # file). Status-tag presence + empty-parent-section detection
+        # are deferred to backlog ticket
+        # `ac-status-tag-and-parent-taxonomy-check` (T-22) per
+        # real-disk vocabulary heterogeneity. R5 vacuous-pass:
+        # zero §97 files OR zero AC headers parsed → exit 1.
+        # §28 §97 disk fix this turn (added
+        # `## v1.0 Core Acceptance Criteria (AC-28-01..AC-28-28)`
+        # parent header) retired 28 orphan AC-28-NN headers.
+        # Spec: spec/27-spec-toolchain/47-check-ac-section-orphan-header.md
+        run: |
+          python3 linter-scripts/check-ac-section-orphan-header.py --self-test
+          python3 linter-scripts/check-ac-section-orphan-header.py
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
