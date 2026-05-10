@@ -1,8 +1,17 @@
 # Changelog — App Database
 
-**Version:** 4.4.0
-**Updated:** 2026-05-10 (Session 34 audit-task A-14 — `consumes:` front-matter expanded from 1→6 entries citing §22 schema/auth/error/permission files; closes consumer-side binding-graph coverage)
+**Version:** 4.5.0
+**Updated:** 2026-05-10 (Session 60 audit-task A-50 — A-44 5-link self-enforcement template applied to AC-ADB-05 + AC-ADB-06 boundary CHECK invariants)
 **Scope:** `spec/23-app-database/`
+
+---
+
+### 4.5.0 — 2026-05-10 — Session 60 audit-task A-50: AC-ADB-05 / AC-ADB-06 promoted to A-44 5-link self-enforcement template
+- **Action**: §97 v3.5.0 → **v3.6.0** restructured AC-ADB-05 (AppLink XOR target invariant) and AC-ADB-06 (AppLink disconnect-timestamp invariant) from terse Given/When/Then prose into the A-44 5-link template. Each AC now carries: (1) byte-exact source-of-truth pin (`00-overview.md` 30775 bytes / 672 lines), (2) constraint pin (XOR clause lines 159–166; lifecycle clause lines 168–171), (3) cross-AC pin (AC-ADB-09 seed for XOR; AC-ADB-07 reconnect rule for lifecycle), (4) algorithm/index pin (AC-ADB-14 polymorphic resolver for XOR; `IX_AppLink_Active` partial index for lifecycle), (5) CI-gate pin (`linter-scripts/check-spec22-inventory.py` keeps the file present + non-empty; deferred §27 gates `applink-xor-check-clause-present` and `applink-disconnect-check-clause-present` re-grep the cited line ranges). Lesson #39 evidence triple (`wc -l` / `sed` / `grep`) is now a normative auditor obligation; explicit invalidation triggers are listed inline.
+- **Why**: §23 Raw-LLM C3 Testability scored 18 because the AppLink CHECK boundary lacked load-evidence path; §22's mirror-quartet (AC-78/79/80/81) reached 20 via the A-44 template. AC-ADB-05/06 are §23's structural twins of AC-78 (table-level CHECK clauses on a polymorphic table) — same template surfaces the implicit 5-link chain.
+- **Lockstep**: §97 v3.5.0 → **v3.6.0** (minor — AC body restructure, no AC count change); this file v4.4.0 → **v4.5.0** (this entry); **no** §00 edit (line counts unchanged), **no** §99 bump, **no** new §27 slot (gates enter §27 deferred backlog). **No** §22 edit (link-only — Lesson #36).
+- **Scorecard impact (Sess-60, A-50)**: §23 Raw-LLM C3 Testability **18→19** (load-evidence path explicit + auditable; ceiling 20 deferred until the two named §27 gates ship). §23 totals: L 117 / C 117 / R 113.
+- **Lesson reapplication**: Sixth application of the A-44 self-enforcement template (§22 AC-78/79/80/81 quartet + A-49 explicit promotion + this dual promotion). Pattern ripe for promotion to §27 meta-gate `ac-5link-template-applied-check` (deferred).
 
 ---
 
