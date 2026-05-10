@@ -256,6 +256,24 @@ Any future generator that writes an artifact consumed by a sibling validator MUS
 - **Forbidden patterns:** (a) restating the 140 KB cap literal in `35-audit-bundle-budget.md` instead of binding to slot 34's `MAX_BYTES` (dual-source drift class per Lesson #36); (b) declaring slot 35 in the delegation map without a matching trace-map entry (audit-boundary < verification-boundary class per Lesson #19); (c) graduating `--strict` to CI without first verifying the OVER class is empty (per AC-35-03 sequencing); (d) renaming or relocating slot 35 — slots are immutable per AC-T-07.
 - **Verifies:** `spec/27-spec-toolchain/35-audit-bundle-budget.md` (slot file present, 90 lines, 5 ACs); `linter-scripts/audit-bundle-budget.py` (productionised from `/tmp/a24-fu27-bundle-budget.py` per Phase 153 Task A24-fu32); `linter-scripts/test/test-audit-bundle-budget.sh` (10 assertions, snapshot-restore-safe); slot 34 AC-34-14 (140 KB cap source); Slot Delegation Map row 35 + AC Family Prefix Index `AC-35-*` row (this §97); trace-map entries (`linter-scripts/trace-map.toml` `[[trace]]` blocks for AC-35-01..05). Codifies **Lesson #19** (audit-boundary < verification-boundary closure for slot 35) + **Lesson #21/#39** (intra-module sibling delegation, second-axis instance after spec/22 AC-80 and spec/14 AC-23) + **Lesson #36** (link-don't-restate for the cap literal) + **Lesson #65** (structural-surgery > pure-promotion regression-protection).
 
+### AC-T-36 — Slot-range numbering convention is normative; new slots MUST land in the correct range  `[active]`
+
+- **Given** the §00 `## Inventory` numbering-range table (lines 79–88) declares **eight role bands** that partition the slot space:
+  - `01–09` Validators (read-only checks; exit non-zero on violation)
+  - `10–19` Generators (produce/refresh derived artifacts from disk truth)
+  - `20–29` Fillers (idempotent scaffolders that create missing module files)
+  - `30–39` Auditors (AI-driven scoring + reporting)
+  - `40–49` Runners (orchestration entry points: `run.sh`, `run.ps1`)
+  - `50–59` Source validators (validate `src/` code, not `spec/`)
+  - `60–69` Configuration files (TOML / allowlists consumed by validators)
+  - `70–79` CI workflows (`.github/workflows/*.yml`)
+- **When** any contributor (human or AI) authors a new slot file under `spec/27-spec-toolchain/NN-*.md` — whether via `23-scaffold-spec-module.md`, hand-edit, or LLM generation,
+- **Then** the chosen slot number `NN` MUST fall inside the band whose declared role matches the new file's actual behaviour: a validator MUST land in `01–09`, a generator in `10–19`, etc. **Cross-band placement is forbidden** (e.g. a new auditor at slot `15` would violate this AC even if slot `15` were free, because `15` is reserved for the Generators band). **AND** the §00 Inventory table, the §97 Slot Delegation Map, and the §97 AC Family Prefix Index MUST all gain a new row in the same commit (per AC-T-30 + AC-T-31 + the cohort discipline mirror of §22 AC-22-CE1 / §26 AC-DG-23) — a slot file added without these three sibling updates is a "split-brain" state and the next commit MUST close the cohort.
+- **Slot exhaustion rule:** if a band fills (e.g. all 10 slots `01–09` occupied) the spec MUST extend the band by reserving the next contiguous decade in a new §00 Inventory row before authoring the overflow slot — slot numbers are NEVER reused (mirror of §22 AC-22-LV1 immutability invariant) and bands NEVER overlap.
+- **Verification (machine-checkable):** `linter-scripts/check-tree-health.cjs --strict` (AC-T-30) MAY assert that every disk slot `NN` matches the band-role declared by its `kind:` frontmatter — kind ∈ {validator, generator, filler, auditor, runner, source-validator, config, workflow} bijects with the eight bands. Until this band-check ships, AC-T-36 is enforced by reviewer attestation in the PR description ("Slot 36 = auditor → band 30–39 ✓").
+- **Exemptions:** slot 99 (consistency report), slot 98 (changelog), slot 97 (acceptance criteria), and the unnumbered companions (`lifecycle-*.mmd`, `trace-map.md`, `_archive/`) are outside the band partition and exempt from this AC.
+- **Verifies:** §00 `## Inventory` numbering-range table (lifts the advisory band declaration to an enforceable contract); §00 "AI Quick-Nav Map" entry-point heuristic #2 ("pick the next free slot number → mirror an existing slot in the same theme row"); cohort-discipline mirror of §22 AC-22-CE1 (Session 12) and §26 AC-DG-23 (Session 11) — closes the F-13 advisory-vs-enforceable gap surfaced in the Session 12 scorecard. Bound to AC-T-30 (Slot Delegation Map enumeration) + AC-T-31 (AC-family-prefix binding) for the three-surface cohort obligation.
+
 ---
 
 ## Slot Delegation Map (Phase 153 Task A24-fu6)
