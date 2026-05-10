@@ -133,7 +133,9 @@ def check_all(overview: Path, ac_file: Path) -> tuple[int, list[str]]:
 
     as_rows, _ = _parse_as_matrix(text)
     bind_rows = _parse_binding_table(text)
-    ac_block = _ac_block(ac_text, "AC-ADS-UI-04")
+    # AC-ADS-UI-04 lives in §24 §00 in current spec; also check §97 in case
+    # it migrates. Either surface satisfies the gate.
+    ac_block = _ac_block(ac_text, "AC-ADS-UI-04") or _ac_block(text, "AC-ADS-UI-04")
 
     # R5 vacuous-pass guard — only fires when surfaces are completely absent.
     # Partial-matrix gaps (7 rows with hole) belong to clause-1; missing
