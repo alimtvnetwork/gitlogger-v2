@@ -463,7 +463,7 @@ PascalCase keys to avoid a translation layer. Booleans serialise as JSON
 - UI representation of these payloads — owned by §24.
 - CI gate for parity enforcement — owned by §27 (`rest-pascalcase-parity-check`, `rest-boolean-parity-check` — both NEW backlog from T-06).
 
-### AC-ADB-REST-01 — REST/RPC contract present and parity-pinned
+### AC-ADB-REST-01 — REST/RPC contract present and parity-pinned [active]
 
 The 8-row R-1 endpoint matrix, R-2 schemas, R-3 error envelope, and R-4
 invariants 1–7 MUST be present in `00-overview.md`. Removing any row of R-1,
