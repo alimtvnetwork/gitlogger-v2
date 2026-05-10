@@ -1,8 +1,15 @@
 # Changelog — App Database
 
-**Version:** 4.3.0
-**Updated:** 2026-05-10 (Session 23 audit-task A-01 — §22 operational-pattern inheritance AC landed)
+**Version:** 4.4.0
+**Updated:** 2026-05-10 (Session 34 audit-task A-14 — `consumes:` front-matter expanded from 1→6 entries citing §22 schema/auth/error/permission files; closes consumer-side binding-graph coverage)
 **Scope:** `spec/23-app-database/`
+
+---
+
+### 4.4.0 — 2026-05-10 — Session 34 audit-task A-14: §22 source-of-truth binding expansion via `consumes:` front-matter
+- **Action**: §00 v4.2.3 → **v4.3.0** expanded the `consumes:` block from 1 entry (AC-23 schema-drift only) to 6 entries citing §22 `02-database-schema.md` (ER baseline + ShaRegistry boundary), `05-auth-tempttoken.md` (Lane A), `31-ssh-key-auth.md` (Lane B + reject codes), `15-error-codes.md` (GL-* namespace), `19-permission-matrix.md` (RBAC). Each row binds a §23 contract surface to the canonical §22 file it derives from; restating any cited contract in §23 trips Lesson #36 + AC-ADB-17 (externalized citation map).
+- **Why**: A-09 (§28→§27, Sess 31), A-11 (§26→§22, Sess 32), A-12 (§24 producer-side, Sess 33) established the consumer/producer binding pattern. A-14 closes coverage on §23 — the last in-scope cohort folder without a multi-row `consumes:` block. Deferred lint §27 D9 `consumes-frontmatter-resolves` now reaches all 7 in-scope folders.
+- **Banners**: §00 v4.2.3 → **v4.3.0** (minor — front-matter contract surface expanded); §98 v4.3.0 → **v4.4.0** (this entry). **No** §97 bump (no new AC; existing AC-ADB-17/18 already cover the underlying invariants), **no** CI workflow change, **no** §22 edit, **no** restatement here (Lesson #36).
 
 ---
 
