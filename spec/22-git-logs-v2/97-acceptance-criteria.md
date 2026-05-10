@@ -149,28 +149,13 @@ Every criterion below is stated as **Given / When / Then**. Each AC also carries
 ## Section D — Endpoints & Streaming
 
 ### AC-11 — Endpoint inventory  `[active]`
-- **Given** the running plugin
-- **When** the WP REST index is queried
-- **Then** all 10 logical endpoints from §Endpoints exist with the documented field names; they fold to 8 HTTP paths in §17 via the `?q=` query-param collapse rule (rows #5/#6 share `/get-logs`; rows #7/#8 share `/get-pipeline-logs`).
-- **Per-endpoint binding matrix (normative tier-1 surface — Lesson #19 audit-boundary pin; full JSON schemas remain canonical in §17 OpenAPI per Lesson #36 link-don't-restate):**
-
-  | # | Method | Path | Request body schema (§17) | Response body schema (§17) | Auth class | Error envelope codes (§15) |
-  |---|---|---|---|---|---|---|
-  | 1 | POST | `/append-log` | `AppendLogRequest` (chunked NDJSON OR single JSON; §04 §1.1 + AC-12) | `AckResponse` (per AC-14) | TempToken + URL/Branch (§05 Lane A) | `GL-PAYLOAD-TOO-LARGE`, `GL-INGEST-TIMEOUT`, `GL-STREAM-*`, `GL-AUTH-*` |
-  | 2 | PUT | `/fixed-log` | `FixedLogRequest` (`{PipelineId, Branch, Sha, PreviousHasError?}`) | `AckResponse` (per AC-14) | TempToken + URL/Branch | `GL-AUTH-*`, `GL-INTERNAL` |
-  | 3 | POST | `/clear-log` | `ClearLogRequest` (`{PipelineId}`) | `AckResponse` (per AC-14, empty `Retrieval` URLs valid) | TempToken + URL/Branch | `GL-AUTH-*` |
-  | 4 | POST | `/clear-log-all` | `ClearLogAllRequest` (`{RepoUrl, Branch}`) | `AckResponse` (per AC-14, empty `Retrieval` URLs valid) | TempToken + URL/Branch | `GL-AUTH-*` |
-  | 5 | GET | `/get-logs` | n/a (query `?RepoUrl=&Branch=&Sha=` OR `?q=`) | `LogPage` JSON OR NDJSON `Header→Log*→End` (per AC-67) | App Password / Cookie (§05 Lane A) | `GL-AUTH-*`, `GL-NDJSON-*`, `GL-SHA-DB-*` |
-  | 6 | GET | `/get-logs?q=…` | n/a (URL-style `?q=github.com/{org}/{repo}/{branch}/{sha}`) | as #5 | as #5 | as #5 |
-  | 7 | GET | `/get-pipeline-logs` | n/a (query `?PipelineId=`) | `PipelineLogPage` JSON OR NDJSON (incl. `Header.StateTransition` per AC-74 when scope=1 pipeline) | App Password / Cookie | `GL-AUTH-*`, `GL-NDJSON-*` |
-  | 8 | GET | `/get-pipeline-logs?q=…` | n/a (URL-style) | as #7 | as #7 | as #7 |
-  | 9 | GET | `/get-error-logs` | n/a (query `?RepoUrl=&Branch=&Sha=`) | `ErrorLogPage` JSON OR NDJSON (severity ≥ Error filter server-side) | App Password / Cookie | `GL-AUTH-*`, `GL-NDJSON-*` |
-  | 10 | GET | `/get-pipeline-error-logs` | n/a (query `?PipelineId=`) | `ErrorLogPage` JSON OR NDJSON (incl. `Header.StateTransition` per AC-74) | App Password / Cookie | `GL-AUTH-*`, `GL-NDJSON-*` |
-
-- **AND** every successful response on write endpoints (#1–#4) MUST conform to `AckResponse` per **AC-14** (Retrieval URLs); every error response on any endpoint MUST conform to `ErrorEnvelope` per **AC-30** (`{Status, Code, Message, RequestId, HttpStatus}`); every NDJSON streaming response on read endpoints (#5–#10) MUST conform to the `Header→Log*|ErrorLog*→Progress*→End` frame contract per **AC-67/AC-68/AC-69/AC-71/AC-72** (opt-in via `Accept: application/x-ndjson`; server-driven frame ordering; resume via `?after-seq=` + `?stream-id=`; per-frame size cap; progress cadence).
-- **AND** the canonical wire schemas (full property lists, examples, OpenAPI `components.schemas` entries) live in **`17-openapi.yaml` v2.9.4+** — restating those schemas inline here is FORBIDDEN per **Lesson #36** (dual-source drift class). This matrix is the audit-walker tier-1 binding (closes the Lesson #19 gap where AC-11 was a 4-line stub citing §17 but §17 lives in tier-2 and may exhaust the walker bundle cap).
-- **AND** any auditor finding citing "missing per-endpoint contract" OR "endpoint inventory unbound to schemas" against the 10 endpoints above MUST be classified as a stale-cache walker-cap artifact per **Lesson #34** (verify by `grep -nE "^\| (1|2|3|4|5|6|7|8|9|10) \|" spec/22-git-logs-v2/97-acceptance-criteria.md` before flagging).
-- **Verifies:** brief §Endpoints, §04 (full per-endpoint contracts), §17 (canonical OpenAPI), AC-12 (streaming ingest), AC-14 (Ack envelope), AC-30 (Error envelope), AC-67–AC-72 (NDJSON streaming retrieval frame contract).
+- **Given** the running plugin exposing the WP REST index under `/wp-json/git-logs/v2/`.
+- **When** an AI auditor or implementer walks spec/22 §97 and seeks the binding contract for the 10 logical REST endpoints — per-endpoint method/path, request/response schemas, auth class, error envelope codes, NDJSON framing applicability, and the T-EP-01..T-EP-10 scenario matrix.
+- **Then** the canonical normative body MUST live in **§57 §AC-11 detail** (`57-ac-section-d-endpoints-detail.md`) — 10 logical endpoints fold to 8 HTTP paths via the `?q=` collapse rule (rows #5/#6 share `/get-logs`; rows #7/#8 share `/get-pipeline-logs`); per-endpoint matrix binds method · path · request schema · response schema · auth class (§05 Lane A — TempToken vs App Password) · `GL-*` error codes (§15); cross-cutting envelope contracts: `AckResponse` (AC-14) on writes #1–#4, `ErrorEnvelope` (AC-30) on any error, NDJSON `Header→Log*|ErrorLog*→Progress*→End` (AC-67/68/69/71/72) on reads #5–#10. Plus the 10-row T-EP-01..T-EP-10 scenario matrix + `Lesson #34` walker-cap classification rule.
+- **Test invariant:** All 10 logical endpoints resolve under `/wp-json/git-logs/v2/` with the documented method+path; write responses (#1–#4) match `AckResponse`; any error response matches `ErrorEnvelope`; NDJSON reads (#5–#10 with `Accept: application/x-ndjson`) emit `Header→Log*→End` framing.
+- **Worked example:** `GET /wp-json/git-logs/v2/get-pipeline-logs?PipelineId=42` with `Accept: application/x-ndjson` → 4-frame stream `Header{StreamId:"s_7f3a"} → Log{Seq:1} → Log{Seq:2} → End{Seq:2,Truncated:false}`; resume via `?stream-id=s_7f3a&after-seq=1` replays only `Seq>1`.
+- **Verifies:** brief §Endpoints, §04 (per-endpoint prose), §17 v2.9.4+ (canonical OpenAPI wire schemas), §15 (`GL-*` codes), AC-12 (streaming ingest), AC-14 (Ack envelope), AC-30 (Error envelope), AC-67–AC-72 (NDJSON frame contract), AC-74 (`Header.StateTransition`), AC-80 (sibling test delegation). Closes Lesson #19 audit-boundary gap (pre-promotion AC-11 was a 4-line stub citing §17 from tier-2). Mirror of AC-05 (§53), AC-12 (§55), AC-23 (§56) — Phase D normative-surface promotions. **§57 §AC-11 detail** — full normative body lives in `57-ac-section-d-endpoints-detail.md`.
+- **Source:** `97-acceptance-criteria.md` (this AC) + `57-ac-section-d-endpoints-detail.md` (full body); cross-refs `04-rest-api-endpoints.md`, `17-openapi.yaml`, `15-error-codes.md`, AC-12, AC-13, AC-14, AC-30, AC-67–AC-72, AC-74, AC-80.
 
 ### AC-12 — Streaming ingestion  `[active]`
 
