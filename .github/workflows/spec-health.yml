@@ -447,6 +447,18 @@ jobs:
           LOVABLE_API_KEY: ${{ secrets.LOVABLE_API_KEY }}
         run: python3 linter-scripts/audit-ai-implementability.py --strict
 
+      - name: §24 design-system boundary gate (Sess-55 A-43, gate #19)
+        # Promotes §24 §97 AC-ADS-06 / 09 / 10 from contract-proven to load-proven.
+        # Hard-fails CI when:
+        #   - any pages/(marketing)/** file imports src/components/app/AppShell
+        #   - any basename appears in BOTH src/components/ui/** and src/components/app/**
+        #   - any var(--app-status-*) leaks into src/components/ui/**
+        # Self-test asserts each negative fixture under linter-scripts/fixtures/
+        # is rejected (vacuously-passing scanner is itself a fail).
+        run: |
+          python3 linter-scripts/check-ads-boundaries.py --check all
+          python3 linter-scripts/check-ads-boundaries.py --self-test
+
       - name: Summary
         if: always()
         env:
