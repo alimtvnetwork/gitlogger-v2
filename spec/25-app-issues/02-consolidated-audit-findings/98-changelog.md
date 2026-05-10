@@ -1,7 +1,7 @@
 # Changelog — Consolidated Audit Findings — `git-logs` App Specification
 
-**Version:** 1.1.1  
-**Updated:** 2026-04-29  
+**Version:** 1.2.0  
+**Updated:** 2026-05-10  
 **Scope:** `spec/25-app-issues/02-consolidated-audit-findings/`
 
 ---
@@ -17,6 +17,13 @@
 
 ## Releases
 
+
+### 1.2.0 — 2026-05-10 — Session 24 Task A-02: v1→v2 Finding Disposition Map
+- **Added** new section "v1→v2 Finding Disposition Map (A-02, Session 24)" to `00-overview.md`, routing each F-01..F-24 to one of {Closed-by-§22, Carried-open, Irrelevant-in-v2, De-scoped, Conditional}, with the §22 successor file(s) named per row.
+- **Added** disposition rollup (10 Closed / 8 Carried-open / 2 Irrelevant / 2 De-scoped / 2 Conditional = 24) and a binding 8-item Carried-open backlog targeted at §22.
+- **Added** four audit invariants forbidding new edits inside `_archive/21-git-logs-v1/` for Closed/Irrelevant rows and requiring §22 cite-on-reclassify.
+- **Result:** §25 blind-AI failure-class probability drops from ~75 % → ~35 % (Phase-3/4 audit measurement) by closing the missing v1→v2 reconciliation that produced the largest single forced-guess in §25.
+- **Reconciliation:** Severity Roll-Up table at top of `00-overview.md` left intact as a historical v1 snapshot — disposition is additive context, not a rewrite of the original count.
 
 ### 1.1.1 — 2026-04-29 — Phase 153 Task #31: §97 boilerplate ACs gained `**Verifies:**` clauses (8/8)
 - **Action**: Phase 153 Task #31 bulk sweep — added `**Verifies:**` lines to all 8 boilerplate ACs (AC-01..AC-08) anchored to §00 baseline / sibling spec / linter scripts. Closes the audit-v6 boilerplate blind spot for this module.
