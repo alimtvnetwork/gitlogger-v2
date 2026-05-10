@@ -106,3 +106,9 @@ These slots are immutable once shipped (per project memory rule). If content nee
 - CI workflow contract inlined: 5 stages (detect, validate, lint, promote, report).
 - Implementability raised 90 → 95 (deterministic audit).
 
+
+### v2.1.6 — 2026-05-10 — A-55: REST/RPC contract pinned (T-06)
+
+- New "REST / RPC Contract" section added between Q4 and Migration Template; AC-ADB-REST-01 minted.
+- Regression-grep: `rg -nc '^## REST / RPC Contract|AC-ADB-REST-01' spec/23-app-database/00-overview.md` MUST return ≥2.
+- Wire contract uses PRIMARY-lane PascalCase keys; boolean parity (true/false ↔ INTEGER 0/1) enforced at API boundary (R-4 invariant 2).
