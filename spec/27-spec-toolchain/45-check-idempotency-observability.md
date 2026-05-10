@@ -95,6 +95,9 @@ fixtures:
 - **F-5** §22 `20-observability.md` inlines a parallel
   "Idempotency contract" matrix re-listing all R-NN flags → fails
   (clause-5; restate-drift)
+- **F-6** R5 vacuous-pass — no R-1 8-row matrix found in §23 §00 →
+  fails as `vacuous-pass: empty walk → exit 3 fixture-rot` rather than
+  silently passing on absence.
 
 ## 5-link self-enforcement chain
 

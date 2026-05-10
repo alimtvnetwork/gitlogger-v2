@@ -87,6 +87,9 @@ correctly REJECTS five synthetic fixtures:
   — overrides silently lose to defaults) → fails (clause-4)
 - **F-5** §23 §00 inlines a parallel "Settings persistence" matrix
   redefining the merge order → fails (clause-6)
+- **F-6** R5 vacuous-pass — no S-1/S-2/S-3 matrix found in §23 §00 →
+  fails as `vacuous-pass: empty walk → exit 3 fixture-rot` rather than
+  silently passing on absence.
 
 ## 5-link self-enforcement chain (A-44 template)
 

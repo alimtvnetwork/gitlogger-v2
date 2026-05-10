@@ -1,7 +1,16 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.40.0
-**Updated:** 2026-05-10 (Phase-5 G-2 — §27 §00 P19-wave gate-cite sub-ledger added; clause-1 cleared; meta-verify residual 9 → 6)
+**Version:** 4.41.0
+**Updated:** 2026-05-10 (Phase-5 G-3 + G-4 — fixture rosters lifted to 6 in slots 39/42/44/45/46; banner-triple `Total active gates: 23` literal added to §00/§98/§99; meta-verify residual 6 → 0)
+**Total active gates: 23**
+
+### 4.41.0 — 2026-05-10 — Phase-5 G-3 + G-4: fixture-roster lift + banner-triple normalization (residual 6 → 0)
+- **G-3 — fixture-roster lift**: Added `**F-6** R5 vacuous-pass — empty-corpus → exit 3 fixture-rot` bullet to slots 39 (was 4 fixtures) / 42 / 44 / 45 / 46 (each was 5 fixtures). Slot 39 also gained `**F-5**` disconnect-invariant-CHECK-absent fixture in the same edit. All 5 slots now declare ≥6 `**F-N**` markers as required by `meta-verify-lockstep.py` clause-3. Pure spec-doc edits — no script changes, no fixture-corpus mutation on disk.
+- **G-4 — banner-triple normalization**: Added canonical `Total active gates: 23` literal to all three §27 banner blocks (§00 banner block under the meta-verify Lesson-#15 cite, §98 changelog header, §99 consistency-report header). Recount basis: `grep -lE '^\*\*Status:\*\*\s+Active\s+gate\s+#' spec/27-spec-toolchain/*.md | wc -l` returns **23**. Previously the meta-verifier's `GATE_COUNT_RE` was matching incidental "27"s (e.g. version strings, sub-ledger row counts), producing the spurious 00=27 / 98=0 / 99=27 drift report.
+- **Mechanical re-verify**: `python3 linter-scripts/meta-verify-lockstep.py` returns **0** violations (was 34 at P19d baseline; -100 %). Self-test still 6/6.
+- **Workflow flip**: With clause-1..5 all green, gate #42 (`§27 lockstep meta-verify gate`) flips from `|| echo "::warning::..."` warn-only to **hard-fail** in `.github/workflows/spec-health.yml`. P19d wave fully load-proven AND CI-enforced.
+- **Phantom-script ledger**: unchanged at **34** (G-3/G-4 are spec-side grooming).
+- **Scorecard impact**: §27 triple-ceiling L120/C120/R120 now backed by 0-residual mechanical pass (was 6 residuals after G-2). C2 Completeness on the meta-verifier corpus hits its true ceiling. No cohort-matrix changes — but §27 R-band C6 Friction tightens (gate #42 no longer warn-only, so auditors can cite it as a hard-fail enforcer).
 
 ### 4.40.0 — 2026-05-10 — Phase-5 G-2: §27 §00 gate-cite sub-ledger lift (clause-1 cleared; residual 9 → 6)
 - **Action**: Inserted a `#### Phase-5 P19 wave gate-cite block` sub-ledger directly after the slot 59 / gate #37 row in §00. The sub-ledger carries 3 rows for gates **#38** (slot 60 `check-no-toolchain-enum-in-issues-folder`), **#40** (slot 62 `check-ci-cli-self-test-harness`), **#41** (slot 63 `check-diagram-parity`) — gates that the main slot ledger could not represent because the 60-69 numeric range was already squatted by config-file rows (slot 60 `forbidden-strings.toml`, slot 61 `spec-cross-links.allowlist`, slot 62 `spec-folder-refs.allowlist`, slot 63 `readme-cross-links.md`). Sub-ledger preserves slot↔§00 one-way consistency without renumbering the legacy config-file slots.
