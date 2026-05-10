@@ -1,9 +1,20 @@
 # Changelog
 
-**Updated:** 2026-05-10 (Phase-5 T-38 — P17 §28 floor-lift completion; AC-28-49 minted in §97 closing the placeholder opened in §27 v4.27.0; literal-cited via gate #40; §28 reaches Lovable + Cursor 120 ceiling)
+**Updated:** 2026-05-10 (Phase-5 T-38 / P19c — gate #40 SHIPPED real-disk pass; AC-28-49 promotes literal-cited → load-proven; §04 declares `--self-test`+`--check`; §07 4-row exit-code table; phantom-script count 37 → 36)
 
 
 All notable changes to `spec/28-universal-ci-cli/`.
+
+## [2.15.0] — 2026-05-10 — Phase-5 T-38 / P19c: gate #40 ships real-disk (AC-28-49 load-proven)
+
+- **Action**: Created `linter-scripts/check-ci-cli-self-test-harness.py` (gate #40, 6 clauses, 6-fixture `--self-test` harness, 4-mode exit-code contract). Real-disk scan against `spec/28-universal-ci-cli/` passes 0 violations. Bumped §04 to v1.2.0 adding the `--self-test` global flag (with 4 semantic markers `built-in`/`no network`/`no real CI provider`/`no real git repo`) and `--check <mode>` enum covering 6 modes. Bumped §07 to v1.2.0 appending `## Self-test exit codes (gate #40 / --self-test)` 4-row table mapping `0`→pass · `1`→violation · `2`→invocation error · `3`→fixture-rot. Wired hard-fail step `§28 CI-CLI self-test harness gate (#40 / Phase-5 T-38 / P19c)` in `.github/workflows/spec-health.yml` after the §24 no-DDL gate.
+- **Why this now**: P19c — second cycle of the post-Sess-65 phantom-script eradication run. Gate #40 was citation-only in v2.14.0 (slot-62 doc + AC-28-49 named the script but the file did not exist on disk — phantom-script #11 of 38 in the Sess-65 audit). Shipping the real script + wiring the workflow step closes the AC-28-49 vapor and lifts §28's load-proof rating from "literal-cited" (band 18 of Rubric v2) to "load-proven" (band 20).
+- **Scorecard impact** (post-P19c, real-disk verified):
+  - §28 Lovable: 120 → **120** (held; C5 already at 20 via citation, now genuinely backed by disk)
+  - §28 Cursor: 120 → **120** (held; same)
+  - §28 Raw-LLM: 118 → **120** (+2 — C6 Friction lifts from 18 → 20: any contributor can now run `python3 linter-scripts/check-ci-cli-self-test-harness.py --self-test` and reproduce the 6/6 pass deterministically; previously the script was vapor and the AC could not be reproduced)
+- **Phantom-script ledger**: count 37 → 36. Remaining backlog for P19d/P19e: gate #42 `meta-verify-lockstep.py` and gate #39 `check-no-out-of-scope-spec-folder-link.py`. P19a (gate #43) flips warn-only → hard once P19e ships.
+- **Risk / rollback**: low. New script is read-only over `spec/28-universal-ci-cli/`. CI step is new (no replacement). Rollback = revert this commit; previous `--self-test` flag did not exist in §04 v1.1.0, so no behavioural drift outside §28's own surface.
 
 ## [2.14.0] — 2026-05-10 — Phase-5 T-38: AC-28-49 minted (P17 §28 floor-lift completion; gate #40 literal-cited)
 

@@ -1,7 +1,7 @@
 # Error Catalog
 
-**Version:** 1.1.1  
-**Updated:** 2026-04-30 (Phase 153 Task A11g — `GLCI-DOCTOR-PROFILE-NOT-FOUND` row clarification: server-side `RepoUrl` → `GitProfile` resolution, CLI passive; bound by §97 AC-28-43)
+**Version:** 1.2.0  
+**Updated:** 2026-05-10 (Phase-5 T-38 / P19c — appended `Self-test exit codes (gate #40)` 4-row table mapping `0`→pass · `1`→violation · `2`→invocation error · `3`→fixture-rot, inheriting §27 cohort contract verbatim per Lesson #36; bound by §97 AC-28-49. Prior: Phase 153 A11g GLCI-DOCTOR-PROFILE-NOT-FOUND clarification.)
 
 All `GLCI-*` codes the CLI itself emits. Server-originated `GL-*` codes are surfaced verbatim per [`spec/22-git-logs-v2/15-error-codes.md`](../22-git-logs-v2/15-error-codes.md). Adding a new code requires a row here.
 
@@ -105,3 +105,20 @@ In `--json` mode:
   "Action": "Check server logs / network"
 }
 ```
+
+---
+
+## Self-test exit codes (gate #40 / `--self-test`)
+
+The `glci --self-test` harness (§04) inherits the §27 cohort
+self-test exit-code contract verbatim per Lesson #36
+(link-don't-restate). vacuously-passing scanner is auto-fail
+per R5.
+
+| Exit | Meaning |
+|-----:|---------|
+| `0` → pass | All clauses passed; ≥1 fixture exercised per `--check` mode |
+| `1` → violation | One or more clauses failed; stderr lists each violation |
+| `2` → invocation error | Bad CLI usage (unknown `--check` mode, missing files) |
+| `3` → fixture-rot | Built-in fixture suite is broken (F-1 unique-passing fixture failed, or a failure-fixture passed). Distinguishes "self-test broken" from "implementation broken" |
+

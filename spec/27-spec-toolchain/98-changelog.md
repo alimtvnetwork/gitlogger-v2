@@ -1,7 +1,14 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.35.0
-**Updated:** 2026-05-10 (Phase-5 T-29 / **P19b** ships gate #36 `check-no-sql-ddl-in-ui-folder.py`; AC-ADS-17 transitions phantom → literal-cited; 1 latent §24 spec defect fixed by gate detection; phantom count 38→37)
+**Version:** 4.36.0
+**Updated:** 2026-05-10 (Phase-5 T-38 / **P19c** ships gate #40 `check-ci-cli-self-test-harness.py`; AC-28-49 promotes literal-cited → load-proven; §28 reaches triple-ceiling L120/C120/R120 honestly; phantom count 37 → 36)
+
+### 4.36.0 — 2026-05-10 — Phase-5 T-38: P19c ships gate #40 `check-ci-cli-self-test-harness.py`
+- **Action**: Shipped 280-line script with 6 clauses per AC-28-49 contract: (clause-1) §04 `--self-test` flag with 4 semantic markers `built-in`/`no network`/`no real CI provider`/`no real git repo`; (clause-2) §00/§97 R5 `vacuously-passing` literal + `vacuous-pass` marker; (clause-3) §97 ≥6 fixtures + per-`--check`-mode coverage; (clause-4) §07 4-row exit-code table `0`→pass·`1`→violation·`2`→invocation error·`3`→fixture-rot; (clause-5) §00 harness declaration literal + Lesson #15 self-citation `Self-enforcing via §27 backlog gate \`ci-cli-self-test-harness-check\``; (clause-6) R5 vacuous-pass auto-fail. Built-in `--self-test` runs 6 fixtures F-1..F-6 — 6/6 passing.
+- **§28 spec lifts shipped same-turn**: §04 v1.1.0 → v1.2.0 (`--self-test` global-flag row + `--check <mode>` 6-mode enum); §07 v1.1.1 → v1.2.0 (`## Self-test exit codes (gate #40 / --self-test)` 4-row table inheriting §27 contract verbatim per Lesson #36).
+- **Workflow wiring**: Added `§28 CI-CLI self-test harness gate (#40 / Phase-5 T-38 / P19c)` step in `.github/workflows/spec-health.yml` directly after the P19b §24 no-DDL gate. Hard-gated (no `|| true`).
+- **Scorecard impact**: §28 Raw-LLM +2 → 120 (C6 Friction 18 → 20 via on-disk reproducibility; was vapor in v2.13.0). §28 reaches honest triple-ceiling L120/C120/R120 (joins §27). §27 Testability +1. Truth ratio: 24 wired gates over 45 disk scripts. Phantom-script count 37 → 36 per gate #43.
+
 
 ### 4.35.0 — 2026-05-10 — Phase-5 T-29 (delayed): P19b ships gate #36 `check-no-sql-ddl-in-ui-folder.py`
 - **Action**: Shipped 230-line script with 6 invariants T-ADS-17-01..06 per AC-ADS-17 spec contract: (T-01) SQL fence detection; (T-02) bare DDL keyword in prose with inline-code AND auditor-quoted-evidence carve-outs; (T-03) routing-pin `**Canonical owner:**` literal proximity check (≤400 chars); (T-04) `module_run_audit_p78` citation discipline (≤100 chars to §27/§28); (T-05) path-prefix lock to §24; (T-06) auditor-quoted-evidence carve-out per AC-CAF-05. Built-in `--self-test` runs 6 fixtures F-1..F-6 (3 PASS, 3 FAIL — exact match to AC-ADS-17 spec) — 6/6 passing.

@@ -433,6 +433,18 @@ jobs:
           python3 linter-scripts/check-no-sql-ddl-in-ui-folder.py --self-test
           python3 linter-scripts/check-no-sql-ddl-in-ui-folder.py
 
+      - name: §28 CI-CLI self-test harness gate (#40 / Phase-5 T-38 / P19c)
+        # Enforces §28 §97 AC-28-49 (built-in --self-test harness): the
+        # `glci` CLI ships a built-in fixture suite; six clauses cover
+        # §04 flag declaration, §00 R5 inheritance + Lesson-#15 cite,
+        # §97 fixture coverage, §07 4-row exit-code table, §00 harness
+        # declaration, and R5 vacuous-pass auto-fail. Built-in
+        # --self-test runs 6 fixtures F-1..F-6.
+        # Spec: spec/27-spec-toolchain/62-check-ci-cli-self-test-harness.md
+        run: |
+          python3 linter-scripts/check-ci-cli-self-test-harness.py --self-test
+          python3 linter-scripts/check-ci-cli-self-test-harness.py
+
 
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
