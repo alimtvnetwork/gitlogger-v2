@@ -586,6 +586,25 @@ jobs:
         run: |
           python3 linter-scripts/check-idempotency-observability.py --self-test
           python3 linter-scripts/check-idempotency-observability.py
+
+      - name: §24+§25 audit-quoted-evidence marker gate
+        # Slot 46 / Gate #27 — five clauses + R5 vacuous-pass.
+        # Mechanises AC-CAF-05 (T-12, the LAST cross-cutting CAF):
+        # caf05-marker (§24 §97 AC-CAF-05 carries `auditor-quoted evidence`,
+        # `spec/_archive/21-git-logs-v1/`, `AC-AI-10/11`, `cross-cutting status`),
+        # ai-10-11-surface (§25 §97 AC-AI-10 + AC-AI-11 present + literals),
+        # ai-14-rule (§25 §97 AC-AI-14 rule 4 carries the verbatim-quote
+        # mechanism literals), finding-body-quoting (every foreign-AC ID
+        # `AC-(ALW|ERR|JWT|CG|SAG|TOK)-\d+` in §25 finding bodies MUST be
+        # backticked or fenced or in a blockquote), no-restate-23-24
+        # (any foreign-AC mention in §23/§24 prose MUST be backticked AND
+        # have an evidence-marker word in ±2-line window). Promotes AC-CAF-05
+        # conditional 20 → load-proven 20. **Fifth and final cross-cutting
+        # CAF gate** — entire CAF-01..05 family un-conditionally load-proven.
+        # Spec: spec/27-spec-toolchain/46-check-audit-quoted-evidence-marker.md
+        run: |
+          python3 linter-scripts/check-audit-quoted-evidence-marker.py --self-test
+          python3 linter-scripts/check-audit-quoted-evidence-marker.py
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
