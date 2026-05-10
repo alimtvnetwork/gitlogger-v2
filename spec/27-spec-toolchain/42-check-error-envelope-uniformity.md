@@ -67,6 +67,9 @@ correctly REJECTS five synthetic fixtures:
   (clause-4)
 - **F-5** §23 inlines a YAML `ErrorEnvelope:` block redefining the
   field set → fails (clause-5)
+- **F-6** R5 vacuous-pass — no `ErrorEnvelope` schema definition found in
+  §22 OpenAPI corpus → fails as `vacuous-pass: empty walk → exit 3
+  fixture-rot` rather than silently passing on absence.
 
 ## 5-link self-enforcement chain (A-44 template)
 
