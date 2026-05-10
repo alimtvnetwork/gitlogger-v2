@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.29.0  
-**Updated:** 2026-05-10 (Phase-5 T-37 — P16 C6 friction sweep: identical Raw-LLM Auditor Pin block (resolves `mem://constraints/spec-scope` + `mem://preferences/scorecard-ritual` + cross-cohort gate map #39/#40/#41/#42 inline) added directly under banner of §22 / §23 / §24 / §25 / §28 §00. §26 + §27 already at C6 ceiling, skipped. Banner version bumps: §22 v3.23.0→v3.24.0, §23 v4.5.0→v4.6.0, §24 v4.8.0→v4.9.0, §25 v3.8.0→v3.9.0, §28 v2.11.0→v2.12.0. Raw-LLM lifts: §22 113→118 (+5); §23 113→118 (+5); §24 112→118 (+6); §25 114→118 (+4); §28 114→118 (+4). All 7 folders now at Raw-LLM ≥118 (cohort floor 118, ceiling 120). No new gate. Prior: T-36 — slot 64 `meta-verify-lockstep.py`, gate #42.)
+**Version:** 4.30.0  
+**Updated:** 2026-05-10 (Phase-5 T-38 — P17 §28 floor-lift completion. AC-28-49 minted in §28 §97 (`glci --self-test` built-in harness contract) closing the placeholder opened in §27 v4.27.0; literal-cited via gate #40 (`linter-scripts/check-ci-cli-self-test-harness.py`, slot 62). §28 advances Lovable 119 → **120** and Cursor 117 → **120** — §28 reaches Lovable + Cursor ceiling; only Raw-LLM 118 remains below. Cohort now: §26 L120/C120/R118, §27 L120/C120/R120 (triple-ceiling), §28 L120/C120/R118. No new gate (42). Prior: T-37 — P16 C6 friction sweep × 5 folders.)
 
 > **Self-enforcing via §27 backlog gate `meta-verify-lockstep`** — Lesson #15 reflexivity pin for gate #42 (slot 64). Stripping this literal from §27 §00 fails clause-5 of the meta-verifier itself.
 <!-- h10-verified-phase: 158 -->
