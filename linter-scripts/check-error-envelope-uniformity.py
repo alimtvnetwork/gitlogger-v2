@@ -222,10 +222,28 @@ RESTATE_RE = re.compile(
     re.MULTILINE)
 
 
+def _has_yaml_envelope_restate(text: str) -> bool:
+    """Walk fenced ```yaml / ```yml blocks; flag if any contains a top-level
+    `ErrorEnvelope:` key declaration. Pure line-walk — no backtracking."""
+    in_yaml = False
+    for ln in text.splitlines():
+        stripped = ln.strip()
+        if stripped.startswith("```"):
+            tag = stripped[3:].strip().lower()
+            if not in_yaml and tag in ("yaml", "yml"):
+                in_yaml = True
+            elif in_yaml:
+                in_yaml = False
+            continue
+        if in_yaml and re.match(r"^\s*ErrorEnvelope:\s*$", ln):
+            return True
+    return False
+
+
 def clause_no_restate(s: Surface) -> list[str]:
     errs: list[str] = []
     for label, text in (("§23", s.db_overview), ("§24", s.ui_overview)):
-        if RESTATE_RE.search(text):
+        if _has_yaml_envelope_restate(text):
             errs.append(f"clause-5: {label} §00 inlines a YAML "
                         f"`ErrorEnvelope:` block restating §22 "
                         f"17-openapi.yaml schema (Lesson #36 violation)")
