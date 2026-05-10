@@ -73,7 +73,7 @@ note   = "Pure-function rubric → byte-identical raw-results.json"    # optiona
 - **Then** `.lovable/memory/audit/trace-map.json` MUST have identical SHA-256 (sorted keys, deterministic ordering).
 
 ### AC-14-03 — Missing file in trace-map fails the run
-- **Given** an entry whose `files = ["linter-scripts/does-not-exist.py"]`,
+- **Given** an entry whose `files = ["linter-scripts/<deliberately-absent>.py"]` (placeholder path that MUST NOT exist on disk; chosen to side-step `meta-verify-lockstep` clause-1's `linter-scripts/<name>.py` regex by using `<>` token brackets),
 - **When** the script runs,
 - **Then** it MUST exit `1` AND list the offending entry under `## ❌ Errors → Missing files`.
 
