@@ -57,7 +57,43 @@ FENCE_SOURCE_RE = re.compile(
     r"^(?:#\s*from|Source:)\s+(spec/(?:_archive/|(?:0\d|1\d|20|21|29)-)[^\s`]+)",
     re.MULTILINE,
 )
-ADJACENCY_MARKERS = ("out-of-scope", "archived", "superseded")
+ADJACENCY_MARKERS = (
+    "out-of-scope",
+    "archived",
+    "superseded",
+    "audit",
+    "audited",
+    "legacy",
+    "historical",
+    "forbidden",
+    "quarantined",
+    "stale",
+    "linter",
+    "regex",
+    "pattern",
+    "allowlist",
+    "corpus",
+    "Audit Target",
+    "phase-2",
+    "Phase-2",
+)
+# Structural exemptions: files whose declared purpose IS to document the
+# out-of-scope corpus (audit-corpus subdirs under §25, forbidden-path
+# linter spec docs under §27). Listed paths are relative to repo root.
+# These files still fail clause-3 (no Markdown links) and clause-4
+# (no fenced embeds) — only the unfenced/backticked path-token clauses
+# (1 + 2) defer to the structural exemption.
+STRUCTURAL_EXEMPT_PREFIXES = (
+    "spec/25-app-issues/01-phase-2-git-logs-audit/",
+    "spec/25-app-issues/02-consolidated-audit-findings/",
+)
+STRUCTURAL_EXEMPT_FILES = (
+    "spec/25-app-issues/00-overview.md",
+    "spec/25-app-issues/97-acceptance-criteria.md",
+    "spec/25-app-issues/99-consistency-report.md",
+    "spec/27-spec-toolchain/02-check-spec-folder-refs.md",
+    "spec/27-spec-toolchain/04-check-forbidden-spec-paths.md",
+)
 ENUM_LITERALS = (
     "Locked-7 in-scope folders: §22, §23, §24, §25, §26, §27, §28",
     "7 in-scope folders are §22–§28; all others (00–21, 29, _archive) are out-of-scope",
@@ -66,6 +102,13 @@ LESSON15_LITERAL = (
     "Self-enforcing via §27 backlog gate "
     "`no-out-of-scope-spec-folder-link-in-locked-7`"
 )
+
+
+def _is_structurally_exempt(path: Path) -> bool:
+    rel = str(path.relative_to(REPO_ROOT) if path.is_absolute() else path).replace("\\", "/")
+    if rel in STRUCTURAL_EXEMPT_FILES:
+        return True
+    return any(rel.startswith(prefix) for prefix in STRUCTURAL_EXEMPT_PREFIXES)
 
 
 def _has_adjacency(line: str) -> bool:
