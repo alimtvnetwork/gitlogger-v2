@@ -61,42 +61,49 @@
 - **Given** the entire `spec/` tree,
 - **When** `node linter-scripts/check-tree-health.cjs --min=80` is run,
 - **Then** this module MUST contribute `required=2/2` (overview + consistency report present) and the overall score MUST be ≥ 80.
+- **Worked example:** `node linter-scripts/check-tree-health.cjs --min=80 --json | jq '.modules["spec/27-spec-toolchain"].required'` MUST emit `"2/2"`; `jq '.score >= 80'` MUST emit `true`. Removing `00-overview.md` drops `required` to `1/2` and fails the gate with exit `1`.
 
 ### AC-T-10 — Spec cross-link gate (zero broken links)
 - **Given** every relative link inside `spec/**/*.md`,
 - **When** `python3 linter-scripts/check-spec-cross-links.py --github` is run as a CI gate (see `.github/workflows/spec-health.yml` step "Spec cross-link gate"),
 - **Then** the script MUST exit 0 with `OK All internal spec cross-references resolve` and ANY broken target MUST fail the build (zero-broken-link contract). Allowlist exceptions live in `linter-scripts/spec-cross-links.allowlist`; entries there bypass the gate intentionally and MUST carry an inline comment justifying the exemption.
 - **Verifies:** `linter-scripts/check-spec-cross-links.py` (binds the AC to its implementation per `linter-scripts/trace-map.toml:115-118`).
+- **Worked example:** `python3 linter-scripts/check-spec-cross-links.py --github; echo "exit=$?"` MUST print `OK All internal spec cross-references resolve` then `exit=0`. Inserting `[broken](./does-not-exist.md)` into any spec file MUST flip the run to `exit=1` with a stderr `<file>:<line>: broken-link: ...` line consumable by the GitHub problem matcher.
 
 ### AC-T-11 — Validator output goes to the correct stream
 - **Given** any validator script in slots 01–09 or 50–59 (extensions `.py`, `.cjs`, `.sh`, `.ps1`, `.go`),
 - **When** the script is executed and produces findings,
 - **Then** ALL violation messages MUST be written to **stderr** (not stdout) and structured as `<file>:<line>: <rule-id>: <message>` so CI log parsers + IDE problem-matchers can extract them deterministically; success-summary lines (e.g. `0 findings`, `OK`) MAY go to stdout; mixing the two streams is FORBIDDEN because downstream tooling pipes stdout to JSON parsers and stderr to log aggregators.
 - **Verifies:** AC-T-03 exit-code contract; `linter-scripts/run.sh` orchestrator (relies on stderr separation to surface failures); `.github/workflows/spec-health.yml` problem-matcher convention.
+- **Worked example:** `python3 linter-scripts/check-spec-cross-links.py >/tmp/out 2>/tmp/err; wc -l </tmp/err` MUST be `0` on a clean tree; after injecting one broken link, `/tmp/err` MUST contain a `<file>:<line>: broken-link: <msg>` line and `/tmp/out` MUST stay parseable as a one-line summary (no findings interleaved).
 
 ### AC-T-12 — Filler scripts MUST be safe to run in a tight loop
 - **Given** any filler script in slots 20–29 (`fill-missing-acceptance-criteria.cjs`, `fill-missing-changelogs.cjs`, `fill-missing-consistency-reports.cjs`),
 - **When** the script is executed N times consecutively against the same `spec/` tree,
 - **Then** the second through Nth runs MUST produce **byte-identical** output to the disk state at the end of the first run — no new files created, no existing files mutated, no banner timestamps bumped, no AC bodies regenerated. Idempotency is verified by the `git diff --exit-code` invariant in `linter-scripts/run.sh` after the self-heal pipeline. Re-running a filler against an already-complete tree MUST exit `0` with a stdout summary like `0 files created` and zero stderr output.
 - **Verifies:** AC-T-04 idempotency declaration; SELF-HEAL pipeline contract in `mem://index.md` Core; `linter-scripts/run.sh` post-fill `git diff` gate.
+- **Worked example:** `for i in 1 2 3; do node linter-scripts/fill-missing-acceptance-criteria.cjs; done; git diff --exit-code spec/` MUST exit `0` after run 2 and run 3 (run 1 may legitimately create files). Any non-zero exit means a filler is non-idempotent and MUST be patched before merge.
 
 ### AC-T-13 — Generators are deterministic given identical disk truth
 - **Given** any generator in slots 10–19 (e.g. `generate-spec-index.cjs`, `generate-dashboard-data.cjs`, `generate-trace-map.py`),
 - **When** the generator is run twice on the same `spec/` snapshot (no edits between runs),
 - **Then** the produced artifact MUST be **byte-identical** between runs — no embedded `Date.now()`, no `Math.random()`, no environment-leaked values (`$USER`, `$HOSTNAME`, `process.env.CI`), no map-iteration order non-determinism (use `Array.from(map).sort()` or equivalent). Embedded `Generated: <date>` lines MUST use a **content-derived** timestamp (`git log -1 --format=%cI` of the latest spec-tree change) rather than `new Date()` — non-deterministic generators trigger phantom diffs that drown real changes in PRs.
 - **Verifies:** AC-T-01 bijection (regenerated artifacts must round-trip); `linter-scripts/generate-spec-index.cjs`; `linter-scripts/generate-dashboard-data.cjs`; `linter-scripts/audit-spec-vs-code-v2.py` (extended coverage). **Mechanical lock (P49):** `linter-scripts/test/test-audit-deterministic-stability.sh` runs each generator twice on the live `spec/` tree and asserts byte-identical output (sha256 + byte-count) across runs — auditor + spec-index + dashboard-data, snapshot-restore-safe (working tree byte-identical pre/post). 13/13 assertions GREEN.
+- **Worked example:** `node linter-scripts/generate-spec-index.cjs && sha256sum spec/INDEX.md > /tmp/a; node linter-scripts/generate-spec-index.cjs && sha256sum spec/INDEX.md > /tmp/b; diff /tmp/a /tmp/b` MUST be empty. A non-empty diff implies wall-clock leakage (`new Date()`) or unsorted map iteration — fix by switching to `git log -1 --format=%cI` and `Array.from(map).sort()`.
 
 ### AC-T-14 — Auditor scripts MUST emit machine-readable JSON alongside human-readable Markdown
 - **Given** any auditor script in slots 30–39 (`audit-spec-vs-code.py`, `audit-spec-vs-code-v2.py`),
 - **When** the auditor is invoked with `--format json` (mandatory flag),
 - **Then** the output MUST be valid JSON parseable by `json.loads()` / `JSON.parse()` with a fixed top-level shape `{score: number, max_score: number, grade: string, findings: Array<{rule_id: string, severity: "low"|"medium"|"high"|"critical", file: string, line: number|null, message: string}>, generated_at: string}`. The default invocation (no flag) emits Markdown for humans. Auditors WITHOUT a JSON mode are FORBIDDEN because the dashboard generator (§11) consumes JSON only. Schema versioning: bumping the JSON shape is a major version of the auditor and triggers a §98 changelog entry.
 - **Verifies:** AC-T-05 CLI surface; §11 `generate-dashboard-data.cjs` (consumer); `mem://index.md` measured-not-narrated rule.
+- **Worked example:** `python3 linter-scripts/audit-spec-vs-code-v2.py --format json | jq -e '.score, .max_score, .grade, (.findings | type == "array")'` MUST exit `0` and emit four non-null values; `jq -e '.findings[0] | has("rule_id") and has("severity") and has("file")'` MUST emit `true`. An auditor returning Markdown under `--format json` MUST FAIL the dashboard build (§11) with a JSON parse error.
 
 ### AC-T-15 — Configuration files (slots 60–69) MUST be self-validating
 - **Given** any configuration file in slots 60–69 (`forbidden-strings.toml`, `spec-cross-links.allowlist`, `spec-folder-refs.allowlist`, `readme-cross-links.md`),
 - **When** the file is loaded by its consumer validator,
 - **Then** the consumer MUST refuse to start (exit `2`, NOT exit `1`) if the config is malformed: TOML files MUST be parseable by `tomllib.load()`; `.allowlist` files MUST follow the documented `# comment` + `<path>` line format; every allowlist entry MUST carry a trailing `# reason: <free-text>` comment explaining why the exception exists (silent allowlist entries accumulate as zombie waivers). The consumer's spec section MUST cite the config's spec section bidirectionally — §03 ↔ §60, §01 ↔ §61, §02 ↔ §62.
 - **Verifies:** AC-T-06 bidirectional source links; §03/§60 contract; §01/§61 contract; §02/§62 contract.
+- **Worked example:** `python3 -c "import tomllib; tomllib.load(open('linter-scripts/forbidden-strings.toml','rb'))"` MUST exit `0`; `awk '!/^#/ && NF && !/# reason:/' linter-scripts/spec-cross-links.allowlist` MUST print zero lines (every entry carries a `# reason:` comment). A malformed TOML config MUST cause its consumer to exit `2` (config error), NOT `1` (findings).
 
 ### AC-T-16 — Runners (slots 40–49) MUST be functionally equivalent across platforms
 - **Given** the two orchestrator entry points `linter-scripts/run.sh` (slot 40) and `linter-scripts/run.ps1` (slot 41),
