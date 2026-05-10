@@ -155,6 +155,8 @@ A-05 is the normative anchor. The other three citations point here; this section
 
 > **Slot policy:** Slots 01–96 are reserved for future per-component or per-page deep-dives (e.g., `01-app-shell.md`, `02-app-toolbar.md`). The current overlay is small enough to fit in `00-overview.md`.
 
+> **No-DDL boundary (Normative — Phase-5 T-29):** **App-side DDL is owned exclusively by §23.** The §24 folder MUST NOT carry executable DDL fences (` ```sql `, ` ```sqlite `, ` ```postgres `, ` ```pg `, ` ```mysql `, ` ```mariadb `, ` ```ddl `, ` ```plpgsql `) nor unfenced bare DDL keywords (`CREATE TABLE `, `ALTER TABLE `, `DROP TABLE `, `CREATE INDEX `, `ALTER COLUMN `). Column-name references in U-1 / U-3 binding tables and backticked single-token mentions remain permitted (see AC-ADS-17 carve-outs). **Self-enforcing via §27 backlog gate `no-sql-ddl-in-ui-folder-check`** (slot 58 / gate #36 / Lesson #15 reflexivity pin) — stripping either literal from this block fails clause-5 of the gate itself.
+
 ---
 
 ## Inlined Contracts
