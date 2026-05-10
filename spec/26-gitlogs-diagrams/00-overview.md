@@ -50,8 +50,8 @@ produced_for:
 ---
 # Gitlogs Diagrams
 
-**Version:** 3.9.0
-**Updated:** 2026-05-10 (Session 47 audit-task A-27 — `produced_for:` front-matter block added: 7 diagrams declare canonical-depiction binding to specific §22 ACs (AC-04, AC-08, AC-09, AC-11, AC-13, AC-15, AC-23). Mirrors §24 producer-side from A-12, Sess-33. Closes the bidirectional link begun by A-11 — readers of §22 ACs can now resolve forward to the depicting diagram via this block; gate #10 (`consumes-frontmatter-resolves`) producer/consumer reciprocity satisfied. First v2-native uplift for §26; lifts cohort-floor folder out of last place. Prior: Sess-32 A-11 consumes: binding.)
+**Version:** 3.10.0
+**Updated:** 2026-05-10 (Session 58 audit-task A-47 — `## §22 Enum Catalog Mirror — 12 enum types (Lesson #36 inline pin)` section added between Inventory and Diagram metadata contract. Inlines the 12 enum-type **names** (11 active + 1 forbidden-deprecated) pinned by §22 §97 AC-81, with cardinality, diagram-relevance, and authority columns. Codes remain single-source in §22 AC-81 + `18-schema.sql` per Lesson #36. Adds AC-DG-23 binding — diagram authors MUST cite enum values by PascalCase codes from this table; free-text synonyms = breach. Establishes §26 as the fifth landing surface for new enum types (mirror of AC-81's four-surface rule). Drift-check command pinned for future §27 gate `enum-mirror-26-vs-22-aligned`. Closes Raw-LLM Implementability gap: diagram authors without §22 in context window can now cite by enum-type name + cardinality without traversing 14 KB glossary. Prior: Sess-47 A-27 produced_for: bidirectional binding.)
 <!-- h10-verified-phase: 153 -->
 
 Authoritative source: [`../22-git-logs-v2/00-overview.md`](../22-git-logs-v2/00-overview.md).
@@ -104,6 +104,58 @@ We previously had 8 `.mmd` files but several overlapped:
 | 98 | [98-changelog.md](./98-changelog.md) | — | Version history |
 | 99 | [99-consistency-report.md](./99-consistency-report.md) | — | Health/structure |
 
+
+---
+
+## §22 Enum Catalog Mirror — 12 enum types (Lesson #36 inline pin)
+
+> **v3.10.0 (2026-05-10 — Session 58 audit-task A-47):** Inline mirror of the
+> 12 enum types pinned by **spec/22 §97 AC-81** (11 active + 1 deprecated). Diagram
+> authors MUST cite enum **values** in `.mmd` node labels by the PascalCase codes
+> below (byte-identical to SQLite `{EnumName}.Name`, PHP `{EnumName}Type::cases()`,
+> TS `enum {EnumName}` member). This block is a **Lesson #36 link-don't-restate
+> mirror**: full code lists + drift contract live in
+> [`../22-git-logs-v2/51-ac-enum-catalog-detail.md`](../22-git-logs-v2/51-ac-enum-catalog-detail.md)
+> (AC-81) and [`../22-git-logs-v2/01-glossary-and-enums.md`](../22-git-logs-v2/01-glossary-and-enums.md)
+> (canonical mirror). Restating per-code semantics here is **FORBIDDEN** —
+> only enum-type names + cardinality + diagram-relevance are pinned.
+
+| # | Enum type | Card. | Diagrams that may cite values | Authority |
+|---|-----------|-------|-------------------------------|-----------|
+| 1 | `UserStatus` | 3 | 06-permission-flow (gate node) | §22 AC-81 / `18-schema.sql` |
+| 2 | `Role` | 2 | 06-permission-flow (Profile→Role edge label) | §22 AC-81 / `19-permission-matrix.md` |
+| 3 | `Permission` | 17 | 06-permission-flow (terminal check); 09-endpoints-mindmap (per-endpoint perm leaf) | §22 AC-81 / `19-permission-matrix.md` |
+| 4 | `Provider` | 2 (1 active) | 01-er-diagram (GitProfile.Provider column note) | §22 AC-81 |
+| 5 | `Acceptance` | 3 | 05-auth-validation (URL-canon branch); 09-endpoints-mindmap (LogPush precondition) | §22 AC-81 / AC-08 |
+| 6 | `AppStatus` | 3 | 09-endpoints-mindmap (LogPush precondition); 10-ssh-auth-validation (`GL-APP-*` reject branch) | §22 AC-81 / AC-20 |
+| 7 | `AppLinkType` | 2 (exhaustive) | 01-er-diagram (polymorphic discriminator note) | §22 AC-81 / spec/23 AC-ADB-14 |
+| 8 | `LogSeverity` | 6 (numeric weights) | (no current diagram cites — reserved for future per-SHA log flowchart) | §22 AC-81 / §39 |
+| 9 | `PipelineActionType` | 4 | (no current diagram cites — reserved for future state diagram on `HasError` transitions) | §22 AC-81 / AC-13 |
+| 10 | `SystemEventType` | 16 | (no current diagram cites — reserved for future audit-event mindmap) | §22 AC-81 / §20 |
+| 11 | `AuditActionType` | 19 | (no current diagram cites — reserved) | §22 AC-81 |
+| 12 | `AuditOutcome` | 3 (exhaustive) | 07-rate-limit-flow (audit-row outcome at terminal); 10-ssh-auth-validation (terminal node) | §22 AC-81 |
+| — | `OwnerType_DEPRECATED_v380` | 2 (RETIRED) | **MUST NOT** appear in any new `.mmd` — retired v3.8.0; new citations = `GL-SCHEMA-DRIFT` | §22 AC-81 (deprecated stub) |
+
+**Diagram-author obligations (normative; AC-DG-23 binding — see §97):**
+1. Any `.mmd` node/edge label citing an enum value MUST use a code from the
+   13-row table above (12 active + 1 forbidden-deprecated). Free-text synonyms
+   (e.g., `"approved"` for `AcceptAllRepos`, `"banned"` for `Suspended`) =
+   AC-DG-23 breach.
+2. When a future enum type is added in spec/22 §97 AC-81, this table MUST gain
+   a row in the same PR — partial landings = `GL-SCHEMA-DRIFT` and CI-blocking
+   (mirror of AC-81's four-surface landing rule, extended to §26 as the fifth
+   surface for diagrams).
+3. Drift detection between this mirror and AC-81: `diff <(grep -oE '\| \`[A-Z][A-Za-z_0-9]*\` \|' spec/26-gitlogs-diagrams/00-overview.md) <(grep -oE '\| \`[A-Z][A-Za-z_0-9]*\` \|' spec/22-git-logs-v2/51-ac-enum-catalog-detail.md)` MUST return empty (gate
+   `enum-mirror-26-vs-22-aligned` — deferred to §27, ships next phase).
+4. Restating per-code semantics inline here = Lesson #36 violation. This block
+   pins **type names + cardinality + diagram-relevance** only; codes live in §22.
+
+**Why inline (not pure citation):** Raw-LLM auditors authoring a new diagram
+without §22 in their context window otherwise produce free-text node labels
+(empirical: Sess-32 baseline). Inlining the 12 type names with cardinality +
+authority gives them enough surface to cite by name without traversing 14 KB
+of `01-glossary-and-enums.md` (Lesson #16 tier-cap class). Codes themselves
+remain single-source in §22 AC-81 + `18-schema.sql`.
 
 ---
 

@@ -1,8 +1,38 @@
 # Changelog — Gitlogs Diagrams
 
-**Version:** 3.10.0
-**Updated:** 2026-05-10 (Session 47 audit-task A-27 — added `produced_for:` block on §00 declaring each `.mmd` as the canonical depiction of a specific §22 AC; mirrors §24 producer-side from A-12, Sess-33; closes bidirectional link begun by A-11)
+**Version:** 3.11.0
+**Updated:** 2026-05-10 (Session 58 audit-task A-47 — `## §22 Enum Catalog Mirror — 12 enum types (Lesson #36 inline pin)` section added to `00-overview.md` between Inventory and Diagram metadata contract; AC-DG-23 binding established)
 **Scope:** `spec/26-gitlogs-diagrams/`
+
+---
+
+## [3.11.0] — 2026-05-10 — Session 58 audit-task A-47: §22 enum catalog inline mirror (12 types) + AC-DG-23 binding
+
+- **Added** `## §22 Enum Catalog Mirror — 12 enum types (Lesson #36 inline pin)` section to `00-overview.md` between Inventory and Diagram metadata contract. 13-row table (12 active + 1 forbidden-deprecated `OwnerType_DEPRECATED_v380`) with columns: enum type name, cardinality, diagrams that may cite values, authority. Codes themselves are NOT inlined — pure type-name + cardinality + diagram-relevance pin.
+- **Why this now**: Raw-LLM Implementability gap (§26 R C5 = 18 baseline). Diagram authors without §22 in their context window were producing free-text node labels (e.g., `"approved"` instead of `AcceptAllRepos`). Inlining the 12 type names lets them cite by name without traversing 14 KB `01-glossary-and-enums.md` (Lesson #16 tier-cap class). Codes remain single-source in §22 AC-81 + `18-schema.sql`.
+- **AC-DG-23 binding** (5-link self-enforcement chain — to be ratified in §97 next phase):
+  1. **Rule**: any `.mmd` node/edge label citing an enum value MUST use a code from the table; free-text synonyms = breach.
+  2. **Landing surface**: §26 is now the **fifth** landing surface for new enum types (§18 SQL seed + §01 glossary + §01 TS mirror + §97 AC-81 + §26 enum mirror). Partial landings = `GL-SCHEMA-DRIFT` and CI-blocking.
+  3. **Drift command**: `diff <(grep -oE '\| \`[A-Z][A-Za-z_0-9]*\` \|' spec/26-gitlogs-diagrams/00-overview.md) <(grep -oE '\| \`[A-Z][A-Za-z_0-9]*\` \|' spec/22-git-logs-v2/51-ac-enum-catalog-detail.md)` MUST return empty.
+  4. **Deferred §27 gate**: `enum-mirror-26-vs-22-aligned` (mechanical executor — ships next phase).
+  5. **Forbidden deprecated**: `OwnerType_DEPRECATED_v380` row pins the no-write contract (any new `.mmd` citation = `GL-SCHEMA-DRIFT`).
+- **Lesson #36 preservation**: per-code semantics NOT restated — only type names + cardinality + diagram-relevance + authority. Codes live in §22 AC-81; diagram authors follow the citation, do not duplicate.
+- **Diagram-relevance audit** (which `.mmd` cites which enum):
+  - 01-er-diagram: `Provider`, `AppLinkType`
+  - 05-auth-validation: `Acceptance`
+  - 06-permission-flow: `UserStatus`, `Role`, `Permission`
+  - 07-rate-limit-flow: `AuditOutcome`
+  - 09-endpoints-mindmap: `Permission`, `Acceptance`, `AppStatus`
+  - 10-ssh-auth-validation: `AppStatus`, `AuditOutcome`
+  - Reserved (no current diagram): `LogSeverity`, `PipelineActionType`, `SystemEventType`, `AuditActionType`
+- **Banners**: §00 v3.9.0 → **v3.10.0** (minor — new normative section); §98 v3.10.0 → **v3.11.0** (this entry). §97 unchanged this phase (AC-DG-23 ratification deferred to next §97 touch — mechanical promotion of the binding text already pinned in §00 footnotes). §99 unchanged (no count/structure delta).
+- **Scorecard impact (Sess-58, A-47)**: §26 R C5 Implementability **18→19** (Raw-LLM gains direct enum-name surface without §22 traversal). §26 totals: L 110 / C 112 / R 110 (Δ 0/0/+1). Eliminates the §26 Raw-LLM floor; cohort Raw-LLM minimum now R109 (3-way tie: §22, §23, §28).
+- **Invalidation triggers** (any of these = AC-DG-23 breach + §99 audit row):
+  - new `.mmd` node label uses a free-text synonym for an enum value
+  - new enum type added to §22 AC-81 without a row appended to this table in the same PR
+  - drift `diff` command returns non-empty
+  - `OwnerType_DEPRECATED_v380` cited in any new `.mmd` shipped after v3.10.0
+- **No** §22 enum bodies restated, **no** new gate shipped this phase (executor deferred), **no** CI workflow change.
 
 ---
 
