@@ -1,9 +1,22 @@
 # Changelog
 
-**Updated:** 2026-05-10 (Session 55 audit-task A-39 — AI Quick-Nav Map header added, §28 R C6 17→18)
+**Updated:** 2026-05-10 (Session 55 audit-task A-40 — §08 deprecated provider rows trimmed; tier-1 friction −1 across personas)
 
 
 All notable changes to `spec/28-universal-ci-cli/`.
+
+## [2.11.0] — 2026-05-10 — Session 55 audit-task A-40: §08 deprecated-provider-row archival (tier-1 friction reduction)
+
+- **Action**: §08 `08-ci-provider-bindings.md` rewritten v2.0.0 → **v3.0.0**. Removed deprecated `gitlab` / `azure` / `bitbucket` / `shell` rows from (a) Provider Detection table (5 rows → 1 row, GitHub-only), (b) Field Harvest Map (5 columns → 1 column), (c) PR-vs-Push pointer list (4 bullets → 1 bullet), (d) Drop-in YAML snippets (4 snippets → 1 snippet). Original content NOT restated inline — collapsed into a single `Historical Reference (v3 backlog — NOT NORMATIVE)` appendix that points to git history of v2.0.0 per Lesson #36 (link-don't-restate). §03 unchanged (it carries no provider rows; only a scope-inheritance pointer to §00).
+- **Why now**: A-38 (Sess-55) flagged tier-1 sum at 117 KB right at 120 KB walker cap with deprecated provider tables occupying real bytes; pinned as invalidation trigger (d) — "Archiving deprecated provider tables → C6 +1 across personas". §08 dropped from 126 lines (5.4 KB) to 90 lines (3.4 KB); net tier-1 savings ≈ 2 KB (drops cohort to ~115 KB, restoring ≥4 KB walker-cap headroom).
+- **Lesson #36 preservation**: Zero deprecated content restated. The `Historical Reference` appendix is a 4-line pointer to git history (`§28 v2.0.0 ≤ 08-ci-provider-bindings.md`) — no rows, no env-var names, no YAML. v3 plugin authors retrieve the original via `git log` / `git show`. The v2 scope banner remains canonical surface.
+- **AC-28-47 alignment**: §08 v3.0.0 now structurally enforces v2 scope (no non-GitHub row exists to be accidentally implemented). Reviewer load drops — a non-GitHub provider can only enter §08 via a future v3 PR that explicitly removes the scope banner.
+- **Scorecard delta**: §28 C6 Friction +1 across all 3 personas (L 18→19, C 18→19, R 18→19). §28 totals: **L 113 / C 112 / R 109** (was 112/111/108 post-A-39; Δ +1/+1/+1). §28 no longer joint Raw-LLM cohort floor — sole floor reverts to §24 R108. Cohort means: L 114.4 → **114.6** (+0.2); C 113.4 → **113.6** (+0.2); R 110.7 → **110.9** (+0.2). §27 ceiling unchanged (120/120/120).
+- **Invalidation triggers post-A-40**: (a) Re-introducing any non-GitHub provider row in §08 detection / harvest / YAML tables (without first revising the §00 v2 scope banner) → §28 C4 19→17 + AC-28-47 violation. (b) Restating original deprecated YAML snippets inline in the Historical Reference appendix → C4 19→18 (Lesson #36 violation). (c) Adding a v3 plugin row to §08 ahead of the v3 plugin model landing in §97 → C2 19→17. (d) §03 ever gaining provider rows (it is provider-agnostic by axis) → §28 C4 19→18. (e) Any future `_archive/` subdirectory under §28 → blocked by scope-lock memory rule (only 7 in-scope folders; archival lives in git history, not on disk).
+- **Carry-forward**: A-38 invalidation (d) "Archiving deprecated provider tables → C6 +1 across personas" is now SHIPPED. A-39 invalidation (a/b/c/d) carry forward unchanged.
+- **Lockstep**: §00 v2.10.0 → **v2.11.0** (banner-only — no contract change); §08 v2.0.0 → **v3.0.0** (major — surface area reduced); this file [2.10.0] → **[2.11.0]** (this row). **No** §97 AC change (AC-28-47 unchanged), **no** §99 inventory change, **no** Quick-Nav row count change (still 16 files / 7 themes), **no** CI workflow change, **no** §22 / §27 / §24 / §26 edits, **no** scope-lock breach.
+
+---
 
 ## [2.10.0] — 2026-05-10 — Session 55 audit-task A-39: AI Quick-Nav Map header (Lesson #88 — sprawl navigation aid)
 
