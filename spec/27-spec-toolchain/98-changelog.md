@@ -2,7 +2,7 @@
 
 **Version:** 4.58.0
 **Updated:** 2026-05-10 (Phase-5 G-6n / T-29 — slot 58 `check-no-sql-ddl-in-ui-folder.py` SHIPPED on disk; gate #36 self-test 6/6 + disk green on FIRST run after one §24 §00 surgical insert at line 158; phantom 13 → 12; backlog `no-sql-ddl-in-ui-folder-check` (T-09) retired)
-**Total active gates: 25**
+**Total active gates: 23**
 
 ### 4.58.0 — 2026-05-10 — Phase-5 G-6n: slot 58 `check-no-sql-ddl-in-ui-folder.py` shipped (gate #36; §24 no-DDL boundary load-proven; phantom 13 → 12; closes Phase-5 T-09 backlog)
 - **Action**: Created `linter-scripts/check-no-sql-ddl-in-ui-folder.py` (~230 LOC, 5 clauses + R5 binding-table-exemption anchor + built-in `--self-test`). Walks every `.md` under `spec/24-app-design-system-and-ui/`. Five clauses: clause-1 no SQL fences (8 forbidden lang tags `{sql, sqlite, postgres, pg, mysql, mariadb, ddl, plpgsql}` — fence regex anchored at line start ≤3 leading spaces so inline backticked-mention of ` ```sql ` in §97 AC-ADS-17 prose is exempt by-construction); clause-2 no bare DDL keywords (`CREATE TABLE `, `ALTER TABLE `, `DROP TABLE `, `CREATE INDEX `, `ALTER COLUMN `) in unfenced non-backtick-span prose (inline-backtick spans stripped before scan); clause-3 no §24-owned `migrations/`/`schema/`/`ddl/` `.sql` path references (regex `spec/24-…/(migrations|schema|ddl)/.*\.sql`); clause-4 R5 vacuous-pass anchor — ≥1 U-1/U-3 binding-table row mentions a DDL column name (`IsActive`/`AppId`/`AppLinkType`/`AppStatusId`); clause-5 §24 §00 boundary literal pinning (`App-side DDL is owned exclusively by §23` + `Self-enforcing via §27 backlog gate \`no-sql-ddl-in-ui-folder-check\`` — Lesson #15 reflexivity).
