@@ -1,8 +1,18 @@
 # Changelog — App Design System & UI
 
-**Version:** 4.5.0
-**Updated:** 2026-05-10 (Session 55 audit-task A-36 — first native Rubric-v2 re-score; carried v1×1.20 retired)
+**Version:** 4.6.0
+**Updated:** 2026-05-10 (Session 55 audit-task A-37 — AC-ADS-16 walker-pin promotion to §00; mirror of §22 AC-78 pattern)
 **Scope:** `spec/24-app-design-system-and-ui/`
+
+---
+
+### 4.6.0 — 2026-05-10 — Session 55 audit-task A-37: AC-ADS-16 walker-pin promoted to §00 (mirror of §22 AC-78)
+- **Action**: §00 v4.4.0 → **v4.5.0** added a `> 🤖 **Walker-Pin**` block directly under the version banner (between line 30 `---` and line 32 `## Keywords`). Block surfaces three structural-pin ACs at the §00 anchor: **AC-ADS-16** (§07 dependency boundary, 5 binding rules + scope-lock interaction), **AC-ADS-15** (§22 operational-pattern inheritance via `GL-*` → `ADS-*` namespace extension, 5 required codes), **AC-ADS-14** (Cross-Module Externalized Citation Map, 2 rows: spec/07 + spec/27). Plus a **Forbidden remediation patterns** sub-list (6 items) codifying auto-fail patterns: re-declaring §07 primitives, inlining registry, raw color literals, restating §22 envelope shapes, promoting walker-cap findings to CRITICAL, proposing §07 edits from §24 PR.
+- **Why (closes A-36 invalidation trigger (e))**: A-36 native v2 re-score identified C2 Completeness 18/18/18 with no §00 walker-pin (mirror of §22 AC-78). AC-ADS-16 lives at §97 line 204 (last AC), past the typical 90–120 KB tier-1 walker cap; without the §00 mirror, every Raw-LLM rebaseline re-flags "external dependency §07 unresolved" / "raw color literal in app token" / "missing primitive token registry" as fresh findings (Lesson #65 walker-saturation class, same root cause as §22 AC-78). Same-module §00↔§97 mirroring is permitted and required for harness-saturated modules per Lesson #71-#74; cross-module restatement remains forbidden per Lesson #36.
+- **Per-criterion impact (per A-36 invalidation trigger (e))**: §24 C2 Completeness **18 → 19** across all three personas. New persona totals: **L 113 / C 113 / R 109** (was 112/112/108; Δ +1/+1/+1).
+- **Cohort impact**: §24 still cohort floor on Raw-LLM but no longer alone — now ties §28 R109? No — §28 R108 still alone at floor; §24 R109 lifts above. Cohort R floor now §28 alone at 108.
+- **No criterion reaches 20** — the walker-pin itself is not a self-enforcing meta-rule (no machine gate fails when AC-ADS-16 is absent from §00); a future §27 gate `walker-pin-coverage-check` (validates every module with §97 > 80 KB has a §00 walker-pin block citing the tail AC) would lift §24 C5 to 20 across personas. Not in scope this turn.
+- **Lockstep**: §00 v4.4.0 → **v4.5.0** (minor — new normative subsection block, same-module mirror); banner re-bumped (this turn) v4.5.0 (§00 only). This file v4.5.0 → **v4.6.0** (this row). **No** §97 bump (mirror only — AC-ADS-14/15/16 contract bodies untouched at §97 line 136/193/204), **no** §99 inventory change, **no** CI workflow change, **no** §07 / §22 / §27 edits, **no** scope-lock breach. All 5 strict gates expected GREEN.
 
 ---
 
