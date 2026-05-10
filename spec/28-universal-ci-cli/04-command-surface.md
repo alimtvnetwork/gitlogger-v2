@@ -27,6 +27,8 @@ Every subcommand below is normative. Adding a flag requires a row here.
 | `--verbose`, `-v` | count | 0 | `-v` info, `-vv` debug, `-vvv` trace |
 | `--quiet`, `-q` | bool | false | Suppress local stdout (logs still ship) |
 | `--json` | bool | false | Machine-readable output on stdout |
+| `--self-test` | bool | false | Run built-in fixture suite (`built-in`; `no network`; `no real CI provider`; `no real git repo`). Exits `0` pass · `1` violation · `2` invocation error · `3` fixture-rot. See §07. |
+| `--check <mode>` | enum | `all` | Run a single self-test mode: `all` \| `self-test-flag-declared` \| `r5-vacuous-pass-carried` \| `per-mode-fixture-coverage` \| `exit-code-contract` \| `harness-declaration`. Used by gate #40 (Phase-5 T-38). |
 
 ---
 
