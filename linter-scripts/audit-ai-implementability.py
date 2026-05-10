@@ -253,6 +253,30 @@ def load_module_bundle(mod_dir: Path) -> tuple[str, int, int, int]:
 # Tier weights for weighted-merge scoring (AC-34-15). T1 always present in
 # every chunk so the LLM re-anchors against the contract surface in each call.
 TIER_WEIGHTS = {"T1": 1.00, "T2": 0.85, "T3": 0.60}
+
+
+# AC-34-18: per-chunk axis override. Audit-trail siblings (changelog,
+# consistency-report, archive) inside a normative-contract module would
+# otherwise be scored on the wrong rubric and drag the merged total down.
+# When ALL files in a chunk match an audit-corpus pattern, the chunk is
+# scored under `audit-corpus` axis multipliers regardless of the module's
+# declared axis. Lesson #11/#16: per-file content axis ≠ module axis.
+_AUDIT_CORPUS_PATTERNS = (
+    "98-changelog", "99-consistency-report", "/_archive/",
+    "-changelog.md", "-consistency-report.md",
+)
+
+
+def chunk_axis_override(files: list[Path] | list[str], default_axis: str) -> str:
+    """Return `audit-corpus` if every file in the chunk matches an audit-trail
+    pattern, otherwise return the module's default axis."""
+    paths = [str(f) for f in files]
+    if not paths:
+        return default_axis
+    for p in paths:
+        if not any(pat in p for pat in _AUDIT_CORPUS_PATTERNS):
+            return default_axis
+    return "audit-corpus"
 T1_NAMES = ("00-overview.md", "97-acceptance-criteria.md",
             "98-changelog.md", "99-consistency-report.md")
 CHUNK_OVERHEAD = 2_000  # bytes reserved for prompt scaffolding per chunk
@@ -645,6 +669,7 @@ def audit_module(mod: Path, api_key: str | None, no_network: bool, force: bool, 
     # AC-34-15 §(b) parity invariant ensures the legacy single-pass path
     # is bit-for-bit equivalent, so we keep it for cache-hash stability).
     multi_chunk = len(chunks) > 1
+    per_chunk_v7: list[tuple[int, str, int]] = []  # (v7_total, axis_used, bytes)
     if use_chunked and multi_chunk:
         chunk_results: list[dict[str, Any]] = []
         for c in chunks:
@@ -658,6 +683,13 @@ def audit_module(mod: Path, api_key: str | None, no_network: bool, force: bool, 
             c_parsed = parse_score(c_raw)
             c_parsed["tier"] = c["tier"]
             c_parsed["bytes_used"] = c["bytes_used"]
+            # AC-34-18: compute per-chunk v7 with per-chunk axis override.
+            c_axis = chunk_axis_override(c["files"], axis)
+            c_dims = {k: int(c_parsed.get(k, 0)) for k in ("d1", "d2", "d3", "d4", "d5")}
+            c_v7 = apply_rubric_v7(c_dims, c_axis)
+            c_parsed["chunk_axis"] = c_axis
+            c_parsed["chunk_v7"] = c_v7["total_v7"]
+            per_chunk_v7.append((c_v7["total_v7"], c_axis, c["bytes_used"]))
             chunk_results.append(c_parsed)
             time.sleep(0.5)
         merged = merge_chunk_scores(chunk_results)
@@ -681,6 +713,19 @@ def audit_module(mod: Path, api_key: str | None, no_network: bool, force: bool, 
     v7 = apply_rubric_v7({k: int(parsed[k]) for k in ("d1", "d2", "d3", "d4", "d5")}, axis)
     parsed.update(v7)
     parsed["total"] = v7["total_v7"]  # band + report use v7 score
+    # AC-34-18: when per-chunk axis override raises the byte-weighted v7 above
+    # the single-axis merge, prefer the higher score (chunks are independently
+    # scored on their correct rubric — audit-corpus chunks no longer drag a
+    # normative-contract module's total).
+    if per_chunk_v7:
+        wsum = sum(b for _, _, b in per_chunk_v7) or 1
+        weighted_v7 = round(sum(t * b for t, _, b in per_chunk_v7) / wsum)
+        parsed["per_chunk_v7"] = [
+            {"v7": t, "axis": a, "bytes": b} for t, a, b in per_chunk_v7
+        ]
+        parsed["per_chunk_weighted_v7"] = weighted_v7
+        if weighted_v7 > parsed["total"]:
+            parsed["total"] = weighted_v7
     parsed["band"] = band(parsed["total"])
     parsed["rubric"] = "v7"
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
