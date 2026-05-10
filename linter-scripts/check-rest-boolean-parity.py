@@ -38,7 +38,7 @@ JSON_BOOL_RE = re.compile(r'"([A-Za-z_][A-Za-z0-9_]*)"\s*:\s*(true|false)\b')
 JSON_NONBOOL_VAL_RE = re.compile(r'"([A-Za-z_][A-Za-z0-9_]*)"\s*:\s*([^,\n}]+)')
 
 # §22 git-logs OpenAPI whitelist — legacy git-logs surface, not App.
-GIT_LOGS_BOOL_WHITELIST = {"HasError", "Truncated"}
+GIT_LOGS_BOOL_WHITELIST = {"HasError", "PreviousHasError", "Truncated"}
 
 R4_BOOL_LITERALS = (
     "wire `true`/`false` ↔ DB `1`/`0`",
