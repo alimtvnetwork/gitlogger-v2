@@ -35,7 +35,7 @@ following invariants fail:
    `spec/22-git-logs-v2/17-openapi.yaml` declared `type: boolean`
    MUST have an `Is`-prefixed name (App surface) OR be explicitly
    whitelisted in the §22 git-logs-only set
-   `{HasError, Truncated}` (legacy git-logs surface, not App —
+   `{HasError, PreviousHasError, Truncated}` (legacy git-logs surface, not App —
    matches `spec/22-git-logs-v2/17-openapi.yaml` lines 85, 101,
    103, 273, 286). For the App surface (§23) every R-2 boolean key
    MUST round-trip via OpenAPI `type: boolean` with no `format:` coercion.
