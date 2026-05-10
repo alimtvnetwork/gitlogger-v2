@@ -44,8 +44,10 @@ This is the **single source of truth** for every critical observation against th
 | Critical | 5 |
 | High | 9 |
 | Medium | 8 |
-| Low | 2 |
-| **Total** | **24** |
+| Low | 0 *(2 de-scoped — see [Appendix Z](#appendix-z--de-scoped-low-findings-archive-only))* |
+| **Active total** | **22** |
+| De-scoped (archive-only) | 2 |
+| **Grand total** | **24** |
 
 ---
 
@@ -218,20 +220,7 @@ Then close `OI-ALLOW-01` and `OI-ALLOW-05`.
 
 ### F-09 — `Provider::GitLab` reserved in enum but never explicitly rejected
 
-**Severity:** Low · **Category:** Maintainability · **Linked:** P2-GL-20, Checklist C13
-
-**Files:**
-- `spec/_archive/21-git-logs-v1/01-glossary-and-enums.md` (Provider enum declaration)
-- `spec/_archive/21-git-logs-v1/00-overview.md` · Line 47
-
-**Evidence (00-overview.md):**
-```
-47: | 9 | Provider scope | GitHub only (GitLab reserved in `Provider` enum, not used) |
-```
-
-**Why it fails.** The validation layer has no documented reject path. A row inserted with `Provider='GitLab'` would pass schema validation and break downstream callers expecting GitHub-only normalization.
-
-**Required fix.** Add explicit reject in `11-error-management.md`: code `GL-VAL-PROVIDER-DISABLED`, HTTP 400. Document in the Provider enum: "Inserts with `GitLab` MUST be rejected at the validation layer."
+**Status:** **De-scoped (archive-only)** · See [Appendix Z](#appendix-z--de-scoped-low-findings-archive-only). Target file lives under `spec/_archive/21-git-logs-v1/`, which is out of the active scope-lock; current §22 (`spec/22-git-logs-v2/`) supersedes the Provider enum semantics. Retained as a 1-line pointer for traceability.
 
 ---
 
@@ -354,15 +343,7 @@ Then close `OI-ALLOW-01` and `OI-ALLOW-05`.
 
 ### F-16 — Inventory orphans: `00-overview.md` doesn't list `17-spec-consistency-checklist.md` cross-link table
 
-**Severity:** Low · **Category:** Maintainability
-
-**File:** `spec/_archive/21-git-logs-v1/00-overview.md` · **Lines:** 80–89 (Cross-References table)
-
-**Evidence:** The Cross-References table at the bottom of the overview was not updated when file `17` was added; the inventory row exists but no cross-link entry confirms its dependencies.
-
-**Why it fails.** Downstream tooling that walks Cross-References instead of the inventory table will not discover the consistency checklist.
-
-**Required fix.** Add a row to the Cross-References table: `| Spec consistency checklist | [../../_archive/21-git-logs-v1/17-spec-consistency-checklist.md](../../_archive/21-git-logs-v1/17-spec-consistency-checklist.md) |`.
+**Status:** **De-scoped (archive-only)** · See [Appendix Z](#appendix-z--de-scoped-low-findings-archive-only). Target file lives under `spec/_archive/21-git-logs-v1/`, which is out of the active scope-lock; §22 has its own §99 inventory + Cross-References. Retained as a 1-line pointer for traceability.
 
 ---
 
@@ -573,4 +554,17 @@ Two cross-cutting boilerplate sections previously inlined here (Phase-74 5-stage
 - **Tracker issue log SQL (Phase 82):** the canonical `tracker_issue_p82` DDL + indexes are owned by §28 (universal-ci-cli) and consumed cross-tracker. Sub-02 emits `tracker_slug='25-app-issues/02-consolidated-audit-findings'` rows via the standard CI runner. See [`spec/28-universal-ci-cli/00-overview.md`](../../28-universal-ci-cli/00-overview.md) for the canonical DDL and consumer contract.
 
 See [`./lifecycle-25-app-issues-02-consolidated-audit-findings-lifecycle.mmd`](./lifecycle-25-app-issues-02-consolidated-audit-findings-lifecycle.mmd) for the visual lifecycle.
+
+---
+
+## Appendix Z — De-scoped Low Findings (archive-only)
+
+The two findings below were carried from the Phase-2 audit but target files under `spec/_archive/21-git-logs-v1/`, which is outside the active scope-lock (only `spec/22..28` are in scope). They are **non-actionable in the current spec lifecycle** and have been promoted to this de-scoped appendix to keep the active findings walker focused on remediable work. Pointers remain at their original IDs (F-09, F-16) for cross-reference traceability with the Phase-2 audit and the §27 dashboard.
+
+| ID | Title | Original severity | De-scope rationale | Reopen condition |
+|---|---|---|---|---|
+| F-09 | `Provider::GitLab` reserved in enum but never explicitly rejected | Low | Targets `_archive/21-git-logs-v1/01-glossary-and-enums.md`; superseded by §22 enum catalog (`51-ac-enum-catalog-detail.md`) which is the active source of truth. | Only if a §22 successor enum reintroduces an unhandled `Provider::GitLab` reject path. |
+| F-16 | Inventory orphan — `17-spec-consistency-checklist.md` missing cross-link | Low | Targets `_archive/21-git-logs-v1/00-overview.md`; §22 owns its own `99-consistency-report.md` and Cross-References table independently. | Only if archive-tracking ever moves back in-scope. |
+
+**Audit invariant:** de-scoped findings MUST NOT count toward active severity rollups, MUST NOT block remediation order sequencing, and MUST NOT be re-counted by the §27 dashboard's "open findings" metric. They remain visible in the canonical findings table as `Status: De-scoped` one-line stubs (no evidence/why-fail/fix bodies) so the ID space stays contiguous.
 
