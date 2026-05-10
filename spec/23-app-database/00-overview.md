@@ -396,22 +396,24 @@ PascalCase keys to avoid a translation layer. Booleans serialise as JSON
 // App (response)
 {
   "AppId": 42,                       // INTEGER
-  "Name": "demo-app",                // TEXT, unique
-  "RepoUrlCanonical": "github.com/acme/demo",  // TEXT
-  "IsActive": true,                  // boolean (DB: INTEGER 0/1)
+  "AppName": "demo-app",             // TEXT
+  "AppSlug": "demo-app",             // TEXT, unique
+  "Description": "demo description", // TEXT, NULL allowed
+  "ProfileId": 7,                    // FK → Profile(ProfileId)
+  "AppStatusId": 1,                  // FK → AppStatus(AppStatusId)
   "CreatedAt": "2026-05-10T12:34:56Z",
   "UpdatedAt": "2026-05-10T12:34:56Z"
 }
 
 // AppLink (response)
 {
-  "LinkId": 17,
+  "AppLinkId": 17,
   "AppId": 42,
-  "DiscriminatorId": 3,              // FK to LookupDiscriminator
-  "TargetKey": "github.com/acme/demo",
-  "ResolutionState": "active",       // enum: active|disconnected|orphaned
-  "IsActive": true,
-  "CreatedAt": "...",
+  "AppLinkTypeId": 2,                // FK → AppLinkType (1=GitProfile, 2=Repo)
+  "TargetGitProfileId": null,        // populated iff AppLinkTypeId = GitProfile
+  "TargetRepoId": 5,                 // populated iff AppLinkTypeId = Repo
+  "IsActive": true,                  // boolean (DB: INTEGER 0/1)
+  "CreatedAt": "2026-05-10T12:34:56Z",
   "DisconnectedAt": null
 }
 
@@ -419,7 +421,7 @@ PascalCase keys to avoid a translation layer. Booleans serialise as JSON
 { "RepoUrl": "https://github.com/acme/demo.git" }
 
 // R-06 success (Q1 single-row hit, ResolutionState="active")
-{ "AppId": 42, "LinkId": 17, "ResolutionState": "active" }
+{ "AppId": 42, "AppLinkId": 17, "ResolutionState": "active" }
 ```
 
 ### R-3 — Error envelope (uniform across all 8 endpoints)
