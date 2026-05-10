@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 3.3.0  
-**Updated:** 2026-05-10 (Session 40 audit-task A-20 — D7 `derives-from-restate-check` promoted Deferred → Active as gate #15. Sixth deferred→Active conversion (6/9). Active gate count 14 → 15; deferred backlog 4 → 3. Gate is now self-enforcing for the backlog-discipline meta-rule established in A-08. Last low-risk conversion; remaining D1/D3 are integration-test, D4 is AST-scan. Prior: Sess-39 A-19 D2 promotion.)
+**Version:** 3.4.0  
+**Updated:** 2026-05-10 (Session 41 audit-task A-21 — D4 `no-raw-color-in-app-component` promoted Deferred → Active as gate #16. Seventh deferred→Active conversion (7/9). Active gate count 15 → 16; deferred backlog 3 → 2. First non-trivial conversion: TSX/CSS AST scan of §24 component registry + `src/components/`, keyed by A-12 `produced_for:` index. Declaring ACs §22 AC-COHORT-04 (J-4) + §24 AC-ADS-16 rule-2 qualifiers removed in same PR per backlog-discipline lockstep (now machine-enforced by gate #15). Remaining D1/D3 require integration-test scaffolding. Prior: Sess-40 A-20 D7 promotion.)
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
@@ -350,6 +350,7 @@ This section is the **canonical, single-in-scope source-of-truth** for every CI 
 | 13 | `cohort-orphaned-finding` | Active | §27 | `python3 linter-scripts/check-cohort-orphaned-finding.py --root spec/25-app-issues --max-age-sessions 1` | 0 = pass; 1 = any `Carried-open` disposition-map row with `Last touched` >1 session ago AND no §22 backlog citation; 2 = invocation error | audit stage |
 | 14 | `finding-vs-audit-distinction-check` | Active | §27 | `python3 linter-scripts/check-finding-vs-audit-distinction.py --root spec/25-app-issues` | 0 = pass; 1 = any `## F-NN` Evidence block cites a runtime `AuditTrail` row without `runtime-cite` tag; 2 = invocation error | validate stage |
 | 15 | `derives-from-restate-check` | Active | §27 | `python3 linter-scripts/check-derives-from-restate.py --consumer spec/24-app-design-system-and-ui --source spec/07-design-system --shingle 8 --max-matches 2` | 0 = pass; 1 = any §24 paragraph contains ≥3 8-token shingle matches with any §07 paragraph; 2 = invocation error | audit stage |
+| 16 | `no-raw-color-in-app-component` | Active | §27 | `python3 linter-scripts/check-no-raw-color.py --registry spec/24-app-design-system-and-ui --src src/components --token-prefix --app-error-` | 0 = pass; 1 = any TSX/CSS file in §24 component registry (resolved via A-12 `produced_for:` index) contains an inline color literal (hex, rgb(), hsl(), oklch()) outside an `--app-error-*` / token reference; 2 = invocation error | audit stage |
 
 **Deferred lint rules (declared by Wave-1/Wave-2 ACs; implementation pending).**
 
@@ -357,7 +358,8 @@ This section is the **canonical, single-in-scope source-of-truth** for every CI 
 |---|---|---|---|---|---|
 | D1 | `error-envelope-shape-check` | A-03 (`60-app-cohort-integration.md` AC-COHORT-01, J-1) | §27 | Every error emitted by §23 writer-paths conforms to §22 `ErrorEnvelope` shape | Round-trip integration test using §22 `17-openapi.yaml` |
 | D3 | `request-id-roundtrip-check` | A-03 (AC-COHORT-03, J-3) | §27 | `requestId` echoed across §23 emit → §22 HTTP header → §24 render → §22 AuditTrail (Critical only) | Integration test against §22 `20-observability.md` |
-| D4 | `no-raw-color-in-app-component` | A-03 (AC-COHORT-04, J-4) + A-05 (AC-ADS-16 rule 2) | §27 | §24 components MUST NOT inline-style colors; every error color resolves via `--app-error-*` token | AST scan of TSX/CSS in §24 component registry |
+
+> **D4 promoted to Active in A-21 (Session 41)** — moved to Active row #16 above. Seventh deferred→Active conversion (7/9). First non-trivial conversion: TSX/CSS AST scan of the §24 component registry and `src/components/`, keyed by the A-12 `produced_for:` index so that the script enumerates exactly the consumer files §24 declares (no globbing drift). Flags any color literal (hex `#rrggbb`, `rgb()`, `hsl()`, `oklch()`) appearing outside an `--app-error-*` token reference or a CSS custom-property dereference. The `--src src/components` argument scopes the runtime sweep to the in-scope app surface; §07 design-system source files remain untouched (covered by gate #15 instead). Declaring ACs §22 AC-COHORT-04 (J-4) and §24 AC-ADS-16 rule-2 "deferred implementation" qualifiers removed in the same PR per backlog-discipline lockstep — now machine-enforced by gate #15 (D7 self-enforcement, A-20).
 
 > **D7 promoted to Active in A-20 (Session 40)** — moved to Active row #15 above. Sixth deferred→Active conversion (6/9). Pure-Python 8-token shingle-hash diff between §24 (consumer, in-scope) and §07 (source-of-truth, read-only — `--source` arg explicitly opens §07 for **read** even though §07 is outside the scope-lock; the script never writes). No AST traversal, no integration test. Now also serves the meta-level role originally declared in A-08: "deferred → Active conversions that fail to remove the declaring AC's qualifier are themselves a `derives-from-restate-check` (D7) violation" — gate #15 is now self-enforcing for this rule. Declaring AC §24 AC-ADS-16 T-04 "deferred implementation" qualifier removed in same PR per backlog-discipline lockstep.
 
