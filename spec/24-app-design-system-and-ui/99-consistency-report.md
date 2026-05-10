@@ -125,3 +125,10 @@ These slots are immutable once shipped (per project memory rule).
 - New "AppShell Route Matrix" subsection added between AppShell skeleton and Responsive breakpoints; AC-ADS-UI-04 minted.
 - Binds AS-NN rows ↔ `AppShellVariant` enum (file-line 511) ↔ S-NN settings routes (T-08) ↔ U-NN component routes (T-07).
 - Regression-grep: `rg -nc '^### AppShell Route Matrix|AC-ADS-UI-04|AS-01.*Marketing' spec/24-app-design-system-and-ui/00-overview.md` MUST return ≥3.
+
+### v2.2.8 — 2026-05-10 — A-59: AC-CAF-01..05 minted (T-12)
+
+- New AC-CAF-NN namespace in §97 covering cross-cutting App-layer concerns (§23+§24+§25 spanning).
+- AC-CAF-01 (boolean parity), AC-CAF-02 (error envelope), AC-CAF-03 (idempotency), AC-CAF-04 (seedable-config), AC-CAF-05 (audit-evidence interpretation).
+- Cross-folder scorecard impact: §23 C4 19→20, §25 C4 19→20 (both conditional on §27 gate shipment).
+- Regression-grep: `rg -nc '^### AC-CAF-0[1-5]' spec/24-app-design-system-and-ui/97-acceptance-criteria.md` MUST return ≥5.
