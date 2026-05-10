@@ -21,8 +21,8 @@ produced_for:
 
 # App Design System & UI
 
-**Version:** 4.7.0
-**Updated:** 2026-05-10 (Session 56 audit-task A-45 — added Quick-Nav header so context-bounded walkers can reach Walker-Pin / §97 / §27-gate / §22-inheritance anchors in one hop without scanning 700 lines. Lifts §24 R C6 Friction 18→19.)
+**Version:** 4.8.0
+**Updated:** 2026-05-10 (Session 64 audit-task A-55 / Phase-5 T-03 — removed inlined `module_run_audit_p78` Postgres DDL block (30 lines) from §00; replaced with link-only routing pin citing §27/§28 as canonical owners. Closes audit F-24-01: UI folder no longer owns SQL persistence schema.)
 **AI Confidence:** Production-Ready
 <!-- h10-verified-phase: 153 -->
 **Ambiguity:** None
