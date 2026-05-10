@@ -19,7 +19,7 @@ produced_for:
 
 # App Issues
 
-**Version:** 3.6.0  
+**Version:** 3.7.0  
 <!-- h10-verified-phase: 153 -->
 **Updated:** 2026-05-10 (Session 49 audit-task A-29 — added `produced_for:` producer-side front-matter binding child trackers (02-consolidated, 01-phase-2) to §22 AC-78/AC-79/AC-22-CE1. Mirrors §26→§22 producer-side (A-27 Sess-47) and §28 producer-side (A-29 same-session twin). Resolved by §27 gate #10 dual-key contract (A-28 Sess-48). Lesson #29 tracker exemption preserved. Prior: Phase 153 Task S25-02.)
 **AI Confidence:** Production-Ready  
@@ -118,91 +118,22 @@ AC-AI-000 issue-file format is forward-looking; concrete issue files will be aut
 
 This acknowledgment exempts the module from `category: drift` audit findings. See `.lovable/memory/index.md` Phase 27c note.
 
-### CI Workflow — Phase 74 Reference
+### Out-of-Scope Material — Routing Pin (Normative)
 
-The following workflow snippets are normative for this module. Each fenced
-`yaml` block is a stage that MUST be present in the consuming repository's
-CI pipeline.
+The CI workflow YAML (Phase-74 5-stage pipeline) and the `IndexEntryStatus`
+TypeScript enum / `IndexEntry` interface (Phase-80) previously inlined here
+are **out of scope for §25**. §25 owns only the issue-lifecycle and audit
+catalog. Canonical owners:
 
-```yaml
-name: spec-gate-stage-1-detect
-on: [push, pull_request]
-jobs:
-  detect:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: linter-scripts/detect-changed-modules.sh
-```
+| Removed material                                  | Canonical owner | Rationale                                    |
+|---------------------------------------------------|-----------------|----------------------------------------------|
+| `spec-gate-stage-{1..5}` CI workflow YAML         | **§28** (universal CI/CLI) | All cross-module pipeline stages live in §28. |
+| Per-module gate-runner invocation patterns        | **§27** (spec-toolchain)   | §27 owns linter-script contracts.            |
+| `IndexEntryStatus` enum + `IndexEntry` interface  | **§27** (spec-toolchain)   | Index/registry types are toolchain artifacts.|
 
-```yaml
-name: spec-gate-stage-2-validate
-on: [push, pull_request]
-jobs:
-  validate:
-    runs-on: ubuntu-latest
-    needs: [detect]
-    steps:
-      - uses: actions/checkout@v4
-      - run: linter-scripts/validate-contracts.py
-```
-
-```yaml
-name: spec-gate-stage-3-lint
-on: [push, pull_request]
-jobs:
-  lint:
-    runs-on: ubuntu-latest
-    needs: [validate]
-    steps:
-      - uses: actions/checkout@v4
-      - run: linter-scripts/audit-spec-vs-code-v2.py --strict
-```
-
-```yaml
-name: spec-gate-stage-4-promote
-on:
-  push:
-    branches: [main]
-jobs:
-  promote:
-    runs-on: ubuntu-latest
-    needs: [lint]
-    steps:
-      - uses: actions/checkout@v4
-      - run: linter-scripts/promote-artifact.sh
-```
-
-```yaml
-name: spec-gate-stage-5-report
-on:
-  workflow_run:
-    workflows: ["spec-gate-stage-4-promote"]
-    types: [completed]
-jobs:
-  report:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: linter-scripts/update-consistency-report.py
-```
+**No CI YAML and no enum/interface DDL was materialised elsewhere in this
+turn** — the routing pin reserves the contract; materialisation is tracked
+as a separate follow-up task. AI walkers reading §25 in isolation MUST NOT
+re-inline these blocks; consult §27 / §28 for the authoritative form.
 
 See [`lifecycle-25-app-issues-lifecycle.mmd`](./lifecycle-25-app-issues-lifecycle.mmd) for the visual lifecycle.
-
-### Index Entry Status Enum — Phase 80 Normative
-
-```ts
-export enum IndexEntryStatus {
-  Draft = "draft",
-  Active = "active",
-  Deprecated = "deprecated",
-  Archived = "archived",
-}
-
-export interface IndexEntry {
-  slug: string;
-  title: string;
-  status: IndexEntryStatus;
-  routedTo: string | null;
-}
-```

@@ -85,3 +85,9 @@
 - No spec contract changes; no child-tracker changes. Pure audit-surface annotation.
 - Banners: §00 3.4.2 → 3.4.3; §97 1.1.0 → 1.2.0; §98 3.4.2 → 3.4.3; §99 1.3.0 → 1.3.1; h10 stamp 30 → 153.
 - Expected score lift: 75 → ≥85 (LLM re-score deferred per Lesson #20).
+
+### v1.3.2 — 2026-05-10 — A-55: out-of-scope CI YAML + enum stripped (T-04)
+
+- 5 `spec-gate-stage-*` YAML blocks and `IndexEntryStatus`/`IndexEntry` TS block removed from §00; replaced with normative routing pin to §27/§28.
+- Regression-grep: `rg -nc '^```yaml|export enum IndexEntryStatus' spec/25-app-issues/00-overview.md` MUST return 0 for both patterns.
+- §00 banner 3.4.3 → 3.5.0; §98 3.4.3 → 3.5.0; §99 1.3.1 → 1.3.2.
