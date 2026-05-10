@@ -3,6 +3,8 @@ kind: module
 description: App-specific UI overlay on top of the core design system (§07). Declares app-only token extensions, layout containers, and the application shell pattern. NOT a redefinition of §07 — strictly additive.
 content_axis: normative-contract
 axis_rationale: "App-only token extensions (additive contract over §07)"
+derives_from: spec/07-design-system
+restate_forbidden: true
 ---
 
 # App Design System & UI
