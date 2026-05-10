@@ -1,0 +1,21 @@
+{
+  "_doc": "NEGATIVE — gate #18 MUST reject (response header X-Request-Id missing entirely).",
+  "request": {
+    "method": "POST",
+    "path": "/v1/push",
+    "headers": { "x-request-id": "req-9d2e1a8c-NEG2" },
+    "body": {}
+  },
+  "response": {
+    "status": 401,
+    "headers": { "content-type": "application/json" },
+    "body": {
+      "Status": "Error",
+      "Code": "GL-AUTH-WP-MISSING",
+      "Message": "WordPress auth header missing",
+      "RequestId": "req-9d2e1a8c-NEG2",
+      "HttpStatus": 401
+    }
+  },
+  "meta": { "echo_path": "header", "fixture_kind": "negative", "expected_violation": "response header X-Request-Id missing" }
+}
