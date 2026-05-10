@@ -1,6 +1,14 @@
 ---
 title: 26-gitlogs-diagrams index lifecycle
 ---
+%% Diagram type: flowchart TD
+%% What this answers: "How does the §26 maintainer review the diagram index
+%%   and tracker? Walk: trigger -> enumerate child specs/issues -> triage
+%%   each (new/open/resolved) -> update 99-consistency-report.md -> done."
+%% Authoritative source: spec/26-gitlogs-diagrams/00-overview.md + 99-consistency-report.md
+%% Audience: §26 maintainers performing periodic index/tracker reviews.
+%% Entry point: read 00-overview.md "Index review cadence" section first; this
+%%   diagram is the canonical lifecycle for that cadence.
 flowchart TD
     Start([Trigger: index/tracker review])
     List[Enumerate child specs / open issues]

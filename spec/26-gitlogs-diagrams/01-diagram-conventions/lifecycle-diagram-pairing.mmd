@@ -1,3 +1,12 @@
+%% Diagram type: flowchart TD
+%% What this answers: "What is the authoring + retirement lifecycle for a
+%%   .mmd / .svg diagram pair? Walk: new diagram -> render -> commit pair ->
+%%   CI verifies SHA-256 of re-render matches committed SVG -> merge or
+%%   block (GLD-001 stale render); on retirement BOTH files MUST be deleted."
+%% Authoritative source: spec/26-gitlogs-diagrams/01-diagram-conventions/00-overview.md
+%% Audience: contributors authoring/retiring diagrams; CI auditors verifying drift.
+%% Entry point: read 00-overview.md "Diagram pairing rule" section first; this
+%%   diagram is the visual canon for that rule. Drift detector: GLD-001 in CI.
 flowchart TD
     A[New Diagram Authored] --> B[Author X.mmd]
     B --> C[Run: mmdc -i X.mmd -o X.svg]
