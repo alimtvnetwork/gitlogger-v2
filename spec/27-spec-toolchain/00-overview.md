@@ -55,7 +55,7 @@ If you delete a script, you MUST also delete its file here and add a §98 change
 | **Scaffolders & deepeners** | `23-scaffold-spec-module.md`, `25-deepen-consistency-reports.md` | New-module scaffolding + §99 enrichment |
 | **Lockstep & freshness gates** | `24-check-lockstep.md`, `26-check-99-summary-freshness.md`, `27-check-99-stamp-bump.md`, `29-check-version-parity.md` | Banner/version cascades and stamp freshness |
 | **Runtime & archive guards** | `28-check-archive-exclusion-runtime.md` | Walker-cap and `_archive/` exclusion enforcement |
-| **AI-implementability auditors** | `30-audit-spec-vs-code.md`, `31-audit-spec-vs-code-v2.md`, `32-check-truncated-prose.md`, `33-check-ai-confidence.md`, `34-audit-ai-implementability.md`, `35-audit-bundle-budget.md` | Scoring rubrics, confidence checks, bundle-budget walkers |
+| **AI-implementability auditors** | `30-audit-spec-vs-code.md`, `31-audit-spec-vs-code-v2.md`, `32-check-truncated-prose.md`, `33-check-ai-confidence.md`, `34-audit-ai-implementability.md`, `35-audit-bundle-budget.md`, `36-check-ads-boundaries.md` | Scoring rubrics, confidence checks, bundle-budget walkers, §24 boundary scanner |
 | **Runner shells** | `40-run-sh.md`, `41-run-ps1.md` | Bash + PowerShell entry points |
 | **Foreign-language validators** | `50-validate-guidelines-py.md`, `51-validate-guidelines-go.md`, `52-check-axios-version.md` | Python / Go guideline validators + axios pin |
 | **Allowlists & TOML configs** | `60-forbidden-strings-toml.md`, `61-spec-cross-links-allowlist.md`, `62-spec-folder-refs-allowlist.md`, `63-readme-cross-links-md.md` | Static allowlist/configuration data |
