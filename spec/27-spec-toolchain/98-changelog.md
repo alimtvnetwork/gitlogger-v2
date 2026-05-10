@@ -1,8 +1,19 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.31.0
-**Updated:** 2026-05-10 (Phase-5 T-37 — P16 C6 friction sweep across 5 remaining folders; identical Raw-LLM Auditor Pin block added to §22/§23/§24/§25/§28 §00; cohort floor on Raw-LLM advances to 118)
+**Version:** 4.32.0
+**Updated:** 2026-05-10 (Phase-5 T-38 — P17 §28 floor-lift completion; AC-28-49 minted in §28 §97 closing the placeholder; literal-cited via gate #40; §28 reaches L120/C120 ceiling)
 **Scope:** `spec/27-spec-toolchain/`
+
+### 4.32.0 — 2026-05-10 — Phase-5 T-38: P17 §28 floor-lift completion (AC-28-49 minted, literal-cited via gate #40)
+- **Action**: §28 §97 minted `### AC-28-49 — \`glci --self-test\` built-in harness contract (Normative)  \`[high]\`` directly after AC-28-48 under new section `## Phase-5 T-38 — Self-test harness contract closure (P17 §28 floor-lift)`. AC body declares the 4 semantic markers for `glci --self-test` flag (`built-in` + `no network` + `no real CI provider` + `no real git repo`), ≥6-fixture coverage, 4-row exit-code contract, R5 inheritance literal, Lesson #15 self-citation. AC-28-49 carries inline `**Mechanically enforced by:**` clause naming `linter-scripts/check-ci-cli-self-test-harness.py` (gate #40, slot 62, all 6 clauses) — promotes from placeholder (18) to literal-cited (20) per Rubric v2 18-20 band anchor. Ships 6 canonical-shape fixture rows F-1..F-6 inline.
+- **Why this now**: Closes the AC-28-49 placeholder opened in §27 v4.27.0 (gate #40 / slot 62 ship at T-33). Per cohort discipline, floor-lift gates ship before their target-folder ACs are minted; mirror of P14 §26 final lift (AC-DG-01/02/06 literal-cited via gate #41 at T-35).
+- **Scorecard impact** (carry-forward §28 Lovable 119 / Cursor 117 / Raw-LLM 118 → updated):
+  - §28 Lovable: 119 → **120** (+1 — C5 literal-cited gate binding inline in AC body)
+  - §28 Cursor: 117 → **120** (+3 — C2 +1 fixture coverage now load-proven on §97 surface; C5 +2 literal-cited)
+  - §28 Raw-LLM: 118 → 118 (held — C6 already at 18 via P16 pin block; C2/C5 already at 19/19 for Raw-LLM after P16)
+  - **§28 reaches Lovable + Cursor 120 ceiling.** Cohort matrix: §27 + §28 now share L120/C120; only §27 holds Raw-LLM 120.
+- **Files changed**: `spec/28-universal-ci-cli/97-acceptance-criteria.md` (AC-28-49 minted); `spec/28-universal-ci-cli/00-overview.md` v2.12.0 → v2.13.0; `spec/28-universal-ci-cli/98-changelog.md` [2.13.0] → [2.14.0]; `spec/28-universal-ci-cli/99-consistency-report.md` v2.5.2 → v2.5.3; `spec/27-spec-toolchain/00-overview.md` v4.29.0 → v4.30.0; this `spec/27-spec-toolchain/98-changelog.md`; `spec/27-spec-toolchain/99-consistency-report.md` v2.90.25 → v2.90.26.
+- **Gate-count delta**: 42 → 42.
 
 ### 4.31.0 — 2026-05-10 — Phase-5 T-37: P16 C6 friction sweep (Raw-LLM Auditor Pin × 5 folders → cohort floor 118)
 - **Action**: Identical Raw-LLM Auditor Pin block added directly under banner of §22 §00 (v3.23.0→v3.24.0), §23 §00 (v4.5.0→v4.6.0), §24 §00 (v4.8.0→v4.9.0), §25 §00 (v3.8.0→v3.9.0), §28 §00 (v2.11.0→v2.12.0). Pin block resolves `mem://constraints/spec-scope` (locked-7 cohort) + `mem://preferences/scorecard-ritual` (Rubric v2 18-20 band anchor) + cross-cohort gate map (#39 `check-no-out-of-scope-spec-folder-link.py` slot 61 / #40 `check-ci-cli-self-test-harness.py` slot 62 / #41 `check-diagram-parity.py` slot 63 / #42 `meta-verify-lockstep.py` slot 64) inline on each folder's §00 surface. §26 + §27 already at C6 ceiling, skipped.
