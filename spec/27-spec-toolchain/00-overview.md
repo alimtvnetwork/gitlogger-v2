@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 2.98.0  
-**Updated:** 2026-05-10 (Session 35 audit-task A-15 — D9 `consumes-frontmatter-resolves` promoted from Deferred → Active as gate #10. First deferred→Active conversion (1/9 shipped). Trigger: full cohort `consumes:` / `produced_for:` coverage from A-09/A-11/A-12/A-14. Active gate count 9 → 10; deferred backlog 9 → 8. Prior: Sess-31 A-09 external-invoker binding.)
+**Version:** 2.99.0  
+**Updated:** 2026-05-10 (Session 36 audit-task A-16 — D8 `cohort-naming-check` promoted Deferred → Active as gate #11. Second deferred→Active conversion (2/9). Active gate count 10 → 11; deferred backlog 8 → 7. Prior: Sess-35 A-15 D9 promotion.)
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
