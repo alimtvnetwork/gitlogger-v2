@@ -12,6 +12,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 **Updated:** 2026-05-10 (Phase-5 T-36 / **P19d** ships `linter-scripts/meta-verify-lockstep.py` (gate #42 — was phantom; now real). Self-test 6/6 (F-1..F-6 per slot-64 spec). Real-disk on §27 SURFACES 34 latent violations across 49 slot docs (clause-2 R5 sections, clause-3 fixture counts, clause-4 4-row exit-code tables, clause-5 banner-triple drift) — wired **warn-only** until §27 slot-doc backlog grooms. Truth ratio: 25 wired gates over 46 disk scripts. Phantom-script count drops 36 → **35**. Cohort lifts: §27 +1 (reflexivity now load-proven; backlog newly visible). Prior: T-38 P19c gate #40.)
 
 > **Self-enforcing via §27 backlog gate `meta-verify-lockstep`** — Lesson #15 reflexivity pin for gate #42 (slot 64). Stripping this literal from §27 §00 fails clause-5 of the meta-verifier itself.
+>
+> **Locked-7 in-scope folders: §22, §23, §24, §25, §26, §27, §28** — all others (`spec/00-…` through `spec/21-…`, `spec/29-…`, `spec/_archive/…`) are out-of-scope and quarantined per `mem://constraints/spec-scope`. **Self-enforcing via §27 backlog gate `no-out-of-scope-spec-folder-link-in-locked-7`** (Lesson #15 reflexivity pin for gate #39, slot 61). Stripping either literal fails clause-5 of the perimeter gate.
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
