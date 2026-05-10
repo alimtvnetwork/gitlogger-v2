@@ -1,7 +1,7 @@
 # Command Surface
 
-**Version:** 1.1.0  
-**Updated:** 2026-04-30 (Phase 153 Task A11g — added normative pipe-merge mechanism + PTY-forbidden clause + monotonic-timestamp rule to step 3 of `glci lint/build/test`; bound by §97 AC-28-42)
+**Version:** 1.2.0  
+**Updated:** 2026-05-10 (Phase-5 T-38 / P19c — added `--self-test` global flag + `--check <mode>` enum (6 modes) covering the §28 built-in fixture suite; bound by §97 AC-28-49 and mechanically enforced by gate #40 `linter-scripts/check-ci-cli-self-test-harness.py`. Prior: Phase 153 A11g pipe-merge mechanism.)
 
 Every subcommand below is normative. Adding a flag requires a row here.
 
