@@ -679,6 +679,40 @@ jobs:
         run: |
           python3 linter-scripts/check-ui-component-binding-matrix.py --self-test
           python3 linter-scripts/check-ui-component-binding-matrix.py
+
+      - name: §24 AppShell route matrix gate (#31 / T-24)
+        # Phase-5 T-24 / Slot 53 — closes §27 backlog ticket
+        # `appshell-route-matrix-check` (oldest §24-side backlog
+        # ticket, minted Phase-5 T-09 alongside the AS-NN matrix
+        # itself; matrix has been paper-only for 15 cycles).
+        # Walks §24 §00 AppShell Route Matrix (AS-NN rows) +
+        # variant→behaviour binding table + invariant block +
+        # §24 §97/§00 AC-ADS-UI-04 surface and asserts six
+        # clauses: clause-1 AS-NN matrix presence + ≥8 floor +
+        # AS-IDs unique + contiguous from AS-01; clause-2
+        # variant enum closed-set discipline ({Marketing,
+        # Console, Settings, Modal} or sentinel `(none — no
+        # shell)`); clause-3 variant↔binding bidirectional
+        # parity (every observed variant referenced in binding
+        # table with ≥1 AS-NN cite, every binding row consumed
+        # by ≥1 AS-NN); clause-4 Marketing rows MUST cite
+        # `MUST NOT import` + AC-ADS-06 (binds invariant-2 at
+        # the matrix surface; sibling to gate #19 AST-side);
+        # clause-5 invariant block normative literal presence
+        # (`single source of truth`, `appshell-route-matrix-check`,
+        # `MUST NOT import from \`src/components/app/**\``,
+        # `--app-toolbar-height`, `5th variant` — clause-5 IS
+        # the slot 53 self-citation per Lesson #15);
+        # clause-6 AC-ADS-UI-04 surface literal presence
+        # (`AppShell route matrix`, `8-row AS-NN matrix`,
+        # `4-row variant→behaviour binding table`, `parity-locked`).
+        # Same exit-code contract as gates #22..#35: 0/1/2/3.
+        # R5 vacuous-pass: AS-NN matrix absent OR binding table
+        # absent OR AC-ADS-UI-04 surface absent → exit 1.
+        # Spec: spec/27-spec-toolchain/53-check-appshell-route-matrix.md
+        run: |
+          python3 linter-scripts/check-appshell-route-matrix.py --self-test
+          python3 linter-scripts/check-appshell-route-matrix.py
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
