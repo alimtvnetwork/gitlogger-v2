@@ -1,10 +1,17 @@
 # Changelog — App Design System & UI
 
-**Version:** 4.2.0
-**Updated:** 2026-05-10 (Session 23 audit-task A-01 — §22 operational-pattern inheritance AC landed)
+**Version:** 4.3.0
+**Updated:** 2026-05-10 (Session 27 audit-task A-05 — §07 dependency boundary promoted to normative AC-ADS-16 + `restate_forbidden: true` front-matter)
 **Scope:** `spec/24-app-design-system-and-ui/`
 
 ---
+
+### 4.3.0 — 2026-05-10 — Session 27 audit-task A-05: §07 dependency boundary promoted to normative
+- **Action**: §97 v3.3.0 → **v3.4.0** added `AC-ADS-16 [critical]` promoting the §07 dependency boundary from prose-table to a normative AC with 5 binding rules + 4 test invariants. §00 front-matter gains `derives_from: spec/07-design-system` and `restate_forbidden: true`. §00 gains `### Dependency Boundary (A-05, Session 27 — normative)` subsection right under `## Relationship to §07`.
+- **5 binding rules**: (1) no `--app-*` token suffix may collide with a §07 primitive name; (2) every `--app-*` value MUST resolve via `var(--<§07-primitive>)` — raw color literals forbidden; (3) §07 contract text MUST NOT be restated verbatim or near-verbatim (Lesson #36 link-don't-restate); (4) under scope-lock, §24 MUST NOT propose §07 edits — gaps file as §22 backlog tickets tagged `carry-up-to-§07`; (5) §27 toolchain rule `derives-from-restate-check` (deferred) parses §24 markdown for §07 prose copies.
+- **Cohort linkage**: A-05 is the normative anchor for boundary discipline; AC-ADS-15 T-05, the §22 cohort-integration ownership table (A-03), and §25 disposition-map row F-21 all cite this section. Deleting it requires same-PR updates to all three citations.
+- **Result**: §24 Lovable score lifts ~+1, Cursor ~+2 (boundary now machine-checkable for items 1+2; reviewer-checkable for items 3-5 until §27 lint rule ships); closes final Wave-1 Critical task A-05 and unblocks Wave 2.
+- **Lockstep**: §00 v4.1.4 → **v4.2.0** (new normative subsection + 2 front-matter keys); §97 v3.3.0 → **v3.4.0** (AC count 15 → 16); §98 v4.2.0 → **v4.3.0**; §99 lockstep update deferred (mechanical).
 
 ### 4.2.0 — 2026-05-10 — Session 23 audit-task A-01: §22 operational-pattern inheritance (AC-ADS-15)
 - **Action**: §97 v3.2.0 → **v3.3.0** added `AC-ADS-15 [critical]` binding §24's runtime contracts (Phase 55 Go/Python/PHP token loaders; AppShell layout invariants from AC-ADS-12; Phase 61 Component Registry API) to §22's operational patterns by namespace extension. `GL-*` error-code family extends to `ADS-*` with five required codes: `ADS-TOKEN-LOADER-FAIL`, `ADS-TOKEN-PARITY-VIOLATION` (runtime peer of build-time AC-ADS-04), `ADS-SHELL-GEOMETRY-DRIFT`, `ADS-COMPONENT-NOT-FOUND`, `ADS-COMPONENT-VARIANT-INVALID`. Server-generated UUIDv4 `RequestId` per §22 AC-30; client-side AppShell may use browser-generated UUIDv4 routed through `X-App-Trace-Id` header which the server logs alongside but never overwrites its own server-side `RequestId` (preserves §22 AC-30 client-supplied-header-ignored rule). AppShell renders + Component Registry lookups MUST NOT emit AuditTrail rows (sink-side rule per §22 AC-04). Token mutations (admin theme editor when implemented per audit task A-15; runtime hot-reload) MUST emit `AuditTrail` rows with PascalCase action verbs (`app.token.reload` / `app.token.update`).

@@ -3,12 +3,14 @@ kind: module
 description: App-specific UI overlay on top of the core design system (§07). Declares app-only token extensions, layout containers, and the application shell pattern. NOT a redefinition of §07 — strictly additive.
 content_axis: normative-contract
 axis_rationale: "App-only token extensions (additive contract over §07)"
+derives_from: spec/07-design-system
+restate_forbidden: true
 ---
 
 # App Design System & UI
 
-**Version:** 4.1.4
-**Updated:** 2026-04-30
+**Version:** 4.2.0
+**Updated:** 2026-05-10 (Session 27 audit-task A-05 — §07 dependency boundary promoted to normative + `restate_forbidden: true`)
 **AI Confidence:** Production-Ready
 <!-- h10-verified-phase: 153 -->
 **Ambiguity:** None
@@ -63,6 +65,25 @@ This module is **NOT** a parallel design system. It is a strict, **additive over
 **Disambiguation:** if a token, component, or pattern is generic enough to appear on a marketing page → it lives in §07. If it only makes sense inside the authenticated app shell → it lives in §24. There is **no overlap**; if a §07 token would suffice, do not create an `--app-*` alias.
 
 This explicit ownership matrix resolves the previous circular reference flagged in the AI-implementability audit (`ai-implementability-2026-04-27.md`, finding 24-A).
+
+### Dependency Boundary (A-05, Session 27 — normative)
+
+The `Relationship to §07` table above is **promoted to a normative dependency boundary** with the following machine-checkable rules. §24's front-matter declares `derives_from: spec/07-design-system` and `restate_forbidden: true`; this section binds those keys to enforceable behaviour.
+
+**Boundary rules (binding on every §24 PR):**
+
+1. **No §07 token name MAY be re-declared in §24.** A `--app-*` token whose suffix matches any §07 primitive token name (`--background`, `--foreground`, `--primary`, `--primary-foreground`, `--secondary`, `--muted`, `--accent`, `--destructive`, `--border`, `--input`, `--ring`, `--space-*`, `--font-*`, `--radius-*`) is a **boundary violation** — even if the value differs.
+2. **Every `--app-*` token value MUST resolve through a §07 primitive.** Acceptable: `--app-toolbar-bg: var(--surface-1);`. Forbidden: `--app-toolbar-bg: oklch(0.95 0.01 240);` (raw value bypasses §07 — also trips AC-ADS-03).
+3. **No §07 contract text MAY be restated in §24.** Cross-reference §07 by anchored link only (Lesson #36 link-don't-restate). If a §07 rule needs paraphrasing for clarity, the paraphrase MUST be marked `> Non-normative summary; see §07 §X for the binding rule.`
+4. **Scope-lock interaction.** §07 is OUT of the active scope-lock (only `spec/22..28` are in-scope). Therefore §24 MUST NOT propose edits to §07; if a §07 token is missing or wrong, the correct remediation is to file a §22 backlog ticket (`carry-up-to-§07`) and document the gap in §99, NOT to add a compensating `--app-*` token.
+5. **`restate_forbidden: true` enforcement.** The §27 toolchain rule `derives-from-restate-check` (to be implemented) parses §24 markdown for any verbatim or near-verbatim copy of §07 contract text and fails the build. Until the rule ships, the boundary is enforced by AC-ADS-16 reviewer discipline.
+
+**Cohort interaction.** This boundary is jointly cited by:
+- AC-ADS-15 (§22 operational-pattern inheritance) — `ADS-*` error codes MUST NOT name §07 primitive tokens (already enforced via AC-ADS-15 T-05).
+- App cohort integration overview (§22 `60-app-cohort-integration.md`, A-03 Sess-25) — Ownership Boundaries table row for "App-overlay tokens (`--app-*`)".
+- §25 disposition map (A-02 Sess-24) — F-21 disposition `Irrelevant-in-v2` cites this boundary as the reason the v1 "coding-guidelines-applied.md" pattern is not needed in v2.
+
+A-05 is the normative anchor. The other three citations point here; this section MUST NOT be deleted without same-PR updates to all three.
 
 ---
 
