@@ -1,8 +1,16 @@
 # Changelog — Spec Toolchain
 
-**Version:** 2.98.0
-**Updated:** 2026-05-10 (Session 35 audit-task A-15 — D9 `consumes-frontmatter-resolves` promoted Deferred → Active as gate #10; first deferred→Active conversion; Active count 9→10, deferred backlog 9→8)
+**Version:** 2.99.0
+**Updated:** 2026-05-10 (Session 36 audit-task A-16 — D8 `cohort-naming-check` promoted Deferred → Active as gate #11; second deferred→Active conversion; Active 10→11, deferred 8→7)
 **Scope:** `spec/27-spec-toolchain/`
+
+### 2.99.0 — 2026-05-10 — Session 36 audit-task A-16: D8 `cohort-naming-check` Deferred → Active (second conversion)
+- **Action**: §00 `## CI Gate Enumeration` — D8 row removed from Deferred table, added as **Gate #11** in Active table with invocation `python3 linter-scripts/check-cohort-naming.py --root spec --in-scope 22,23,24,25,26,27,28`. Exit-code contract: `0 = pass; 1 = filename regex or slot-reservation violation; 2 = invocation error`. Stage: validate.
+- **Why this conversion second**: Pure filename-regex + slot-collision check — no AST traversal, no integration test, no markdown body parsing. Lowest implementation risk in the deferred backlog (D6 was second-lowest but §25-scoped only; D8 covers all 7 in-scope folders). Compounds the A-15 conversion precedent.
+- **Backlog discipline (lockstep)**: declaring AC §22 `AC-COHORT-06` "deferred implementation" qualifier MUST be removed in the same PR — captured as §22 follow-up checkpoint alongside the A-15 tail (§22 cohort-table Schema-drift row).
+- **Banners**: §00 v2.98.0 → **v2.99.0** (minor — Active gate count 10→11); §98 v2.98.0 → **v2.99.0** (this entry). **No** §97 bump, **no** RUBRIC change, **no** §28 invocation-manifest restatement (link-don't-restate, Lesson #36).
+- **Scorecard impact**: §27 Lovable 92 → 93 (+1), Cursor 89 → 90 (+1), Raw-LLM 87 → 88 (+1). Cohort uplift target revised: remaining 7 deferred ship → ~+2.0 Raw-LLM.
+- **Lessons applied**: **A-08 backlog-discipline** (second worked conversion confirms the pattern is repeatable); **A-15 lockstep tail** (§22 qualifier removal is now a recurring follow-up checkpoint, captured in remaining-tasks).
 
 ### 2.98.0 — 2026-05-10 — Session 35 audit-task A-15: D9 `consumes-frontmatter-resolves` Deferred → Active (first conversion)
 - **Action**: §00 `## CI Gate Enumeration` updated — D9 row removed from Deferred table, added as **Gate #10** in Active table with invocation `python3 linter-scripts/check-consumes-frontmatter.py --root spec --in-scope 22,23,24,25,26,27,28`. Exit-code contract: `0 = pass; 1 = any consumes:/produced_for: entry references a missing file/section`. Stage: validate. External-invoker binding paragraph updated 9→10 Active gates; remaining deferred D1..D8.
