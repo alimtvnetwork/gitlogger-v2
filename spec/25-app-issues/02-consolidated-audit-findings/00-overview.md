@@ -6,8 +6,8 @@ description: Consolidated audit findings tracker for git-logs App spec. Not a co
 # Consolidated Audit Findings — `git-logs` App Specification
 
 **Document ID:** `AUDIT-GL-2026-04-25`  
-**Version:** 1.2.0  
-**Updated:** 2026-05-10  
+**Version:** 1.3.0  
+**Updated:** 2026-05-10 (Session 31 audit-task A-10 — added `Last touched` column to v1→v2 disposition map + 5th invariant wiring the column as input signal for §27 deferred lint rule D5 `cohort-orphaned-finding`. All 24 rows seeded at Sess-24 (creation session). D5 implementation still deferred.)
 <!-- h10-verified-phase: 32 -->
 **Audit Mode:** Spec-only (no code reviewed)  
 **Scope:** every file in `spec/_archive/21-git-logs-v1/`  
