@@ -114,8 +114,14 @@ def check_file(path: Path) -> list[tuple[int, str]]:
         snippet = prose[max(0, m.start() - 20) : m.end() + 30].replace("\n", " ")
         errors.append((2, f"T-02 bare DDL `{m.group(0)}` in prose at {rel}: …{snippet}…"))
 
-    # T-04 — module_run_audit_p78 must be followed within 100 chars by §27/§28
+    # T-04 — module_run_audit_p78 must be followed within 100 chars by §27/§28.
+    # Skip backtick-fenced inline references (documentation citations are OK).
     for m in re.finditer(re.escape(P78_TOKEN), text):
+        # Inline-code carve-out: token sandwiched between backticks
+        before = text[max(0, m.start() - 1) : m.start()]
+        after = text[m.end() : m.end() + 1]
+        if before == "`" and after == "`":
+            continue
         window = text[m.end() : m.end() + 100]
         if not P78_CITE_RE.search(window):
             line = text[: m.start()].count("\n") + 1
