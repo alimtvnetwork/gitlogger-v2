@@ -194,6 +194,10 @@ for (const name of Object.keys(rootTokens)) {
 
 ---
 
+## Acceptance Criteria — Inheritance & Boundary (cont. — Phase-5 T-13 reconciliation)
+
+> **Header reconciliation note:** AC-ADS-15 (§22 operational-pattern inheritance) and AC-ADS-16 (§07 dependency boundary) were appended after the Worked Examples section in earlier sessions and were therefore visually orphaned from the main `## Acceptance Criteria` block. Rather than reorder content (which would invalidate every existing line-anchored citation in §22/§25/§27), Phase-5 T-13 mints this `## Acceptance Criteria — Inheritance & Boundary (cont.)` header to make the structural relationship explicit. Both ACs below carry full normative weight equal to AC-ADS-01..14 above. The Cross-cutting App Framework section (`## Cross-cutting App Framework (CAF)` below) is its own sibling namespace, NOT a continuation of `AC-ADS-*`. Self-enforcing via §27 backlog gate `ac-section-orphan-header-check` (NEW from T-13).
+
 ### AC-ADS-15: §22 operational-pattern inheritance for runtime token & component contracts  `[critical]`
 
 - **Given** §24 ships three runtime contract surfaces — (a) the design-token loader (§00 Phase 55 reference impls in Go / Python / PHP), (b) the AppShell layout invariants (AC-ADS-12 fixed header/sidebar geometry), and (c) the App UI Component Registry API (§00 Phase 61) — AND §22-git-logs-v2 owns the canonical operational-pattern surfaces in scope (AC-30 `ErrorEnvelope` shape; the `GL-*` `ErrorCode` enum in §22 §17 / §15; server-generated UUIDv4 `RequestId` correlation; `AuditTrail` row written with the same `RequestId`; AC-04 sink-side observability rule),

@@ -132,3 +132,9 @@ These slots are immutable once shipped (per project memory rule).
 - AC-CAF-01 (boolean parity), AC-CAF-02 (error envelope), AC-CAF-03 (idempotency), AC-CAF-04 (seedable-config), AC-CAF-05 (audit-evidence interpretation).
 - Cross-folder scorecard impact: §23 C4 19→20, §25 C4 19→20 (both conditional on §27 gate shipment).
 - Regression-grep: `rg -nc '^### AC-CAF-0[1-5]' spec/24-app-design-system-and-ui/97-acceptance-criteria.md` MUST return ≥5.
+
+### v2.2.9 — 2026-05-10 — A-60: §97 orphan headers reconciled (T-13)
+
+- New H2 `## Acceptance Criteria — Inheritance & Boundary (cont.)` minted before AC-ADS-15 to enclose AC-ADS-15/16 explicitly.
+- AC-ADS-15/16 line numbers shifted by +5 (originally line 197/208 → now ~200/211); AC-ID anchors stable.
+- Regression-grep: `rg -nc '^## Acceptance Criteria — Inheritance' spec/24-app-design-system-and-ui/97-acceptance-criteria.md` MUST return ≥1.
