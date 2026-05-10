@@ -214,6 +214,28 @@ The remaining grep hits in `37-blind-ai-gap-analysis.md` are **historical narrat
 
 ---
 
+## Appendix A — Mirror of `spec/13-generic-cli/97 AC-22` (SQLite locking + atomic file writes)
+
+> **Non-normative mirror — canonical at `spec/13-generic-cli/97-acceptance-criteria.md` AC-22 (Phase 153 Task A11a).** Inlined here per Lesson #88 (cross-folder citation resolvability for context-bounded Raw-LLM agents). AC-26 of this module delegates the persisted-floor concurrency contract to AC-22; if you only have spec/22 in context, this excerpt is the contract you implement against. **If this mirror and spec/13 AC-22 ever diverge, spec/13 wins** — re-sync via `linter-scripts/check-lockstep.py`.
+>
+> **AC-22 — Database + file concurrency contract for SQLite + multi-threaded `exec` / `update`**
+>
+> - **Given** any binary that opens a SQLite database OR concurrently writes files under the config/data directory,
+> - **When** the binary opens the connection or performs a write,
+> - **Then** all of the following MUST hold:
+>   - **PRAGMAs at startup:** `journal_mode=WAL`, `busy_timeout=5000` (cross-cuts spec/05 AC-SD-22), `foreign_keys=ON`.
+>   - **Write transactions:** every WRITE MUST use `BEGIN IMMEDIATE` (NOT default `DEFERRED`) so lock acquisition fails fast rather than mid-transaction.
+>   - **Retry on lock:** any `SQLITE_BUSY` / `SQLITE_LOCKED` MUST retry with exponential back-off — **3 attempts, base 100 ms, ±25 % jitter** (mirrors spec/27 AC-T-28 R3).
+>   - **Atomic file writes outside SQLite:** config/lock/cache files MUST follow temp-then-rename (spec/27 AC-T-28 R1) — write to `<target>.tmp.<pid>`, `fsync`, `os.Rename`, cleanup in `finally`.
+>   - **Parallel batch:** `--parallel=N` MUST serialize SQLite writes through a single connection pool (size = N), NOT N independent connections (N-connection mode is FORBIDDEN — amplifies WAL checkpoint contention).
+>   - **Update lock:** `update` / `self-update` MUST acquire a process-level lock file at `~/.local/state/<binary-name>/update.lock` before mutating the binary; if held, exit 1 with `error: another update is in progress (lock held by PID <n>)`; release in `finally`/`defer`.
+>
+> **Cross-cuts:** spec/05 AC-SD-22 (`busy_timeout` cross-cutting), spec/27 AC-T-28 R1 (atomic temp-then-rename) + R3 (retry policy).
+>
+> **§22 binding:** AC-26 (rate-limit persisted-floor concurrency) delegates to this contract for the SQLite-backed `RateLimitFloor` table — the persisted floor is mutated under the same `BEGIN IMMEDIATE` + retry envelope. Any §22 endpoint that touches the floor (rate-limit checks in `04-rest-api-endpoints.md`, frame ingestion in `46-server-upload-frames-endpoint.md`) inherits this contract.
+
+---
+
 ## Cross-References
 
 | Reference | Location |
