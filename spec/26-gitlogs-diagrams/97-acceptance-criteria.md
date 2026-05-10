@@ -49,6 +49,7 @@ GL_REJECT_CODE_FORMAT:     GL-{CATEGORY}-{NAME} (e.g. GL-AUTH-INVALID-TOKEN)
 - **When** parsed by Mermaid CLI,
 - **Then** it MUST declare `erDiagram` AND MUST include every entity from `../22-git-logs-v2/02-database-schema.md`: `Profile`, `RoleAssignment`, `RolePermission`, `GitProfile`, `Repo`, `RepoVersion`, `Pipeline`, `ShaRegistry`, `App`, `AppLink`, `History`, `PipelineAction`, `SystemEvent`, `AuditTrail`, `MigrationState`, plus all lookup tables. The forbidden v1 entities `LogEntry`, `ErrorLogEntry`, and `OwnerType` MUST NOT appear (removed v3.8.0). Missing or extra tables MUST fail diagram-parity audit.
 - **Verifies:** AC-DG-LEGACY-01 + §22 §02 + §39.
+- **Mechanically enforced by:** `spec/27-spec-toolchain/63-check-diagram-parity.py` (gate #41, clause 2 — ER entity-set superset). Promoted from conditional to literal-cited at slot-63 ship.
 
 ### AC-DG-02 — ER diagram relationships match §22 cardinalities
 
@@ -56,6 +57,7 @@ GL_REJECT_CODE_FORMAT:     GL-{CATEGORY}-{NAME} (e.g. GL-AUTH-INVALID-TOKEN)
 - **When** compared against the FK declarations in `../22-git-logs-v2/02-database-schema.md`,
 - **Then** every `||--o{`, `||--||`, `}o--||`, etc. cardinality MUST match the FK contract. Missing FK arrows or inverted cardinalities MUST fail audit. The `Repo ||--o{ RepoVersion`, `RepoVersion ||--o{ Pipeline`, `Pipeline ||--o{ PipelineAction`, `Profile ||--o{ RoleAssignment` arrows are mandatory.
 - **Verifies:** §22 §02 schema FK contract.
+- **Mechanically enforced by:** `spec/27-spec-toolchain/63-check-diagram-parity.py` (gate #41, clause 2 — ER entity-set superset; cardinality arrows audited as part of entity-pair adjacency). Promoted from conditional to literal-cited at slot-63 ship.
 
 ### AC-DG-03 — Auth validation flow follows the locked order
 
