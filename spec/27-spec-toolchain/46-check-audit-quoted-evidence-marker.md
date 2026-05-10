@@ -93,6 +93,9 @@ fixtures:
 - **F-5** §23 §00 mentions `AC-JWT-09` in a paragraph with no
   surrounding `evidence` / `audit` / `_archive` marker word →
   fails (clause-5; restate-drift inside §23)
+- **F-6** R5 vacuous-pass — no `AC-CAF-05` audit-quoted-evidence
+  literal found in any in-scope §97 → fails as `vacuous-pass: empty
+  walk → exit 3 fixture-rot` rather than silently passing on absence.
 
 ## 5-link self-enforcement chain
 
