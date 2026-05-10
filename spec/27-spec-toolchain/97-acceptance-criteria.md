@@ -131,6 +131,7 @@
 - **When** its `on.push.paths` and `on.pull_request.paths` arrays are inspected,
 - **Then** they MUST include ALL of: `spec/**` (any spec edit re-runs the gate), `linter-scripts/**` (any toolchain edit re-runs the gate), `.github/workflows/spec-health.yml` (workflow edits self-validate), `linter-scripts/spec-cross-links.allowlist` (allowlist edits re-validate), `linter-scripts/forbidden-strings.toml` (config edits re-validate). Workflow MUST run on `push` to `main` AND on `pull_request` to `main` — single-trigger workflows are FORBIDDEN because they leak unguarded merges. The minimum-score threshold MUST be `100` (locked at A+ per `mem://index.md` Core) — lowering the threshold is a major version bump of slot 70 and requires a §98 entry with written justification.
 - **Verifies:** AC-T-08 trigger paths; §70 spec section; `mem://index.md` Core "CI threshold locked at 100".
+- **Worked example:** `for p in 'spec/**' 'linter-scripts/**' '.github/workflows/spec-health.yml' 'linter-scripts/spec-cross-links.allowlist' 'linter-scripts/forbidden-strings.toml'; do yq ".on.push.paths[], .on.pull_request.paths[]" .github/workflows/spec-health.yml | grep -Fxq "$p" || echo "MISSING: $p"; done` MUST print zero lines; `yq '.jobs.*.steps[] | select(.name == "Tree health") | .run' .github/workflows/spec-health.yml | grep -Fq -- '--min=100'` MUST match.
 
 ### AC-T-20 — `trace-map.md` is informational, NOT acceptance surface
 - **Given** the `trace-map.md` file present in this module (alongside slots 01–79),
