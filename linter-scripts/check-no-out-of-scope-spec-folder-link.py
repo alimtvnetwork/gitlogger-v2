@@ -109,6 +109,9 @@ class Surface:
             if not base.exists():
                 continue
             for p in sorted(base.rglob("*.md")):
+                # exclude per-folder _archive subdirs (out-of-scope by definition)
+                if "_archive" in p.parts:
+                    continue
                 files.append((p, p.read_text(encoding="utf-8")))
         overview = (SPEC_ROOT / "27-spec-toolchain" / "00-overview.md").read_text(encoding="utf-8")
         return cls(files=files, overview=overview)
