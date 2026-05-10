@@ -546,6 +546,26 @@ jobs:
           python3 linter-scripts/check-error-envelope-uniformity.py --self-test
           python3 linter-scripts/check-error-envelope-uniformity.py
 
+      - name: §24 seedable-config row gate
+        # Slot 44 / Gate #25 — six clauses against §24 §00 Settings Surface
+        # (S-1 route matrix, S-2 persistence matrix, S-3 4-invariant
+        # seedable-config binding) + §24 §97 AC-ADS-UI-03 + cross-cutting
+        # AC-CAF-04: s1-s2-coverage (every S-NN cites valid R-NN, no orphan
+        # endpoints), seed-row-presence (R-10 verbatim canonical note +
+        # `Setting` table named in S-3), override-table-separation (S-3
+        # invariant 2 carries `UserSettingOverride` + `ON CONFLICT(UserId,Key)
+        # DO UPDATE` + `MUST NOT mutate the seed row` literals all three),
+        # r09-merged-view (R-09 note + non-inverted `COALESCE(override.Value,
+        # seed.Value)`), forward-only-removal (§23 Rule 12 cite + same-
+        # migration removal of seed + overrides), no-restate (§22/§23 MUST
+        # NOT inline a parallel Settings persistence matrix). R5 vacuous-
+        # pass: missing S-1/S-2/S-3 anchors → exit 3 fixture-rot. Promotes
+        # AC-CAF-04 (T-12) from conditional to load-proven.
+        # Spec: spec/27-spec-toolchain/44-check-seedable-config-row-present.md
+        run: |
+          python3 linter-scripts/check-seedable-config-row-present.py --self-test
+          python3 linter-scripts/check-seedable-config-row-present.py
+
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
