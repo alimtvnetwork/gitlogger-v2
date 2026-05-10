@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.34.0  
-**Updated:** 2026-05-10 (Phase-5 T-38 / **P19c** ships `linter-scripts/check-ci-cli-self-test-harness.py` (gate #40 — was phantom; now real). Self-test 6/6 (F-1..F-6 per AC-28-49 spec). Real-disk on §28 PASSES — required §04 v1.2.0 (declares `--self-test`+`--check`) and §07 v1.2.0 (4-row exit-code table). AC-28-49 promotes literal-cited → **load-proven**. Phantom-script count 37 → **36**. Cohort lifts: §28 Raw-LLM +2 (118 → 120, triple-ceiling honest), §27 +1 (truth ratio 4/6 P19 cycles complete). Prior: T-29 P19b gate #36.)
+**Version:** 4.35.0  
+**Updated:** 2026-05-10 (Phase-5 T-36 / **P19d** ships `linter-scripts/meta-verify-lockstep.py` (gate #42 — was phantom; now real). Self-test 6/6 (F-1..F-6 per slot-64 spec). Real-disk on §27 SURFACES 34 latent violations across 49 slot docs (clause-2 R5 sections, clause-3 fixture counts, clause-4 4-row exit-code tables, clause-5 banner-triple drift) — wired **warn-only** until §27 slot-doc backlog grooms. Truth ratio: 25 wired gates over 46 disk scripts. Phantom-script count drops 36 → **35**. Cohort lifts: §27 +1 (reflexivity now load-proven; backlog newly visible). Prior: T-38 P19c gate #40.)
 
 > **Self-enforcing via §27 backlog gate `meta-verify-lockstep`** — Lesson #15 reflexivity pin for gate #42 (slot 64). Stripping this literal from §27 §00 fails clause-5 of the meta-verifier itself.
 <!-- h10-verified-phase: 158 -->
