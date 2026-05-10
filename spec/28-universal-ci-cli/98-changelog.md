@@ -1,9 +1,21 @@
 # Changelog
 
-**Updated:** 2026-05-10 (Session 61 audit-task A-51 — authored 5 fixture corpora `linter-scripts/fixtures/glci-{exec-runner-crashed,exec-timeout,push-stream-broken,stream-buffer-overflow,push-deadline-exceeded}/` for T-28-29/30/31/36/48; load-proves §28 C3 Raw-LLM 19→20)
+**Updated:** 2026-05-10 (Phase-5 T-38 — P17 §28 floor-lift completion; AC-28-49 minted in §97 closing the placeholder opened in §27 v4.27.0; literal-cited via gate #40; §28 reaches Lovable + Cursor 120 ceiling)
 
 
 All notable changes to `spec/28-universal-ci-cli/`.
+
+## [2.14.0] — 2026-05-10 — Phase-5 T-38: AC-28-49 minted (P17 §28 floor-lift completion; gate #40 literal-cited)
+
+- **Action**: Minted `### AC-28-49 — \`glci --self-test\` built-in harness contract (Normative)  \`[high]\`` in `97-acceptance-criteria.md` directly after AC-28-48 under new section `## Phase-5 T-38 — Self-test harness contract closure (P17 §28 floor-lift)`. AC body declares the 4 semantic markers (`built-in` + `no network` + `no real CI provider` + `no real git repo`) for `glci --self-test` flag in §04, the ≥6-fixture coverage requirement in §97, the 4-row exit-code contract in §07, the R5 inheritance literal in §00, and the Lesson #15 self-citation. AC-28-49 carries inline `**Mechanically enforced by:**` clause naming `linter-scripts/check-ci-cli-self-test-harness.py` (gate #40, slot 62, all 6 clauses) — promotes from placeholder (18) to literal-cited (20) per Rubric v2 18-20 band anchor. 6 canonical-shape fixture rows F-1..F-6 inline in §97 body.
+- **Why this now**: P17 §28 floor-lift completion — closes the AC-28-49 placeholder opened in §27 v4.27.0 (gate #40 / slot 62 ship). Per cohort discipline, floor-lift gates ship before their target-folder ACs are minted; mirror of P14 §26 final lift (AC-DG-01/02/06 literal-cited via gate #41).
+- **Scorecard impact** (carry-forward Lovable 119 / Cursor 117 / Raw-LLM 118 → updated):
+  - §28 Lovable: 119 → **120** (+1 — C5 literal-cited gate binding inline)
+  - §28 Cursor: 117 → **120** (+3 — C2 +1 fixture coverage on §97 surface; C5 +2 literal-cited)
+  - §28 Raw-LLM: 118 → 118 (held — C6 already at 18 via P16 pin block)
+  - §28 reaches Lovable + Cursor 120 ceiling.
+- **Files changed**: §28 §97 (AC-28-49 minted); §28 §00 v2.12.0 → v2.13.0; this §28 §98; §28 §99 (banner cascade); §27 §00 v4.29.0 → v4.30.0; §27 §98 v4.31.0 → v4.32.0; §27 §99 v2.90.25 → v2.90.26.
+- **Gate-count delta**: 42 → 42.
 
 ## [2.13.0] — 2026-05-10 — Session 61 audit-task A-51: 5 inaugural T-28-NN fixture corpora landed (load-proves C3 Raw-LLM ceiling)
 

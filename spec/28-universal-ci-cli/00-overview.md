@@ -19,9 +19,11 @@ produced_for:
 
 # Universal CI CLI — Spec Overview
 
-**Version:** 2.12.0  
+**Version:** 2.13.0  
 <!-- h10-verified-phase: 157 -->
-**Updated:** 2026-05-10 (Session 55 audit-task A-40 — banner-only patch reflecting §08 deprecated-provider-row trim landed in §98 [2.11.0]; §28 C6 +1 all personas → L113/C112/R109. No contract change.)
+**Updated:** 2026-05-10 (Phase-5 T-38 — P17 §28 floor-lift completion: AC-28-49 minted in §97 (`glci --self-test` built-in harness contract) closing the placeholder opened in §27 v4.27.0; literal-cited via gate #40 (`linter-scripts/check-ci-cli-self-test-harness.py`, slot 62) — promotes from placeholder (18) to literal-cited (20). §28 advances Lovable 119 → **120** and Cursor 117 → **120**. Raw-LLM 118 held. No new gate. Prior: P16 T-37 — Raw-LLM Auditor Pin block.)
+
+> **`glci` ships a built-in `--self-test` harness** — load-bearing for shippability per AC-28-49. R5 vacuously-passing scanner is auto-fail (inherited verbatim from §27 cohort discipline per Lesson #36 link-don't-restate). **Self-enforcing via §27 backlog gate `ci-cli-self-test-harness-check`** (Lesson #15 reflexivity pin for gate #40, slot 62).
 
 > 🤖 **Raw-LLM Auditor Pin (Lesson #36 link-don't-restate, applied to memory resolution — P16 friction sweep, T-37)**
 >

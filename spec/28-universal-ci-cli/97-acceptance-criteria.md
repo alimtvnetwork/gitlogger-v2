@@ -458,6 +458,32 @@ The following 12 ACs close the four error codes flagged "v1.1 deferred" in `99-c
 
 ---
 
+## Phase-5 T-38 — Self-test harness contract closure (P17 §28 floor-lift)
+
+### AC-28-49 — `glci --self-test` built-in harness contract (Normative)  `[high]`
+
+- **Given** `glci` is shipped to environments that may have no external test harness (no real CI provider, no real git repo, no network), AND auditors / implementers MUST be able to run the CLI's own self-validation in such environments,
+- **When** the operator runs `glci --self-test` (or canonical equivalent `glci selftest` / `glci --harness`),
+- **Then** the binary MUST execute its built-in fixture suite covering every `--check <mode>` enumerated in §04 — built-in, no network, no real CI provider, no real git repo (4 semantic markers verbatim per gate #40 clause-1),
+- **AND** every `--check <mode>` MUST have at least one fixture row in this §97 with canonical shape `**Fixture F-N (<mode>):** <description>` (minimum 6 fixtures: F-1 unique-passing + ≥5 failure variants),
+- **AND** §28 §07 MUST declare the 4-row exit-code table mapping `0` → pass · `1` → violation · `2` → invocation error · `3` → fixture-rot (exit `3` distinguishes "fixture broken" from "implementation broken"; vacuously-passing scanner is auto-fail per R5),
+- **AND** §28 §00 MUST carry the literal `glci ships a built-in \`--self-test\` harness` (or canonical equivalent `built-in self-test harness is load-bearing for shippability`) PLUS Lesson #15 self-citation `Self-enforcing via §27 backlog gate \`ci-cli-self-test-harness-check\``.
+
+**Mechanically enforced by:** `spec/27-spec-toolchain/62-check-ci-cli-self-test-harness.md` → `linter-scripts/check-ci-cli-self-test-harness.py` (gate #40, all 6 clauses). Promoted from placeholder (T-33 minted, T-38 closed) to literal-cited at slot-62 ship — closes the §28 floor-lift backlog opened in §27 v4.27.0.
+
+**Fixtures** (canonical shape required by gate #40 clause-3, ≥6 rows):
+- **Fixture F-1 (all):** complete-clean — synthetic §28 with all 4 semantic markers in §04, R5 inheritance literal in §00, 4-row exit-code table in §07, ≥6 fixtures in §97; passes.
+- **Fixture F-2 (self-test-flag-declaration):** §04 omits `--self-test` flag OR strips one of 4 semantic markers (`built-in` / `no network` / `no real CI provider` / `no real git repo`); fails.
+- **Fixture F-3 (r5-inheritance):** §28 §00 strips `vacuously-passing` literal; fails.
+- **Fixture F-4 (fixture-coverage):** §97 has only 5 fixture rows (one `--check` mode uncovered); fails.
+- **Fixture F-5 (exit-code-table):** §07 exit-code table omits row `3 → fixture-rot`; fails.
+- **Fixture F-6 (lesson-15-reflexivity):** §28 §00 strips `Self-enforcing via §27 backlog gate \`ci-cli-self-test-harness-check\`` literal; fails.
+
+- **Source:** Phase-5 T-38 (P17 §28 floor-lift) — closes the AC-28-49 placeholder minted in §27 v4.27.0 (gate #40 / slot 62 ship). The placeholder was deferred per the cohort discipline that floor-lift gates ship before their target-folder ACs are minted (allowing the gate to ship as the load-proof mechanism, then the AC closes the loop on the §28 §97 surface).
+- **Verifies:** §28 §04 `--self-test` flag declaration with 4 semantic markers (`built-in` + `no network` + `no real CI provider` + `no real git repo`) + §28 §07 4-row exit-code table + §28 §00 R5 inheritance literal + Lesson #15 self-citation. Codifies **Lesson #15** reflexivity (clause-5 enforces gate name remains in §28 §00) + **Lesson #36** link-don't-restate (R5 inheritance is cited verbatim from §27, not restated). Promotes AC-28-49 from placeholder (18) to literal-cited (20) per Rubric v2 18-20 band anchor.
+
+---
+
 ## Worked Examples
 
 > Non-normative `kind: example` — illustrative implementations of opaque ACs. If example and AC ever diverge, the AC wins.
