@@ -815,6 +815,23 @@ jobs:
         # src-tree backlog is owned by the §02 coding-guidelines workflow.
         # Spec: spec/27-spec-toolchain/50-validate-guidelines-py.md
         run: python3 linter-scripts/validate-guidelines.py --self-test
+
+      - name: validate-guidelines.go static-surface gate (#45 / G-6s / slot 51)
+        # Sess-66 G-6s — phantom-clearing for slot 51. The Go port of the
+        # cross-language coding-guidelines validator had a §27 §00 entry +
+        # 99-ledger row but no CI invocation. CI runners do not install Go,
+        # so end-to-end execution is out of scope; instead this gate runs a
+        # static-surface probe (`bash linter-scripts/test/test-validate-
+        # guidelines-go-surface.sh`) with six clauses: file-exists, version
+        # banner, eight CODE-RED-001..008 rule IDs present, four boolean-
+        # principle CODE-RED-022..025 rule IDs present, `package main` +
+        # `func main()` declared, and AC-51-01 parity-anchor (every CODE-RED
+        # rule in the .py port either exists in .go OR is in the frozen
+        # TOLERATED_PY_ONLY baseline-drift set of 10 rules). Any NEW .py-only
+        # rule added without a .go port (or explicit baseline growth) fails
+        # clause-6, forcing porter discipline. Companion to gate #44 (slot 50).
+        # Spec: spec/27-spec-toolchain/51-validate-guidelines-go.md
+        run: bash linter-scripts/test/test-validate-guidelines-go-surface.sh
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,

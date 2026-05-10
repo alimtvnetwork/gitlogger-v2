@@ -1,8 +1,17 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.62.0
-**Updated:** 2026-05-10 (Sess-66 G-6r — slot 50 `validate-guidelines.py` phantom-cleared; `--self-test` synthetic-fixture probe wired as gate #44; phantom 9 → 8; banner-triple recount goes 23 → **24**)
-**Total active gates: 24**
+**Version:** 4.63.0
+**Updated:** 2026-05-10 (Sess-66 G-6s — slot 51 `validate-guidelines.go` phantom-cleared via static-surface probe wired as gate #45; phantom 8 → 7; banner-triple recount goes 24 → **25**)
+**Total active gates: 25**
+
+### 4.63.0 — 2026-05-10 — Sess-66 G-6s: slot 51 `validate-guidelines.go` load-proven (gate #45; static-surface probe with AC-51-01 parity anchor; phantom 8 → 7; paired-validator track complete)
+- **Action**: Created `linter-scripts/test/test-validate-guidelines-go-surface.sh` (~95 LOC, six clauses). The probe statically validates the Go validator's surface contract without requiring a Go runtime in the spec-health workflow runner. Clauses: (1) source file exists and non-empty; (2) `Version: X.Y.Z` banner present; (3) eight CODE-RED-001..008 rule IDs present in `.go`; (4) four CODE-RED-022..025 boolean-principle rule IDs present (P2/P3/P5/P7); (5a) `package main` declared, (5b) `func main()` declared (load-ready); (6) AC-51-01 parity anchor — every `CODE-RED-NNN` token in `.py` either appears in `.go` OR is in the frozen `TOLERATED_PY_ONLY` baseline-drift set. The drift set is pinned at exactly 10 rules (CODE-RED-009/013/014/015/016/017/018/019/020/021); any new `.py`-only rule fails clause-6 unless the porter explicitly grows the list — porter-discipline floor.
+- **Workflow wire**: New step `validate-guidelines.go static-surface gate (#45 / G-6s / slot 51)` in `.github/workflows/spec-health.yml` immediately after gate #44. Single command: `bash linter-scripts/test/test-validate-guidelines-go-surface.sh`. The gate intentionally does NOT `go run` the validator — CI runners do not install Go, and full `.go` execution stays owned by the §02 coding-guidelines workflow per Lesson #36 link-don't-restate.
+- **Slot-doc bump**: `spec/27-spec-toolchain/51-validate-guidelines-go.md` 1.0.0 → 1.1.0; canonical `**Status:** Active gate #45` line added (was missing — recount goes 24 → 25 net +1).
+- **Probe first-run**: green (24 .py rules cross-checked; 10 baseline-tolerated; 0 NEW drift).
+- **Phantom-script ledger**: 8 → 7 (-1 net; cumulative -27 across G-5 + G-6a..G-6s).
+- **Banner-triple gate count**: Rises from 24 → **25**. Recount basis: `grep -lE '^\*\*Status:\*\*\s+Active\s+gate\s+#' spec/27-spec-toolchain/*.md | wc -l` = **25**. `meta-verify-lockstep.py` checks the three banners agree (clause-5 GATE_COUNT_RE) — all three updated in lockstep.
+- **Scorecard**: §27 R-band C6 +1 (paired-validator track complete; both slot 50 and slot 51 CI-load-proven; AC-51-01 parity anchor mechanically enforced going forward).
 
 ### 4.62.0 — 2026-05-10 — Sess-66 G-6r: slot 50 `validate-guidelines.py` load-proven (gate #41; `--self-test` synthetic CODE-RED-002 probe; phantom 9 → 8; resumes paired-validator track ahead of slot 51)
 - **Action**: Added `_run_self_test()` + `--self-test` CLI flag to `linter-scripts/validate-guidelines.py` (1.5.0 → 1.6.0). The probe writes a 2-line TS source (`export const flag = true;` + `export const userActive = false;`) into a `tempfile.TemporaryDirectory`, calls `validate_file()`, and asserts `≥1 CODE-RED` + `≥1 CODE-RED-002` are reported. Exits 0 on success, raises `AssertionError` on regression. Locks AC-50-01 parity anchor (the validator's load-prove path now runs in CI on every PR) and AC-50-03 version-banner (script must import-load cleanly to reach `_run_self_test`).

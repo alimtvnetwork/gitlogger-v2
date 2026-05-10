@@ -1,9 +1,10 @@
 # 51 — validate-guidelines.go
 
-**Version:** 1.0.0  
-**Updated:** 2026-04-25  
+**Version:** 1.1.0  
+**Updated:** 2026-05-10 (Sess-66 G-6s — paired with slot 50; static-surface probe `linter-scripts/test/test-validate-guidelines-go-surface.sh` shipped + wired as **gate #45**; six clauses including AC-51-01 parity anchor with frozen 10-rule TOLERATED_PY_ONLY baseline-drift set; phantom 8 → 7)  
 **Source:** [`linter-scripts/validate-guidelines.go`](../../linter-scripts/validate-guidelines.go)  
-**Category:** Source validator (Go port — preferred for speed)
+**Category:** Source validator (Go port — preferred for speed)  
+**Status:** Active gate #45 (load-proven via static-surface probe; no Go runtime in CI per Lesson #36 link-don't-restate — full Go execution lives in §02 coding-guidelines workflow when promoted)
 
 ---
 
