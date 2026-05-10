@@ -345,6 +345,7 @@ This section is the **canonical, single-in-scope source-of-truth** for every CI 
 | 8 | `summary-freshness` | Active | §27 | `node linter-scripts/check-summary-freshness.cjs` | 0 = pass; 1 = stale roll-up | audit stage |
 | 9 | `stamp-bump` | Active | §27 | `node linter-scripts/check-stamp-bump.cjs` | 0 = pass; 1 = banner stamp not bumped on contract change | audit stage |
 | 10 | `consumes-frontmatter-resolves` | Active | §27 | `python3 linter-scripts/check-consumes-frontmatter.py --root spec --in-scope 22,23,24,25,26,27,28` | 0 = pass; 1 = any `consumes:` / `produced_for:` entry references a missing file/section | validate stage |
+| 11 | `cohort-naming-check` | Active | §27 | `python3 linter-scripts/check-cohort-naming.py --root spec --in-scope 22,23,24,25,26,27,28` | 0 = pass; 1 = any in-scope folder/file violates AC-COHORT-06 filename regex or slot-reservation rules; 2 = invocation error | validate stage |
 
 **Deferred lint rules (declared by Wave-1/Wave-2 ACs; implementation pending).**
 
@@ -357,7 +358,8 @@ This section is the **canonical, single-in-scope source-of-truth** for every CI 
 | D5 | `cohort-orphaned-finding` | A-03 (AC-COHORT-05, J-5) | §27 | §25 `Carried-open` row >1 session without §22 backlog citation → dashboard slot 11 warning | §25 disposition-map row age check |
 | D6 | `finding-status-enum-check` | A-04 (§25 AC-09) | §27 | Every `## F-NN` Status value ∈ {Open, In progress, Resolved, De-scoped (archive-only)} | Markdown parser; disposition-map values explicitly excluded |
 | D7 | `derives-from-restate-check` | A-05 (§24 AC-ADS-16 T-04) | §27 | §24 paragraphs MUST NOT contain ≥3 8-token shingle matches with any §07 paragraph | 8-token shingle hash compare |
-| D8 | `cohort-naming-check` | A-06 (§22 AC-COHORT-06) | §27 | Every in-scope folder/file matches the AC-COHORT-06 patterns + slot reservations | Filename regex + slot collision check |
+
+> **D8 promoted to Active in A-16 (Session 36)** — moved to Active row #11 above. Lowest-risk second conversion (pure filename regex + slot-collision check; no AST/integration-test dependency). Conversion count 2/9; remaining deferred 7. Declaring AC §22 AC-COHORT-06 "deferred implementation" qualifier removed in same PR per backlog-discipline lockstep.
 
 > **D9 promoted to Active in A-15 (Session 35)** — moved to Active row #10 above. Trigger: full cohort `consumes:` / `produced_for:` coverage achieved via A-09 (§28→§27), A-11 (§26→§22), A-12 (§24 producer-side), A-14 (§23→§22). First deferred→Active conversion (1/9 shipped). The declaring AC's "deferred implementation" qualifier in §22's cohort-table Schema-drift row was removed in the same PR per backlog-discipline lockstep.
 
