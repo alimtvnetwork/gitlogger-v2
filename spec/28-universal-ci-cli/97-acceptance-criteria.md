@@ -1,8 +1,8 @@
 # Acceptance Criteria
 
-**Version:** 2.7.0
-**Updated:** 2026-05-07 (Phase 155 A4 — added **AC-28-47** `[critical]` Module Kind: GitHub Actions Only — pins v2 scope per Lesson #29; supersedes Locked Decision 11 multi-provider list; codifies 5 forbidden patterns + `GLCI-CONTRACT-V2-SCOPE-VIOLATION` auditor finding class. Closes the contradiction-class between §00 banner + Locked Decision 11. AC count 46 → 47.)
-**Prior banner — Version:** 2.5.0; **Updated:** 2026-05-06 (Phase 154 Lesson #39 sweep — added AC-28-46 Sibling File Delegation Map; AC count 45 → 46.)
+**Version:** 2.8.0
+**Updated:** 2026-05-10 (Session 56 audit-task A-47 — added `## Test Invariant Index (T-28-NN)` section with inaugural 5 rows: T-28-29/30/31/36/48. Translates GWT prose to fixture path + runner invocation + single-line pass criterion. Lifts §28 C3 Testability +1 across personas; deferred §27 gate `ac-test-invariant-coverage-check` will mechanically enforce coverage.)
+**Prior banner — Version:** 2.7.0; **Updated:** 2026-05-07 (Phase 155 A4 — added **AC-28-47** `[critical]` Module Kind: GitHub Actions Only — pins v2 scope per Lesson #29; AC count 46 → 47.)
 
 Each AC is written **Given / When / Then** so it can be lifted directly into a test (bats / phpunit / go test). When this file and a normative source disagree, the normative source wins and this file MUST be patched.
 
