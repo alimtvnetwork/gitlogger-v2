@@ -6,8 +6,8 @@ description: Consolidated audit findings tracker for git-logs App spec. Not a co
 # Consolidated Audit Findings — `git-logs` App Specification
 
 **Document ID:** `AUDIT-GL-2026-04-25`  
-**Version:** 1.3.0  
-**Updated:** 2026-05-10 (Session 31 audit-task A-10 — added `Last touched` column to v1→v2 disposition map + 5th invariant wiring the column as input signal for §27 deferred lint rule D5 `cohort-orphaned-finding`. All 24 rows seeded at Sess-24 (creation session). D5 implementation still deferred.)
+**Version:** 1.3.1  
+**Updated:** 2026-05-10 (Session 44 audit-task A-24 — lockstep tail sweep: invariant #5 stale "D5 implementation deferred" qualifier retired in-place — D5 shipped as Active gate #13 in Sess-38 A-18. No invariant text/contract change; editorial-only patch bump.)
 <!-- h10-verified-phase: 32 -->
 **Audit Mode:** Spec-only (no code reviewed)  
 **Scope:** every file in `spec/_archive/21-git-logs-v1/`  
@@ -622,7 +622,7 @@ The `Last touched` column records the spec-improvement session in which the row 
 2. Reclassifying any row (e.g. flipping a Conditional to Closed) requires citing the specific §22 file + line that resolves it, recorded in the "Notes" column of the row.
 3. The disposition map MUST stay synchronised with §22's `99-consistency-report.md`; if §22 adds a new file that closes a Carried-open row, this map MUST be updated in the same PR.
 4. The Severity Roll-Up table MUST NOT be retroactively edited from this map — it remains a historical snapshot of the v1 audit. Disposition is additive context, not a rewrite of the original count.
-5. Any material edit to a row (disposition change, owner change, or notes change ≥ 1 sentence) MUST bump that row's `Last touched` cell to the editing session ID (`Sess-NN`). Editorial-only edits (typo, link rename) MUST NOT bump it. The `Last touched` column is the sole input for §27 deferred lint rule **D5 `cohort-orphaned-finding`**: any `Carried-open` row whose `Last touched` is more than 1 spec-improvement session older than the current session triggers a §22 backlog warning. (Wired by A-10, Sess-31; D5 implementation deferred per §27 §00 `## CI Gate Enumeration`.)
+5. Any material edit to a row (disposition change, owner change, or notes change ≥ 1 sentence) MUST bump that row's `Last touched` cell to the editing session ID (`Sess-NN`). Editorial-only edits (typo, link rename) MUST NOT bump it. The `Last touched` column is the sole input for §27 lint rule **D5 `cohort-orphaned-finding`** (Active gate #13 per §27 §00 `## CI Gate Enumeration`): any `Carried-open` row whose `Last touched` is more than 1 spec-improvement session older than the current session triggers a §22 backlog warning. (Wired by A-10, Sess-31; D5 shipped as Active gate #13 in Sess-38 audit-task A-18; "implementation deferred" qualifier retired in Sess-44 A-24 lockstep sweep.)
 
 ---
 
