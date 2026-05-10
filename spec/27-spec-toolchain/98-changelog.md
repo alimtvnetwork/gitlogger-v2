@@ -1,8 +1,23 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.3.0
-**Updated:** 2026-05-10 (Session 51 audit-task A-31 — Shared harness library contract: `linter-scripts/_lib/fixture_replay/` is the sole canonical home for the gate #17 + #18 HTTP fixture-replay engine; duplication outside `_lib/` is a gate #15 violation at meta-level)
+**Version:** 4.4.0
+**Updated:** 2026-05-10 (Session 52 audit-task A-32 — `linter-scripts/_lib/fixture_replay/` skeleton landed; A-31 contract now backed by code; gate #15 self-enforcement extension is LIVE)
 **Scope:** `spec/27-spec-toolchain/`
+
+### 4.4.0 — 2026-05-10 — Session 52 audit-task A-32: `linter-scripts/_lib/fixture_replay/` skeleton landed (A-31 contract → code)
+
+- **Action**: Created `linter-scripts/_lib/fixture_replay/` Python package implementing the A-31 (Sess-51) shared harness library contract:
+  - `__init__.py` — re-exports the stable public API (`load_fixtures`, `replay`, `load_schema`, `Fixture`, `ReplayResult`, `HarnessSetupError`, and the four `EXIT_*` constants).
+  - `exit_codes.py` — sole canonical source of `EXIT_HARNESS_SETUP = 3`.
+  - `schema_loader.py` — `load_schema(path, component_name)` reads named OpenAPI components from §22 `17-openapi.yaml` (or sibling); PyYAML is a deferred runtime import with JSON fallback (no install-time dep).
+  - `engine.py` — `load_fixtures(dir)` yields deterministically-ordered `Fixture` records from `*.json` files; `replay(fixture, schema)` performs closed-shape comparison (required-keys + no-extras) and returns `ReplayResult` whose `violations` list callers extend with per-gate assertions.
+  - `linter-scripts/_lib/__init__.py` marker — package root reserved for cross-gate shared code only.
+- **Smoke verification**: (a) missing fixtures dir → `HarnessSetupError` raised correctly (caller translates to exit-code 3); (b) positive replay passes for a well-formed envelope; (c) negative replay flags `missing required key 'message'` and `'requestId'` as expected.
+- **Per-script doc**: `spec/27-spec-toolchain/80-lib-fixture-replay.md` v1.0.0 added — documents the public API + per-gate script template + normative constraints (no network, no install-time PyYAML dep, closed-shape comparison, `_lib/` reservation, exit-code 3 monopoly). Numbered `80` to occupy the shared-library slot range (clear of `01..52` per-gate/per-validator docs and `60..71` config/workflow docs).
+- **Gate #15 extension goes LIVE**: A-31 (Sess-51) extended gate #15 (`derives-from-restate-check`) to scan `linter-scripts/check-*.py` for re-definition of `load_fixtures` / `replay` / `EXIT_HARNESS_SETUP`. With `_lib/fixture_replay/` now on disk, the extension has a concrete target — any future `check-*.py` defining those symbols outside `_lib/` will be flagged. (Note: `check-error-envelope-shape.py` and `check-request-id-roundtrip.py` themselves still don't exist on disk — gates #17/#18 remain spec-only contracts; the day either lands, it MUST import from `_lib/fixture_replay/` or trip gate #15.)
+- **Scope-lock**: only in-scope edits. New files under `linter-scripts/_lib/` (toolchain code, owned by §27 by definition) and one new file under `spec/27-spec-toolchain/`. No §07/§17/§29 access.
+- **Banners**: §00 v4.3.0 → **v4.4.0** (minor — per-script doc added + version field bumped); §98 v4.3.0 → **v4.4.0** (this row); new doc `80-lib-fixture-replay.md` v1.0.0. **No** §97 AC bump, **no** new gate row in the enumeration table (gate #15 extension was declared in A-31; this turn just makes it live).
+- **Verification**: `python3 -c "from _lib.fixture_replay import EXIT_HARNESS_SETUP; print(EXIT_HARNESS_SETUP)"` (with `linter-scripts/` on path) prints `3`. Negative-fixture round-trip flags expected violations.
 
 ### 4.3.0 — 2026-05-10 — Session 51 audit-task A-31: Shared harness library contract (`linter-scripts/_lib/fixture_replay/`)
 - **Action**: Added a normative paragraph to `spec/27-spec-toolchain/00-overview.md` (immediately after the A-28 dual-key resolution contract) titled **"Shared harness library contract (A-31, Session 51 — normative; binds gates #17 + #18 + future integration-test gates)"**. Declares `linter-scripts/_lib/fixture_replay/` as the **sole canonical home** for the HTTP fixture-replay engine shared by gate #17 (`error-envelope-shape-check`, A-22 Sess-42) and gate #18 (`request-id-roundtrip-check`, A-23 Sess-43). Stable public API: `load_fixtures(dir) -> Iterator[Fixture]`, `replay(fixture, schema) -> ReplayResult`, `EXIT_HARNESS_SETUP = 3` (the only sanctioned source of exit-code 3 across the entire toolchain).
