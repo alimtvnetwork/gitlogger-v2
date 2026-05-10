@@ -84,6 +84,8 @@ correctly REJECTS four synthetic fixtures and ACCEPTS one:
   file → fails (clause-3)
 - **F-5** empty file (no `## ` and no `### AC-…`) → fails
   (R5 vacuous-pass)
+- **F-6** R5 vacuous-pass — empty-corpus (zero §97 files in
+  scope) → exit 1 (mirrors gate-template R5 surface)
 
 ## 5-link self-enforcement chain
 
