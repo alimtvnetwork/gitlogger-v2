@@ -25,41 +25,39 @@ fail:
    the first `## ` section heading is an orphan and fails
    clause-1. Orphans break walker-tier pagination because the
    AC has no parent group to inherit pagination context from.
-2. **No empty `## ` parent sections** — every `## ` section
-   header in a §97 file MUST contain at least one `### AC-…`
-   child header before the next `## ` section (or EOF). An
-   empty `## ` section is a stale split-point left over from
-   AC migration and fails clause-2 — Lesson #36 link-don't-restate
-   forbids retaining empty pedagogical scaffolding once it has
-   no live referents.
-3. **Every AC carries a status tag** — every `### AC-…` header
-   MUST end with one of the literal trailing tokens `` `[active]` ``,
-   `` `[deferred]` ``, or `` `[archived]` `` (backticked, with the
-   exact lowercase spelling). A status-less AC header is paper-only
-   and cannot route through the §27 gate-15 D7-self-enforcement
-   discipline (which keys on the status tag for its qualifier-strip
-   contract). Fails clause-3 with the offending AC-ID + line.
-4. **AC-ID uniqueness within a file** — within a single §97 file,
-   every `### AC-…` AC-ID (everything between `### ` and the first
-   ` —` or ` ` or `  `) MUST be unique. Duplicates mask later ACs
+2. **AC-ID uniqueness within a file** — within a single §97 file,
+   every `### AC-…` AC-ID (the first whitespace-separated token
+   after `### `) MUST be unique. Duplicates mask later ACs
    from walker enumeration (the duplicate row wins at parse time)
-   and fail clause-4. Cross-file duplicate AC-IDs are out-of-scope
+   and fail clause-2. Cross-file duplicate AC-IDs are out-of-scope
    for this gate (covered by gate #14 `ac-prefix-contract-check`
    when shipped at slot 48).
-5. **No duplicate `## ` section names within a file** — within a
+3. **No duplicate `## ` section names within a file** — within a
    single §97 file, every `## ` section heading title MUST be
    unique. Duplicate sections fragment AC ownership and silently
    break the §00 Walker-Pin block's "section X of N" counter.
-   Fails clause-5 with the offending section title + both line
+   Fails clause-3 with the offending section title + both line
    numbers.
+
+> **Deferred-to-backlog (T-22 ticket):** status-tag presence and
+> empty-parent-section detection were originally drafted as
+> clauses 4 and 5 here. Real-disk inspection at T-21 found the
+> seven §97 files use heterogeneous status-tag vocabularies
+> (`[critical]`, `[high]`, `[medium]`, `[low]`, `[deferred]`,
+> `[deprecated]`, plus untagged ACs) and that several
+> intentionally-prose-only `## ` parents (e.g.
+> "Module Summary", "Worked Examples", "Cross-References")
+> carry no AC children by design. Tightening those two
+> invariants requires a §97 vocabulary unification + parent-kind
+> taxonomy turn (T-22 backlog ticket
+> `ac-status-tag-and-parent-taxonomy-check`, slot TBD). T-21
+> ships the three load-bearing structural invariants only.
 
 ## Invocation
 
 ```bash
 python3 linter-scripts/check-ac-section-orphan-header.py --check all
 python3 linter-scripts/check-ac-section-orphan-header.py --check no-orphan-ac
-python3 linter-scripts/check-ac-section-orphan-header.py --check no-empty-section
-python3 linter-scripts/check-ac-section-orphan-header.py --check status-tag-present
 python3 linter-scripts/check-ac-section-orphan-header.py --check ac-id-uniqueness
 python3 linter-scripts/check-ac-section-orphan-header.py --check section-name-uniqueness
 python3 linter-scripts/check-ac-section-orphan-header.py --self-test
@@ -74,21 +72,18 @@ because zero `### AC-…` headers were parsed in the seven in-scope
 folders, is **itself a violation** (exit `1`, message
 `vacuous-pass: zero §97 files or zero AC headers parsed`). The
 `--self-test` mode is mandatory in CI and asserts the scanner
-correctly REJECTS six synthetic fixtures:
+correctly REJECTS four synthetic fixtures and ACCEPTS one:
 
-- **F-1** complete-uniform (every AC under a `## ` parent, every
-  parent has ≥1 child, every AC carries `[active]`, all AC-IDs
-  unique, all `## ` titles unique) → passes
+- **F-1** complete-uniform (every AC under a `## ` parent, all
+  AC-IDs unique, all `## ` titles unique) → passes
 - **F-2** orphan AC declared before any `## ` parent → fails
   (clause-1)
-- **F-3** `## ` parent with zero `### AC-…` children before EOF
-  → fails (clause-2)
-- **F-4** `### AC-99` with no trailing `[active]/[deferred]/[archived]`
-  status tag → fails (clause-3)
-- **F-5** duplicate `### AC-04` within the same file → fails
-  (clause-4)
-- **F-6** duplicate `## Mutations` parent section within the same
-  file → fails (clause-5)
+- **F-3** duplicate `### AC-04` within the same file → fails
+  (clause-2)
+- **F-4** duplicate `## Mutations` parent section within the same
+  file → fails (clause-3)
+- **F-5** empty file (no `## ` and no `### AC-…`) → fails
+  (R5 vacuous-pass)
 
 ## 5-link self-enforcement chain
 
@@ -96,11 +91,11 @@ correctly REJECTS six synthetic fixtures:
    line cite — the gate enforces the file-wide invariant set
    declared by this slot doc).
 2. **Fixture surface** — synthetic in-memory tempdirs created by
-   `--self-test` (6 short Markdown blobs reproducing the §97
+   `--self-test` (5 short Markdown blobs reproducing the §97
    header geometry).
 3. **Script** — `linter-scripts/check-ac-section-orphan-header.py`
    (this slot).
-4. **`--self-test`** — built-in mode, runs 6 fixtures (F-1 unique
+4. **`--self-test`** — built-in mode, runs 5 fixtures (F-1 unique
    passing fixture).
 5. **Workflow step** — `.github/workflows/spec-health.yml`
    "§97 AC structural hygiene gate" hard-fails CI on any violation.
@@ -116,17 +111,17 @@ correctly REJECTS six synthetic fixtures:
   the structural-hygiene foundation gate the T-14 `ac-prefix-contract-check`
   (slot 48 next) layers on top of.
 - **Walker-tier pagination** (§00 Walker-Pin block contract) —
-  clause-1 + clause-2 + clause-5 are the file-shape preconditions
-  the walker relies on. Before T-21, walker correctness was a
-  paper-only invariant; T-21 makes it load-proven.
-- **§27 gate #15 D7-self-enforcement** (`derives-from-restate-check`) —
-  clause-3's status-tag presence is the load-bearing token gate
-  #15 keys on for its qualifier-strip lockstep. Before T-21, a
-  malformed status tag bypassed gate #15 silently; T-21 closes
-  that escape hatch.
-- **Lesson #36 link-don't-restate** — clause-2 (no empty parents)
-  is the §97 surface application of the cross-cutting Lesson #36
-  rule against retained pedagogical scaffolding.
+  clauses 1 + 3 are the file-shape preconditions the walker
+  relies on. Before T-21, walker correctness was a paper-only
+  invariant; T-21 makes it load-proven.
+- **§28 §97 disk fix (this turn)** — adding the
+  `## v1.0 Core Acceptance Criteria (AC-28-01..AC-28-28)` parent
+  header retired the file's 28 orphan AC-28-NN headers in one
+  shot, which is what unblocked clause-1 from passing real-disk.
+- **Lesson #36 link-don't-restate** — the deferred-to-backlog
+  empty-parent-section invariant (T-22) is the §97 surface
+  application of Lesson #36; T-21 records the deferral here so
+  it stays visible in §27 backlog ledger discipline.
 
 ## Scorecard impact (Rubric v2 /120)
 

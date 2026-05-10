@@ -8,6 +8,8 @@ Each AC is written **Given / When / Then** so it can be lifted directly into a t
 
 ---
 
+## v1.0 Core Acceptance Criteria (AC-28-01..AC-28-28)
+
 ### AC-28-01 — Detection: TS-only repo
 
 - **Given** a directory containing `package.json` and `tsconfig.json` and no `go.mod` or `composer.json`,
