@@ -1,8 +1,21 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.7.0
-**Updated:** 2026-05-10 (Session 62 audit-task A-52 — authored happy + negative fixture corpora for gates #17 / #18 under `linter-scripts/fixtures/{error-envelope,request-id}/`; load-proves shape + echo end-to-end)
+**Version:** 4.8.0
+**Updated:** 2026-05-10 (Session 63 audit-task A-53 — slot 38 `check-verification-ledger-cadence.py` shipped as gate #21; promotes §25 invariant 5 from contract-proven to load-proven; lifts §25 R C4 19→20)
 **Scope:** `spec/27-spec-toolchain/`
+
+### 4.8.0 — 2026-05-10 — Session 63 audit-task A-53: slot 38 `check-verification-ledger-cadence.py` (gate #21; §25 invariant 5)
+- **Action**: Created `linter-scripts/check-verification-ledger-cadence.py` (executable, with `--current-session N` + `--tolerance N` + `--self-test` modes) and `spec/27-spec-toolchain/38-check-verification-ledger-cadence.md` (slot 38 doc). Wired as workflow step "§25 verification ledger cadence gate" in `.github/workflows/spec-health.yml` (gate #21) immediately after gate #20, env-injected `CURRENT_SESSION=63`. Parser locates the `**Verification cadence ledger.**` sentinel in `spec/25-app-issues/02-consolidated-audit-findings/00-overview.md`, reads the table that follows, extracts `Sess-NN` from each row's first cell, and asserts `current_session - max(sweeps) <= tolerance` (default `1`). Same exit-code contract as gates #17/#18: `0` pass / `1` violation / `2` invocation / `3` setup error.
+- **Why now**: §25 v1.6.0 (A-46 Sess-56) introduced invariant 5 + the cadence ledger as a paper rule, lifting C4 from 18→19 across personas. The R-tier ceiling 20 was deferred behind this exact named gate ("Shipping a §27 gate `verification-ledger-cadence-check` that mechanically rejects sessions missing a ledger row when no material Carried-open edit occurred → C4 R 19→20"). A-53 ships that gate and load-proves the chain.
+- **Verification (this turn)**:
+  - `--self-test` → all 5 in-memory fixtures pass (pass-same-session, pass-1-behind, fail-2-behind, multi-row-takes-latest, missing-sentinel-error).
+  - First live run with stale ledger (latest sweep Sess-56, current Sess-63) → exit `1`, message `latest sweep Sess-56 is 7 session(s) behind current Sess-63`. Confirms gate has teeth.
+  - Appended Sess-63 (A-53) sweep row to §25 ledger (verifying all 8 Carried-open rows still apply; no material change since Sess-56). Re-ran live → exit `0`, message `latest sweep Sess-63 is 0 session(s) behind current Sess-63`. Confirms gate goes green when contract honored.
+- **R5 vacuously-passing-scanner clause**: enforced — the `setup-error-missing-sentinel` self-test fixture asserts the gate exits `3` (not `0`) when the sentinel is absent, preventing silent pass-by-vacuity if the §25 ledger section is renamed or deleted.
+- **Self-enforcement chain (now end-to-end)**: §25 invariant 5 paragraph → cadence ledger table → `Last touched` per-row state → existing §27 gate #13 D5 (`cohort-orphaned-finding`) → **NEW** gate #21 cadence check at PR time. Gate #21 surfaces drift one session earlier than D5, closing the latent "all 8 rows fire D5 simultaneously" failure mode flagged in §25 v1.6.0 invalidation triggers.
+- **Lesson #36 preservation**: slot 38 doc cites §25 anchors only; does not restate invariant 5 body or the F-NN row contents. The rule lives in §25; the enforcement lives in §27.
+- **Scorecard delta**: §27 ceiling already at 120/120/120 (held); gate count 22 → **23**. Beneficiary: §25 R C4 Consistency **19→20** (load-proven via shipped gate + named self-enforcing mechanism per Rubric v2 ceiling rule). §25 totals: **L 110 / C 112 / R 110** (was 110/112/109; Δ 0/0/+1). Cohort R floor lifts: §25 R110 ties §28 R111 below by 1 — **new R floor is §25 R110** (was 109 — net +1 for the floor too).
+- **Invalidation triggers**: (a) Workflow step removed → §25 invariant 5 reverts to contract-proven, R C4 → 19. (b) `CURRENT_SESSION` env var not hand-bumped each session → gate goes silently green (mitigation: workflow comment requires hand-bump). (c) Sentinel `**Verification cadence ledger.**` renamed without script update → gate exits 3 (loud failure, by design).
 
 ### 4.7.0 — 2026-05-10 — Session 62 audit-task A-52: gate #17 / #18 fixture corpora landed (happy + negative load-proof)
 - **Action**: Authored 7 fixture files across two corpora:
