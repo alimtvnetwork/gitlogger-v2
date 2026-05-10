@@ -25,33 +25,33 @@ fail:
    the first `## ` section heading is an orphan and fails
    clause-1. Orphans break walker-tier pagination because the
    AC has no parent group to inherit pagination context from.
-2. **No empty `## ` parent sections** — every `## ` section
-   header in a §97 file MUST contain at least one `### AC-…`
-   child header before the next `## ` section (or EOF). An
-   empty `## ` section is a stale split-point left over from
-   AC migration and fails clause-2 — Lesson #36 link-don't-restate
-   forbids retaining empty pedagogical scaffolding once it has
-   no live referents.
-3. **Every AC carries a status tag** — every `### AC-…` header
-   MUST end with one of the literal trailing tokens `` `[active]` ``,
-   `` `[deferred]` ``, or `` `[archived]` `` (backticked, with the
-   exact lowercase spelling). A status-less AC header is paper-only
-   and cannot route through the §27 gate-15 D7-self-enforcement
-   discipline (which keys on the status tag for its qualifier-strip
-   contract). Fails clause-3 with the offending AC-ID + line.
-4. **AC-ID uniqueness within a file** — within a single §97 file,
-   every `### AC-…` AC-ID (everything between `### ` and the first
-   ` —` or ` ` or `  `) MUST be unique. Duplicates mask later ACs
+2. **AC-ID uniqueness within a file** — within a single §97 file,
+   every `### AC-…` AC-ID (the first whitespace-separated token
+   after `### `) MUST be unique. Duplicates mask later ACs
    from walker enumeration (the duplicate row wins at parse time)
-   and fail clause-4. Cross-file duplicate AC-IDs are out-of-scope
+   and fail clause-2. Cross-file duplicate AC-IDs are out-of-scope
    for this gate (covered by gate #14 `ac-prefix-contract-check`
    when shipped at slot 48).
-5. **No duplicate `## ` section names within a file** — within a
+3. **No duplicate `## ` section names within a file** — within a
    single §97 file, every `## ` section heading title MUST be
    unique. Duplicate sections fragment AC ownership and silently
    break the §00 Walker-Pin block's "section X of N" counter.
-   Fails clause-5 with the offending section title + both line
+   Fails clause-3 with the offending section title + both line
    numbers.
+
+> **Deferred-to-backlog (T-22 ticket):** status-tag presence and
+> empty-parent-section detection were originally drafted as
+> clauses 4 and 5 here. Real-disk inspection at T-21 found the
+> seven §97 files use heterogeneous status-tag vocabularies
+> (`[critical]`, `[high]`, `[medium]`, `[low]`, `[deferred]`,
+> `[deprecated]`, plus untagged ACs) and that several
+> intentionally-prose-only `## ` parents (e.g.
+> "Module Summary", "Worked Examples", "Cross-References")
+> carry no AC children by design. Tightening those two
+> invariants requires a §97 vocabulary unification + parent-kind
+> taxonomy turn (T-22 backlog ticket
+> `ac-status-tag-and-parent-taxonomy-check`, slot TBD). T-21
+> ships the three load-bearing structural invariants only.
 
 ## Invocation
 
