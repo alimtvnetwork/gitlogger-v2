@@ -91,6 +91,24 @@ This file is the **single source of truth** for the App table family. Cross-refe
 
 ---
 
+## Implementation Target Precedence (Normative — read before any DDL block)
+
+> **🚦 Single source of truth:** This module ships **two SQL dialects in one file** by design (per AC-ADB-11). To eliminate the silent-conflict risk that any context-bounded reader (AI walker, AC-78 false-positive auditor, blind-implementation runtime) could pick the wrong dialect, the precedence is pinned here at the §00 anchor — BEFORE either DDL block — and machine-restated at every dialect-bearing section header.
+>
+> | Lane | Dialect | Naming | Boolean | PK | Status | Canonical surface | Materialise? |
+> |------|---------|--------|---------|----|--------|-------------------|--------------|
+> | **PRIMARY** | SQLite (3.40+) | PascalCase | `INTEGER` 0/1 + `Is` prefix | `INTEGER PRIMARY KEY AUTOINCREMENT` | **ACTIVE — every consuming binary MUST use this lane** | `## Inlined Contracts` § "DDL — App / AppLink" (line ~107 below) | ✅ YES |
+> | **REFERENCE** | PostgreSQL 15+ | snake_case | `boolean` | `uuid DEFAULT gen_random_uuid()` | **REFERENCE ONLY — preserved for snake_case naming intent + future PG lane AC** | `## Inlined Contracts (Phase 53 — SQL DDL lever)` § "Canonical app-database schema (PostgreSQL — REFERENCE ONLY)" (line ~386 below) | ❌ NO — silent dialect-flip is FORBIDDEN per AC-ADB-11 |
+>
+> **Cross-cuts pinned here so a 1-section read cannot miss them:**
+> - **Boolean policy (AC-ADB-11 + Convention recap below):** PRIMARY lane uses `INTEGER 0/1 + Is` prefix. REFERENCE lane's `boolean NOT NULL DEFAULT true` is a snake_case-PG idiomatic restate, NOT an alternate boolean policy. Any code emitting `boolean` on the App database is a violation regardless of which DDL block it cites.
+> - **Timestamp parity (AC-ADB-16):** both lanes expose `INTEGER` Unix-seconds UTC at the application boundary. REFERENCE lane's `timestamptz` MUST be wrapped (`EXTRACT(EPOCH FROM …)::bigint` on read, `to_timestamp($1)` on write) — never surfaced as ISO-8601.
+> - **Seed ID parity (AC-ADB-13):** `AppLinkType.Name='GitProfile' ⇒ AppLinkTypeId=1`, `Name='Repo' ⇒ AppLinkTypeId=2`. Both lanes MUST honour these locked IDs even though `INSERT OR IGNORE` (PRIMARY) and `ON CONFLICT DO NOTHING` (REFERENCE) do not pin them by themselves — explicit `INSERT … VALUES (1,'GitProfile'),(2,'Repo')` is the only conformant seed shape (T-10 remediation pending).
+>
+> **AI-walker contract:** if a reader reaches any DDL fence in this file without first passing this precedence pin, treat the read as a **partial-context violation** and re-anchor. The §00 Quick-Nav guarantees this pin is reached on a TOC walk.
+
+---
+
 ## Inlined Contracts
 
 ### Convention recap (binding)
