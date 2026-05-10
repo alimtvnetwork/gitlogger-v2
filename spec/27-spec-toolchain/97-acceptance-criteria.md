@@ -110,30 +110,35 @@
 - **When** both are executed against the same `spec/` tree on Linux + Windows respectively,
 - **Then** they MUST execute the SAME ordered pipeline: (1) validate → (2) fill-consistency → (3) fill-AC → (4) fill-changelogs → (5) regen-index → (6) tree-health gate. Each pipeline step MUST exit with the same code on both platforms (deterministic to within line-ending normalization). Adding a new step requires editing BOTH runners in the same PR — drift between `run.sh` and `run.ps1` is a CI failure caught by a future twin-diff linter. The shared step list lives in `mem://index.md` Core ("SELF-HEAL pipeline") so a single source of truth governs both.
 - **Verifies:** AC-T-01 bijection; SELF-HEAL pipeline in `mem://index.md` Core; §40/§41 spec sections.
+- **Worked example:** `diff <(grep -oE '(validate|fill-[a-z-]+|regen-[a-z-]+|check-[a-z-]+)' linter-scripts/run.sh | nl) <(grep -oE '(validate|fill-[a-z-]+|regen-[a-z-]+|check-[a-z-]+)' linter-scripts/run.ps1 | nl)` MUST be empty (same ordered step list). Adding a step to `run.sh` only — without the matching `run.ps1` edit — MUST fail the twin-diff check in CI.
 
 ### AC-T-17 — Trace-map (§14) MUST round-trip from spec to code and back
 - **Given** the spec ↔ code traceability map produced by `linter-scripts/generate-trace-map.py` (slot 14) consuming `linter-scripts/trace-map.toml`,
 - **When** the trace map is rebuilt from disk truth,
 - **Then** every spec module folder MUST appear as either a `[[mappings]]` entry (with at least one `target` path that exists on disk) OR an explicit `[[orphans]]` entry (with a written justification ≥ 20 chars). `target` paths MUST resolve to files that exist (no dangling code references); spec sections MUST resolve to existing folders (no dangling spec references). Orphan growth (delta ≥ 1 since main branch) fails CI via `check-trace-map-regression.py` (slot 17). The three FORBIDDEN trace-map ideas (auto-proposer, OpenAPI export, sub-file endpoint extraction) per `mem://constraints/forbidden-trace-map-ideas` MUST NOT be implemented or scaffolded — hard-block.
 - **Verifies:** §14 generator; §17 regression gate; `mem://constraints/forbidden-trace-map-ideas` (FORBIDDEN ideas).
+- **Worked example:** `python3 linter-scripts/generate-trace-map.py --validate` MUST exit `0`; for every `[[mappings]]` entry, `test -e "$target"` MUST succeed; `python3 linter-scripts/check-trace-map-regression.py --base origin/main` MUST report `orphan_delta=0`. A new `[[orphans]]` entry without a ≥20-char justification MUST fail with `orphan-justification-too-short`.
 
 ### AC-T-18 — Twin implementations (Python + Go) MUST agree byte-for-byte
 - **Given** the validator twins `linter-scripts/validate-guidelines.py` (slot 50) and `linter-scripts/validate-guidelines.go` (slot 51), or any future twin-pair where Python is the reference and Go is the port,
 - **When** both binaries are run against the same source tree,
 - **Then** the union of findings MUST be identical: same rule IDs, same file paths, same line numbers, same severity, same message text (modulo language-specific quote characters which MUST be normalized to ASCII `"`). Drift is detected by a daily CI job that diffs `validate-guidelines.py --format json` against `validate-guidelines.go --format json` and fails on any mismatch. The Python implementation is the SOURCE OF TRUTH — when adding a new rule, the Python version lands first; the Go port follows in the same PR. Shipping the Go port WITHOUT the Python rule update is FORBIDDEN.
 - **Verifies:** AC-T-14 JSON output contract; §50/§51 spec sections; `mem://specs/full-tree-audit-v4.md` twin-implementation invariant.
+- **Worked example:** `diff <(python3 linter-scripts/validate-guidelines.py --format json | jq -S '.findings | sort_by(.file,.line,.rule_id)') <(go run linter-scripts/validate-guidelines.go --format json | jq -S '.findings | sort_by(.file,.line,.rule_id)')` MUST be empty. Any non-empty diff means twin drift and MUST block merge until the Go port catches up to the Python source-of-truth.
 
 ### AC-T-19 — CI workflows (slots 70–79) MUST trigger on every relevant path
 - **Given** the CI workflow `.github/workflows/spec-health.yml` (slot 70),
 - **When** its `on.push.paths` and `on.pull_request.paths` arrays are inspected,
 - **Then** they MUST include ALL of: `spec/**` (any spec edit re-runs the gate), `linter-scripts/**` (any toolchain edit re-runs the gate), `.github/workflows/spec-health.yml` (workflow edits self-validate), `linter-scripts/spec-cross-links.allowlist` (allowlist edits re-validate), `linter-scripts/forbidden-strings.toml` (config edits re-validate). Workflow MUST run on `push` to `main` AND on `pull_request` to `main` — single-trigger workflows are FORBIDDEN because they leak unguarded merges. The minimum-score threshold MUST be `100` (locked at A+ per `mem://index.md` Core) — lowering the threshold is a major version bump of slot 70 and requires a §98 entry with written justification.
 - **Verifies:** AC-T-08 trigger paths; §70 spec section; `mem://index.md` Core "CI threshold locked at 100".
+- **Worked example:** `for p in 'spec/**' 'linter-scripts/**' '.github/workflows/spec-health.yml' 'linter-scripts/spec-cross-links.allowlist' 'linter-scripts/forbidden-strings.toml'; do yq ".on.push.paths[], .on.pull_request.paths[]" .github/workflows/spec-health.yml | grep -Fxq "$p" || echo "MISSING: $p"; done` MUST print zero lines; `yq '.jobs.*.steps[] | select(.name == "Tree health") | .run' .github/workflows/spec-health.yml | grep -Fq -- '--min=100'` MUST match.
 
 ### AC-T-20 — `trace-map.md` is informational, NOT acceptance surface
 - **Given** the `trace-map.md` file present in this module (alongside slots 01–79),
 - **When** the file inventory in `99-consistency-report.md` is built,
 - **Then** `trace-map.md` MUST be classified as a **rendered output** of slot 14 (`generate-trace-map.py`) and MUST NOT carry a slot number, version banner, or §97 acceptance criteria of its own. The file is regenerated by §14 on every spec change and is NOT hand-edited. Its acceptance surface is delegated entirely to AC-T-17 (round-trip integrity). Adding a slot number to `trace-map.md` (e.g. `80-trace-map.md`) is FORBIDDEN — slots 80+ are reserved for future categories not yet defined. The file MUST be referenced from §14's spec section as "Output: `./trace-map.md`" so readers can discover the rendered artifact without searching.
 - **Verifies:** AC-T-17 trace-map round-trip; §14 spec section; slot-immutability rule (slots 80+ reserved).
+- **Worked example:** `ls spec/27-spec-toolchain/8?-trace-map.md 2>/dev/null | wc -l` MUST be `0` (no slot-numbered alias); `grep -E '^## (Spec|Acceptance|Version)' spec/27-spec-toolchain/trace-map.md | wc -l` MUST be `0` (no banner / AC); `grep -Fq 'Output: \`./trace-map.md\`' spec/27-spec-toolchain/14-*.md` MUST succeed (discoverable from §14).
 
 ### AC-T-21 — Phase 107 orphan ledger as transitional INV-01 satisfaction (Phase 108-min, INV-08)
 - **Given** an executable file under `linter-scripts/` or `.github/workflows/` exists WITHOUT a corresponding `spec/27-spec-toolchain/NN-*.md` slot,
