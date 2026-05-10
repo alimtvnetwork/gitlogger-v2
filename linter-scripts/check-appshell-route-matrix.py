@@ -135,10 +135,12 @@ def check_all(overview: Path, ac_file: Path) -> tuple[int, list[str]]:
     bind_rows = _parse_binding_table(text)
     ac_block = _ac_block(ac_text, "AC-ADS-UI-04")
 
-    # R5 vacuous-pass guard
-    if len(as_rows) < 8 or len(bind_rows) < 4 or not ac_block:
+    # R5 vacuous-pass guard — only fires when surfaces are completely absent.
+    # Partial-matrix gaps (7 rows with hole) belong to clause-1; missing
+    # binding-row for an observed variant belongs to clause-3.
+    if not as_rows or not bind_rows or not ac_block:
         return 1, [
-            f"vacuous-pass: AS-NN matrix < 8 rows / binding table < 4 rows / "
+            f"vacuous-pass: AS-NN matrix absent / binding table absent / "
             f"AC-ADS-UI-04 surface absent (as={len(as_rows)} bind={len(bind_rows)} ac={'yes' if ac_block else 'no'})"
         ]
 
