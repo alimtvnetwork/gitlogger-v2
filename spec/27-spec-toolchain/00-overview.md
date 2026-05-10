@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 2.95.1  
-**Updated:** 2026-05-10 (patch — banner cascade for §97 v2.17.0 → v2.18.0 Session 18 F-15 AC-T-36 in-place amendment + exemption clauses; no contract change here, parity stamp only)
+**Version:** 2.96.0  
+**Updated:** 2026-05-10 (Session 30 audit-task A-08 — added `## CI Gate Enumeration` normative section: 9 Active strict gates + 9 Deferred lint rules with owner / invocation / exit-code contract / declaring-AC; closes the 8-rule deferred-debt-without-index gap accumulated across A-02..A-07.)
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
@@ -316,6 +316,56 @@ These snippets are normative reference implementations (the executable analogue 
 **Decision:** these occurrences are part of the toolchain's enforceable contract; removing them would break the rules they define. The module is exempt from the substring-based `todo_density` heuristic. A future iteration of `audit-spec-vs-code-v2.py` SHOULD switch to a regex that excludes fenced code blocks and back-tick-quoted strings (Phase 39b follow-up R4).
 
 **Evidence verified:** `rg -n -i '\bTODO\b|\bTBD\b|\bFIXME\b' spec/27-spec-toolchain/` — every hit reviewed and classified above.
+
+---
+
+## CI Gate Enumeration (A-08, Session 30 — normative)
+
+This section is the **canonical, single-in-scope source-of-truth** for every CI gate the §27 toolchain enforces against the in-scope cohort (`spec/22..28`). Prior sessions added cohort-level lint rules (A-02 `finding-status-enum-check`, A-03 cohort lint rules J-1..J-5, A-04 `finding-status-enum-check`, A-05 `derives-from-restate-check`, A-06 `cohort-naming-check`, A-07 `consumes-frontmatter-resolves`) without an in-scope index — the result was a growing "deferred-rule debt" no consumer could enumerate. A-08 closes that gap.
+
+**Gate-status vocabulary.**
+
+| Status | Meaning |
+|---|---|
+| **Active** | Implementation lives in `linter-scripts/` or `.github/workflows/spec-health.yml`; runs on every PR. |
+| **Deferred** | Declared as a normative requirement by an in-scope AC; implementation pending a §27 PR. Carried-open until shipped. |
+| **External** | Runs from `.github/workflows/spec-health.yml` but the rule body lives in another repo or third-party action. |
+
+**Strict-gate enumeration (blocks merge on failure).**
+
+| # | Gate name | Status | Owner | Invocation | Exit-code contract | Declared by |
+|---|---|---|---|---|---|---|
+| 1 | `tree-health-min-80` | Active | §27 | `node linter-scripts/check-tree-health.cjs --min=80` | 0 = pass; 1 = score < 80; 2 = invocation error | `.github/workflows/spec-health.yml` detect stage |
+| 2 | `lockstep-strict` | Active | §27 | `node linter-scripts/check-lockstep.cjs --strict` | 0 = pass; 1 = §98 newest-date ≠ §99 newest-date | detect stage |
+| 3 | `cross-links-resolve` | Active | §27 | `python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .` | 0 = pass; 1 = any broken `[label](path.md)` link | validate stage |
+| 4 | `folder-refs-resolve` | Active | §27 | `python3 linter-scripts/check-folder-refs.py` | 0 = pass; 1 = any folder-link 404 | validate stage |
+| 5 | `forbidden-strings-absent` | Active | §27 | `python3 linter-scripts/check-forbidden-strings.py` | 0 = pass; 1 = any forbidden token (e.g., bare `$isNot`/`$isNo`/`$isNon` per coding-guidelines boolean fix) | validate stage |
+| 6 | `version-parity` | Active | §27 | `node linter-scripts/check-version-parity.cjs` | 0 = pass; 1 = §00 banner ≠ §97/§98/§99 banner | validate stage |
+| 7 | `audit-walker-tier-1` | Active | §27 | `python3 linter-scripts/audit-walker.py --tier 1` | 0 = pass; 1 = any §97 AC chunk exceeds paginated walker budget | audit stage |
+| 8 | `summary-freshness` | Active | §27 | `node linter-scripts/check-summary-freshness.cjs` | 0 = pass; 1 = stale roll-up | audit stage |
+| 9 | `stamp-bump` | Active | §27 | `node linter-scripts/check-stamp-bump.cjs` | 0 = pass; 1 = banner stamp not bumped on contract change | audit stage |
+
+**Deferred lint rules (declared by Wave-1/Wave-2 ACs; implementation pending).**
+
+| # | Lint rule | Declared by | Owner | Target signal | Acceptance test |
+|---|---|---|---|---|---|
+| D1 | `error-envelope-shape-check` | A-03 (`60-app-cohort-integration.md` AC-COHORT-01, J-1) | §27 | Every error emitted by §23 writer-paths conforms to §22 `ErrorEnvelope` shape | Round-trip integration test using §22 `17-openapi.yaml` |
+| D2 | `finding-vs-audit-distinction-check` | A-03 (AC-COHORT-02, J-2) | §27 | §25 finding `Evidence` blocks MUST NOT cite runtime `AuditTrail` rows unless tagged `runtime-cite` | Markdown parser scoped to `## F-NN` sections |
+| D3 | `request-id-roundtrip-check` | A-03 (AC-COHORT-03, J-3) | §27 | `requestId` echoed across §23 emit → §22 HTTP header → §24 render → §22 AuditTrail (Critical only) | Integration test against §22 `20-observability.md` |
+| D4 | `no-raw-color-in-app-component` | A-03 (AC-COHORT-04, J-4) + A-05 (AC-ADS-16 rule 2) | §27 | §24 components MUST NOT inline-style colors; every error color resolves via `--app-error-*` token | AST scan of TSX/CSS in §24 component registry |
+| D5 | `cohort-orphaned-finding` | A-03 (AC-COHORT-05, J-5) | §27 | §25 `Carried-open` row >1 session without §22 backlog citation → dashboard slot 11 warning | §25 disposition-map row age check |
+| D6 | `finding-status-enum-check` | A-04 (§25 AC-09) | §27 | Every `## F-NN` Status value ∈ {Open, In progress, Resolved, De-scoped (archive-only)} | Markdown parser; disposition-map values explicitly excluded |
+| D7 | `derives-from-restate-check` | A-05 (§24 AC-ADS-16 T-04) | §27 | §24 paragraphs MUST NOT contain ≥3 8-token shingle matches with any §07 paragraph | 8-token shingle hash compare |
+| D8 | `cohort-naming-check` | A-06 (§22 AC-COHORT-06) | §27 | Every in-scope folder/file matches the AC-COHORT-06 patterns + slot reservations | Filename regex + slot collision check |
+| D9 | `consumes-frontmatter-resolves` | A-07 (§22 cohort table Schema-drift row) | §27 | Every `consumes:` array entry resolves to an existing §97 AC ID in the named in-scope folder | Front-matter parser + AC anchor lookup |
+
+**Gate ownership rule.** §27 is the sole owner of every row above. A consumer folder MAY declare a gate as a normative requirement (Active or Deferred), but the **implementation always lives in §27**; consumer folders MUST NOT ship parallel scripts. Violations of this rule are themselves a `cohort-naming-violation` (AC-COHORT-06 forbidden-pattern: shadow toolchain).
+
+**Backlog discipline.** Every Deferred row above is a §27 backlog item. When a Deferred rule ships, this table moves the row from Deferred → Active in the same PR; the declaring AC's "deferred implementation" qualifier MUST also be removed in the same PR (lockstep). Failing to do both is a `derives-from-restate-check` violation (D7) at meta-level.
+
+**Cohort uplift target.** All 9 deferred rules ship → cohort Raw-LLM gains ~+3 across all 7 folders (measured in Sess-25..Sess-29 scorecards as the dominant remaining ceiling).
+
+---
 
 
 ## CI Workflow Integration — Phase 79 Normative (cross-reference)
