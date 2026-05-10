@@ -68,7 +68,6 @@ run_self_test() {
   # Sess-66 G-6t — synthetic fixture probe (slot 52 phantom-clearing).
   # Three fixtures lock AC-52-01/02/03 contracts in CI.
   local td; td=$(mktemp -d)
-  trap 'rm -rf "$td"' EXIT
   local fail=0
 
   # F-1 AC-52-01 range symbol → exit 1
