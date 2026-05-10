@@ -1,10 +1,16 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.5.0
-**Updated:** 2026-05-10 (Session 55 audit-task A-43 — slot 36 `check-ads-boundaries.py` shipped; gate #19; first §27 gate dedicated to a §24-side AC family)
+**Version:** 4.6.0
+**Updated:** 2026-05-10 (Session 56 audit-task A-48 — slot 37 `check-spec22-inventory.py` shipped; gate #20; second §27 gate dedicated to a §22-side AC family)
 **Scope:** `spec/27-spec-toolchain/`
 
-### 4.5.0 — 2026-05-10 — Session 55 audit-task A-43: slot 36 `check-ads-boundaries.py` (gate #19; first §24-side gate)
+### 4.6.0 — 2026-05-10 — Session 56 audit-task A-48: slot 37 `check-spec22-inventory.py` (gate #20; §22 AC-78 / AC-22-LV1)
+- **Action**: Created `spec/27-spec-toolchain/37-check-spec22-inventory.md` (v1.0.0) + `linter-scripts/check-spec22-inventory.py` (executable, with `--check inventory|locked-vacant|all` + `--self-test` modes). Wired as workflow step "§22 module asset inventory gate" in `.github/workflows/spec-health.yml` (gate #20). Added slot 37 row to §00 `### Validators` table.
+- **Why now**: §22 AC-78 was contract-proven only (paper-only "37-entry inventory MUST exist" with no CI verification) and AC-22-LV1 locked-vacant rule had no enforcement (any PR could silently add `11-foo.md`). Slot 37 closes both gaps with one script.
+- **Contract**: Hard-fails CI when (a) any required tier-1 file or normative non-md fixture is missing/empty (8 paths), or (b) any locked-vacant slot 09..13 is occupied. Built-in `--self-test` runs 3 in-memory synthetic fixtures (no on-disk corpora needed because the predicate is pure file-existence).
+- **R5 vacuously-passing-scanner clause**: carried forward from slot 36 — a scanner that returns 0 because it found nothing to inspect is itself a fail; `--self-test` mandatory in CI.
+- **Scorecard delta (§27)**: ceiling already at 120/120/120; this turn extends gate count 19 → **20** (informative, not score-affecting). Beneficiary: §22 C3 R 19→20 (see §22 changelog v3.23.0). Cohort R mean: 112.3 → **112.4**.
+- **Invalidation triggers**: (a) Workflow step removed → §22 AC-78 reverts to contract-proven. (b) Script self-test failing → §27 gate health regression (would block CI on a corrupted scanner). (c) Adding inventory items beyond the hardcoded 8-path set without script update → silent gap (hardcoded list is the source of truth; future expansion needs a script edit + slot 37 doc bump).
 
 - **Action**: Added §27 slot 36 `36-check-ads-boundaries.md` (v1.0.0, ~85 lines) specifying the `linter-scripts/check-ads-boundaries.py` contract that promotes §24 §97 AC-ADS-06 (marketing-no-AppShell) / AC-ADS-09 (ui×app name-collision) / AC-ADS-10 (--app-status-* leak-into-ui) from contract-proven to **load-proven** CI gates. Wired into `.github/workflows/spec-health.yml` as a hard-fail step ("§24 design-system boundary gate (Sess-55 A-43, gate #19)") that runs `--check all` followed by `--self-test`. §27 §00 inventory + Quick-Nav row updated. The script + 3 fixture corpora (`marketing-appshell-violation/`, `ownership-matrix-collision/`, `status-token-leak/`) shipped Sess-55 A-42; this turn promotes them to a §27 gate.
 - **Why now**: A-42 (Sess-55) shipped the scanner + fixtures with self-test green but stopped short of CI wiring; A-42 invalidation trigger (c) "Promoting `check-ads-boundaries.py` to §27 slot 36 + workflow row + §27 §97 AC + §27 §00 gate-table row → §24 C3 to 20 across personas" — this turn executes that trigger. Lifts §24 to its first criterion-20 ceiling (C3 Testability), which until now was reachable only via §27 (the cohort ceiling-folder).
