@@ -52,7 +52,10 @@ def collect(slot_files: list[Path], workflow_text: str, scripts_on_disk: set[str
 
     for slot in slot_files:
         text = slot.read_text(encoding="utf-8", errors="replace")
-        rel = slot.relative_to(REPO).as_posix()
+        try:
+            rel = slot.relative_to(REPO).as_posix()
+        except ValueError:
+            rel = slot.as_posix()
 
         # Collect every script citation
         for m in SCRIPT_RE.finditer(text):
