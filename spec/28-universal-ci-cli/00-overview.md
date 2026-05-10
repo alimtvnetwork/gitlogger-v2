@@ -35,6 +35,18 @@ axis_rationale: "Universal CI binary behavioural ACs"
 
 ---
 
+## AI Implementer Quickstart
+
+**Read in this order to land a change in ≤30 min:**
+1. **Scope** — `## Scope (v2 — Normative)` (line 18) and `## Locked Decisions` (line 51). Anything outside scope = reject.
+2. **Commands** — `## Top-Level Commands` (line 70) for the verb surface; `## CI provider bindings & runtime helpers` (line 134) for adapter contracts.
+3. **ACs** — [`97-acceptance-criteria.md`](./97-acceptance-criteria.md). Worked Example `WE-01` (AC-28-12/13) shows the 5xx exponential-backoff trace (502→200, 4 attempts, 500/2000/8000 ms, idempotency key `(repo, sha, phase)`).
+4. **Enums** — `## Phase 63 Reference: Universal CI CLI enums (TypeScript)` (line 252) before adding a new mode/phase/exit-code.
+
+**Hard rules:** language-agnostic (no Node/Python-only assumptions in the contract) · idempotency key is `(repo, sha, phase)` — never extend it · 5xx → exponential backoff with jitter · 4xx → fail fast, no retry · exit codes are part of the contract.
+
+---
+
 ## Purpose
 
 A single **language-agnostic command-line wrapper** that any CI/CD pipeline can drop in to:

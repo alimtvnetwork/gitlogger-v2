@@ -36,6 +36,18 @@ axis_rationale: "App tables + AppLink polymorphic resolution rules"
 
 ---
 
+## AI Implementer Quickstart
+
+**Read in this order to land a change in ≤30 min:**
+1. **Contract** — `## Inlined Contracts` (line 65) for DDL + `## Polymorphic AppLink Resolution (Normative)` (line 161) for the 4-state resolver.
+2. **ACs** — [`97-acceptance-criteria.md`](./97-acceptance-criteria.md). Worked Example `WE-01` (AC-ADB-14) shows the resolver's full I/O.
+3. **Migrations** — `## Migration Template` (line 278). **Forward-only**; never edit a shipped migration file.
+4. **Cross-cuts** — Touching `App` or `AppLink`? Re-render diagrams in §26 (`01-er-diagram.mmd`) and re-check §22 §97 AC bindings.
+
+**Hard rules (do not violate):** PascalCase tables/cols · polymorphic FK validated by resolver, never by raw `JOIN` · no destructive DDL · all reads pinned to `AppStatus.Active`.
+
+---
+
 ## Purpose
 
 This module owns the **App** subsystem of the application database. An **App** is a logical CI/CD endpoint (e.g., a deployment target, build pipeline, or webhook receiver) that:
