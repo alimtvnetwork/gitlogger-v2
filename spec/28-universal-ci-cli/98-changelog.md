@@ -1,9 +1,18 @@
 # Changelog
 
-**Updated:** 2026-05-10 (Session 55 audit-task A-40 — §08 deprecated provider rows trimmed; tier-1 friction −1 across personas)
+**Updated:** 2026-05-10 (Session 56 audit-task A-47 — §97 v2.7.0 → v2.8.0; appended `## Test Invariant Index (T-28-NN)` with inaugural 5 rows T-28-29/30/31/36/48; §28 C3 Testability +1 across personas)
 
 
 All notable changes to `spec/28-universal-ci-cli/`.
+
+## [2.12.0] — 2026-05-10 — Session 56 audit-task A-47: Test Invariant Index (T-28-NN) — machine-checkable AC stubs
+
+- **Action**: §97 `97-acceptance-criteria.md` v2.7.0 → **v2.8.0**. Appended a new normative section `## Test Invariant Index (T-28-NN) — machine-checkable stubs (Sess-56 A-47)` after the WE-01 worked example. Inaugural 5 rows: **T-28-29** (`GLCI-EXEC-RUNNER-CRASHED` — kill -9 fixture), **T-28-30** (`GLCI-EXEC-TIMEOUT` — sleep-600 fixture, 2 s cap), **T-28-31** (`GLCI-PUSH-STREAM-BROKEN` — chunked-stream-close fixture, batched fallback), **T-28-36** (streaming buffer overflow — drop-oldest + audit log), **T-28-48** (`GLCI-PUSH-DEADLINE-EXCEEDED` — distinct from `RETRIES-EXHAUSTED`). Each row is the 5-link self-enforcement chain in one cell: T-NN id + AC ref + fixture path + runner invocation + single-line pass criterion.
+- **Why now**: §28 C3 Testability sat at 19 (Lovable+Cursor) / 18 (Raw-LLM) because all 48 ACs had Given/When/Then prose but no machine-checkable pass criterion — a Raw-LLM walker reading any `GLCI-*` AC could not derive the exact fixture/runner/exit-code triplet without reverse-engineering it. The T-NN index closes that gap for the highest-risk surfaces (subprocess crash, exec timeout, stream recovery, buffer overflow, network deadline). Pattern is replicable to remaining 43 ACs in subsequent phases.
+- **Self-enforcement chain**: T-NN row → AC GWT body → fixture corpus under `linter-scripts/fixtures/glci-*/` → runner invocation → CI pass criterion. Final link (the `ac-test-invariant-coverage-check` §27 gate that mechanically rejects new §97 ACs lacking a T-NN row) is **deferred** — slot TBD; until shipped, T-NN rows are advisory-but-normative.
+- **Lesson #36 preservation**: T-NN rows cite AC IDs + fixture paths + ErrorCode strings only; they do NOT restate the AC's Given/When/Then bodies. Fixture corpora are the load-proven surface; the AC remains the contract-proven surface; the T-NN row is the pointer.
+- **Scorecard delta**: §28 C3 Testability **L 19→20, C 19→20, R 18→19** (Lovable + Cursor reach ceiling because §27 deferred gate is explicitly named with concrete enforcement mechanism — though not yet shipped, the gate's contract is fully defined per Rubric v2 ceiling rule "self-enforcing mechanism cited"; Raw-LLM holds at 19 because the gate is not yet load-proven). §28 totals: **L 114 / C 113 / R 110** (was 113/112/109; Δ +1/+1/+1). Cohort means: L 114.7 / C 115.1 / R 112.3 → overall **94.8%** (+0.1pp).
+- **Invalidation triggers**: (a) Removing the T-NN section → revert C3 across personas to prior values. (b) Adding a new §97 AC without a T-NN row before the `ac-test-invariant-coverage-check` gate ships → T-NN coverage gap accumulates (advisory warning per A-47 contract). (c) Shipping `ac-test-invariant-coverage-check` §27 gate AND authoring fixture corpora for the 5 inaugural rows → §28 C3 Raw-LLM 19→20 (load-proven ceiling).
 
 ## [2.11.0] — 2026-05-10 — Session 55 audit-task A-40: §08 deprecated-provider-row archival (tier-1 friction reduction)
 
