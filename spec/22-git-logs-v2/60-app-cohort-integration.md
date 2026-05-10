@@ -8,8 +8,8 @@ axis_rationale: "Cross-folder integration contract for the App cohort (§23+§24
 # App Cohort Integration Overview
 
 **Document ID:** `GL2-COHORT-2026-05-10`
-**Version:** 1.1.0
-**Updated:** 2026-05-10 (Session 28 audit-task A-06 — added AC-COHORT-06 + normative `## Cohort Naming Convention` section)
+**Version:** 1.2.0
+**Updated:** 2026-05-10 (Session 29 audit-task A-07 — added Schema-drift gate row to Ownership Boundaries; §23 + §28 declare `consumes: [§22 §97 AC-23]` in front-matter)
 **AI Confidence:** Production-Ready
 **Ambiguity:** Low
 
