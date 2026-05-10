@@ -454,13 +454,13 @@ jobs:
         # + Lesson #15 self-citation, R5 vacuous-pass auto-fail.
         # Built-in --self-test runs 6 fixtures F-1..F-6.
         # Spec: spec/27-spec-toolchain/64-meta-verify-lockstep.md
-        # Wired as WARN-ONLY initially — surfaces existing drift across
-        # 49 slot docs (~34 violations on ship). Flips to hard-fail
-        # once §27 slot-doc backlog is groomed (tracked under post-P19
-        # cleanup wave).
+        # Wired as HARD-FAIL since Phase-5 G-4 (banner-triple normalization
+        # cleared the last residual). Flipped from warn-only after groom
+        # batches G-1/G-2/G-3/G-4 drove residuals from 34 → 0. P19d wave
+        # fully load-proven AND CI-enforced.
         run: |
           python3 linter-scripts/meta-verify-lockstep.py --self-test
-          python3 linter-scripts/meta-verify-lockstep.py || echo "::warning::§27 meta-lockstep drift present — see Phase-5 T-36 backlog"
+          python3 linter-scripts/meta-verify-lockstep.py
 
       - name: Locked-7 perimeter gate (#39 / Phase-5 T-32 / P19e)
         # Enforces mem://constraints/spec-scope on disk: no .md under
