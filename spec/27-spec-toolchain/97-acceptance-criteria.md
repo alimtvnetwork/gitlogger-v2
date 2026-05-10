@@ -96,6 +96,7 @@
 - **When** the auditor is invoked with `--format json` (mandatory flag),
 - **Then** the output MUST be valid JSON parseable by `json.loads()` / `JSON.parse()` with a fixed top-level shape `{score: number, max_score: number, grade: string, findings: Array<{rule_id: string, severity: "low"|"medium"|"high"|"critical", file: string, line: number|null, message: string}>, generated_at: string}`. The default invocation (no flag) emits Markdown for humans. Auditors WITHOUT a JSON mode are FORBIDDEN because the dashboard generator (§11) consumes JSON only. Schema versioning: bumping the JSON shape is a major version of the auditor and triggers a §98 changelog entry.
 - **Verifies:** AC-T-05 CLI surface; §11 `generate-dashboard-data.cjs` (consumer); `mem://index.md` measured-not-narrated rule.
+- **Worked example:** `python3 linter-scripts/audit-spec-vs-code-v2.py --format json | jq -e '.score, .max_score, .grade, (.findings | type == "array")'` MUST exit `0` and emit four non-null values; `jq -e '.findings[0] | has("rule_id") and has("severity") and has("file")'` MUST emit `true`. An auditor returning Markdown under `--format json` MUST FAIL the dashboard build (§11) with a JSON parse error.
 
 ### AC-T-15 — Configuration files (slots 60–69) MUST be self-validating
 - **Given** any configuration file in slots 60–69 (`forbidden-strings.toml`, `spec-cross-links.allowlist`, `spec-folder-refs.allowlist`, `readme-cross-links.md`),
