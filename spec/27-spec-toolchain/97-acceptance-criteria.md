@@ -13,41 +13,49 @@
 - **Given** the set of executable files under `linter-scripts/` (extensions `.py`, `.cjs`, `.sh`, `.ps1`, `.go`) plus configuration files (`.toml`, `.allowlist`, `readme-cross-links.md`) and the set of workflows under `.github/workflows/*.yml`,
 - **When** the spec sections in this module are enumerated,
 - **Then** every code artifact MUST appear in exactly one spec section, and every spec section MUST point to exactly one code artifact that exists on disk.
+- **Worked example:** `comm -3 <(ls linter-scripts/*.{py,cjs,sh,ps1,go} 2>/dev/null | xargs -n1 basename | sort) <(grep -hoE '(linter-scripts|\.github/workflows)/[A-Za-z0-9._-]+' spec/27-spec-toolchain/*.md | xargs -n1 basename | sort -u)` MUST output zero lines (perfect bijection); any line on the left = orphan code (no spec); any line on the right = orphan spec (dangling reference).
 
 ### AC-T-02 — Inventory matches numbering convention
 - **Given** the inventory tables in [`00-overview.md`](./00-overview.md),
 - **When** each spec filename is checked against its category range (01–09 validators, 10–19 generators, 20–29 fillers, 30–39 auditors, 40–49 runners, 50–59 source validators, 60–69 configs, 70–79 CI),
 - **Then** every entry MUST sit in the documented range for its category.
+- **Worked example:** `01-check-spec-cross-links.md` (validator, slot 01–09) ✓; `10-generate-spec-index.md` (generator, slot 10–19) ✓; a hypothetical `15-fill-missing-foo.md` (filler in generator range) MUST FAIL — fillers belong to slots 20–29.
 
 ### AC-T-03 — Exit-code contract
 - **Given** any spec file in slots 01–09 or 50–59 (validators),
 - **When** the file is read,
 - **Then** it MUST contain a section titled "Exit codes" listing at minimum `0` (pass), `1` (fail), and where applicable `2` (error / invocation problem).
+- **Worked example:** `grep -l '^## Exit codes$' spec/27-spec-toolchain/{01..09}-*.md spec/27-spec-toolchain/{50..59}-*.md | wc -l` MUST equal the count of validator files; for each: `awk '/^## Exit codes$/,/^## /' <file> | grep -E '^\| ?(0|1) '` MUST match both rows.
 
 ### AC-T-04 — Idempotency declaration on fillers
 - **Given** any spec file in slots 20–29,
 - **When** the file is read,
 - **Then** it MUST contain the literal phrase `idempotent` and explicitly state that re-runs on a satisfied tree are no-ops.
+- **Worked example:** `for f in spec/27-spec-toolchain/{20..29}-*.md; do grep -qi 'idempotent' "$f" || echo "MISSING: $f"; done` MUST print zero lines; cross-checked at runtime by AC-T-12's `git diff --exit-code` invariant after a second filler run.
 
 ### AC-T-05 — Each spec lists the script's CLI surface
 - **Given** any per-artifact spec section in this module,
 - **When** the file is read,
 - **Then** it MUST include a "Usage" code block showing the canonical invocation, and a list of supported CLI flags (or `_(none)_` if there are none).
+- **Worked example:** `01-check-spec-cross-links.md` contains ` ```\npython3 linter-scripts/check-spec-cross-links.py [--github]\n``` ` plus a flag table listing `--github`; a spec section with no Usage block MUST FAIL the linter `check-spec-cli-surface.py` (Phase 153 Task A9).
 
 ### AC-T-06 — Each spec links back to the source file with a relative repo path
 - **Given** any per-artifact spec section,
 - **When** the file is read,
 - **Then** it MUST link to the source file using a markdown link whose label is `` `linter-scripts/<name>` `` and whose target is `../../linter-scripts/<name>` (or `../../.github/workflows/<name>` for CI workflows).
+- **Worked example:** `01-check-spec-cross-links.md` contains `` [`linter-scripts/check-spec-cross-links.py`](../../linter-scripts/check-spec-cross-links.py) ``; alternative absolute paths (`/linter-scripts/...`) or bare names (`check-spec-cross-links.py`) MUST FAIL the §10 spec-index generator's link-shape assertion.
 
 ### AC-T-07 — Slot immutability
 - **Given** the §99 consistency report,
 - **When** a script is deleted,
 - **Then** its slot number MUST be marked "retired" in [`99-consistency-report.md`](./99-consistency-report.md) and MUST NOT be reused for a new artifact.
+- **Worked example:** When `audit-spec-vs-code.py` (slot 30) is superseded by `audit-spec-vs-code-v2.py`, slot 30 MUST be marked `retired (superseded by §31)` in §99 and the new script MUST take a fresh slot (31), NOT reclaim 30. Reuse triggers `mem://index.md` Core "slot immutability" violation caught by `check-99-stamp-bump.py`.
 
 ### AC-T-08 — Spec-health workflow trigger paths cover this module
 - **Given** the workflow file `.github/workflows/spec-health.yml`,
 - **When** its `on.push.paths` and `on.pull_request.paths` are inspected,
 - **Then** they MUST include `spec/27-spec-toolchain/**` (so changes here re-run the gate) — see [`70-spec-health-yml.md`](./70-spec-health-yml.md) §3.
+- **Worked example:** `yq '.on.push.paths[], .on.pull_request.paths[]' .github/workflows/spec-health.yml | grep -Fx 'spec/27-spec-toolchain/**'` MUST return a match on BOTH triggers; absence means a §27 spec edit ships unchecked, defeating the meta-linter purpose.
 
 ### AC-T-09 — Tree-health gate
 - **Given** the entire `spec/` tree,
