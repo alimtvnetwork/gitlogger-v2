@@ -165,10 +165,15 @@ def clause_db_primary_lane(surf: Surface) -> list[str]:
             if not IS_PREFIX_RE.match(name):
                 errs.append(f"clause-1: boolean-shaped column {table}.{name} missing `Is` prefix")
 
-    # Mirror check on §22 18-schema.sql
+    # Mirror check on §22 18-schema.sql — legacy git-logs predicates
+    # (HasError/PreviousHasError/Truncated) are whitelisted to mirror the
+    # §22 OpenAPI clause-2 whitelist; everything else holds the line.
+    legacy_ok = {"HasError", "PreviousHasError", "Truncated"}
     for table, name, typ, rest in _scan_table_columns(surf.git_logs_schema):
         if typ in {"BOOLEAN", "BOOL", "TINYINT"}:
             errs.append(f"clause-1: §22 {table}.{name} declared `{typ}` (PRIMARY lane forbids)")
+            continue
+        if name in legacy_ok:
             continue
         if BOOLEAN_FLAG_HINT_RE.match(name) or name in KNOWN_BOOLEAN_COLUMNS:
             if typ != "INTEGER":
