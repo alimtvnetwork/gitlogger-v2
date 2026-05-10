@@ -6,6 +6,7 @@
 %% Owner module: spec/26-gitlogs-diagrams/10-ssh-auth-validation.mmd
 %% Render target: svg
 %% Authoritative source: spec/22-git-logs-v2/31-ssh-key-auth.md (Server Validation Order)
+%% Audience: SSH-lane implementers (PHP plugin); auditors verifying §22 §31 10-step validation order + 11 reject codes.
 
 flowchart TD
     Start([CI/CD request to write endpoint]) --> Mode{X-GL-Auth-Mode header}

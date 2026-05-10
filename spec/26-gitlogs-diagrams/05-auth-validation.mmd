@@ -3,6 +3,7 @@
 %%   validation order and which GL-* error code is raised at each
 %%   rejection point?"
 %% Authoritative source: spec/22-git-logs-v2/05-auth-and-validation.md
+%% Audience: auth-flow implementers (PHP plugin); auditors verifying §22 §05 validation order.
 
 flowchart TD
     Start([CI/CD request to write endpoint]) --> Parse[Parse RepoUrl<br/>provider, owner, repoName, versionSuffix]
