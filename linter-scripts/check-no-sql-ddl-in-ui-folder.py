@@ -115,12 +115,20 @@ def check_file(path: Path) -> list[tuple[int, str]]:
         errors.append((2, f"T-02 bare DDL `{m.group(0)}` in prose at {rel}: …{snippet}…"))
 
     # T-04 — module_run_audit_p78 must be followed within 100 chars by §27/§28.
-    # Skip backtick-fenced inline references (documentation citations are OK).
+    # Skip ANY occurrence inside an inline backtick span (documentation citation).
+    # Build a mask of inline-code positions, then test each token start.
+    inline_spans: list[tuple[int, int]] = [
+        (m.start(), m.end()) for m in re.finditer(r"`[^`\n]+`", text)
+    ]
+
+    def in_inline_code(pos: int) -> bool:
+        for s, e in inline_spans:
+            if s <= pos < e:
+                return True
+        return False
+
     for m in re.finditer(re.escape(P78_TOKEN), text):
-        # Inline-code carve-out: token sandwiched between backticks
-        before = text[max(0, m.start() - 1) : m.start()]
-        after = text[m.end() : m.end() + 1]
-        if before == "`" and after == "`":
+        if in_inline_code(m.start()):
             continue
         window = text[m.end() : m.end() + 100]
         if not P78_CITE_RE.search(window):
