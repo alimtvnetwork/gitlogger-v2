@@ -604,105 +604,12 @@ Phase-2 audit file (`01-phase-2-git-logs-audit`) lives one folder up at `spec/25
 
 This acknowledgment exempts the module from `category: drift` audit findings. See `.lovable/memory/index.md` Phase 27c note.
 
-### CI Workflow — Phase 74 Reference
+### Cross-cutting boilerplate — pointers (Phase 153 Task S25-04)
 
-The following workflow snippets are normative for this module. Each fenced
-`yaml` block is a stage that MUST be present in the consuming repository's
-CI pipeline.
+Two cross-cutting boilerplate sections previously inlined here (Phase-74 5-stage CI workflow yaml + Phase-82 `tracker_issue_p82` SQL DDL, ~3.6 KB combined) have been promoted to their canonical owners to keep the §25 audit-corpus bundle under the 140 KB walker cap (Lesson #29 — module-kind pin):
 
-```yaml
-name: spec-gate-stage-1-detect
-on: [push, pull_request]
-jobs:
-  detect:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: linter-scripts/detect-changed-modules.sh
-```
+- **CI workflow stages (Phase 74):** the detect → validate → lint → promote → report pipeline lives in [`.github/workflows/spec-health.yml`](../../../.github/workflows/spec-health.yml). Sub-02 contributes via the `validate` stage (slot 50) and `lint` stage (slot 30 auditor). Per §27 ownership the workflow yaml is NOT duplicated in §25.
+- **Tracker issue log SQL (Phase 82):** the canonical `tracker_issue_p82` DDL + indexes are owned by §28 (universal-ci-cli) and consumed cross-tracker. Sub-02 emits `tracker_slug='25-app-issues/02-consolidated-audit-findings'` rows via the standard CI runner. See [`spec/28-universal-ci-cli/00-overview.md`](../../28-universal-ci-cli/00-overview.md) for the canonical DDL and consumer contract.
 
-```yaml
-name: spec-gate-stage-2-validate
-on: [push, pull_request]
-jobs:
-  validate:
-    runs-on: ubuntu-latest
-    needs: [detect]
-    steps:
-      - uses: actions/checkout@v4
-      - run: linter-scripts/validate-contracts.py
-```
+See [`./lifecycle-25-app-issues-02-consolidated-audit-findings-lifecycle.mmd`](./lifecycle-25-app-issues-02-consolidated-audit-findings-lifecycle.mmd) for the visual lifecycle.
 
-```yaml
-name: spec-gate-stage-3-lint
-on: [push, pull_request]
-jobs:
-  lint:
-    runs-on: ubuntu-latest
-    needs: [validate]
-    steps:
-      - uses: actions/checkout@v4
-      - run: linter-scripts/audit-spec-vs-code-v2.py --strict
-```
-
-```yaml
-name: spec-gate-stage-4-promote
-on:
-  push:
-    branches: [main]
-jobs:
-  promote:
-    runs-on: ubuntu-latest
-    needs: [lint]
-    steps:
-      - uses: actions/checkout@v4
-      - run: linter-scripts/promote-artifact.sh
-```
-
-```yaml
-name: spec-gate-stage-5-report
-on:
-  workflow_run:
-    workflows: ["spec-gate-stage-4-promote"]
-    types: [completed]
-jobs:
-  report:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: linter-scripts/update-consistency-report.py
-```
-
-See [`lifecycle-25-app-issues-02-consolidated-audit-findings-lifecycle.mmd`](./lifecycle-25-app-issues-02-consolidated-audit-findings-lifecycle.mmd) for the visual lifecycle.
-
-### Tracker Issue Log Schema — Phase 82 Normative
-
-The following SQL DDL is normative for any consumer that persists structured
-issue records derived from this tracker. It MUST be applied verbatim so
-downstream dashboards and migrations remain interoperable across trackers.
-
-```sql
-CREATE TABLE IF NOT EXISTS tracker_issue_p82 (
-    issue_id        BIGSERIAL PRIMARY KEY,
-    tracker_slug    TEXT        NOT NULL,
-    external_ref    TEXT        NULL,
-    title           TEXT        NOT NULL,
-    severity        SMALLINT    NOT NULL CHECK (severity BETWEEN 1 AND 5),
-    status          TEXT        NOT NULL CHECK (status IN ('open','in_progress','blocked','resolved','wontfix')),
-    opened_at       TIMESTAMPTZ NOT NULL DEFAULT now(),
-    resolved_at     TIMESTAMPTZ NULL,
-    resolution_hash CHAR(64)    NULL,
-    UNIQUE (tracker_slug, external_ref)
-);
-
-CREATE INDEX IF NOT EXISTS idx_tracker_issue_p82_open
-    ON tracker_issue_p82 (tracker_slug, opened_at DESC)
-    WHERE status IN ('open','in_progress','blocked');
-
-CREATE INDEX IF NOT EXISTS idx_tracker_issue_p82_severity
-    ON tracker_issue_p82 (severity DESC, opened_at DESC)
-    WHERE status <> 'resolved';
-```
-
-Consuming AI agents can generate verification queries and idempotent
-migrations from this contract without inspecting consumer code.
