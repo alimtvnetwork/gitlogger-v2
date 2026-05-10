@@ -1,8 +1,17 @@
 # Changelog — App Design System & UI
 
-**Version:** 4.10.0
-**Updated:** 2026-05-10 (Session 55 audit-task A-44 — §00 Walker-Pin row for AC-ADS-06/09/10 added; §24 R C3 19→20; §24 reaches first Raw-LLM ceiling-criterion)
+**Version:** 4.11.0
+**Updated:** 2026-05-10 (Session 56 audit-task A-45 — §00 Quick-Nav header added; §24 R C6 Friction 18→19)
 **Scope:** `spec/24-app-design-system-and-ui/`
+
+---
+
+### 4.11.0 — 2026-05-10 — Session 56 audit-task A-45: §00 Quick-Nav header (Raw-LLM C6 Friction lift)
+- **Action**: §00 v4.6.0 → **v4.7.0**. Inserted a "Quick-Nav (Walker Index)" table immediately after the version header and before the Walker-Pin block. 7 rows route a context-bounded walker in one hop to: Walker-Pin block, full AC catalog, §07 dependency boundary (AC-ADS-16 + §00 §A-05), §22 inheritance contract (AC-ADS-15), §27 CI gates #15 + #19 (slot 36), externalized citation map (AC-ADS-14), changelog. Each row pairs anchor + when-to-jump heuristic so a walker with ≤30 KB budget reaches the right surface without scanning 700 lines.
+- **Why now**: Per remaining-task ranking after A-44, §24 R C6 Friction sat at 18 because a Raw-LLM walker landing on §24 §00 had to either (a) read the entire 725-line file or (b) guess which sub-anchor to load next. Quick-Nav eliminates the guess-step.
+- **Lesson #36 preservation**: Quick-Nav cites anchor names + line numbers + AC IDs only; does NOT restate any contract text. Pure pointer table.
+- **Scorecard delta**: §24 C6 Friction **R 18→19** (Lovable + Cursor remain at 19 — already at "low-friction with one navigational hop"; ceiling 20 requires programmatic anchor-resolver, deferred). §24 totals: **L 115 / C 115 / R 112** (was 115/115/111 post-A-44; Δ 0/0/+1). Cohort R mean: 111.3 → **111.4**. Sole Raw-LLM cohort floor remains §25 R108.
+- **Invalidation triggers**: (a) Removing Quick-Nav → revert R C6 to 18. (b) Rows pointing to non-existent anchors → §27 deferred lint candidate (`quick-nav-anchor-resolves`). (c) Shipping a §27 gate that mechanically verifies every Quick-Nav row resolves → C6 R 19→20 ceiling.
 
 ---
 
