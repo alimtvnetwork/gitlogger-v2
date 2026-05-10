@@ -1,7 +1,7 @@
 # Changelog — App Design System & UI
 
-**Version:** 4.4.0
-**Updated:** 2026-05-10 (Session 33 audit-task A-12 — `produced_for:` inverse-binding front-matter declaring §24 as the canonical producer of `--app-*` tokens; mirror of §26→§22 `consumes:` (A-11) from the producer side)
+**Version:** 4.5.0
+**Updated:** 2026-05-10 (Session 55 audit-task A-36 — first native Rubric-v2 re-score; carried v1×1.20 retired)
 **Scope:** `spec/24-app-design-system-and-ui/`
 
 ---
