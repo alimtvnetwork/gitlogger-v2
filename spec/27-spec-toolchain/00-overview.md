@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 2.96.0  
-**Updated:** 2026-05-10 (Session 30 audit-task A-08 — added `## CI Gate Enumeration` normative section: 9 Active strict gates + 9 Deferred lint rules with owner / invocation / exit-code contract / declaring-AC; closes the 8-rule deferred-debt-without-index gap accumulated across A-02..A-07.)
+**Version:** 2.97.0  
+**Updated:** 2026-05-10 (Session 31 audit-task A-09 — added "External invoker binding" paragraph to `## CI Gate Enumeration`: §28 declared sole canonical external invoker of all 9 Active gates; deferred rules D1..D9 gated behind same-PR Active promotion. Prior: Sess-30 A-08 enumeration.)
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
@@ -364,6 +364,8 @@ This section is the **canonical, single-in-scope source-of-truth** for every CI 
 **Backlog discipline.** Every Deferred row above is a §27 backlog item. When a Deferred rule ships, this table moves the row from Deferred → Active in the same PR; the declaring AC's "deferred implementation" qualifier MUST also be removed in the same PR (lockstep). Failing to do both is a `derives-from-restate-check` violation (D7) at meta-level.
 
 **Cohort uplift target.** All 9 deferred rules ship → cohort Raw-LLM gains ~+3 across all 7 folders (measured in Sess-25..Sess-29 scorecards as the dominant remaining ceiling).
+
+**External invoker binding (A-09, Session 31 — normative).** §28 (`spec/28-universal-ci-cli`) is the **canonical, sole-in-scope external invoker** of every Active gate above. §28's `00-overview.md` `consumes:` front-matter MUST cite this section by name; §28 MUST NOT re-declare gate semantics, exit codes, or invocation strings (link-don't-restate, Lesson #36). Conversely, §27 MUST NOT add a new Active gate without ensuring §28's invocation manifest can call it via the contract above. Any divergence is a `consumes-frontmatter-resolves` (D9) violation at meta-level. Deferred rules D1..D9 are NOT exposed to §28 until promoted to Active in the same PR that ships their implementation.
 
 ---
 
