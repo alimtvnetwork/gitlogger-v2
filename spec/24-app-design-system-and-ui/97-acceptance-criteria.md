@@ -201,6 +201,17 @@ for (const name of Object.keys(rootTokens)) {
 
 ---
 
+### AC-ADS-16: §07 dependency boundary is normative and `restate_forbidden`  `[critical]`  (A-05, Session 27)
+
+- **Given** §24 declares `derives_from: spec/07-design-system` and `restate_forbidden: true` in its front-matter, AND §00 ships the normative `### Dependency Boundary (A-05, Session 27 — normative)` subsection with five binding rules,
+- **When** any §24 PR adds, modifies, or removes a token, component, or contract that touches the §07 boundary,
+- **Then** the change MUST satisfy all five rules: (1) no `--app-*` token suffix MAY collide with a §07 primitive name (`--background`, `--foreground`, `--primary`, `--primary-foreground`, `--secondary`, `--muted`, `--accent`, `--destructive`, `--border`, `--input`, `--ring`, `--space-*`, `--font-*`, `--radius-*`); (2) every `--app-*` token value MUST resolve via `var(--<§07-primitive>)` — raw `oklch()` / `hsl()` / `rgb()` / hex literals are forbidden (also trips AC-ADS-03); (3) §07 contract text MUST NOT be restated verbatim or near-verbatim — cross-reference by anchored link only (Lesson #36); (4) under the active scope-lock (`spec/22..28` only), §24 MUST NOT propose edits to §07 — gaps are filed as §22 backlog tickets tagged `carry-up-to-§07` and noted in §99; (5) the §27 toolchain rule `derives-from-restate-check` (to be implemented) parses §24 markdown for §07 prose copies and fails the build — until shipped, this AC is enforced by reviewer discipline.
+- **Verifies:** §00 § "Relationship to §07 (Core Design System)" (the prose ownership matrix); §00 § "Dependency Boundary (A-05, Session 27 — normative)" (the binding rules); §24 front-matter keys `derives_from` + `restate_forbidden`; §27 `derives-from-restate-check` lint rule (deferred implementation). Reinforces AC-ADS-15 T-05 and AC-ADS-03.
+- **Test invariant (T-ADS-16-01..T-ADS-16-04):** (T-01) Front-matter parser MUST find `derives_from: spec/07-design-system` AND `restate_forbidden: true`; missing either is a fail. (T-02) Regex scan of all `--app-*` token declarations MUST reject any name whose suffix matches the §07 primitive set. (T-03) Regex scan of all `--app-*` token *values* MUST accept only `var(--<identifier>)`, `calc(...)`, `color-mix(...)` referencing other tokens, or numeric/keyword literals for non-color properties — raw color literals are rejected. (T-04) `derives-from-restate-check` (when shipped) compares §24 paragraphs against §07 paragraphs via 8-token shingle hash; ≥3 matching shingles in any single §24 paragraph fails the build.
+- **Externalized Citation Map row** (extends AC-ADS-14): `spec/07-design-system §00 (primitive token registry)` | this AC + §00 Dependency Boundary subsection | "§07 primitive token names + values are inherited by reference; §24 forbids re-declaration and verbatim restatement" | **YES** restate-forbidden. Cohort consumers: AC-ADS-15 T-05; §22 `60-app-cohort-integration.md` Ownership Boundaries row "App-overlay tokens"; §25 `02-consolidated-audit-findings/00-overview.md` disposition-map row F-21 (`Irrelevant-in-v2`).
+
+---
+
 ## Cross-References
 
 - [Module overview](./00-overview.md)
