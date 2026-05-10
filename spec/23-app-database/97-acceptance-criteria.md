@@ -1,8 +1,8 @@
 # Acceptance Criteria — 23 App Database
 
-**Version:** 3.5.0
-**Updated:** 2026-05-10 (Session 23 audit-task A-01 — added **AC-ADB-18** `[critical]` §22 operational-pattern inheritance: ErrorEnvelope shape (§22 AC-30) + AuditTrail row (§22 AC-21) + sink-side observability rule (§22 AC-04) + schema-drift three-surface invariant (§22 AC-23) inherited by namespace extension (`GL-*` → `ADB-*`). Closes Phase 4 forced guesses G23-4 (App-link resolution had no transport-layer error binding) + G23-5 (no audit-trail event contract). AC count 17 → 18; lifts §23 Implementability ceiling for blind-AI-execution test by binding the previously-implicit operational story to in-scope §22.)
-**Updated-prev:** 2026-05-06 (Phase 154 C-Sweep — added **AC-ADB-17** `[critical]` Cross-Module Externalized Citation Map per Lessons #36 + #37; explicit normative anchor table for 5 externalized citations: spec/05 (split-DB pattern), spec/13 §97 AC-22 (SQLite locking), spec/22 (entity DDL), spec/02 (naming conventions), spec/27 (script gates). Each row pins owning-AC + cite-source-file + purpose + restate-forbidden flag. Mirror of spec/22 AC-79 pattern. AC count 16 → 17.)
+**Version:** 3.6.0
+**Updated:** 2026-05-10 (Session 60 audit-task A-50 — restructured **AC-ADB-05** + **AC-ADB-06** into the A-44 5-link self-enforcement template: byte-exact source-of-truth pin, constraint pin, cross-AC pin, algorithm/index pin, CI-gate pin (deferred §27 gates `applink-xor-check-clause-present` + `applink-disconnect-check-clause-present`); Lesson #39 evidence triple promoted to normative auditor obligation; explicit invalidation triggers inline. AC count unchanged (18). Lifts §23 Raw-LLM C3 Testability 18→19.)
+**Updated-prev:** 2026-05-10 (Session 23 audit-task A-01 — added **AC-ADB-18** `[critical]` §22 operational-pattern inheritance: ErrorEnvelope shape (§22 AC-30) + AuditTrail row (§22 AC-21) + sink-side observability rule (§22 AC-04) + schema-drift three-surface invariant (§22 AC-23) inherited by namespace extension (`GL-*` → `ADB-*`). AC count 17 → 18.)
 **Scope:** `spec/23-app-database/`
 **Generated:** Hand-authored alongside the v4.0.0 overview (Phase 39a). Supersedes the auto-extracted v2.0.0 set.
 
