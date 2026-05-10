@@ -1,8 +1,17 @@
 # Changelog — Spec Toolchain
 
-**Version:** 3.1.0
-**Updated:** 2026-05-10 (Session 38 audit-task A-18 — D5 `cohort-orphaned-finding` promoted Deferred → Active as gate #13; fourth conversion 4/9; Active 12→13, deferred 6→5; consumes A-10's `Last touched` signal)
+**Version:** 3.2.0
+**Updated:** 2026-05-10 (Session 39 audit-task A-19 — D2 `finding-vs-audit-distinction-check` promoted Deferred → Active as gate #14; fifth conversion 5/9; Active 13→14, deferred 5→4)
 **Scope:** `spec/27-spec-toolchain/`
+
+### 3.2.0 — 2026-05-10 — Session 39 audit-task A-19: D2 `finding-vs-audit-distinction-check` Deferred → Active (fifth conversion)
+- **Action**: §00 `## CI Gate Enumeration` — D2 row removed from Deferred table, added as **Gate #14** in Active table with invocation `python3 linter-scripts/check-finding-vs-audit-distinction.py --root spec/25-app-issues`. Exit-code contract: `0 = pass; 1 = any ## F-NN Evidence block cites a runtime AuditTrail row without runtime-cite tag; 2 = invocation error`. Stage: validate.
+- **Why this conversion fifth**: Same markdown-parser family as gate #12 (D6/A-17). Reuses §25 `## F-NN` heading walker; the Evidence-block sub-parser is a small extension (~50 LOC delta). No AST traversal, no integration test. Compounds the A-17 parser pattern, completes §25-scoped enforcement.
+- **Backlog discipline (lockstep)**: declaring AC §22 `AC-COHORT-02` "deferred implementation" qualifier MUST be removed in the same PR — captured as §22 follow-up checkpoint alongside the existing tail (AC-COHORT-05 from A-18, AC-COHORT-06 from A-16, Schema-drift row from A-15, §25 AC-09 from A-17). **Tail count: 5 qualifiers pending**.
+- **Banners**: §00 v3.1.0 → **v3.2.0** (minor — Active-gate count 13→14); §98 v3.1.0 → **v3.2.0** (this entry). **No** §97 bump, **no** RUBRIC change, **no** §25 schema change.
+- **Scorecard impact**: §27 Lovable 95 → 95 (carried — diminishing returns on parser-family additions), Cursor 92 → 93 (+1), Raw-LLM 90 → 90 (carried). §25 Lovable 94 → 94 (carried), Cursor 89 → 90 (+1) (finding/audit boundary now machine-enforced). Cohort uplift target revised: remaining 4 deferred ship → ~+1.0 Raw-LLM.
+- **Composition snapshot**: 14 Active + 4 Deferred = 18 total. Started Sess-30 at 9/9; now 78/22 (was 50/50 five sessions ago). All §25-scoped lint rules now Active (D2/D5/D6 shipped; remaining D1/D3/D4/D7 are §22/§23/§24-scoped and integration-test/AST-heavy).
+- **Lessons applied**: **A-08 backlog-discipline** (fifth worked conversion; pattern-stable); **parser-family composition** (D6 + D2 share ~80% codebase — second instance of "ship the parser, then add validators incrementally" worked).
 
 ### 3.1.0 — 2026-05-10 — Session 38 audit-task A-18: D5 `cohort-orphaned-finding` Deferred → Active (fourth conversion)
 - **Action**: §00 `## CI Gate Enumeration` — D5 row removed from Deferred table, added as **Gate #13** in Active table with invocation `python3 linter-scripts/check-cohort-orphaned-finding.py --root spec/25-app-issues --max-age-sessions 1`. Exit-code contract: `0 = pass; 1 = any Carried-open row with Last touched >1 session ago AND no §22 backlog citation; 2 = invocation error`. Stage: audit (not validate — orphan-detection is a freshness check, naturally belongs to the audit stage alongside `summary-freshness` and `stamp-bump`).

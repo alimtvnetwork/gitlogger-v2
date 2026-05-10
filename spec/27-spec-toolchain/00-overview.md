@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 3.1.0  
-**Updated:** 2026-05-10 (Session 38 audit-task A-18 — D5 `cohort-orphaned-finding` promoted Deferred → Active as gate #13. Fourth deferred→Active conversion (4/9). Active gate count 12 → 13; deferred backlog 6 → 5. Consumes A-10's `Last touched` signal. Prior: Sess-37 A-17 D6 promotion.)
+**Version:** 3.2.0  
+**Updated:** 2026-05-10 (Session 39 audit-task A-19 — D2 `finding-vs-audit-distinction-check` promoted Deferred → Active as gate #14. Fifth deferred→Active conversion (5/9). Active gate count 13 → 14; deferred backlog 5 → 4. Compounds the A-17 markdown-parser pattern. Prior: Sess-38 A-18 D5 promotion.)
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
@@ -348,16 +348,18 @@ This section is the **canonical, single-in-scope source-of-truth** for every CI 
 | 11 | `cohort-naming-check` | Active | §27 | `python3 linter-scripts/check-cohort-naming.py --root spec --in-scope 22,23,24,25,26,27,28` | 0 = pass; 1 = any in-scope folder/file violates AC-COHORT-06 filename regex or slot-reservation rules; 2 = invocation error | validate stage |
 | 12 | `finding-status-enum-check` | Active | §27 | `python3 linter-scripts/check-finding-status-enum.py --root spec/25-app-issues` | 0 = pass; 1 = any `## F-NN` Status ∉ {Open, In progress, Resolved, De-scoped}; 2 = invocation error | validate stage |
 | 13 | `cohort-orphaned-finding` | Active | §27 | `python3 linter-scripts/check-cohort-orphaned-finding.py --root spec/25-app-issues --max-age-sessions 1` | 0 = pass; 1 = any `Carried-open` disposition-map row with `Last touched` >1 session ago AND no §22 backlog citation; 2 = invocation error | audit stage |
+| 14 | `finding-vs-audit-distinction-check` | Active | §27 | `python3 linter-scripts/check-finding-vs-audit-distinction.py --root spec/25-app-issues` | 0 = pass; 1 = any `## F-NN` Evidence block cites a runtime `AuditTrail` row without `runtime-cite` tag; 2 = invocation error | validate stage |
 
 **Deferred lint rules (declared by Wave-1/Wave-2 ACs; implementation pending).**
 
 | # | Lint rule | Declared by | Owner | Target signal | Acceptance test |
 |---|---|---|---|---|---|
 | D1 | `error-envelope-shape-check` | A-03 (`60-app-cohort-integration.md` AC-COHORT-01, J-1) | §27 | Every error emitted by §23 writer-paths conforms to §22 `ErrorEnvelope` shape | Round-trip integration test using §22 `17-openapi.yaml` |
-| D2 | `finding-vs-audit-distinction-check` | A-03 (AC-COHORT-02, J-2) | §27 | §25 finding `Evidence` blocks MUST NOT cite runtime `AuditTrail` rows unless tagged `runtime-cite` | Markdown parser scoped to `## F-NN` sections |
 | D3 | `request-id-roundtrip-check` | A-03 (AC-COHORT-03, J-3) | §27 | `requestId` echoed across §23 emit → §22 HTTP header → §24 render → §22 AuditTrail (Critical only) | Integration test against §22 `20-observability.md` |
 | D4 | `no-raw-color-in-app-component` | A-03 (AC-COHORT-04, J-4) + A-05 (AC-ADS-16 rule 2) | §27 | §24 components MUST NOT inline-style colors; every error color resolves via `--app-error-*` token | AST scan of TSX/CSS in §24 component registry |
 | D7 | `derives-from-restate-check` | A-05 (§24 AC-ADS-16 T-04) | §27 | §24 paragraphs MUST NOT contain ≥3 8-token shingle matches with any §07 paragraph | 8-token shingle hash compare |
+
+> **D2 promoted to Active in A-19 (Session 39)** — moved to Active row #14 above. Fifth deferred→Active conversion (5/9). Markdown-parser implementation in the same family as gate #12 (D6/A-17): scans `## F-NN` Evidence blocks in `spec/25-app-issues/**/*.md`, flags any reference to runtime `AuditTrail` rows missing the `runtime-cite` tag. Declaring AC §22 AC-COHORT-02 "deferred implementation" qualifier removed in same PR per backlog-discipline lockstep.
 
 > **D5 promoted to Active in A-18 (Session 38)** — moved to Active row #13 above. Fourth deferred→Active conversion (4/9). Input signal `Last touched` column was wired by A-10 (Sess 31, §25 disposition-map invariant 5); A-18 ships the gate that consumes it. Pure date-arithmetic on `Sess-NN` row stamps; no AST/integration-test dependency. Declaring AC §22 AC-COHORT-05 "deferred implementation" qualifier removed in same PR per backlog-discipline lockstep.
 
