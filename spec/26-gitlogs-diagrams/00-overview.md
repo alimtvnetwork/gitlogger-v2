@@ -11,8 +11,8 @@ axis_reclassification:
 ---
 # Gitlogs Diagrams
 
-**Version:** 3.7.0
-**Updated:** 2026-05-07 (Phase D3-fu1 — version-parity catch-up: §00 3.6.2 → 3.7.0 to mirror §98 v3.7.0 minor bump from Phase B2 (new AC-26); per Lesson #25 single-case SemVer-track unification. No content change.)
+**Version:** 3.7.1
+**Updated:** 2026-05-10 (Session 13 banner cascade — §00 3.7.0 → 3.7.1 patch to acknowledge that the "AI Implementer Quickstart" rule #2 (4-line `.mmd` narrative header) is now AC-pinned in §97 v3.8.0 as **AC-DG-23**. No content change to this file. Mirror of the §97 minor bump per Lesson #25 SemVer-track unification.)
 <!-- h10-verified-phase: 153 -->
 
 Authoritative source: [`../22-git-logs-v2/00-overview.md`](../22-git-logs-v2/00-overview.md).
