@@ -1124,12 +1124,40 @@ def validate_file(filepath: str) -> List[Violation]:
     return violations
 
 
+def _run_self_test() -> int:
+    """Sess-66 G-6r — synthetic fixture probe (slot 50 phantom-clearing).
+
+    Writes a tiny TS source containing a guaranteed CODE-RED-002 (boolean naming)
+    violation into a tmp dir, runs validate_file(), and asserts at least one
+    CODE-RED violation is reported. Locks the validator's load-proven contract
+    and the AC-50-01 parity anchor with the Go port (slot 51).
+    """
+    import tempfile, os as _os
+    sample = "export const flag = true;\nexport const userActive = false;\n"
+    with tempfile.TemporaryDirectory() as td:
+        fp = _os.path.join(td, "probe.ts")
+        with open(fp, "w") as fh:
+            fh.write(sample)
+        violations = validate_file(fp)
+    code_red = [v for v in violations if v.severity == "CODE-RED"]
+    assert code_red, "self-test: expected ≥1 CODE-RED violation on boolean-naming probe"
+    assert any(v.rule == "CODE-RED-002" for v in code_red), \
+        "self-test: expected CODE-RED-002 (boolean naming) on `flag`/`userActive`"
+    print(f"[self-test] OK — {len(violations)} violation(s), {len(code_red)} CODE-RED")
+    return 0
+
+
 def main():
     parser = argparse.ArgumentParser(description="Cross-Language Coding Guidelines Validator")
     parser.add_argument("--path", default="src", help="Directory to scan (default: src)")
     parser.add_argument("--json", action="store_true", help="Output as JSON")
     parser.add_argument("--max-lines", type=int, default=15, help="Max function lines (default: 15)")
+    parser.add_argument("--self-test", action="store_true",
+                        help="Run synthetic fixture probe and exit (Sess-66 G-6r)")
     args = parser.parse_args()
+
+    if args.self_test:
+        sys.exit(_run_self_test())
 
     report = ValidationReport()
 
