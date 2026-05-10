@@ -9,8 +9,8 @@ restate_forbidden: true
 
 # App Design System & UI
 
-**Version:** 4.1.4
-**Updated:** 2026-04-30
+**Version:** 4.2.0
+**Updated:** 2026-05-10 (Session 27 audit-task A-05 — §07 dependency boundary promoted to normative + `restate_forbidden: true`)
 **AI Confidence:** Production-Ready
 <!-- h10-verified-phase: 153 -->
 **Ambiguity:** None
