@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.10.0  
-**Updated:** 2026-05-10 (Phase-5 T-18 — added slot 44 `check-seedable-config-row-present.py`, gate #25. Third cross-cutting App-framework gate (CAF). Promotes AC-CAF-04 (T-12) from conditional 20 (paper-only, 3-turn decay shared with CAF-01/02/03/05) to un-conditional 20 (load-proven §24 surface contract). 6-clause separation scan (S-1↔S-2 coverage / seed-row presence / override-table separation / R-09 merged-view / forward-only removal / no-restate) with 5-fixture in-memory `--self-test`. Closes §27 backlog entry `seedable-config-row-present-check` minted T-08; closes §24 §00 S-5 line 459 follow-up.)  
+**Version:** 4.11.0  
+**Updated:** 2026-05-10 (Phase-5 T-19 — added slot 45 `check-idempotency-observability.py`, gate #26. Fourth cross-cutting App-framework gate (CAF). Promotes AC-CAF-03 (T-12) from conditional 20 (paper-only) to un-conditional 20 (load-proven cross-folder observability contract). 5-clause static surface scan (idempotent-set parity §23 R-1 ∪ §24 S-2 ↔ AC-CAF-03 enumeration / observability-marker literal discipline `EXPLAIN QUERY PLAN` + `IDENTICAL body` + `modulo TraceId` + `WE-4` / WE-4 disconnect-path literals + R-4 inv-6 names R-07 / §24 U-1 no-alias for non-idempotent {R-01,R-04,R-08,R-15} / no-restate in §22 / §25) with 5-fixture in-memory `--self-test`. Closes §27 backlog entry `idempotency-observability-check` minted T-12. Only CAF-05 remains paper-only. Prior: Phase-5 T-18 — slot 44 `check-seedable-config-row-present.py`, gate #25.)  
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
