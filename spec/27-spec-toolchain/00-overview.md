@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 2.97.0  
-**Updated:** 2026-05-10 (Session 31 audit-task A-09 — added "External invoker binding" paragraph to `## CI Gate Enumeration`: §28 declared sole canonical external invoker of all 9 Active gates; deferred rules D1..D9 gated behind same-PR Active promotion. Prior: Sess-30 A-08 enumeration.)
+**Version:** 2.98.0  
+**Updated:** 2026-05-10 (Session 35 audit-task A-15 — D9 `consumes-frontmatter-resolves` promoted from Deferred → Active as gate #10. First deferred→Active conversion (1/9 shipped). Trigger: full cohort `consumes:` / `produced_for:` coverage from A-09/A-11/A-12/A-14. Active gate count 9 → 10; deferred backlog 9 → 8. Prior: Sess-31 A-09 external-invoker binding.)
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
@@ -344,6 +344,7 @@ This section is the **canonical, single-in-scope source-of-truth** for every CI 
 | 7 | `audit-walker-tier-1` | Active | §27 | `python3 linter-scripts/audit-walker.py --tier 1` | 0 = pass; 1 = any §97 AC chunk exceeds paginated walker budget | audit stage |
 | 8 | `summary-freshness` | Active | §27 | `node linter-scripts/check-summary-freshness.cjs` | 0 = pass; 1 = stale roll-up | audit stage |
 | 9 | `stamp-bump` | Active | §27 | `node linter-scripts/check-stamp-bump.cjs` | 0 = pass; 1 = banner stamp not bumped on contract change | audit stage |
+| 10 | `consumes-frontmatter-resolves` | Active | §27 | `python3 linter-scripts/check-consumes-frontmatter.py --root spec --in-scope 22,23,24,25,26,27,28` | 0 = pass; 1 = any `consumes:` / `produced_for:` entry references a missing file/section | validate stage |
 
 **Deferred lint rules (declared by Wave-1/Wave-2 ACs; implementation pending).**
 
@@ -357,15 +358,16 @@ This section is the **canonical, single-in-scope source-of-truth** for every CI 
 | D6 | `finding-status-enum-check` | A-04 (§25 AC-09) | §27 | Every `## F-NN` Status value ∈ {Open, In progress, Resolved, De-scoped (archive-only)} | Markdown parser; disposition-map values explicitly excluded |
 | D7 | `derives-from-restate-check` | A-05 (§24 AC-ADS-16 T-04) | §27 | §24 paragraphs MUST NOT contain ≥3 8-token shingle matches with any §07 paragraph | 8-token shingle hash compare |
 | D8 | `cohort-naming-check` | A-06 (§22 AC-COHORT-06) | §27 | Every in-scope folder/file matches the AC-COHORT-06 patterns + slot reservations | Filename regex + slot collision check |
-| D9 | `consumes-frontmatter-resolves` | A-07 (§22 cohort table Schema-drift row) | §27 | Every `consumes:` array entry resolves to an existing §97 AC ID in the named in-scope folder | Front-matter parser + AC anchor lookup |
+
+> **D9 promoted to Active in A-15 (Session 35)** — moved to Active row #10 above. Trigger: full cohort `consumes:` / `produced_for:` coverage achieved via A-09 (§28→§27), A-11 (§26→§22), A-12 (§24 producer-side), A-14 (§23→§22). First deferred→Active conversion (1/9 shipped). The declaring AC's "deferred implementation" qualifier in §22's cohort-table Schema-drift row was removed in the same PR per backlog-discipline lockstep.
 
 **Gate ownership rule.** §27 is the sole owner of every row above. A consumer folder MAY declare a gate as a normative requirement (Active or Deferred), but the **implementation always lives in §27**; consumer folders MUST NOT ship parallel scripts. Violations of this rule are themselves a `cohort-naming-violation` (AC-COHORT-06 forbidden-pattern: shadow toolchain).
 
 **Backlog discipline.** Every Deferred row above is a §27 backlog item. When a Deferred rule ships, this table moves the row from Deferred → Active in the same PR; the declaring AC's "deferred implementation" qualifier MUST also be removed in the same PR (lockstep). Failing to do both is a `derives-from-restate-check` violation (D7) at meta-level.
 
-**Cohort uplift target.** All 9 deferred rules ship → cohort Raw-LLM gains ~+3 across all 7 folders (measured in Sess-25..Sess-29 scorecards as the dominant remaining ceiling).
+**Cohort uplift target.** Remaining 8 deferred rules ship → cohort Raw-LLM gains ~+2.5 across all 7 folders (measured in Sess-25..Sess-29 scorecards as the dominant remaining ceiling).
 
-**External invoker binding (A-09, Session 31 — normative).** §28 (`spec/28-universal-ci-cli`) is the **canonical, sole-in-scope external invoker** of every Active gate above. §28's `00-overview.md` `consumes:` front-matter MUST cite this section by name; §28 MUST NOT re-declare gate semantics, exit codes, or invocation strings (link-don't-restate, Lesson #36). Conversely, §27 MUST NOT add a new Active gate without ensuring §28's invocation manifest can call it via the contract above. Any divergence is a `consumes-frontmatter-resolves` (D9) violation at meta-level. Deferred rules D1..D9 are NOT exposed to §28 until promoted to Active in the same PR that ships their implementation.
+**External invoker binding (A-09, Session 31 — normative; updated A-15 Sess-35).** §28 (`spec/28-universal-ci-cli`) is the **canonical, sole-in-scope external invoker** of every Active gate above (now 10 gates after D9 promotion). §28's `00-overview.md` `consumes:` front-matter MUST cite this section by name AND list `consumes-frontmatter-resolves` in its invocation manifest; §28 MUST NOT re-declare gate semantics, exit codes, or invocation strings (link-don't-restate, Lesson #36). Conversely, §27 MUST NOT add a new Active gate without ensuring §28's invocation manifest can call it via the contract above. Any divergence is a `consumes-frontmatter-resolves` (gate #10) violation at meta-level. Remaining deferred rules D1..D8 are NOT exposed to §28 until promoted to Active in the same PR that ships their implementation.
 
 ---
 

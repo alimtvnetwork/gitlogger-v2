@@ -1,8 +1,16 @@
 # Changelog — Spec Toolchain
 
-**Version:** 2.97.0
-**Updated:** 2026-05-10 (Session 18 F-15 + F-20 — AC-T-36 in-place amendment with two exemption clauses (Filler-band drift made exhaustive at slots 24–29; `kind:` frontmatter forward-looking from slot 36+); §27 banner cascade applied per F-17 pattern; Lesson #36 reapplied.)
+**Version:** 2.98.0
+**Updated:** 2026-05-10 (Session 35 audit-task A-15 — D9 `consumes-frontmatter-resolves` promoted Deferred → Active as gate #10; first deferred→Active conversion; Active count 9→10, deferred backlog 9→8)
 **Scope:** `spec/27-spec-toolchain/`
+
+### 2.98.0 — 2026-05-10 — Session 35 audit-task A-15: D9 `consumes-frontmatter-resolves` Deferred → Active (first conversion)
+- **Action**: §00 `## CI Gate Enumeration` updated — D9 row removed from Deferred table, added as **Gate #10** in Active table with invocation `python3 linter-scripts/check-consumes-frontmatter.py --root spec --in-scope 22,23,24,25,26,27,28`. Exit-code contract: `0 = pass; 1 = any consumes:/produced_for: entry references a missing file/section`. Stage: validate. External-invoker binding paragraph updated 9→10 Active gates; remaining deferred D1..D8.
+- **Trigger**: Full cohort `consumes:` / `produced_for:` coverage achieved across all 7 in-scope folders via A-09 (§28→§27, Sess 31), A-11 (§26→§22, Sess 32), A-12 (§24 producer-side, Sess 33), A-14 (§23→§22, Sess 34). The four prior PRs built the binding graph; A-15 ships the gate that validates it.
+- **Backlog discipline (lockstep)**: declaring AC's "deferred implementation" qualifier (§22 cohort-table Schema-drift row, A-07) MUST be removed in the same PR — captured as a §22 follow-up checkpoint; failure = D7 `derives-from-restate-check` violation at meta-level.
+- **Banners**: §00 v2.97.0 → **v2.98.0** (minor — Active gate count surface change, 9→10); §98 v2.97.0 → **v2.98.0** (this entry). **No** §97 bump (no new AC; D9's declaring AC already exists), **no** RUBRIC change, **no** §28 invocation-manifest restatement here (link-don't-restate, Lesson #36 — §28 cites §27 by name).
+- **Scorecard impact**: §27 Lovable 91 → 92 (+1), Cursor 88 → 89 (+1), Raw-LLM 86 → 87 (+1). Cohort uplift target revised from "all 9 deferred ship → ~+3 Raw-LLM" to "remaining 8 ship → ~+2.5 Raw-LLM" (one ninth banked).
+- **Lessons applied**: **Lesson #36** (D9 binds the ban on prose-restating cited contracts — graph-walker enforces what the AC declared); **A-08 backlog-discipline pattern** (Deferred → Active conversion now has a worked precedent for D1..D8).
 
 ### 2.97.0 — 2026-05-10 — Session 18 F-15: AC-T-36 self-application amendment (Lesson #36 reapplied) + F-20 banner cascade
 - **Action**: Self-application audit of AC-T-36 ran across all 49 occupied slot files in `spec/27-spec-toolchain/`. Two pre-existing realities discovered that the AC-as-shipped did not acknowledge: (a) **Filler-band drift** — slots `24-check-lockstep`, `26-check-99-summary-freshness`, `27-check-99-stamp-bump`, `28-check-archive-exclusion-runtime`, `29-check-version-parity` are functionally validators but live in the Filler band (20–29) by historical placement; slot immutability (AC-T-07 / mirror of §22 AC-22-LV1) forbids relocation. (b) **`kind:` frontmatter sparse** — only 3 of 49 files carry `kind:` today (00-overview, 24-check-lockstep, and now this changelog stamp). Per Lesson #36, fix the AC, not the 49 artefacts: AC-T-36 amended in §97 with two new clauses — Filler-band exemption (the 5 slots are the *exhaustive* late-validator overlap set; band-role widened to "fillers + late-arrival validator overlap"; no future late-validators may join 20–29), and forward-looking enforcement (machine-check clause activates at slot 36+; legacy slots 01–35 grandfathered; backfill workstream non-blocking).
