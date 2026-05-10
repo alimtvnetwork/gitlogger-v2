@@ -700,7 +700,7 @@ package contract
 type AppIssueRecord struct {
     ID            string `json:"id"`
     Status        string `json:"status"`   // open|in-progress|resolved|deferred|wontfix
-    Severity      string `json:"severity"` // blocker|major|minor|info
+    Severity      string `json:"severity"` // blocker|major|minor|info — FROZEN Phase-50 enum; canonical = {Critical,High,Medium,Low} (parent §97 AC-AI-14)
     OpenedAt      string `json:"opened_at"`           // YYYY-MM-DD
     ClosedAt      string `json:"closed_at,omitempty"`
     ResolutionRef string `json:"resolution_ref,omitempty"`
