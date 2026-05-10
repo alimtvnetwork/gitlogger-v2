@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.3.0  
-**Updated:** 2026-05-10 (Session 51 audit-task A-31 — added **Shared harness library contract**: `linter-scripts/_lib/fixture_replay/` is the sole canonical home for the gate #17 + #18 HTTP fixture-replay engine (`load_fixtures` / `replay` / `EXIT_HARNESS_SETUP=3`); duplication outside `_lib/` is a gate #15 violation at meta-level (gate #15 extended to scan `check-*.py` for the three named symbols). Also extended A-28 dual-key contract row to enumerate A-29 (§28/§25) producer-side bindings now resolved by gate #10. Friction (C6) uplift task: removes the last harness-divergence drift risk in the integration-test family. No gate-count change (still 18/18 Active, 0 Deferred). Prior: Sess-48 A-28 dual-key contract.)
+**Version:** 4.4.0  
+**Updated:** 2026-05-10 (Session 52 audit-task A-32 — `linter-scripts/_lib/fixture_replay/` skeleton landed: `engine.py` + `schema_loader.py` + `exit_codes.py` + `__init__.py` re-exporting the public API per A-31 contract. Smoke-tested: `HarnessSetupError` → exit-code 3 path, positive shape match, negative missing-required-keys. New per-script doc `80-lib-fixture-replay.md` v1.0.0 added (NOT a gate — shared library; trace-map MAY include it as a leaf). Gate #15 self-enforcement extension is now LIVE — has actual `check-*.py` to scan once those scripts ship. Prior: Sess-51 A-31 contract.)
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
