@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.33.0  
-**Updated:** 2026-05-10 (Phase-5 T-29 / **P19b** ships `linter-scripts/check-no-sql-ddl-in-ui-folder.py` (gate #36 — was phantom; now real). Self-test 6/6 (F-1..F-6 per AC-ADS-17 spec). Real-disk on §24 PASSES — gate caught 1 latent spec defect (missing `**Canonical owner:**` literal in §24 §00 routing pin) which was fixed in same turn. AC-ADS-17 transitions from forward-reference to **literal-cited (honest)**. Phantom-script count drops 38 → 37 (per gate #43). Cohort lifts: §24 +6 (paradox-AC now enforced), §27 +1 (truth ratio improves). Prior: T-40 — P19a gate #43 truth-by-construction.)
+**Version:** 4.34.0  
+**Updated:** 2026-05-10 (Phase-5 T-38 / **P19c** ships `linter-scripts/check-ci-cli-self-test-harness.py` (gate #40 — was phantom; now real). Self-test 6/6 (F-1..F-6 per AC-28-49 spec). Real-disk on §28 PASSES — required §04 v1.2.0 (declares `--self-test`+`--check`) and §07 v1.2.0 (4-row exit-code table). AC-28-49 promotes literal-cited → **load-proven**. Phantom-script count 37 → **36**. Cohort lifts: §28 Raw-LLM +2 (118 → 120, triple-ceiling honest), §27 +1 (truth ratio 4/6 P19 cycles complete). Prior: T-29 P19b gate #36.)
 
 > **Self-enforcing via §27 backlog gate `meta-verify-lockstep`** — Lesson #15 reflexivity pin for gate #42 (slot 64). Stripping this literal from §27 §00 fails clause-5 of the meta-verifier itself.
 <!-- h10-verified-phase: 158 -->
