@@ -124,6 +124,7 @@
 - **When** both binaries are run against the same source tree,
 - **Then** the union of findings MUST be identical: same rule IDs, same file paths, same line numbers, same severity, same message text (modulo language-specific quote characters which MUST be normalized to ASCII `"`). Drift is detected by a daily CI job that diffs `validate-guidelines.py --format json` against `validate-guidelines.go --format json` and fails on any mismatch. The Python implementation is the SOURCE OF TRUTH — when adding a new rule, the Python version lands first; the Go port follows in the same PR. Shipping the Go port WITHOUT the Python rule update is FORBIDDEN.
 - **Verifies:** AC-T-14 JSON output contract; §50/§51 spec sections; `mem://specs/full-tree-audit-v4.md` twin-implementation invariant.
+- **Worked example:** `diff <(python3 linter-scripts/validate-guidelines.py --format json | jq -S '.findings | sort_by(.file,.line,.rule_id)') <(go run linter-scripts/validate-guidelines.go --format json | jq -S '.findings | sort_by(.file,.line,.rule_id)')` MUST be empty. Any non-empty diff means twin drift and MUST block merge until the Go port catches up to the Python source-of-truth.
 
 ### AC-T-19 — CI workflows (slots 70–79) MUST trigger on every relevant path
 - **Given** the CI workflow `.github/workflows/spec-health.yml` (slot 70),
