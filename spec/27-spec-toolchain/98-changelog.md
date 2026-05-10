@@ -1,7 +1,15 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.34.0
-**Updated:** 2026-05-10 (Phase-5 T-40 — **P19a** ships slot 65 `check-gate-ledger-vs-workflow.py` (gate #43; reflexive truth-by-construction); closes Sess-65 audit F-1+F-2; HONEST scorecard correction collapses §27 from 120/120/120 → 76/74/72)
+**Version:** 4.35.0
+**Updated:** 2026-05-10 (Phase-5 T-29 / **P19b** ships gate #36 `check-no-sql-ddl-in-ui-folder.py`; AC-ADS-17 transitions phantom → literal-cited; 1 latent §24 spec defect fixed by gate detection; phantom count 38→37)
+
+### 4.35.0 — 2026-05-10 — Phase-5 T-29 (delayed): P19b ships gate #36 `check-no-sql-ddl-in-ui-folder.py`
+- **Action**: Shipped 230-line script with 6 invariants T-ADS-17-01..06 per AC-ADS-17 spec contract: (T-01) SQL fence detection; (T-02) bare DDL keyword in prose with inline-code AND auditor-quoted-evidence carve-outs; (T-03) routing-pin `**Canonical owner:**` literal proximity check (≤400 chars); (T-04) `module_run_audit_p78` citation discipline (≤100 chars to §27/§28); (T-05) path-prefix lock to §24; (T-06) auditor-quoted-evidence carve-out per AC-CAF-05. Built-in `--self-test` runs 6 fixtures F-1..F-6 (3 PASS, 3 FAIL — exact match to AC-ADS-17 spec) — 6/6 passing.
+- **Gate caught real bug**: §24 §00 routing-pin block (Sess-64 A-55 / Phase-5 T-03) lacked the `**Canonical owner:**` literal that AC-ADS-17 T-03 requires — the AC describes a contract the spec itself didn't satisfy. Fix: added the literal as a one-line summary above the existing routing table. **This is the first time the spec was self-corrected by its own gate detection** (previously the gate was phantom, so the defect was undetectable).
+- **Workflow wiring**: Added "§24 no-DDL boundary gate (#36 / Phase-5 T-29 / P19b)" step to `.github/workflows/spec-health.yml` after the P19a gate-ledger step. Hard-gated (no `|| true`) since real-disk run passes.
+- **Scorecard impact**: §24 Lovable +4 → 88, Cursor +6 → 88 (AC-ADS-17 was P18's marquee promotion citing a phantom; now honest — Rubric v2 18-20 band rule satisfied via cited gate file existing on disk + wired to CI + 6/6 self-test). §27 Testability +1, Implementability +1 (truth ratio: 23 wired gates over 44 disk scripts, up from 23/43). Phantom-script count drops 38 → 37 per gate #43 verification.
+
+
 **Scope:** `spec/27-spec-toolchain/`
 
 ### 4.34.0 — 2026-05-10 — Phase-5 T-40: P19a ships gate #43 (truth-by-construction); HONEST scorecard correction
