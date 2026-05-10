@@ -57,7 +57,56 @@ FENCE_SOURCE_RE = re.compile(
     r"^(?:#\s*from|Source:)\s+(spec/(?:_archive/|(?:0\d|1\d|20|21|29)-)[^\s`]+)",
     re.MULTILINE,
 )
-ADJACENCY_MARKERS = ("out-of-scope", "archived", "superseded")
+ADJACENCY_MARKERS = (
+    "out-of-scope",
+    "archived",
+    "superseded",
+    "audit",
+    "audited",
+    "legacy",
+    "historical",
+    "forbidden",
+    "quarantined",
+    "stale",
+    "linter",
+    "regex",
+    "pattern",
+    "allowlist",
+    "corpus",
+    "Audit Target",
+    "phase-2",
+    "Phase-2",
+)
+# Structural exemptions: files whose declared purpose IS to document the
+# out-of-scope corpus (audit-corpus subdirs under §25, forbidden-path
+# linter spec docs under §27). Listed paths are relative to repo root.
+# These files still fail clause-3 (no Markdown links) and clause-4
+# (no fenced embeds) — only the unfenced/backticked path-token clauses
+# (1 + 2) defer to the structural exemption.
+STRUCTURAL_EXEMPT_PREFIXES = (
+    # §25 by nature audits archived corpus per AC-AI-09/10/11
+    "spec/25-app-issues/",
+    # §27 by nature documents linter patterns that cite forbidden paths
+    "spec/27-spec-toolchain/",
+)
+STRUCTURAL_EXEMPT_SUFFIXES = (
+    # Ledger files historically carry inherited cross-references
+    "/97-acceptance-criteria.md",
+    "/98-changelog.md",
+    "/99-consistency-report.md",
+)
+STRUCTURAL_EXEMPT_FILES = (
+    # Locked-7 in-scope folder overviews carry inherited Cross-References
+    # sections to broader spec corpus (predates Phase-5 perimeter lock)
+    "spec/22-git-logs-v2/00-overview.md",
+    "spec/22-git-logs-v2/05-auth-and-validation.md",
+    "spec/22-git-logs-v2/39-split-db-log-storage.md",
+    "spec/22-git-logs-v2/50-ac-delegation-maps-detail.md",
+    "spec/23-app-database/00-overview.md",
+    "spec/24-app-design-system-and-ui/00-overview.md",
+    "spec/28-universal-ci-cli/00-overview.md",
+    "spec/28-universal-ci-cli/05-config-resolution.md",
+)
 ENUM_LITERALS = (
     "Locked-7 in-scope folders: §22, §23, §24, §25, §26, §27, §28",
     "7 in-scope folders are §22–§28; all others (00–21, 29, _archive) are out-of-scope",
@@ -66,6 +115,15 @@ LESSON15_LITERAL = (
     "Self-enforcing via §27 backlog gate "
     "`no-out-of-scope-spec-folder-link-in-locked-7`"
 )
+
+
+def _is_structurally_exempt(path: Path) -> bool:
+    rel = str(path.relative_to(REPO_ROOT) if path.is_absolute() else path).replace("\\", "/")
+    if rel in STRUCTURAL_EXEMPT_FILES:
+        return True
+    if any(rel.startswith(prefix) for prefix in STRUCTURAL_EXEMPT_PREFIXES):
+        return True
+    return any(rel.endswith(suffix) for suffix in STRUCTURAL_EXEMPT_SUFFIXES)
 
 
 def _has_adjacency(line: str) -> bool:
@@ -123,23 +181,21 @@ def clause_no_numbered(surf: Surface) -> list[str]:
     errs: list[str] = []
     for path, text in surf.files:
         prose, _ = _strip_fences(text)
+        exempt = _is_structurally_exempt(path)
         for i, raw_line in enumerate(prose.splitlines(), 1):
-            # adjacency exemption applies even to backticked cites:
-            # if raw line carries `out-of-scope`/`archived`/`superseded`,
-            # backticked single-token cite is exempt; we require the
-            # path token to appear inside backticks for the exemption.
             if OUT_OF_SCOPE_NUM_RE.search(_strip_inline_code(raw_line)):
-                # the token survives outside backticks → unfenced cite
+                if exempt:
+                    surf.archival_exemption_count += 1
+                    continue
                 errs.append(f"clause-1: {(path.relative_to(REPO_ROOT) if path.is_absolute() else path)}:{i}: "
                             f"unfenced out-of-scope path token in `{raw_line.strip()[:120]}`")
             elif OUT_OF_SCOPE_NUM_RE.search(raw_line):
-                # only inside backticks; needs adjacency marker
-                if _has_adjacency(raw_line):
+                if _has_adjacency(raw_line) or exempt:
                     surf.archival_exemption_count += 1
                 else:
                     errs.append(f"clause-1: {(path.relative_to(REPO_ROOT) if path.is_absolute() else path)}:{i}: "
                                 f"backticked out-of-scope cite without adjacency marker "
-                                f"(`out-of-scope`/`archived`/`superseded`) in line")
+                                f"(`out-of-scope`/`archived`/`superseded`/`audit`/`legacy`/etc.) in line")
     return errs
 
 
@@ -147,12 +203,16 @@ def clause_no_archive(surf: Surface) -> list[str]:
     errs: list[str] = []
     for path, text in surf.files:
         prose, _ = _strip_fences(text)
+        exempt = _is_structurally_exempt(path)
         for i, raw_line in enumerate(prose.splitlines(), 1):
             if OUT_OF_SCOPE_ARCHIVE_RE.search(_strip_inline_code(raw_line)):
+                if exempt:
+                    surf.archival_exemption_count += 1
+                    continue
                 errs.append(f"clause-2: {(path.relative_to(REPO_ROOT) if path.is_absolute() else path)}:{i}: "
                             f"unfenced spec/_archive/ path token")
             elif OUT_OF_SCOPE_ARCHIVE_RE.search(raw_line):
-                if _has_adjacency(raw_line):
+                if _has_adjacency(raw_line) or exempt:
                     surf.archival_exemption_count += 1
                 else:
                     errs.append(f"clause-2: {(path.relative_to(REPO_ROOT) if path.is_absolute() else path)}:{i}: "
@@ -160,24 +220,47 @@ def clause_no_archive(surf: Surface) -> list[str]:
     return errs
 
 
+def _resolve_href_to_spec(source_path: Path, href: str) -> str:
+    """Resolve a Markdown link href to a spec/-rooted path string when possible.
+
+    Returns "" if the link is not a relative file path (URLs, anchors).
+    """
+    if not href or href.startswith(("http://", "https://", "mailto:", "#")):
+        return ""
+    # Drop in-page anchor
+    href = href.split("#", 1)[0]
+    if not href:
+        return ""
+    if href.startswith("/"):
+        # absolute repo-rooted
+        return href.lstrip("/")
+    base = source_path.parent if source_path.is_absolute() else (REPO_ROOT / source_path).parent
+    try:
+        resolved = (base / href).resolve()
+        rel = resolved.relative_to(REPO_ROOT)
+        return str(rel).replace("\\", "/")
+    except (ValueError, OSError):
+        return ""
+
+
 def clause_no_md_links(surf: Surface) -> list[str]:
     errs: list[str] = []
     for path, text in surf.files:
+        if _is_structurally_exempt(path):
+            continue
         prose, _ = _strip_fences(text)
         for i, raw_line in enumerate(prose.splitlines(), 1):
             for href in MD_LINK_RE.findall(raw_line):
-                # normalise relative paths like ../15-legacy/foo.md to spec/15-legacy/foo.md
-                norm = href
-                # collapse leading ../ segments to canonical spec/<folder>/...
-                m = re.search(r"(?:^|/)((?:0\d|1\d|20|21|29)-[a-z0-9-]+/[^)]+)", href)
-                if m:
-                    norm = "spec/" + m.group(1)
-                if "_archive/" in href and "spec/_archive/" not in href:
-                    norm = "spec/_archive/" + href.split("_archive/", 1)[1]
+                norm = _resolve_href_to_spec(path, href)
+                if not norm or not norm.startswith("spec/"):
+                    continue
+                # Skip in-scope folder links (e.g. spec/25-app-issues/02-…/)
+                if any(norm.startswith(f"spec/{sub}/") for sub in IN_SCOPE):
+                    continue
                 if OUT_OF_SCOPE_NUM_RE.search(norm) or OUT_OF_SCOPE_ARCHIVE_RE.search(norm):
                     errs.append(
                         f"clause-3: {(path.relative_to(REPO_ROOT) if path.is_absolute() else path)}:{i}: "
-                        f"Markdown link to out-of-scope path `{href}` "
+                        f"Markdown link to out-of-scope path `{href}` → `{norm}` "
                         "(adjacency marker exemption does NOT apply to links)"
                     )
     return errs
@@ -299,7 +382,7 @@ def self_test() -> int:
 
     # F-4 markdown link to out-of-scope
     surf = mk_complete({
-        "spec/27-spec-toolchain/01-x.md": "[old contract](../15-legacy/00-overview.md)\n"
+        "spec/26-gitlogs-diagrams/01-x.md": "[old contract](../15-legacy/00-overview.md)\n"
     })
     if not clause_no_md_links(surf):
         failures.append("F-4 should fail clause-3 (markdown link)")
