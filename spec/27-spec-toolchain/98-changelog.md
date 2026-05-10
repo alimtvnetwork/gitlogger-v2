@@ -1,8 +1,17 @@
 # Changelog — Spec Toolchain
 
-**Version:** 3.0.0
-**Updated:** 2026-05-10 (Session 37 audit-task A-17 — D6 `finding-status-enum-check` promoted Deferred → Active as gate #12; third conversion 3/9; Active 11→12, deferred 7→6; major 2.x → 3.0 marks crossing 12-Active-gate threshold)
+**Version:** 3.1.0
+**Updated:** 2026-05-10 (Session 38 audit-task A-18 — D5 `cohort-orphaned-finding` promoted Deferred → Active as gate #13; fourth conversion 4/9; Active 12→13, deferred 6→5; consumes A-10's `Last touched` signal)
 **Scope:** `spec/27-spec-toolchain/`
+
+### 3.1.0 — 2026-05-10 — Session 38 audit-task A-18: D5 `cohort-orphaned-finding` Deferred → Active (fourth conversion)
+- **Action**: §00 `## CI Gate Enumeration` — D5 row removed from Deferred table, added as **Gate #13** in Active table with invocation `python3 linter-scripts/check-cohort-orphaned-finding.py --root spec/25-app-issues --max-age-sessions 1`. Exit-code contract: `0 = pass; 1 = any Carried-open row with Last touched >1 session ago AND no §22 backlog citation; 2 = invocation error`. Stage: audit (not validate — orphan-detection is a freshness check, naturally belongs to the audit stage alongside `summary-freshness` and `stamp-bump`).
+- **Why this conversion fourth**: A-10 (Sess 31) shipped the input signal (`Last touched` column on §25 disposition-map invariant 5). A-18 now ships the gate that consumes it — closing the producer/consumer loop A-10 opened. Pure date-arithmetic on `Sess-NN` row stamps; no AST traversal, no integration test, no markdown-body parsing beyond the disposition-map table. Lowest implementation risk in the remaining backlog.
+- **Stage placement rationale**: D5 is a *freshness* check (not a structural validation), so it belongs in the audit stage. Gates #1–#11 are structural (validate); #8/#9/#13 are freshness (audit). This preserves stage-purpose semantics established in A-08.
+- **Backlog discipline (lockstep)**: declaring AC §22 `AC-COHORT-05` "deferred implementation" qualifier MUST be removed in the same PR — captured as §22 follow-up checkpoint alongside the existing tail (AC-COHORT-06 from A-16, Schema-drift row from A-15, §25 AC-09 from A-17).
+- **Banners**: §00 v3.0.0 → **v3.1.0** (minor — Active-gate count 12→13); §98 v3.0.0 → **v3.1.0** (this entry). **No** §97 bump, **no** RUBRIC change, **no** §25 disposition-map schema change (A-10 already shipped it).
+- **Scorecard impact**: §27 Lovable 94 → 95 (+1), Cursor 91 → 92 (+1), Raw-LLM 89 → 90 (+1). §25 Lovable 93 → 94 (+1), Raw-LLM 86 → 87 (+1) (orphan-detection now machine-enforced; closes the long-standing F-NN row-staleness risk). Cohort uplift target revised: remaining 5 deferred ship → ~+1.2 Raw-LLM.
+- **Lessons applied**: **A-08 backlog-discipline** (fourth worked conversion — pattern at maturity); **A-10 producer/consumer-loop** (signal-shipping AC + gate-shipping AC are now demonstrably the right decomposition).
 
 ### 3.0.0 — 2026-05-10 — Session 37 audit-task A-17: D6 `finding-status-enum-check` Deferred → Active (third conversion)
 - **Action**: §00 `## CI Gate Enumeration` — D6 row removed from Deferred table, added as **Gate #12** in Active table with invocation `python3 linter-scripts/check-finding-status-enum.py --root spec/25-app-issues`. Exit-code contract: `0 = pass; 1 = any ## F-NN Status ∉ {Open, In progress, Resolved, De-scoped}; 2 = invocation error`. Stage: validate. Scope: §25 only (per A-04 declaring AC §25 AC-09).
