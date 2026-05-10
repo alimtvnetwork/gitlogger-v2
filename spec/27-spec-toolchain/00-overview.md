@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.4.0  
-**Updated:** 2026-05-10 (Session 52 audit-task A-32 — `linter-scripts/_lib/fixture_replay/` skeleton landed: `engine.py` + `schema_loader.py` + `exit_codes.py` + `__init__.py` re-exporting the public API per A-31 contract. Smoke-tested: `HarnessSetupError` → exit-code 3 path, positive shape match, negative missing-required-keys. New per-script doc `80-lib-fixture-replay.md` v1.0.0 added (NOT a gate — shared library; trace-map MAY include it as a leaf). Gate #15 self-enforcement extension is now LIVE — has actual `check-*.py` to scan once those scripts ship. Prior: Sess-51 A-31 contract.)
+**Version:** 4.5.0  
+**Updated:** 2026-05-10 (Session 55 audit-task A-43 — added slot 36 `check-ads-boundaries.py`, gate #19. Promotes §24 §97 AC-ADS-06/09/10 from contract-proven to load-proven via fixture-driven CI gate. Built-in `--self-test` rejects 3 negative-fixture corpora under `linter-scripts/fixtures/`. First §27 gate dedicated to a §24-side AC family.)
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
@@ -55,7 +55,7 @@ If you delete a script, you MUST also delete its file here and add a §98 change
 | **Scaffolders & deepeners** | `23-scaffold-spec-module.md`, `25-deepen-consistency-reports.md` | New-module scaffolding + §99 enrichment |
 | **Lockstep & freshness gates** | `24-check-lockstep.md`, `26-check-99-summary-freshness.md`, `27-check-99-stamp-bump.md`, `29-check-version-parity.md` | Banner/version cascades and stamp freshness |
 | **Runtime & archive guards** | `28-check-archive-exclusion-runtime.md` | Walker-cap and `_archive/` exclusion enforcement |
-| **AI-implementability auditors** | `30-audit-spec-vs-code.md`, `31-audit-spec-vs-code-v2.md`, `32-check-truncated-prose.md`, `33-check-ai-confidence.md`, `34-audit-ai-implementability.md`, `35-audit-bundle-budget.md` | Scoring rubrics, confidence checks, bundle-budget walkers |
+| **AI-implementability auditors** | `30-audit-spec-vs-code.md`, `31-audit-spec-vs-code-v2.md`, `32-check-truncated-prose.md`, `33-check-ai-confidence.md`, `34-audit-ai-implementability.md`, `35-audit-bundle-budget.md`, `36-check-ads-boundaries.md` | Scoring rubrics, confidence checks, bundle-budget walkers, §24 boundary scanner |
 | **Runner shells** | `40-run-sh.md`, `41-run-ps1.md` | Bash + PowerShell entry points |
 | **Foreign-language validators** | `50-validate-guidelines-py.md`, `51-validate-guidelines-go.md`, `52-check-axios-version.md` | Python / Go guideline validators + axios pin |
 | **Allowlists & TOML configs** | `60-forbidden-strings-toml.md`, `61-spec-cross-links-allowlist.md`, `62-spec-folder-refs-allowlist.md`, `63-readme-cross-links-md.md` | Static allowlist/configuration data |
@@ -141,6 +141,7 @@ Numbering convention inside this module:
 | 33 | [33-check-ai-confidence.md](./33-check-ai-confidence.md) | `linter-scripts/check-ai-confidence.py` | Mechanize AC-09 four-gate `AI Confidence` rubric (P1→P4) — derive tier from on-disk signals; per-file opt-in stamp |
 | 34 | [34-audit-ai-implementability.md](./34-audit-ai-implementability.md) | `linter-scripts/audit-ai-implementability.py` | LLM-driven deep-walk audit (5 dims × 0-20); walks `*.md\|*.json\|*.yaml\|*.tmpl\|*.toml`; cached, advisory-by-default |
 | 35 | [35-audit-bundle-budget.md](./35-audit-bundle-budget.md) | `linter-scripts/audit-bundle-budget.py` | Deterministic walker bundle-budget audit; classifies each module as CLEAR/AT_CEILING/OVER vs slot-34 `MAX_BYTES`; advisory-by-default with `--strict` for graduating gate (Lesson #65) |
+| 36 | [36-check-ads-boundaries.md](./36-check-ads-boundaries.md) | `linter-scripts/check-ads-boundaries.py` | Validator: §24 §97 AC-ADS-06/09/10 boundary scanner — marketing-no-AppShell + ui/app name-collision + `--app-status-*` leak-into-ui detection. Built-in `--self-test` against three negative-fixture corpora under `linter-scripts/fixtures/`. Gate #19 (Sess-55 A-43); first §27 gate dedicated to a §24-side AC family. |
 
 ### Runners
 

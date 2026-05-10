@@ -1,8 +1,20 @@
 # Changelog — App Design System & UI
 
-**Version:** 4.8.0
-**Updated:** 2026-05-10 (Session 55 audit-task A-42 — fixture corpora + check-ads-boundaries.py shipped; AC-ADS-06/09/10 negative-fixture self-test green)
+**Version:** 4.9.0
+**Updated:** 2026-05-10 (Session 55 audit-task A-43 — §27 slot 36 / gate #19 wired in CI; §24 C3 Testability hits 20 on Lovable + Cursor)
 **Scope:** `spec/24-app-design-system-and-ui/`
+
+---
+
+### 4.9.0 — 2026-05-10 — Session 55 audit-task A-43: §27 gate #19 promotion lifts §24 C3 Testability to 20 (first §24 ceiling-criterion)
+- **Action**: A-42 fixture-shipped scanner promoted to §27 slot 36 (`spec/27-spec-toolchain/36-check-ads-boundaries.md` v1.0.0) and wired into `.github/workflows/spec-health.yml` as gate #19 ("§24 design-system boundary gate"). Workflow step runs `python3 linter-scripts/check-ads-boundaries.py --check all && --self-test`. §27 §00 v4.4.0 → v4.5.0 + §27 §98 v4.4.0 → v4.5.0 (cross-folder edit honored under scope-lock — §27 is in-scope).
+- **Self-enforcement chain**: AC-ADS-06/09/10 are now **CI-gated, load-proven, and self-tested**. The chain: §24 §97 contract → `linter-scripts/check-ads-boundaries.py` runtime check → `--self-test` against 3 negative fixtures → workflow step hard-fail on rc≠0. No ceiling-criterion can sit at 20 without all four links; §24 C3 now has all four.
+- **Scorecard delta**: §24 C3 Testability **L 19→20 / C 19→20 / R 18→19** (Raw-LLM stays 19 because §24 §00 walker bundle does not cite gate #19 yet — promotion to a §24 §00 Walker-Pin row would lift Raw-LLM to 20). §24 totals: **L 115 / C 115 / R 110** (was 114/114/109; Δ +1/+1/+1). **First §24 criterion to reach 20** — joins §27 (which holds the cohort ceiling pattern across all 6 criteria via gates #5–#19).
+- **Cohort impact**: Cohort means: L 114.7 → **115.0** (+0.3), C 113.7 → **114.0** (+0.3), R 111.0 → **111.1** (+0.1). §24 no longer cohort floor on Cursor (was tied with §28 at C112; now C115 ≥ §28 C112). Sole Raw-LLM floor remains §25 R108.
+- **Lesson #36 preservation**: Slot 36 cites AC-ADS-06/09/10 by ID only. Workflow step comment is descriptive (forbidden patterns) but does not duplicate the GWT bodies. Fixture READMEs cite owner AC + T-NN by ID.
+- **Invalidation triggers post-A-43**: (a) Removing the workflow step → §24 C3 drops 20→19; A-42 trigger (c) reopens. (b) Modifying scanner so any negative fixture passes → §24 C3 19→17 (vacuously-passing scanner is auto-fail per slot 36 R5 contract). (c) Adding a §24 §00 Walker-Pin row citing gate #19 + slot 36 → §24 R C3 19→**20** (would unlock §24 first Raw-LLM ceiling-criterion). (d) Removing any negative fixture → A-42 trigger (a) reopens.
+- **Carry-forward**: A-42/A-41 invalidation triggers carry forward as already noted in §27 §98 [4.5.0]. A-37/A-39/A-40 carry forward.
+- **Lockstep**: §97 unchanged (AC text already cites fixtures since A-41). §00 unchanged (Walker-Pin row deferred to next §00 touch — A-43 trigger (c) is the next leverage point). This file v4.8.0 → **v4.9.0** (this row). Cross-folder edits this turn: `spec/27-spec-toolchain/00-overview.md` + `spec/27-spec-toolchain/98-changelog.md` + `spec/27-spec-toolchain/36-check-ads-boundaries.md` (NEW) + `.github/workflows/spec-health.yml`. All within scope-lock (§24 + §27 + linter-scripts + workflows).
 
 ---
 
