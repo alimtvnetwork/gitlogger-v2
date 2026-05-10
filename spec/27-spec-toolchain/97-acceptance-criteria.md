@@ -117,6 +117,7 @@
 - **When** the trace map is rebuilt from disk truth,
 - **Then** every spec module folder MUST appear as either a `[[mappings]]` entry (with at least one `target` path that exists on disk) OR an explicit `[[orphans]]` entry (with a written justification ≥ 20 chars). `target` paths MUST resolve to files that exist (no dangling code references); spec sections MUST resolve to existing folders (no dangling spec references). Orphan growth (delta ≥ 1 since main branch) fails CI via `check-trace-map-regression.py` (slot 17). The three FORBIDDEN trace-map ideas (auto-proposer, OpenAPI export, sub-file endpoint extraction) per `mem://constraints/forbidden-trace-map-ideas` MUST NOT be implemented or scaffolded — hard-block.
 - **Verifies:** §14 generator; §17 regression gate; `mem://constraints/forbidden-trace-map-ideas` (FORBIDDEN ideas).
+- **Worked example:** `python3 linter-scripts/generate-trace-map.py --validate` MUST exit `0`; for every `[[mappings]]` entry, `test -e "$target"` MUST succeed; `python3 linter-scripts/check-trace-map-regression.py --base origin/main` MUST report `orphan_delta=0`. A new `[[orphans]]` entry without a ≥20-char justification MUST fail with `orphan-justification-too-short`.
 
 ### AC-T-18 — Twin implementations (Python + Go) MUST agree byte-for-byte
 - **Given** the validator twins `linter-scripts/validate-guidelines.py` (slot 50) and `linter-scripts/validate-guidelines.go` (slot 51), or any future twin-pair where Python is the reference and Go is the port,
