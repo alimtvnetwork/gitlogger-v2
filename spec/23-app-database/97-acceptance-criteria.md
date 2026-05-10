@@ -161,7 +161,7 @@ Defines the App, AppLink, AppStatus, and AppLinkType tables — the polymorphic-
   );
   ```
 
-  This codifies the **Phase 153 Task A11b audit finding** "Broken External References — App/AppLink reference Profile/GitProfile/Repo whose schemas are not provided in this context". Mirrors spec/02 AC-CG-21 Subfolder Delegation Map and spec/27 AC-T-29 per-artifact AC delegation contracts (Lesson #19/#21): when audit-boundary < verification-boundary, the consuming module MUST inline a summary surface so the contract is auditable in isolation while keeping the authoritative source in one place.
+  This codifies the **Phase 153 Task A11b audit finding** "Broken External References — App/AppLink reference Profile/GitProfile/Repo whose schemas are not provided in this context". Mirrors spec/02 `AC-CG-21` Subfolder Delegation Map and spec/27 AC-T-29 per-artifact AC delegation contracts (Lesson #19/#21): when audit-boundary < verification-boundary, the consuming module MUST inline a summary surface so the contract is auditable in isolation while keeping the authoritative source in one place.
 - **Verifies:** spec/22-git-logs-v2 §02/§07 (authoritative Profile/GitProfile/Repo DDL); `00-overview.md` § "Schema" (App + AppLink FKs reference these parent tables); codifies **Lesson #26** "external-FK contract surfaces MUST inline a minimal DDL summary so consuming-module audits don't fail on unresolved references".
 
 ### AC-ADB-13: AppLink CHECK constraint uses hardcoded ID constants, not subqueries (Phase 153 Task A11b)  `[medium]`
