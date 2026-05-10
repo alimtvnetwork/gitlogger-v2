@@ -1,8 +1,16 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.61.0
-**Updated:** 2026-05-10 (Phase-5 G-6q / T-32 — slot 61 `check-no-out-of-scope-spec-folder-link.py` SHIPPED on disk as boundary-quartet 4/4 capstone; gate #39 self-test 6/6 + disk green on FIRST run across 175 §22-§28 .md files (168 structural exemptions, 0 unexempt violations); phantom 10 → 9; **FINAL** Phase-5 T-09 backlog ticket retired; `mem://constraints/spec-scope` now self-enforcing on disk)
-**Total active gates: 23**
+**Version:** 4.62.0
+**Updated:** 2026-05-10 (Sess-66 G-6r — slot 50 `validate-guidelines.py` phantom-cleared; `--self-test` synthetic-fixture probe wired as gate #41; phantom 9 → 8; banner-triple gate count rises 23 → **24**)
+**Total active gates: 24**
+
+### 4.62.0 — 2026-05-10 — Sess-66 G-6r: slot 50 `validate-guidelines.py` load-proven (gate #41; `--self-test` synthetic CODE-RED-002 probe; phantom 9 → 8; resumes paired-validator track ahead of slot 51)
+- **Action**: Added `_run_self_test()` + `--self-test` CLI flag to `linter-scripts/validate-guidelines.py` (1.5.0 → 1.6.0). The probe writes a 2-line TS source (`export const flag = true;` + `export const userActive = false;`) into a `tempfile.TemporaryDirectory`, calls `validate_file()`, and asserts `≥1 CODE-RED` + `≥1 CODE-RED-002` are reported. Exits 0 on success, raises `AssertionError` on regression. Locks AC-50-01 parity anchor (the validator's load-prove path now runs in CI on every PR) and AC-50-03 version-banner (script must import-load cleanly to reach `_run_self_test`).
+- **Workflow wire**: New step `validate-guidelines.py load-proven gate (#41 / G-6r / slot 50)` in `.github/workflows/spec-health.yml` immediately after gate #39 (locked-7 perimeter). Single command: `python3 linter-scripts/validate-guidelines.py --self-test`. The gate intentionally does NOT scan `src/` — the cross-language src-tree backlog (Go/PHP/TS/Rust legacy violations) stays owned by the §02 coding-guidelines workflow per Lesson #36 link-don't-restate.
+- **Slot-doc bump**: `spec/27-spec-toolchain/50-validate-guidelines-py.md` 1.0.0 → 1.1.0; `**Status:** Active gate #41` line added (was missing — slot 50 doc previously had no Status line, which is why the recount goes 23 → 24 net +1 even though gate #40/#42 already exist on disk via different slot docs).
+- **Phantom-script ledger**: 9 → 8 (-1 net; cumulative -26 across G-5 + G-6a..G-6r).
+- **Banner-triple gate count**: Rises from 23 → **24**. Recount basis: `grep -lE '^\*\*Status:\*\*\s+Active\s+gate\s+#' spec/27-spec-toolchain/*.md | wc -l` = **24**. `meta-verify-lockstep.py` checks the three banners agree (clause-5 GATE_COUNT_RE) — all three updated in lockstep.
+- **Scorecard**: §27 R-band C6 +1 (slot-50 phantom retired; paired-validator track resumed). Locked-7 cohort C-band unchanged (gate is §27-internal infra, not a perimeter gate).
 
 ### 4.61.0 — 2026-05-10 — Phase-5 G-6q: slot 61 `check-no-out-of-scope-spec-folder-link.py` shipped (gate #39; locked-7 perimeter mechanized; phantom 10 → 9; closes FINAL Phase-5 T-09 backlog ticket — boundary-quartet 4/4 complete)
 - **Action**: Hardened existing on-disk slot-61 script (`linter-scripts/check-no-out-of-scope-spec-folder-link.py`, ~450 LOC) from "239 disk violations" first-run state to **OK on FIRST workflow run** by widening the contract's pressure-release valves to match real-corpus reality without weakening the perimeter guarantee. Three structural changes:
