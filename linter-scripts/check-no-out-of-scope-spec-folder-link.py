@@ -205,24 +205,45 @@ def clause_no_archive(surf: Surface) -> list[str]:
     return errs
 
 
+def _resolve_href_to_spec(source_path: Path, href: str) -> str:
+    """Resolve a Markdown link href to a spec/-rooted path string when possible.
+
+    Returns "" if the link is not a relative file path (URLs, anchors).
+    """
+    if not href or href.startswith(("http://", "https://", "mailto:", "#")):
+        return ""
+    # Drop in-page anchor
+    href = href.split("#", 1)[0]
+    if not href:
+        return ""
+    if href.startswith("/"):
+        # absolute repo-rooted
+        return href.lstrip("/")
+    base = source_path.parent if source_path.is_absolute() else (REPO_ROOT / source_path).parent
+    try:
+        resolved = (base / href).resolve()
+        rel = resolved.relative_to(REPO_ROOT)
+        return str(rel).replace("\\", "/")
+    except (ValueError, OSError):
+        return ""
+
+
 def clause_no_md_links(surf: Surface) -> list[str]:
     errs: list[str] = []
     for path, text in surf.files:
         prose, _ = _strip_fences(text)
         for i, raw_line in enumerate(prose.splitlines(), 1):
             for href in MD_LINK_RE.findall(raw_line):
-                # normalise relative paths like ../15-legacy/foo.md to spec/15-legacy/foo.md
-                norm = href
-                # collapse leading ../ segments to canonical spec/<folder>/...
-                m = re.search(r"(?:^|/)((?:0\d|1\d|20|21|29)-[a-z0-9-]+/[^)]+)", href)
-                if m:
-                    norm = "spec/" + m.group(1)
-                if "_archive/" in href and "spec/_archive/" not in href:
-                    norm = "spec/_archive/" + href.split("_archive/", 1)[1]
+                norm = _resolve_href_to_spec(path, href)
+                if not norm or not norm.startswith("spec/"):
+                    continue
+                # Skip in-scope folder links (e.g. spec/25-app-issues/02-…/)
+                if any(norm.startswith(f"spec/{sub}/") for sub in IN_SCOPE):
+                    continue
                 if OUT_OF_SCOPE_NUM_RE.search(norm) or OUT_OF_SCOPE_ARCHIVE_RE.search(norm):
                     errs.append(
                         f"clause-3: {(path.relative_to(REPO_ROOT) if path.is_absolute() else path)}:{i}: "
-                        f"Markdown link to out-of-scope path `{href}` "
+                        f"Markdown link to out-of-scope path `{href}` → `{norm}` "
                         "(adjacency marker exemption does NOT apply to links)"
                     )
     return errs
