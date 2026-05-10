@@ -110,6 +110,7 @@
 - **When** both are executed against the same `spec/` tree on Linux + Windows respectively,
 - **Then** they MUST execute the SAME ordered pipeline: (1) validate → (2) fill-consistency → (3) fill-AC → (4) fill-changelogs → (5) regen-index → (6) tree-health gate. Each pipeline step MUST exit with the same code on both platforms (deterministic to within line-ending normalization). Adding a new step requires editing BOTH runners in the same PR — drift between `run.sh` and `run.ps1` is a CI failure caught by a future twin-diff linter. The shared step list lives in `mem://index.md` Core ("SELF-HEAL pipeline") so a single source of truth governs both.
 - **Verifies:** AC-T-01 bijection; SELF-HEAL pipeline in `mem://index.md` Core; §40/§41 spec sections.
+- **Worked example:** `diff <(grep -oE '(validate|fill-[a-z-]+|regen-[a-z-]+|check-[a-z-]+)' linter-scripts/run.sh | nl) <(grep -oE '(validate|fill-[a-z-]+|regen-[a-z-]+|check-[a-z-]+)' linter-scripts/run.ps1 | nl)` MUST be empty (same ordered step list). Adding a step to `run.sh` only — without the matching `run.ps1` edit — MUST fail the twin-diff check in CI.
 
 ### AC-T-17 — Trace-map (§14) MUST round-trip from spec to code and back
 - **Given** the spec ↔ code traceability map produced by `linter-scripts/generate-trace-map.py` (slot 14) consuming `linter-scripts/trace-map.toml`,
