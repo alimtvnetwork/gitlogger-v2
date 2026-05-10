@@ -492,7 +492,7 @@ jobs:
         # is a separate §23 spec-side reconciliation backlog (G-6a-followup).
         run: |
           python3 linter-scripts/check-rest-pascalcase-parity.py --self-test
-          python3 linter-scripts/check-rest-pascalcase-parity.py || echo "::warning::§23 R-2 vs PRIMARY-lane DDL bijection drift — see G-6a-followup backlog"
+          python3 linter-scripts/check-rest-pascalcase-parity.py
 
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
