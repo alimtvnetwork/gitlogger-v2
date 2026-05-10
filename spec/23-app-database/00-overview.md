@@ -386,8 +386,8 @@ PascalCase keys to avoid a translation layer. Booleans serialise as JSON
 | R-03  | GET    | `/api/v1/apps`                    | user  | SELECT App    | Yes        | 200 `{items:[App]}`    |
 | R-04  | POST   | `/api/v1/apps/{AppId}/links`      | admin | INSERT AppLink| No         | 201 `{AppLink}`        |
 | R-05  | GET    | `/api/v1/apps/{AppId}/links`      | user  | Q4            | Yes        | 200 `{items:[AppLink]}`|
-| R-06  | POST   | `/api/v1/applinks/resolve`        | svc   | Q1            | Yes        | 200 `{AppId,LinkId,State}` / 404 |
-| R-07  | POST   | `/api/v1/applinks/{LinkId}/disconnect` | admin | Q2       | Yes (no-op on 2nd call) | 200 `{LinkId,DisconnectedAt}` |
+| R-06  | POST   | `/api/v1/applinks/resolve`        | svc   | Q1            | Yes        | 200 `{AppId,AppLinkId,ResolutionState}` / 404 |
+| R-07  | POST   | `/api/v1/applinks/{AppLinkId}/disconnect` | admin | Q2       | Yes (no-op on 2nd call) | 200 `{AppLinkId,DisconnectedAt}` |
 | R-08  | POST   | `/api/v1/apps/{AppId}/links/reconnect` | admin | Q3       | No (always inserts new row per Q3) | 201 `{AppLink}` |
 
 ### R-2 — Request / response schemas (JSON)
