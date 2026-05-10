@@ -1,10 +1,18 @@
 # Changelog — App Design System & UI
 
-**Version:** 4.1.4
-**Updated:** 2026-05-06
+**Version:** 4.2.0
+**Updated:** 2026-05-10 (Session 23 audit-task A-01 — §22 operational-pattern inheritance AC landed)
 **Scope:** `spec/24-app-design-system-and-ui/`
 
 ---
+
+### 4.2.0 — 2026-05-10 — Session 23 audit-task A-01: §22 operational-pattern inheritance (AC-ADS-15)
+- **Action**: §97 v3.2.0 → **v3.3.0** added `AC-ADS-15 [critical]` binding §24's runtime contracts (Phase 55 Go/Python/PHP token loaders; AppShell layout invariants from AC-ADS-12; Phase 61 Component Registry API) to §22's operational patterns by namespace extension. `GL-*` error-code family extends to `ADS-*` with five required codes: `ADS-TOKEN-LOADER-FAIL`, `ADS-TOKEN-PARITY-VIOLATION` (runtime peer of build-time AC-ADS-04), `ADS-SHELL-GEOMETRY-DRIFT`, `ADS-COMPONENT-NOT-FOUND`, `ADS-COMPONENT-VARIANT-INVALID`. Server-generated UUIDv4 `RequestId` per §22 AC-30; client-side AppShell may use browser-generated UUIDv4 routed through `X-App-Trace-Id` header which the server logs alongside but never overwrites its own server-side `RequestId` (preserves §22 AC-30 client-supplied-header-ignored rule). AppShell renders + Component Registry lookups MUST NOT emit AuditTrail rows (sink-side rule per §22 AC-04). Token mutations (admin theme editor when implemented per audit task A-15; runtime hot-reload) MUST emit `AuditTrail` rows with PascalCase action verbs (`app.token.reload` / `app.token.update`).
+- **Why**: Phase 4 audit (Session 22) measured §24 blind-AI failure probability at ~92% — the highest in the cohort — with 2 Very-High×Wide forced guesses (G24-1/-2 spec/07 dependency, irreducible under scope-lock) plus G24-4 (token-loader had no error contract) and G24-7 (Phase 78 Module Run Audit Schema had no §22 inheritance binding). G24-4 + G24-7 are both closeable by inheriting §22's operational pattern via namespace extension. The asymmetry vs §23's AC-ADB-18 is recorded explicitly: §24 inherits AC-30 + AC-21 + AC-04 (3 patterns) but NOT AC-23 (schema-drift) because §24 has no DDL surface.
+- **§07 boundary preserved**: AC-ADS-15 is carved disjoint from §07's domain — `ADS-*` codes MUST NOT name §07 primitive tokens; a missing `--background` is a §07 failure not an `ADS-TOKEN-LOADER-FAIL`. This reinforces audit task **A-05** (§07 dependency boundary discipline) and explicitly does NOT lift the §07 dependency under scope-lock — that ceiling remains at ~89 Lovable per Phase 4.
+- **Lockstep**: §97 v3.2.0 → **v3.3.0** (minor — new critical AC); this file v4.1.4 → **v4.2.0** (minor — this row); §99 patch bump deferred to next consistency pass (no inventory-axis change). **No token rename · no §07 edit (link-only per scope-lock) · no §22 edit (link-only inheritance per Lesson #36) · no §27 gate change · no slot file added.** Scorecard impact (per Phase 4 / Wave-1 model): §24 Lovable 89 → ~93 expected on next honest re-score for the runtime-error-class portion (§07 ceiling remains at 89 for the irreducible primitive-registry portion — best-case §24 Lovable under scope-lock is ~93 not the pre-audit 97).
+- **Audit-trail**: Closes audit task **A-01** (declare §22 as operational-pattern parent for §23 + §24) for the §24 half. The §23 half landed same-PR as **AC-ADB-18**. Combined PR is the single highest-leverage Wave-1 fix per Phase-5 sequencing. Forced-guess inventory updated: G24-4 + G24-7 closed; G24-1/-2/-3/-5/-6 remain (G24-1/-2 irreducible under scope-lock; G24-3/-5/-6 await audit tasks A-14/A-15).
+
 
 ## [4.1.4] — 2026-05-06 — Phase 154 C-Sweep: Cross-Module Externalized Citation Map (Lesson #36 + #37)
 
