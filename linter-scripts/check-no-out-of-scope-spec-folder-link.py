@@ -127,14 +127,14 @@ def clause_no_numbered(surf: Surface) -> list[str]:
             # path token to appear inside backticks for the exemption.
             if OUT_OF_SCOPE_NUM_RE.search(_strip_inline_code(raw_line)):
                 # the token survives outside backticks → unfenced cite
-                errs.append(f"clause-1: {path.relative_to(REPO_ROOT)}:{i}: "
+                errs.append(f"clause-1: {(path.relative_to(REPO_ROOT) if path.is_absolute() else path)}:{i}: "
                             f"unfenced out-of-scope path token in `{raw_line.strip()[:120]}`")
             elif OUT_OF_SCOPE_NUM_RE.search(raw_line):
                 # only inside backticks; needs adjacency marker
                 if _has_adjacency(raw_line):
                     surf.archival_exemption_count += 1
                 else:
-                    errs.append(f"clause-1: {path.relative_to(REPO_ROOT)}:{i}: "
+                    errs.append(f"clause-1: {(path.relative_to(REPO_ROOT) if path.is_absolute() else path)}:{i}: "
                                 f"backticked out-of-scope cite without adjacency marker "
                                 f"(`out-of-scope`/`archived`/`superseded`) in line")
     return errs
@@ -146,13 +146,13 @@ def clause_no_archive(surf: Surface) -> list[str]:
         prose, _ = _strip_fences(text)
         for i, raw_line in enumerate(prose.splitlines(), 1):
             if OUT_OF_SCOPE_ARCHIVE_RE.search(_strip_inline_code(raw_line)):
-                errs.append(f"clause-2: {path.relative_to(REPO_ROOT)}:{i}: "
+                errs.append(f"clause-2: {(path.relative_to(REPO_ROOT) if path.is_absolute() else path)}:{i}: "
                             f"unfenced spec/_archive/ path token")
             elif OUT_OF_SCOPE_ARCHIVE_RE.search(raw_line):
                 if _has_adjacency(raw_line):
                     surf.archival_exemption_count += 1
                 else:
-                    errs.append(f"clause-2: {path.relative_to(REPO_ROOT)}:{i}: "
+                    errs.append(f"clause-2: {(path.relative_to(REPO_ROOT) if path.is_absolute() else path)}:{i}: "
                                 f"backticked spec/_archive/ cite without adjacency marker")
     return errs
 
@@ -173,7 +173,7 @@ def clause_no_md_links(surf: Surface) -> list[str]:
                     norm = "spec/_archive/" + href.split("_archive/", 1)[1]
                 if OUT_OF_SCOPE_NUM_RE.search(norm) or OUT_OF_SCOPE_ARCHIVE_RE.search(norm):
                     errs.append(
-                        f"clause-3: {path.relative_to(REPO_ROOT)}:{i}: "
+                        f"clause-3: {(path.relative_to(REPO_ROOT) if path.is_absolute() else path)}:{i}: "
                         f"Markdown link to out-of-scope path `{href}` "
                         "(adjacency marker exemption does NOT apply to links)"
                     )
@@ -185,7 +185,7 @@ def clause_no_fenced_embeds(surf: Surface) -> list[str]:
     for path, text in surf.files:
         for m in FENCE_SOURCE_RE.finditer(text):
             errs.append(
-                f"clause-4: {path.relative_to(REPO_ROOT)}: "
+                f"clause-4: {(path.relative_to(REPO_ROOT) if path.is_absolute() else path)}: "
                 f"fenced embed source-attribution `{m.group(1)}`"
             )
     return errs
