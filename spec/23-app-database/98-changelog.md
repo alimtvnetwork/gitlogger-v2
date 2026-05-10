@@ -1,8 +1,22 @@
 # Changelog — App Database
 
-**Version:** 4.6.0
-**Updated:** 2026-05-10 (Session 64 audit-task A-53 / Phase-5 T-01 — added "Implementation Target Precedence (Normative)" pin at §00 line 94 + escalated REFERENCE-lane PG header to `🚫 REFERENCE-ONLY … DO NOT MATERIALISE`. Closes audit finding F-23-01 silent-conflict risk for context-bounded readers.)
+**Version:** 4.7.0
+**Updated:** 2026-05-10 (Session 64 audit-task A-54 / Phase-5 T-02 — boolean-uniformity verification pass: PRIMARY-lane DDL has 0 violations; F-23-02 closed by negative evidence, no §00 edit. Recorded grep regression command in §99.)
 **Scope:** `spec/23-app-database/`
+
+---
+
+### 4.7.0 — 2026-05-10 — Session 64 audit-task A-54 (Phase-5 T-02): boolean-uniformity verification pass
+- **Action**: Negative-evidence sweep over §00 PRIMARY-lane DDL (lines 105–385) for any `boolean`/`BOOLEAN`/`tinyint`/`BOOL ` token or non-`Is/Has`-prefixed boolean column. Sweep command: `sed -n '105,385p' spec/23-app-database/00-overview.md | grep -nE 'boolean|BOOLEAN|TINYINT|tinyint|BOOL '`. **Result: 0 matches.** Single boolean column in PRIMARY lane is `IsActive INTEGER NOT NULL  -- 0/1` (file-line 174, AppLink table) — fully conformant with §00 line 99 Convention recap (`INTEGER 0/1 + Is prefix`). REFERENCE-lane `boolean NOT NULL DEFAULT true` at line ~432 remains fenced under T-01 precedence pin (`🚫 REFERENCE-ONLY … DO NOT MATERIALISE`) — out of scope per AC-ADB-11. §99 v2.1.4 → **v2.1.5** records the pass plus the regression-grep command for future re-verification.
+- **Why**: Phase-5 audit Phase 4 §4.1 conflict map flagged F-23-02 (boolean policy stated then violated) as the second-highest CRIT after F-23-01. Re-read after T-01 precedence pin showed the only `boolean` token in §00 lives in the now-fenced REFERENCE lane; F-23-02 was a Phase-2 false-positive driven by the same fence-strength asymmetry that drove the F-23-01 partial overstatement (see §98 4.6.0 Lesson #62 candidate). T-02 closes by **verification, not remediation** — the spec was already correct; the audit needed a regression-grep entry to defend the property going forward.
+- **Lockstep**: §99 v2.1.4 → **v2.1.5** (this verification entry); this file v4.6.0 → **v4.7.0** (this entry); **no** §00 edit (verification confirms PRIMARY lane is uniformly compliant); **no** §97 bump (AC-ADB-11 + Convention recap line 99 already own the contract).
+- **Scorecard impact (Sess-64, A-54 / T-02)**: §23 Raw-LLM **C4 Consistency 18→19** (PRIMARY-lane boolean policy now has documented negative-evidence sweep + regression command in §99; ceiling 20 deferred to a §27 gate that runs the regression grep on every PR — promotion candidate for the §27 backlog as `boolean-uniformity-primary-lane-check`). §23 totals: L 117 / C 119 / R 114.
+- **Lesson #62 reapplication**: Second instance of "Phase-2 false-positive driven by fence-strength asymmetry" (F-23-01 in Sess-64 A-53 was the first). Reinforces the Lesson #62 candidate: **a contractually-fenced section is a true-positive only if the fence is reachable from a 1-section read**. Sweep-grep regression commands recorded in §99 are the lightweight load-evidence form when no §27 gate yet exists.
+- **Audit-trail**: Closes Phase-5 T-02 (second of 22 remediation tasks; second consecutive turn closing a false-positive CRIT by verification rather than edit). Cohort blind-fail P projection: ~0.92 → ~0.88.
+
+---
+
+### 4.6.0 — 2026-05-10 — Session 64 audit-task A-53 (Phase-5 T-01): dual-dialect precedence pinned at §00 anchor
 
 ---
 
