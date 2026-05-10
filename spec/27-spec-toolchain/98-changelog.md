@@ -1,7 +1,15 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.39.0
-**Updated:** 2026-05-10 (Phase-5 G-1 — first §27 meta-lockstep groom batch; meta-verify-lockstep latent violations 34 → 9; no new gates/scripts/slots — pure correctness pass)
+**Version:** 4.40.0
+**Updated:** 2026-05-10 (Phase-5 G-2 — §27 §00 P19-wave gate-cite sub-ledger added; clause-1 cleared; meta-verify residual 9 → 6)
+
+### 4.40.0 — 2026-05-10 — Phase-5 G-2: §27 §00 gate-cite sub-ledger lift (clause-1 cleared; residual 9 → 6)
+- **Action**: Inserted a `#### Phase-5 P19 wave gate-cite block` sub-ledger directly after the slot 59 / gate #37 row in §00. The sub-ledger carries 3 rows for gates **#38** (slot 60 `check-no-toolchain-enum-in-issues-folder`), **#40** (slot 62 `check-ci-cli-self-test-harness`), **#41** (slot 63 `check-diagram-parity`) — gates that the main slot ledger could not represent because the 60-69 numeric range was already squatted by config-file rows (slot 60 `forbidden-strings.toml`, slot 61 `spec-cross-links.allowlist`, slot 62 `spec-folder-refs.allowlist`, slot 63 `readme-cross-links.md`). Sub-ledger preserves slot↔§00 one-way consistency without renumbering the legacy config-file slots.
+- **Numbering-arc note**: The sub-ledger also documents the contiguous gate-number arc **#36..#43** (P19 wave + post-P19 grooming gates) to make the "8 gates ship under one numbering arc" pin discoverable on a TOC walk.
+- **Mechanical re-verify**: `python3 linter-scripts/meta-verify-lockstep.py` returns **6** violations (was 9 after G-1, was 34 at P19d baseline). Clause-1 fully cleared. Residuals (backlogged): 5 × clause-3 fixture under-counts in slots 39/42/44/45/46 (G-3); 1 × clause-5 banner-triple gate-count drift (G-4).
+- **Phantom-script ledger**: unchanged at **34** (G-2 doesn't promote vapor → real).
+- **Workflow**: meta-verify gate stays warn-only — flips to hard-fail when G-3 + G-4 close out.
+- **Scorecard impact**: §27 triple-ceiling L120/C120/R120 held. C2 Completeness on the meta-verifier corpus materially tightens (3-of-3 phantom slot↔ledger cites cleared = 100 % clause-1 pass-rate). No cohort matrix changes.
 
 ### 4.39.0 — 2026-05-10 — Phase-5 G-1: §27 meta-lockstep groom batch (34 → 9 latent violations)
 - **Action**: First grooming batch against gate #42 (`meta-verify-lockstep.py`). No new gates, no new scripts, no new slots — pure correctness sweep against the existing meta-verifier surface that was wired warn-only in v4.37.0 / P19d.
