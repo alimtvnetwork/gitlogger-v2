@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/push",
+    "headers": { "x-request-id": "req-7c4f3b2a-0001" },
+    "body": { "Sha": "deadbeef" }
+  },
+  "response": {
+    "status": 401,
+    "headers": { "content-type": "application/json", "x-request-id": "req-7c4f3b2a-0001" },
+    "body": {
+      "Status": "Error",
+      "Code": "GL-AUTH-WP-MISSING",
+      "Message": "WordPress auth header missing",
+      "RequestId": "req-7c4f3b2a-0001",
+      "HttpStatus": 401
+    }
+  },
+  "meta": { "severity": "high", "fixture_kind": "happy-path" }
+}

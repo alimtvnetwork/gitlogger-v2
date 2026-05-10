@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/push",
+    "headers": { "x-request-id": "req-7c4f3b2a-0003" },
+    "body": { "Sha": "f00dbabe" }
+  },
+  "response": {
+    "status": 401,
+    "headers": { "content-type": "application/json", "x-request-id": "req-7c4f3b2a-0003" },
+    "body": {
+      "Status": "Error",
+      "Code": "GL-SSH-NONCE-REUSED",
+      "Message": "SSH replay-protection: nonce already consumed",
+      "RequestId": "req-7c4f3b2a-0003",
+      "HttpStatus": 401
+    }
+  },
+  "meta": { "severity": "high", "fixture_kind": "happy-path" }
+}

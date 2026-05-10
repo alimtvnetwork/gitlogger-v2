@@ -1,0 +1,20 @@
+{
+  "_doc": "NEGATIVE fixture — gate #17 MUST reject (missing required key 'RequestId').",
+  "request": {
+    "method": "POST",
+    "path": "/v1/push",
+    "headers": { "x-request-id": "req-7c4f3b2a-NEG1" },
+    "body": {}
+  },
+  "response": {
+    "status": 401,
+    "headers": { "content-type": "application/json" },
+    "body": {
+      "Status": "Error",
+      "Code": "GL-AUTH-WP-MISSING",
+      "Message": "WordPress auth header missing",
+      "HttpStatus": 401
+    }
+  },
+  "meta": { "severity": "high", "fixture_kind": "negative", "expected_violation": "missing required key 'RequestId'" }
+}

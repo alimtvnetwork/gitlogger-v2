@@ -1,0 +1,22 @@
+{
+  "_doc": "NEGATIVE fixture — gate #17 MUST reject (extra key 'StackTrace' breaks closed shape).",
+  "request": {
+    "method": "POST",
+    "path": "/v1/push",
+    "headers": { "x-request-id": "req-7c4f3b2a-NEG2" },
+    "body": {}
+  },
+  "response": {
+    "status": 500,
+    "headers": { "content-type": "application/json", "x-request-id": "req-7c4f3b2a-NEG2" },
+    "body": {
+      "Status": "Error",
+      "Code": "GL-AUTH-WP-INVALID",
+      "Message": "Internal failure",
+      "RequestId": "req-7c4f3b2a-NEG2",
+      "HttpStatus": 500,
+      "StackTrace": "at /app/server.ts:42"
+    }
+  },
+  "meta": { "severity": "critical", "fixture_kind": "negative", "expected_violation": "unexpected key 'StackTrace' (closed schema)" }
+}

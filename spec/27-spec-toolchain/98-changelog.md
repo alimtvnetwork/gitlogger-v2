@@ -1,8 +1,24 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.6.0
-**Updated:** 2026-05-10 (Session 56 audit-task A-48 — slot 37 `check-spec22-inventory.py` shipped; gate #20; second §27 gate dedicated to a §22-side AC family)
+**Version:** 4.7.0
+**Updated:** 2026-05-10 (Session 62 audit-task A-52 — authored happy + negative fixture corpora for gates #17 / #18 under `linter-scripts/fixtures/{error-envelope,request-id}/`; load-proves shape + echo end-to-end)
 **Scope:** `spec/27-spec-toolchain/`
+
+### 4.7.0 — 2026-05-10 — Session 62 audit-task A-52: gate #17 / #18 fixture corpora landed (happy + negative load-proof)
+- **Action**: Authored 7 fixture files across two corpora:
+  - `linter-scripts/fixtures/error-envelope/` — 3 happy-path (`01-auth-wp-missing-conformant.json`, `02-permission-denied-conformant.json`, `03-ssh-nonce-reused-conformant.json`) using real §22 `ErrorCode` enum values (`GL-AUTH-WP-MISSING`, `GL-AUTHZ-PERMISSION-DENIED`, `GL-SSH-NONCE-REUSED`); 2 negative under `negative/` (`01-missing-request-id.json` strips required `RequestId`; `02-extra-stacktrace-key.json` adds forbidden `StackTrace` to break closed shape).
+  - `linter-scripts/fixtures/request-id/` — 2 happy-path (`01-header-echo-conformant.json`, `02-permission-denied-header-echo.json`) with `meta.echo_path=header`; 2 negative (`01-header-mismatch.json` echoes `server-fabricated-id-9999` instead of the request id; `02-header-missing.json` drops the response header entirely).
+  - Each corpus README documents file inventory, expected violation per negative fixture, and the dual invocation contract (default → exit 0; `--fixtures .../negative` → exit 1).
+- **Verification (this turn)**: ran all four invocations.
+  - `python3 linter-scripts/check-error-envelope-shape.py` → `[gate-17] PASS: 3 fixtures conform to ErrorEnvelope`, exit `0`.
+  - `python3 linter-scripts/check-error-envelope-shape.py --fixtures .../negative` → exit `1`, exact violations: `missing required key 'RequestId'` + `unexpected key 'StackTrace' (closed schema)`.
+  - `python3 linter-scripts/check-request-id-roundtrip.py` → `[gate-18] PASS: 2 fixtures round-trip X-Request-Id`, exit `0`.
+  - `python3 linter-scripts/check-request-id-roundtrip.py --fixtures .../negative` → exit `1`, exact violations: header mismatch + `X-Request-Id=None`.
+- **Why now**: A-34 (Sess-53) activated gates #17/#18 against an *empty* `DEFAULT_FIXTURES` directory — the gates exited green-by-vacuity, falling under R5 "vacuously-passing-scanner" clause. A-52 closes that gap: the gates now exercise both positive (must accept) and negative (must reject) corpora, with the negative path proving the gate has teeth.
+- **Self-enforcement chain (now end-to-end)**: §22 `17-openapi.yaml` `ErrorEnvelope` schema → `_lib/fixture_replay/{schema_loader,engine}.py` → gate scripts `check-error-envelope-shape.py` / `check-request-id-roundtrip.py` → happy corpora (CI default, must exit 0) → negative corpora (CI explicit invocation, must exit 1). Removing any happy fixture flips CI to harness-setup error (exit 3 — `no *.json fixtures`); weakening any negative fixture's hostility silently re-opens the vacuity hole (mitigated by the documented `expected_violation` field per fixture).
+- **Lesson #36 preservation**: Fixture READMEs cite §22 anchors + ErrorCode enum members only; they do NOT restate the ErrorEnvelope schema. The schema remains the contract surface in §22; the fixtures are the load surface in §27 toolchain.
+- **Scorecard delta**: §27 ceiling already at 120/120/120 (held). Gate-count tally 20 → **22** (gates #17 + #18 now load-proven as well as activated). Beneficiary: §22 R C3 Testability load-evidence path widened (gates that consume §22 schemas now have hostile coverage). No persona-score movement this turn (R already capped on relevant criteria).
+- **Invalidation triggers**: (a) any happy `*.json` removed → harness-setup exit 3 → CI red; (b) negative subdir removed or made non-hostile → vacuity hole re-opens (R5 violation); (c) §22 `ErrorEnvelope` schema gains/loses a required key without matching fixture update → schema/fixture drift caught by next CI run.
 
 ### 4.6.0 — 2026-05-10 — Session 56 audit-task A-48: slot 37 `check-spec22-inventory.py` (gate #20; §22 AC-78 / AC-22-LV1)
 - **Action**: Created `spec/27-spec-toolchain/37-check-spec22-inventory.md` (v1.0.0) + `linter-scripts/check-spec22-inventory.py` (executable, with `--check inventory|locked-vacant|all` + `--self-test` modes). Wired as workflow step "§22 module asset inventory gate" in `.github/workflows/spec-health.yml` (gate #20). Added slot 37 row to §00 `### Validators` table.
