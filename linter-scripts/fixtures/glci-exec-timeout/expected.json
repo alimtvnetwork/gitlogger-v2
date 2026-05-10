@@ -1,0 +1,21 @@
+{
+  "fixture_id": "glci-exec-timeout",
+  "owning_ac": "AC-28-30",
+  "owning_test_invariant": "T-28-30",
+  "runner": "./runner.sh",
+  "invocation": "glci ts-test --fixture . --phase-timeout-ms=2000",
+  "expected": {
+    "exit_code": 1,
+    "stderr_envelope": {
+      "ErrorCode": "GLCI-EXEC-TIMEOUT",
+      "RequestId": "<non-empty>"
+    },
+    "elapsed_ms_max": 3000
+  },
+  "must_not": {
+    "stderr_envelope": {
+      "ErrorCode": ["GLCI-EXEC-RUNNER-CRASHED", "GLCI-EXEC-NONZERO-EXIT"]
+    },
+    "exit_code": [0]
+  }
+}

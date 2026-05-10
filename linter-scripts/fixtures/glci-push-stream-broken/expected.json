@@ -1,0 +1,18 @@
+{
+  "fixture_id": "glci-push-stream-broken",
+  "owning_ac": "AC-28-31",
+  "owning_test_invariant": "T-28-31",
+  "server": "python mock_server.py",
+  "invocation": "glci ts-test --stream --server http://127.0.0.1:9931",
+  "expected": {
+    "exit_code": 0,
+    "received_log_must_contain": ["stream\t", "batch\t"],
+    "stream_frames_min": 3,
+    "batch_frames_min": 3,
+    "fallback_triggered": true
+  },
+  "must_not": {
+    "exit_code": [1, 2, 3, 4],
+    "behavior": ["infinite-stream-retry", "drop-unacked-frames"]
+  }
+}

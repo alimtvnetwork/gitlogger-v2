@@ -1,0 +1,23 @@
+{
+  "fixture_id": "glci-push-deadline-exceeded",
+  "owning_ac": "AC-28-48",
+  "owning_test_invariant": "T-28-48",
+  "server": "python mock_server.py",
+  "config": "./glci.toml",
+  "invocation": "glci ts-test --server http://127.0.0.1:9932 --config ./glci.toml",
+  "expected": {
+    "exit_code": 4,
+    "stderr_envelope": {
+      "ErrorCode": "GLCI-PUSH-DEADLINE-EXCEEDED",
+      "RequestId": "<non-empty>"
+    },
+    "elapsed_ms_max": 16000,
+    "per_attempt_ms_max": 5500
+  },
+  "must_not": {
+    "stderr_envelope": {
+      "ErrorCode": ["GLCI-PUSH-RETRIES-EXHAUSTED", "GLCI-EXEC-TIMEOUT"]
+    },
+    "exit_code": [0, 1, 2, 3]
+  }
+}

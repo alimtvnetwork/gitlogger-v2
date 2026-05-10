@@ -1,9 +1,24 @@
 # Changelog
 
-**Updated:** 2026-05-10 (Session 56 audit-task A-47 — §97 v2.7.0 → v2.8.0; appended `## Test Invariant Index (T-28-NN)` with inaugural 5 rows T-28-29/30/31/36/48; §28 C3 Testability +1 across personas)
+**Updated:** 2026-05-10 (Session 61 audit-task A-51 — authored 5 fixture corpora `linter-scripts/fixtures/glci-{exec-runner-crashed,exec-timeout,push-stream-broken,stream-buffer-overflow,push-deadline-exceeded}/` for T-28-29/30/31/36/48; load-proves §28 C3 Raw-LLM 19→20)
 
 
 All notable changes to `spec/28-universal-ci-cli/`.
+
+## [2.13.0] — 2026-05-10 — Session 61 audit-task A-51: 5 inaugural T-28-NN fixture corpora landed (load-proves C3 Raw-LLM ceiling)
+
+- **Action**: Authored 5 hostile fixture corpora under `linter-scripts/fixtures/`, one per inaugural T-28-NN row from A-47:
+  - `glci-exec-runner-crashed/` (T-28-29 / AC-28-29) — `runner.sh` does `kill -9 $$` mid-phase; `expected.json` pins `exit_code=1`, `ErrorCode=GLCI-EXEC-RUNNER-CRASHED`, `Signal=SIGKILL`, plus `must_not` block forbidding `GLCI-EXEC-TIMEOUT`/`GLCI-EXEC-NONZERO-EXIT`.
+  - `glci-exec-timeout/` (T-28-30 / AC-28-30) — `sleep 600` runner with `--phase-timeout-ms=2000`; pins `exit_code=1`, `ErrorCode=GLCI-EXEC-TIMEOUT`, `elapsed_ms_max=3000`.
+  - `glci-push-stream-broken/` (T-28-31 / AC-28-31) — `mock_server.py` accepts 3 NDJSON frames on `/stream` then `socket.shutdown(SHUT_RDWR)`; accepts batched fallback on `/batch`; logs every frame to `received.log` to prove both surfaces received the un-acked frames; pins `exit_code=0` + `fallback_triggered=true`.
+  - `glci-stream-buffer-overflow/` (T-28-36 / AC-28-36) — runner emits 50 000 frames; pins `BufferDroppedCount>0`, exact stderr regex `^audit: dropped [0-9]+ oldest frames \(buffer cap=1024\)$` (exactly once), `exit_code=0` (drop is non-fatal); `must_not` block forbids drop-newest eviction and per-drop log flooding.
+  - `glci-push-deadline-exceeded/` (T-28-48 / AC-28-48) — `mock_server.py` sleeps 60 s on every request; `glci.toml` pins `request_timeout_ms=5000` + `total_deadline_ms=15000`; pins `exit_code=4`, `ErrorCode=GLCI-PUSH-DEADLINE-EXCEEDED`, `elapsed_ms_max=16000`, `per_attempt_ms_max=5500`; `must_not` forbids `GLCI-PUSH-RETRIES-EXHAUSTED` (the discriminator).
+- Each fixture ships a `README.md` (owner + invocation + failure modes detected), the runner/server, and a strict `expected.json` containing both positive `expected` and negative `must_not` clauses (so a partial impl that returns the right exit code with the wrong `ErrorCode` still fails the gate).
+- **Why now**: A-47 (Sess-56) raised §28 C3 to L 20 / C 20 / R 19 by *naming* the deferred enforcement chain (T-NN row → AC GWT → fixture path → invocation → pass criterion). Raw-LLM stayed at 19 because the fixture path was *named but vacant* — a Raw-LLM walker following the cite reached an empty directory. A-51 closes that gap by populating the 5 cited paths with replay-engine-shaped corpora; the chain is now load-proven end-to-end except for the §27 `ac-test-invariant-coverage-check` gate (still deferred, but no longer the bottleneck for these 5 ACs).
+- **Self-enforcement chain (now end-to-end)**: `97-acceptance-criteria.md` line 497–501 Test Invariant Index → `linter-scripts/fixtures/glci-*/README.md` → `runner.sh`/`mock_server.py` → `expected.json` (positive + negative contracts) → CI invocation per `invocation` field. Removing any fixture file invalidates the cited path; weakening any `must_not` clause invalidates the discriminator (e.g. SIGKILL vs timeout, deadline vs retry-budget).
+- **Lesson #36 preservation**: Fixture READMEs cite AC IDs + invariant IDs only; they do NOT restate AC bodies. The AC remains the contract surface; the fixture is the load surface; the T-NN row is the bridge.
+- **Scorecard delta**: §28 C3 Testability **R 19→20** (Raw-LLM ceiling reached: chain is fully load-proven for the 5 inaugural surfaces, with negative `must_not` blocks providing the cited self-enforcing mechanism per Rubric v2 ceiling rule). Lovable + Cursor already at 20 (held). §28 totals: **L 115 / C 114 / R 111** (was 114/113/110; Δ +1/+1/+1). Cohort Raw-LLM mean 112.5 → **112.7** (~94.0%); Raw-LLM floor still §25 (112).
+- **Invalidation triggers**: (a) Removing/emptying any `glci-*/` directory → revert C3 Raw-LLM to 19. (b) Weakening any `must_not` block (e.g. allowing both `GLCI-PUSH-DEADLINE-EXCEEDED` and `GLCI-PUSH-RETRIES-EXHAUSTED` for T-28-48) → discriminator gone, revert. (c) Adding new T-NN rows without matching corpora → cumulative coverage gap until `ac-test-invariant-coverage-check` ships.
 
 ## [2.12.0] — 2026-05-10 — Session 56 audit-task A-47: Test Invariant Index (T-28-NN) — machine-checkable AC stubs
 
