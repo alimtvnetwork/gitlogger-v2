@@ -602,7 +602,7 @@ SCOPE: 25 issue records produced 2026-Q1; no code-side mutations performed
 
 INV-01  every issue MUST have stable IssueId matching pattern P2-GLA-NNN
 INV-02  every issue MUST cite at least one source location (file path + line/section anchor)
-INV-03  Severity ∈ {blocker, major, minor, info} — no other values permitted
+INV-03  Severity ∈ {blocker, major, minor, info} — no other values permitted  // FROZEN HISTORICAL ENUM (Phase-50 internal-audit-process classifier). Canonical issue-record severity enum is `{Critical, High, Medium, Low}` per parent `../97-acceptance-criteria.md` AC-AI-14. See sub-01 §97 AC-09 for the binding contract; do NOT "reconcile" the two — they have disjoint scopes.
 INV-04  Status ∈ {open, in-progress, resolved, deferred, wontfix}
 INV-05  resolved/deferred/wontfix issues MUST carry a ResolutionRef (PR, ADR, or memory note)
 INV-06  the canonical count is 25; deltas require a 98-changelog entry + new IssueId
