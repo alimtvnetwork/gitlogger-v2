@@ -1,8 +1,17 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.42.0
-**Updated:** 2026-05-10 (Phase-5 G-5 — §27 §00 main-ledger legacy-name backfill; gate #43 phantom-script citations 34 → 26)
+**Version:** 4.43.0
+**Updated:** 2026-05-10 (Phase-5 G-6a — slot 56 `check-rest-pascalcase-parity.py` shipped; gate #34 load-proven via `--self-test`, disk run wired warn-only)
 **Total active gates: 23**
+
+### 4.43.0 — 2026-05-10 — Phase-5 G-6a: slot 56 `check-rest-pascalcase-parity.py` shipped (gate #34 load-proven; phantom citations 26 → 25)
+- **Action**: Created `linter-scripts/check-rest-pascalcase-parity.py` (430 LOC, 6 clauses + R5 vacuous-pass + built-in `--self-test`). Implements the slot-56 contract: clause-1 PascalCase shape on every R-2 wire key (`^[A-Z][A-Za-z0-9]*$`, `Error`+`items` whitelisted); clause-2 wire ↔ DDL bijection on `App` + `AppLink` (modulo `{RepoUrl,ResolutionState}` request-only + `{Code,Message,Field,TraceId}` R-3 envelope whitelists); clause-3 boolean sample values restricted to `Is`-prefixed keys; clause-4 R-4 invariant 1 literal preservation incl. Lesson #15 self-citation `Self-enforcing via §27 backlog gate \`rest-pascalcase-parity-check\``; clause-5 AC-ADB-REST-01 surface presence (heading + `8-row R-1 endpoint matrix` + `R-4 invariants 1…` + `[active]`/`[deferred]`/`[archived]` status tag); clause-6 no-restate of `## REST / RPC Contract` heading in §22/§24/§25 (§22 `17-openapi.yaml` git-logs surface exempt). Same exit-code contract as gates #22..#33: `0`/`1`/`2`/`3`.
+- **Self-test**: `python3 linter-scripts/check-rest-pascalcase-parity.py --self-test` → **6/6 fixtures passed** (F-1 unique-passing complete-uniform; F-2 `appId` camelCase wire key fails clause-1; F-3 `LinkLabel` wire-only-no-DDL fails clause-2; F-4 `Active: true` boolean on non-`Is` key fails clause-3; F-5 R-4 strips gate self-citation fails clause-4; F-6 §24 child restates `## REST / RPC Contract` fails clause-6).
+- **Workflow**: Wired as new step "§23 REST PascalCase parity gate" in `.github/workflows/spec-health.yml` immediately after gate #33 step. Two-line invocation: hard `--self-test` (load-proves the 6-clause contract) THEN warn-only full disk run (surfaces the known §23 §00 R-2 vs PRIMARY-lane DDL bijection drift — `Name`/`AppName`, `LinkId`/`AppLinkId`, `DiscriminatorId`/`AppLinkTypeId`, `TargetKey`, `RepoUrlCanonical` — separate §23 spec-side reconciliation backlog ticket **G-6a-followup**). Disk run flips to hard-fail when G-6a-followup ships.
+- **Mechanical re-verify**: `meta-verify-lockstep.py` still **0** violations (slot 56 fixture roster, R5, exit codes, gate #34 cite all in place from prior groom waves). `check-gate-ledger-vs-workflow.py` I-1 EXISTS failures **26 → 25** (one phantom-script citation `check-rest-pascalcase-parity.py` now resolves to a real on-disk artefact); citation count holds at 73, resolution rate 64 % → 66 %.
+- **Phantom-script ledger**: **26 → 25** (-1 net this turn).
+- **Scorecard impact**: §23 R-band Cursor 117 → 118 (C3 Testability +1 — REST contract now load-proven). Lovable §23 already at 120 carried. §27 R-band C6 Friction +1 (oldest §23-side backlog ticket `rest-pascalcase-parity-check` — paper-only for 21 cycles — converts to load-proven). No L/C cohort movement until G-6a-followup reconciles §23 §00 wire ↔ DDL drift and the warn-only disk run flips to hard-fail.
+- **Bindings reaffirmed**: AC-ADB-REST-01 promoted from conditional 20 to load-proven 20 (cited mechanism IS gate #34 via clause-4 self-citation). Sibling to gate #28 (status-tag enforcement piggyback via clause-5).
 
 ### 4.42.0 — 2026-05-10 — Phase-5 G-5: §27 §00 main-ledger legacy-name backfill (phantom citations 34 → 26)
 - **Action**: Updated 5 `## CI Gate Enumeration` rows in §27 §00 to swap legacy `.cjs` / phantom-name invocations for their real on-disk `.py` equivalents:
