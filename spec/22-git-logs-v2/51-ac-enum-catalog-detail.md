@@ -1,0 +1,44 @@
+# AC-81 Detail — Enum Catalog Promotion (Tier-1 Normative Binding)
+
+> **Sibling-file detail** for `97-acceptance-criteria.md` AC-81. Promoted out of §97
+> per AC-80 sibling-file delegation map to keep §97 within the audit walker's
+> tier-1 budget cap (Lesson #16 + Lesson #19 + Lesson #34). The full normative
+> body below is byte-identical to the previous §97 AC-81 inline body and remains
+> tier-1 binding.
+
+### AC-81 — Enum Catalog promotion: normative tier-1 binding with inline canonical list (Lesson #19 + Lesson #36)  `[critical]`
+
+**Given** spec/22 ships **11 active enum types** + **1 deprecated stub** that drive every state-machine transition, RBAC permission lookup, audit row, system-event row, severity ordering, and TS-client typing across the WP plugin, headless SPA, Gutenberg block editor, and future React Native client — and the canonical catalog lives in `01-glossary-and-enums.md` (14 KB) which the audit walker may exhaust budget on before reaching (per Lesson #16 tier-cap class), causing `[D4] Truncated Glossary and Enums` false-positive findings (precedent: Phase A1 v2 audit; cleared as harness artifact in AC-78 evidence row);
+
+**When** an AI auditor walks spec/22 §97 (the tier-1 contract surface) OR an implementer needs to verify which enum codes are normative without leaving the §97 bundle,
+
+**Then** the canonical inventory below is the **normative tier-1 binding** — every code is byte-identical to the SQLite `{EnumName}.Name` column, the PHP `{EnumName}Type::cases()` constant, and the TypeScript `enum {EnumName}` member name (drift between any of the four = `GL-SCHEMA-DRIFT` per `15-error-codes.md`):
+
+| Enum | Codes (PascalCase, byte-identical across SQLite + PHP + TS) | Authority | Drift signal |
+|---|---|---|---|
+| `UserStatus` | `Active`, `Suspended`, `Revoked` | `18-schema.sql` lookup-table seed | `GL-SCHEMA-DRIFT` at boot |
+| `Role` | `Admin`, `Editor` | `18-schema.sql` | `GL-SCHEMA-DRIFT` at boot |
+| `Permission` | `AppCreate`, `AppView`, `AppModify`, `AppDelete`, `ProfileCreate`, `ProfileView`, `ProfileModify`, `ProfileDelete`, `GitProfileCreate`, `GitProfileView`, `GitProfileModify`, `GitProfileDelete`, `RepoView`, `RepoModify`, `RepoDelete`, `HistoryView`, `LogPush` (17 codes) | `18-schema.sql` + RBAC matrix `19-permission-matrix.md` | `GL-SCHEMA-DRIFT` + permission-resolution failure |
+| `Provider` | `GitHub` (active in v2), `GitLab` (reserved — not active) | `18-schema.sql` | `GL-SCHEMA-DRIFT` |
+| `Acceptance` | `AcceptAllRepos`, `AcceptSelectedRepoOnly`, `AcceptSelectedRepoInAllVersions` | `18-schema.sql` + AC-08 | URL canonicalization mismatch |
+| `AppStatus` | `Active`, `Disabled`, `Archived` | `18-schema.sql` + AC-20 (lifecycle gates push) | Push-acceptance state-machine drift |
+| `AppLinkType` | `GitProfile`, `Repo` (polymorphic discriminator — exhaustive 2-value set) | `18-schema.sql` + AC-18 + spec/23 AC-ADB-14 (polymorphic AppLink resolution) | `GL-APPLINK-RESOLVE-FAILED` |
+| `LogSeverity` | `Trace=10`, `Debug=20`, `Info=30`, `Warn=40`, `Error=50`, `Fatal=60` (numeric weights normative for ordering / threshold checks) | `18-schema.sql` + per-SHA log file schema (§39) | severity-threshold drift = silent log loss |
+| `PipelineActionType` (renamed from `ActionType` in v3.8.0) | `Append`, `Fixed`, `Clear`, `ClearAll` | `18-schema.sql` + AC-13 (HasError sticky) | audit-row-write failure |
+| `SystemEventType` (NEW v3.8.0) | `ProfileCreated`, `ProfileDeleted`, `ProfileStatusChanged`, `RoleAssigned`, `RoleRevoked`, `GitProfileCreated`, `GitProfileAcceptanceChanged`, `GitProfileBranchRestrictionChanged`, `AppCreated`, `AppStatusChanged`, `AppLinkAdded`, `AppLinkRemoved`, `SshKeyRegistered`, `SshKeyRevoked`, `SshKeyRotated`, `TempTokenRotated` (16 codes) | `18-schema.sql` + business-event observability (§20) | system-event audit gap |
+| `AuditActionType` | `ProfileCreate`, `ProfileUpdate`, `ProfileDelete`, `GitProfileCreate`, `GitProfileUpdate`, `GitProfileDelete`, `RepoCreate`, `RepoUpdate`, `RepoDelete`, `AppCreate`, `AppUpdate`, `AppDelete`, `AppLinkChange`, `LogPush`, `LogQuery`, `AuthSuccess`, `AuthFail`, `MigrationRun`, `ConfigChange` (19 codes; `ConfigChange` seed id 25 added v2.8.0) | `18-schema.sql` | audit-trail completeness gap |
+| `AuditOutcome` | `Success`, `Rejected`, `Error` (exhaustive 3-value set) | `18-schema.sql` | audit-row-write rejection |
+| `OwnerType_DEPRECATED_v380` | `User`, `Organization` (RETIRED v3.8.0 — replaced by `GitProfile.IsOrganization: boolean`) | retired (kept as TS deprecated stub for v1 client compat only) | NEW writes against this enum = `GL-SCHEMA-DRIFT` |
+
+**AND** the canonical source-of-truth precedence is locked: `18-schema.sql` lookup-table seeds = **canonical**; `01-glossary-and-enums.md` Enum Catalog tables = **canonical (human-readable mirror)**; `01-glossary-and-enums.md` `## TypeScript Mirror` block = **hand-maintained mirror** (drift = §99 audit row demoted ✅ → ⚠️); future PHP `{EnumName}Type::cases()` = **generated from SQL at boot** (drift escalates to `GL-SCHEMA-DRIFT` at admin-page load) — this AC delegates the full Drift-detection contract to `01-glossary-and-enums.md` `## Drift-detection contract` table per **Lesson #36** (link-don't-restate; restating the 4-row precedence table here would create a dual-source class);
+
+**AND** any new enum value added in a future phase MUST land in **all four** surfaces in the same PR (SQL seed in `18-schema.sql` + Enum Catalog table row in `01-glossary-and-enums.md` + TypeScript `enum` member in the `## TypeScript Mirror` block + this AC-81 normative table row) — partial landings = `GL-SCHEMA-DRIFT` and CI-blocking;
+
+**AND** any new enum **type** added in a future phase MUST add a row to this table BEFORE the type ships — the table IS the §97 tier-1 audit-followable enum-binding chain (mirror of AC-80's sibling-file delegation map and AC-79's cross-module externalized citation map; together AC-78 + AC-79 + AC-80 + AC-81 form the **complete tier-1 normative-surface closure** for spec/22 — module-kind pin + cross-module citations + sibling-file delegation + enum catalog promotion);
+
+**AND** any auditor finding citing `[D4] Truncated Glossary and Enums` OR `[D4] Missing Concrete Code Fixtures` (citing missing SQL DDL or PHP class skeletons) OR "missing enum catalog" against the 12 enum types listed above MUST be classified as a **stale-cache walker-cap artifact** per Lesson #34 — verify by `grep -nE "^### (UserStatus|Role|Permission|Provider|Acceptance|AppStatus|AppLinkType|LogSeverity|PipelineActionType|SystemEventType|AuditActionType|AuditOutcome|OwnerType)" spec/22-git-logs-v2/01-glossary-and-enums.md` before flagging (the file is 14 KB on disk; walker-bundle truncation does not equal content gap);
+
+**AND** restating the per-enum-code semantics inline in any other spec/22 file (`02-database-schema.md`, `04-rest-api-endpoints.md`, `19-permission-matrix.md`, `15-error-codes.md`) is **FORBIDDEN** — those files MUST cite by enum-name only and link back to `01-glossary-and-enums.md` per Lesson #36 (precedent: AC-79 cross-module citation map; AC-80 sibling-file delegation map row for `01-glossary-and-enums.md` already pins this constraint as `**Restate-in-§97 forbidden? YES**`).
+
+- **Verifies:** the normative enum catalog binding for spec/22 — all 11 active + 1 deprecated enum types are pinned in §97 tier-1 with full code lists (where ≤6 codes) or representative-with-count format (where >6 codes), enum→authority mapping, and drift-signal column. Closes the **Lesson #19 audit-boundary < verification-boundary gap** for the enum catalog (the catalog file `01-glossary-and-enums.md` is tier-2 and may be walker-truncated; this AC lifts its normative inventory into the tier-1 §97 bundle so contract integrity survives any walker-cap class). Codifies **Lesson #36** (link-don't-restate) by delegating the 4-row Drift-detection precedence contract to `01-glossary-and-enums.md` `## Drift-detection contract` rather than restating it. Mirror of spec/02 AC-CG-22 Exception Ledger pattern (closed inventory + canonical source) and spec/12 AC-10 interface-contract binding pattern. Completes the **tier-1 normative-surface closure quartet** for spec/22 (AC-78 + AC-79 + AC-80 + AC-81). Until A8 (LLM-gateway re-score) unblocks, this AC declares any "missing enum catalog" or "[D4] Truncated Glossary" finding against the 12 listed enums a stale-cache walker-cap artifact per Lesson #34.
+- **Source:** `97-acceptance-criteria.md` (this AC); cross-references `01-glossary-and-enums.md` (canonical human-readable mirror + TypeScript mirror + Drift-detection contract), `18-schema.sql` (canonical SQL lookup-table seeds), `15-error-codes.md` (`GL-SCHEMA-DRIFT` error code surface), `19-permission-matrix.md` (Permission enum × Role matrix), spec/23 AC-ADB-14 (AppLinkType polymorphic resolution), and AC-78/AC-79/AC-80 (mirror-quartet members).
