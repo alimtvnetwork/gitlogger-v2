@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Gate #40 — check-ci-cli-self-test-harness.
+r"""Gate #40 — check-ci-cli-self-test-harness.
 
 Asserts §28 (Universal CI CLI) declares a built-in `--self-test`
 harness mirroring the §27 self-test cohort discipline.
