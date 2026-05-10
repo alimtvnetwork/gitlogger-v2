@@ -5,12 +5,24 @@ content_axis: normative-contract
 axis_rationale: "App-only token extensions (additive contract over §07)"
 derives_from: spec/07-design-system
 restate_forbidden: true
+produced_for:
+  # Inverse-binding (A-12, Session 33) — mirror of §26→§22 `consumes:` (A-11) from the
+  # producer side. §24 OWNS the `--app-*` token catalog (§00 "App-only semantic tokens"
+  # + JSON Schema "AppDesignTokens"); the rows below are the in-scope consumers that
+  # MUST NOT redeclare these tokens. Any consumer adding an `--app-*` token without
+  # adding itself here trips deferred lint §27 D9 `consumes-frontmatter-resolves` (inverse).
+  - consumer: spec/22-git-logs-v2/60-app-cohort-integration.md "Ownership Boundaries: App-overlay tokens (--app-*)"
+    contract: AC-ADS-03 (no raw colors) + AC-ADS-04 (light/dark parity)
+  - consumer: spec/26-gitlogs-diagrams (any future app-shell diagram)
+    contract: AC-DG-05 (header type+intent) — diagrams citing app shell MUST reference §24 token names verbatim, never raw HSL
+  - consumer: src/styles.css + src/components/** (TSX/CSS AST scan)
+    contract: §27 deferred D4 `no-raw-color-in-app-component` — §24 is the sole authority for `--app-*` token names
 ---
 
 # App Design System & UI
 
-**Version:** 4.2.0
-**Updated:** 2026-05-10 (Session 27 audit-task A-05 — §07 dependency boundary promoted to normative + `restate_forbidden: true`)
+**Version:** 4.3.0
+**Updated:** 2026-05-10 (Session 33 audit-task A-12 — added `produced_for:` inverse-binding front-matter declaring §24 as the canonical producer of `--app-*` tokens; lists in-scope consumers (§22 cohort overview, §26 future diagrams, app source) so deferred lint §27 D9 has a parseable producer-side signal. Mirrors §26→§22 `consumes:` (A-11, Sess 32) from the producer side.)
 **AI Confidence:** Production-Ready
 <!-- h10-verified-phase: 153 -->
 **Ambiguity:** None

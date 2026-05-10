@@ -1,8 +1,15 @@
 # Changelog — App Design System & UI
 
-**Version:** 4.3.0
-**Updated:** 2026-05-10 (Session 27 audit-task A-05 — §07 dependency boundary promoted to normative AC-ADS-16 + `restate_forbidden: true` front-matter)
+**Version:** 4.4.0
+**Updated:** 2026-05-10 (Session 33 audit-task A-12 — `produced_for:` inverse-binding front-matter declaring §24 as the canonical producer of `--app-*` tokens; mirror of §26→§22 `consumes:` (A-11) from the producer side)
 **Scope:** `spec/24-app-design-system-and-ui/`
+
+---
+
+### 4.4.0 — 2026-05-10 — Session 33 audit-task A-12: producer-side inverse binding for `--app-*` token catalog
+- **Action**: §00 v4.2.0 → **v4.3.0** added `produced_for:` block to front-matter listing 3 in-scope consumers of the `--app-*` token catalog: (1) §22 `60-app-cohort-integration.md` "Ownership Boundaries" row, (2) §26 future app-shell diagrams, (3) `src/styles.css` + `src/components/**` AST-scanned by deferred lint §27 D4 `no-raw-color-in-app-component`.
+- **Why**: A-11 (Sess 32) shipped consumer→source binding on §26→§22; A-12 ships the inverse on §24 so deferred lint §27 D9 `consumes-frontmatter-resolves` can validate the directed graph in BOTH directions. Any consumer redeclaring an `--app-*` token without registering itself here trips D9 (inverse). No new AC — existing AC-ADS-03/04/16 already cover the underlying invariants; A-12 only adds a parseable producer-side index.
+- **Banners**: §00 v4.2.0 → **v4.3.0** (minor — new front-matter contract surface); §98 v4.3.0 → **v4.4.0** (this entry). **No** §97 bump (no new AC), **no** CI workflow change, **no** §07 edit (scope-lock honoured per AC-ADS-16 rule 4), **no** restatement of consumer contracts here (Lesson #36).
 
 ---
 
