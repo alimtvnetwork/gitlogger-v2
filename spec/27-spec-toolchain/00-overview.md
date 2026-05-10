@@ -347,6 +347,7 @@ This section is the **canonical, single-in-scope source-of-truth** for every CI 
 | 10 | `consumes-frontmatter-resolves` | Active | §27 | `python3 linter-scripts/check-consumes-frontmatter.py --root spec --in-scope 22,23,24,25,26,27,28` | 0 = pass; 1 = any `consumes:` / `produced_for:` entry references a missing file/section | validate stage |
 | 11 | `cohort-naming-check` | Active | §27 | `python3 linter-scripts/check-cohort-naming.py --root spec --in-scope 22,23,24,25,26,27,28` | 0 = pass; 1 = any in-scope folder/file violates AC-COHORT-06 filename regex or slot-reservation rules; 2 = invocation error | validate stage |
 | 12 | `finding-status-enum-check` | Active | §27 | `python3 linter-scripts/check-finding-status-enum.py --root spec/25-app-issues` | 0 = pass; 1 = any `## F-NN` Status ∉ {Open, In progress, Resolved, De-scoped}; 2 = invocation error | validate stage |
+| 13 | `cohort-orphaned-finding` | Active | §27 | `python3 linter-scripts/check-cohort-orphaned-finding.py --root spec/25-app-issues --max-age-sessions 1` | 0 = pass; 1 = any `Carried-open` disposition-map row with `Last touched` >1 session ago AND no §22 backlog citation; 2 = invocation error | audit stage |
 
 **Deferred lint rules (declared by Wave-1/Wave-2 ACs; implementation pending).**
 
@@ -356,8 +357,9 @@ This section is the **canonical, single-in-scope source-of-truth** for every CI 
 | D2 | `finding-vs-audit-distinction-check` | A-03 (AC-COHORT-02, J-2) | §27 | §25 finding `Evidence` blocks MUST NOT cite runtime `AuditTrail` rows unless tagged `runtime-cite` | Markdown parser scoped to `## F-NN` sections |
 | D3 | `request-id-roundtrip-check` | A-03 (AC-COHORT-03, J-3) | §27 | `requestId` echoed across §23 emit → §22 HTTP header → §24 render → §22 AuditTrail (Critical only) | Integration test against §22 `20-observability.md` |
 | D4 | `no-raw-color-in-app-component` | A-03 (AC-COHORT-04, J-4) + A-05 (AC-ADS-16 rule 2) | §27 | §24 components MUST NOT inline-style colors; every error color resolves via `--app-error-*` token | AST scan of TSX/CSS in §24 component registry |
-| D5 | `cohort-orphaned-finding` | A-03 (AC-COHORT-05, J-5) | §27 | §25 `Carried-open` row >1 session without §22 backlog citation → dashboard slot 11 warning | §25 disposition-map row age check |
 | D7 | `derives-from-restate-check` | A-05 (§24 AC-ADS-16 T-04) | §27 | §24 paragraphs MUST NOT contain ≥3 8-token shingle matches with any §07 paragraph | 8-token shingle hash compare |
+
+> **D5 promoted to Active in A-18 (Session 38)** — moved to Active row #13 above. Fourth deferred→Active conversion (4/9). Input signal `Last touched` column was wired by A-10 (Sess 31, §25 disposition-map invariant 5); A-18 ships the gate that consumes it. Pure date-arithmetic on `Sess-NN` row stamps; no AST/integration-test dependency. Declaring AC §22 AC-COHORT-05 "deferred implementation" qualifier removed in same PR per backlog-discipline lockstep.
 
 > **D6 promoted to Active in A-17 (Session 37)** — moved to Active row #12 above. Third deferred→Active conversion (3/9). Markdown-parser implementation: scan `spec/25-app-issues/**/*.md` for `## F-NN` headings, parse Status field, validate against the 4-value enum (disposition-map row Status values explicitly excluded — they use `Carried-open`/`Closed`/`Archive-only` per A-10 contract). Declaring AC §25 AC-09 "deferred implementation" qualifier removed in same PR per backlog-discipline lockstep.
 
