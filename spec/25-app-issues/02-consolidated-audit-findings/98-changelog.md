@@ -1,7 +1,7 @@
 # Changelog — Consolidated Audit Findings — `git-logs` App Specification
 
-**Version:** 1.5.0  
-**Updated:** 2026-05-10 (Session 44 audit-task A-24 — lockstep tail sweep: stale "deferred implementation" / "implementation pending" / "implementation deferred" qualifiers updated in-place with shipped-status footnotes for D5 (gate #13, A-18), `finding-status-enum-check` (gate #12, A-17). Historical session bullets preserved verbatim; trailing parenthetical added.)  
+**Version:** 1.6.0  
+**Updated:** 2026-05-10 (Session 56 audit-task A-46 — `Last touched` column semantics extended from "last material edit" to `max(last material edit, last freshness verification)`; verification cadence ledger added; all 8 Carried-open rows bumped to Sess-56 via inaugural sweep; invariant 5 rewritten; eliminates latent D5 perma-fire failure mode. §25 R C4 Consistency 18→19.)  
 **Scope:** `spec/25-app-issues/02-consolidated-audit-findings/`
 
 ---
