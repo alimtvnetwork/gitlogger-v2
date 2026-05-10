@@ -1,8 +1,23 @@
 # Changelog — Consolidated Audit Findings — `git-logs` App Specification
 
-**Version:** 1.6.0  
-**Updated:** 2026-05-10 (Session 56 audit-task A-46 — `Last touched` column semantics extended from "last material edit" to `max(last material edit, last freshness verification)`; verification cadence ledger added; all 8 Carried-open rows bumped to Sess-56 via inaugural sweep; invariant 5 rewritten; eliminates latent D5 perma-fire failure mode. §25 R C4 Consistency 18→19.)  
+**Version:** 1.7.0  
+**Updated:** 2026-05-10 (Session 63 audit-task A-53 — appended Sess-63 sweep row to verification cadence ledger; §27 gate #21 `check-verification-ledger-cadence.py` shipped this session and load-proves invariant 5 end-to-end; §25 R C4 Consistency **19→20** — ceiling reached.)  
 **Scope:** `spec/25-app-issues/02-consolidated-audit-findings/`
+
+---
+
+### 1.7.0 — 2026-05-10 — Session 63 audit-task A-53: invariant 5 promoted to ceiling-band (R C4 19→20) via §27 gate #21
+- **Action**: Appended Sess-63 (A-53) sweep row to the **Verification cadence ledger** in `00-overview.md` (immediately below the inaugural Sess-56 row). Sweep verifies all 8 Carried-open rows (F-07, F-08, F-10, F-11, F-13, F-14, F-18, F-23) still apply with no material change since Sess-56; F-08/F-18/F-23 still pending F-02 cascade resolution; next due Sess-64. The new row's `Result` cell mechanically cites the §27 gate that just shipped: gate #21 re-ran live after the row was appended and turned green (drift 7→0).
+- **Why now**: §25 v1.6.0 (Sess-56) lifted R C4 from 18→19 by writing the rule but explicitly deferred the 20-band ceiling behind one named §27 gate ("Shipping a §27 gate `verification-ledger-cadence-check` that mechanically rejects sessions missing a ledger row when no material Carried-open edit occurred → C4 R 19→20"). A-53 ships exactly that gate (slot 38 / gate #21) AND honors its first cadence cycle in the same turn — the chain is end-to-end, not just contract-named.
+- **Self-enforcement chain (now load-proven)**: invariant 5 (rule) → cadence ledger (operational record, now 2 rows) → `Last touched` column (per-row state) → §27 gate #13 D5 (CI enforcement of staleness) → **NEW** §27 gate #21 (PR-time cadence check). Gate #21 surfaces drift one session earlier than D5, eliminating the latent "all 8 rows fire D5 simultaneously" failure mode flagged in v1.6.0 invalidation triggers.
+- **Lesson #36 preservation**: this row cites §27 slot 38 by anchor only; does not restate the gate's parser logic or exit codes. The contract lives in §27; the cadence record lives here.
+- **Scorecard delta**: §25 C4 Consistency **R 19→20** (ceiling reached: rule + per-row state + 2 enforcement mechanisms — gate #13 staleness + gate #21 cadence — with gate #21 named, shipped, self-tested, and live-proven this turn). Lovable + Cursor stay at 19 (already at ceiling on this criterion since Sess-56). §25 totals: **L 110 / C 112 / R 110** (was 110/112/109; Δ 0/0/+1). **Cohort R floor lifts from 109 → 110** — best per-point gain available this turn. Cohort R mean 111.6 → **111.7**.
+- **Invalidation triggers**: (a) Removing the Sess-63 sweep row without a Sess-64+ replacement → gate #21 will exit 1 next session for any current_session > 64, surfacing the violation at PR time. (b) Removing §27 gate #21 from `.github/workflows/spec-health.yml` → revert R C4 to 19. (c) Materially editing a Carried-open row in any session that does not also append a ledger row → both invariant 5 paths satisfied (material edit IS a valid alternative to the sweep), but the gate cannot tell the difference; mitigation lives in the changelog narrative for that session.
+
+---
+
+### 1.6.0 — 2026-05-10 — Session 56 audit-task A-46: `Last touched` dual-source semantics + verification cadence ledger (Raw-LLM C4 Consistency lift) [carried, see header for v1.7.0 promotion]
+**Scope-stub:** `spec/25-app-issues/02-consolidated-audit-findings/`
 
 ---
 
