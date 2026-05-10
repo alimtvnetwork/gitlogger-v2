@@ -1,7 +1,7 @@
 # Acceptance Criteria (v2)
 
-**Version:** 3.22.0  
-**Updated:** 2026-05-07 (Phase J15 — final J-series slot: new file `45-cli-test-plan.md` v1.0.0 + new **AC-87** `[critical]` binding 6 sub-contracts (two-layer L1+L2 architecture + closed 5-suite matrix T-CLI-IDENT/PTR/CLASSIFY/UPLOAD/AUTOFIX with min-case floors 7/9/11/13/12 = ≥52 L2 cases + per-suite GWT 1:1 to AC-82..AC-86 sub-sections + fixture taxonomy + L1≥85% line coverage + 100% GL-* negative-path + 100% ExitCode positive + CI binding to spec/12 AC-10 runner matrix + 6 forbidden patterns); AC-80 row 42 added. **J-series sextet AC-82..AC-87 contract-complete.** AC count 83 → 84 (+1 — AC-87). Lesson #36 septuple link-don't-restate to spec/22 §32/§33/§41/§42/§43/§44 + spec/13 AC-21/AC-22 + spec/12 AC-10. Closes inherited backlog J15.)
+**Version:** 3.23.0  
+**Updated:** 2026-05-10 (Session 59 audit-task A-49 — AC-78 §97 body restructured from single dense paragraph into A-44 GWT + 5-link self-enforcement template (Given/When/Then + Test invariant + Worked example + 5-link chain + Invalidation triggers). Adds 4-tuple byte-exact verification anchors `(04=406, 18=465, 34=311 lines, 01=14346 bytes)`, promotes Lesson #39 evidence triple from prose to normative obligation, pins deferred §27 gate `ac-78-false-positive-detector` as the load-prove executor for the chain. Mirror-pair structure now bytewise-aligned with AC-79/AC-80/AC-81. No new AC, no inventory delta. Prior: Phase J15 AC-87.)
 
 ---
 
