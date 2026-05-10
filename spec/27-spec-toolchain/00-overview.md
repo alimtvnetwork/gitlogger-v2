@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.4.0  
-**Updated:** 2026-05-10 (Session 52 audit-task A-32 — `linter-scripts/_lib/fixture_replay/` skeleton landed: `engine.py` + `schema_loader.py` + `exit_codes.py` + `__init__.py` re-exporting the public API per A-31 contract. Smoke-tested: `HarnessSetupError` → exit-code 3 path, positive shape match, negative missing-required-keys. New per-script doc `80-lib-fixture-replay.md` v1.0.0 added (NOT a gate — shared library; trace-map MAY include it as a leaf). Gate #15 self-enforcement extension is now LIVE — has actual `check-*.py` to scan once those scripts ship. Prior: Sess-51 A-31 contract.)
+**Version:** 4.5.0  
+**Updated:** 2026-05-10 (Session 55 audit-task A-43 — added slot 36 `check-ads-boundaries.py`, gate #19. Promotes §24 §97 AC-ADS-06/09/10 from contract-proven to load-proven via fixture-driven CI gate. Built-in `--self-test` rejects 3 negative-fixture corpora under `linter-scripts/fixtures/`. First §27 gate dedicated to a §24-side AC family.)
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
