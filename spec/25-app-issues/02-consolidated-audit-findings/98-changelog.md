@@ -1,7 +1,7 @@
 # Changelog — Consolidated Audit Findings — `git-logs` App Specification
 
-**Version:** 1.5.0  
-**Updated:** 2026-05-10 (Session 44 audit-task A-24 — lockstep tail sweep: stale "deferred implementation" / "implementation pending" / "implementation deferred" qualifiers updated in-place with shipped-status footnotes for D5 (gate #13, A-18), `finding-status-enum-check` (gate #12, A-17). Historical session bullets preserved verbatim; trailing parenthetical added.)  
+**Version:** 1.6.0  
+**Updated:** 2026-05-10 (Session 56 audit-task A-46 — `Last touched` column semantics extended from "last material edit" to `max(last material edit, last freshness verification)`; verification cadence ledger added; all 8 Carried-open rows bumped to Sess-56 via inaugural sweep; invariant 5 rewritten; eliminates latent D5 perma-fire failure mode. §25 R C4 Consistency 18→19.)  
 **Scope:** `spec/25-app-issues/02-consolidated-audit-findings/`
 
 ---
@@ -16,6 +16,16 @@
 ---
 
 ## Releases
+
+### 1.6.0 — 2026-05-10 — Session 56 audit-task A-46: `Last touched` dual-source semantics + verification cadence ledger (Raw-LLM C4 Consistency lift)
+- **Changed** `Last touched` column semantics in `00-overview.md` v1→v2 Finding Disposition Map: from "session of last material edit" to **`max(last material edit, last freshness verification)`**. Pre-amble paragraph rewritten; invariant 5 rewritten with the dual-source rule.
+- **Added** Verification cadence ledger immediately below the disposition table — append-only ledger with one row per freshness sweep (sweep session, rows verified, result, next due). Inaugural Sess-56 row recorded: all 8 Carried-open rows verified, all still apply, F-08/F-18/F-23 remain pending F-02 cascade resolution.
+- **Bumped** `Last touched` for all 8 Carried-open rows from `Sess-24` to **`Sess-56`** (F-07, F-08, F-10, F-11, F-13, F-14, F-18, F-23). Per-row `Notes` cell appended with `*Sess-56 freshness sweep: still applies [...]*` italic suffix recording the verification basis. Closed-by-§22, Irrelevant-in-v2, De-scoped, and Conditional rows untouched (D5 only consumes Carried-open rows).
+- **Why now**: Latent failure mode — the original Sess-24 seed-date drifted past D5's 1-session window in Sess-25, meaning every Carried-open row would perma-fire D5 in CI. The single-source semantics ("last material edit") could never produce a green run for stable-but-still-applicable findings. The dual-source rule (material edit OR verification sweep) restores a path to a clean D5 signal without forcing fake material edits.
+- **Self-enforcing chain**: invariant 5 (rule) → cadence ledger (operational record) → `Last touched` column (per-row state) → §27 gate #13 D5 (CI enforcement). All four links live in this folder + §27 — no cross-cohort coordination needed.
+- **Lesson #36 preservation**: D5 contract text not restated (cited by gate # + name only); no §22 ErrorEnvelope / RequestId shapes inlined; ledger is append-only operational record, not contract restatement.
+- **Scorecard delta**: §25 C4 Consistency **R 18→19** (Lovable + Cursor stay at 19 — already at "consistent rule + ≥1 enforcement mechanism" band; ceiling 20 requires §27 gate that mechanically verifies ledger append cadence, deferred). §25 totals: **L 110 / C 112 / R 109** (was 110/112/108; Δ 0/0/+1). **Cohort no longer has a sole Raw-LLM floor below 109** — §25 R109 now ties §23 R109 / §26 R109 / §28 R109. Cohort R mean: 111.4 → **111.6** (+0.2).
+- **Invalidation triggers**: (a) Removing the verification ledger or reverting invariant 5 → revert R C4 to 18. (b) Failing to append a ledger row in any session that does not materially edit a Carried-open row → D5 fires next session for all 8 rows (correct behavior; documents the rule). (c) Shipping a §27 gate `verification-ledger-cadence-check` that mechanically rejects sessions missing a ledger row when no material Carried-open edit occurred → C4 R 19→20.
 
 ### 1.4.0 — 2026-05-10 — Session 31 Task A-10: Disposition-map `Last touched` column wires D5
 - **Added** `Last touched` column to the v1→v2 Finding Disposition Map (`00-overview.md` §"v1→v2 Finding Disposition Map"); all 24 rows seeded at `Sess-24` (the section's creation session).
