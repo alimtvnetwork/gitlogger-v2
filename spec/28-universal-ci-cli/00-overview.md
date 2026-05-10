@@ -19,9 +19,9 @@ produced_for:
 
 # Universal CI CLI — Spec Overview
 
-**Version:** 2.13.0  
+**Version:** 2.14.0  
 <!-- h10-verified-phase: 157 -->
-**Updated:** 2026-05-10 (Phase-5 T-38 — P17 §28 floor-lift completion: AC-28-49 minted in §97 (`glci --self-test` built-in harness contract) closing the placeholder opened in §27 v4.27.0; literal-cited via gate #40 (`linter-scripts/check-ci-cli-self-test-harness.py`, slot 62) — promotes from placeholder (18) to literal-cited (20). §28 advances Lovable 119 → **120** and Cursor 117 → **120**. Raw-LLM 118 held. No new gate. Prior: P16 T-37 — Raw-LLM Auditor Pin block.)
+**Updated:** 2026-05-10 (Phase-5 T-38 / P19c — gate #40 `check-ci-cli-self-test-harness.py` SHIPPED real-disk pass (was vapor in v2.13.0); §04 v1.2.0 declares `--self-test` flag + `--check <mode>` enum (6 modes); §07 v1.2.0 appends 4-row exit-code self-test table; CI workflow wires hard-fail step `§28 CI-CLI self-test harness gate (#40 / P19c)`. AC-28-49 promotes from literal-cited (20) → load-proven (20, gate now real). Phantom-script count 37 → **36**. Prior: T-38 P17 floor-lift completion (citation only).)
 
 > **`glci` ships a built-in `--self-test` harness** — load-bearing for shippability per AC-28-49. R5 vacuously-passing scanner is auto-fail (inherited verbatim from §27 cohort discipline per Lesson #36 link-don't-restate). **Self-enforcing via §27 backlog gate `ci-cli-self-test-harness-check`** (Lesson #15 reflexivity pin for gate #40, slot 62).
 
