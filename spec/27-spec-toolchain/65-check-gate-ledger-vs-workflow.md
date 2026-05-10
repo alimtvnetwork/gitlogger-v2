@@ -39,28 +39,34 @@ Carve-outs: none. Reflexively, this very file is subject to I-1/I-2/I-3 — the 
 
 ## Exit-code contract
 
+Exit codes: `0` pass · `1` violation (I-1 EXISTS — phantom script cited) · `2` invocation error (also: I-2 WIRED — active gate not in workflow) · `3` fixture-rot (also: I-3 NUMBERED — duplicate or large gap in gate numbers) · `99` FATAL — `spec/27-spec-toolchain/` or workflow file not found.
+
 | Exit | Meaning                                                              |
 |------|----------------------------------------------------------------------|
-| 0    | All three invariants pass.                                           |
-| 1    | I-1 EXISTS failure (phantom script cited).                           |
-| 2    | I-2 WIRED failure (active gate not in workflow).                     |
-| 3    | I-3 NUMBERED failure (duplicate or large gap in gate numbers).       |
-| 99   | FATAL — `spec/27-spec-toolchain/` or workflow file not found.        |
+| `0`  | pass — all three invariants hold.                                    |
+| `1`  | violation — I-1 EXISTS failure (phantom script cited).               |
+| `2`  | invocation error — I-2 WIRED failure (active gate not in workflow).  |
+| `3`  | fixture-rot — I-3 NUMBERED failure (duplicate or large gap in gate numbers) OR self-test fixture corpus drift. |
+| `99` | FATAL — `spec/27-spec-toolchain/` or workflow file not found.        |
 
 When multiple invariants fail simultaneously, the script surfaces the most-severe (lowest-numbered) failing exit code.
+
+## R5 — vacuously-passing scanner is auto-fail
+
+A run that finds zero slot docs, zero citations, or an empty workflow file is **itself a violation** (`vacuous-pass: empty corpus → exit 3 fixture-rot`). The `--self-test` mode is mandatory in CI: it asserts the scanner REJECTS six synthetic fixtures rather than silently passing on absence.
 
 ---
 
 ## Self-test fixtures (6)
 
-| ID  | Name                | Setup                                                              | Expected exit |
-|-----|---------------------|--------------------------------------------------------------------|---------------|
-| F-1 | clean               | 1 active gate, script exists, wired                                | 0             |
-| F-2 | phantom-cite        | Slot doc references a script that doesn't exist                    | 1             |
-| F-3 | unwired             | Active gate marker present; script exists; NOT in workflow         | 2             |
-| F-4 | duplicate-numbers   | Two slot docs both claim `Active gate #1`                          | 3             |
-| F-5 | small-gap-ok        | Gate #1 + Gate #3 (gap of 1) — passes                              | 0             |
-| F-6 | happy-multi         | 2 active gates, both scripts exist, both wired                     | 0             |
+| ID       | Name                | Setup                                                              | Expected exit |
+|----------|---------------------|--------------------------------------------------------------------|---------------|
+| **F-1**  | clean               | 1 active gate, script exists, wired                                | 0             |
+| **F-2**  | phantom-cite        | Slot doc references a script that doesn't exist                    | 1             |
+| **F-3**  | unwired             | Active gate marker present; script exists; NOT in workflow         | 2             |
+| **F-4**  | duplicate-numbers   | Two slot docs both claim `Active gate #1`                          | 3             |
+| **F-5**  | small-gap-ok        | Gate #1 + Gate #3 (gap of 1) — passes                              | 0             |
+| **F-6**  | happy-multi         | 2 active gates, both scripts exist, both wired                     | 0             |
 
 Self-test runs in-memory using `tempfile.TemporaryDirectory()`; no disk mutation outside `/tmp`.
 
