@@ -1,3 +1,12 @@
+%% Diagram type: erDiagram (entity-relationship)
+%% What this answers: "What entities live in the root SQLite DB, what are
+%%   their PK/FK relationships, and where is the boundary between root-DB
+%%   tables and the per-SHA log files referenced via ShaRegistry?"
+%% Authoritative source: spec/22-git-logs-v2/02-database-schema.md + 18-schema.sql
+%%   + 39-split-db-log-storage.md (per-SHA boundary).
+%% Audience: schema implementers (PHP plugin authors); auditors verifying §22 ER drift.
+%% Entry point: read spec/22 §02 first for table definitions; this diagram is the
+%%   visual canon for the relationships. Re-render via mmdc; pair-rule per GLD-001.
 %% v3.8.5 — Phase 4 re-render. Split-DB boundary: every entity below lives in the ROOT DB
 %% (wp-content/uploads/git-logs/git-logs.sqlite). LogEntry / ErrorLogEntry no longer exist;
 %% log lines live in per-SHA files at <ShaLogsRoot>/<aa>/<sha>.db (see §39). The ShaRegistry
