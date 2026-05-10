@@ -1,11 +1,14 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.32.0
-**Updated:** 2026-05-10 (Phase-5 T-38 — P17 §28 floor-lift completion; AC-28-49 minted in §28 §97 closing the placeholder; literal-cited via gate #40; §28 reaches L120/C120 ceiling)
+**Version:** 4.33.0
+**Updated:** 2026-05-10 (Phase-5 T-39 — P18 §24 floor-lift; AC-ADS-17 minted in §24 §97 (no-DDL boundary closure); literal-cited via gate #36; §24 reaches L120/C120 ceiling)
 **Scope:** `spec/27-spec-toolchain/`
 
-### 4.32.0 — 2026-05-10 — Phase-5 T-38: P17 §28 floor-lift completion (AC-28-49 minted, literal-cited via gate #40)
-- **Action**: §28 §97 minted `### AC-28-49 — \`glci --self-test\` built-in harness contract (Normative)  \`[high]\`` directly after AC-28-48 under new section `## Phase-5 T-38 — Self-test harness contract closure (P17 §28 floor-lift)`. AC body declares the 4 semantic markers for `glci --self-test` flag (`built-in` + `no network` + `no real CI provider` + `no real git repo`), ≥6-fixture coverage, 4-row exit-code contract, R5 inheritance literal, Lesson #15 self-citation. AC-28-49 carries inline `**Mechanically enforced by:**` clause naming `linter-scripts/check-ci-cli-self-test-harness.py` (gate #40, slot 62, all 6 clauses) — promotes from placeholder (18) to literal-cited (20) per Rubric v2 18-20 band anchor. Ships 6 canonical-shape fixture rows F-1..F-6 inline.
+### 4.33.0 — 2026-05-10 — Phase-5 T-39: P18 §24 floor-lift (AC-ADS-17 minted, literal-cited via gate #36)
+- **Action**: §24 §97 minted `### AC-ADS-17 — §24 folder owns ZERO DDL surface — single-source-of-truth for App-side DDL is §23  \`[critical]\`` directly after AC-CAF-05 under new section `## Acceptance Criteria — Boundary Closure (Phase-5 T-39 — P18 §24 floor-lift)`. AC body declares 6 no-DDL invariants (no SQL fences, no bare DDL keywords in prose, column names allowed in render-binding tables, routing-pin required when removing DDL, §28 cohort gate parity, scope-lock to §24 only) and ships 6 fixture rows F-1..F-6 with 6 test invariants T-ADS-17-01..06. AC-ADS-17 carries inline `**Mechanically enforced by:**` clause naming `linter-scripts/check-no-sql-ddl-in-ui-folder.py` (gate #36, slot 58, all 6 invariants) — promotes from carried (118 Lovable / 116 Cursor) to literal-cited (120/120) per Rubric v2 18-20 band anchor. Closes audit-task A-55 / Phase-5 T-03 routing-pin loop reflexively (the routing pin is now AC-bound, not just prose).
+- **Scorecard impact**: §24 Lovable 118 → **120** (+2), Cursor 116 → **120** (+4), Raw-LLM 118 → **118** (held — Raw-LLM cohort floor lift deferred to P19 sweep). §24 reaches Lovable + Cursor ceiling. Triple-ceiling roster unchanged (only §27 at 120/120/120). Cohort floor lifts to L120/C120/R118 across §24/§26/§28 (3 of 7 folders); §22/§23/§25 still hold prior carried scores.
+
+
 - **Why this now**: Closes the AC-28-49 placeholder opened in §27 v4.27.0 (gate #40 / slot 62 ship at T-33). Per cohort discipline, floor-lift gates ship before their target-folder ACs are minted; mirror of P14 §26 final lift (AC-DG-01/02/06 literal-cited via gate #41 at T-35).
 - **Scorecard impact** (carry-forward §28 Lovable 119 / Cursor 117 / Raw-LLM 118 → updated):
   - §28 Lovable: 119 → **120** (+1 — C5 literal-cited gate binding inline in AC body)
