@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 2.97.0  
-**Updated:** 2026-05-10 (Session 31 audit-task A-09 — added "External invoker binding" paragraph to `## CI Gate Enumeration`: §28 declared sole canonical external invoker of all 9 Active gates; deferred rules D1..D9 gated behind same-PR Active promotion. Prior: Sess-30 A-08 enumeration.)
+**Version:** 2.98.0  
+**Updated:** 2026-05-10 (Session 35 audit-task A-15 — D9 `consumes-frontmatter-resolves` promoted from Deferred → Active as gate #10. First deferred→Active conversion (1/9 shipped). Trigger: full cohort `consumes:` / `produced_for:` coverage from A-09/A-11/A-12/A-14. Active gate count 9 → 10; deferred backlog 9 → 8. Prior: Sess-31 A-09 external-invoker binding.)
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
