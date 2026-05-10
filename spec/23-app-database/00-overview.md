@@ -4,7 +4,22 @@ description: App-specific database tables (App, AppLink, AppStatus, AppLinkType)
 content_axis: normative-contract
 axis_rationale: "App tables + AppLink polymorphic resolution rules"
 consumes:
-  - spec/22-git-logs-v2 §97 AC-23  # PascalCase + AUTOINCREMENT PK + CHECK-constraint catalog (schema-drift gate; A-07 cross-flag, Sess-29)
+  # A-14 (Session 34) — completes the binding-graph coverage on the consumer side.
+  # Mirror of §26→§22 (A-11) and §28→§27 (A-09) consumer-binding pattern.
+  # Each row is the canonical §22 source-of-truth for the named contract; drift between
+  # §23 and any cited section trips deferred lint §27 D9 `consumes-frontmatter-resolves`.
+  - source: spec/22-git-logs-v2 §97 AC-23
+    contract: PascalCase + AUTOINCREMENT PK + CHECK-constraint catalog (schema-drift gate; A-07 cross-flag, Sess-29)
+  - source: spec/22-git-logs-v2/02-database-schema.md
+    contract: ER baseline + ShaRegistry split-DB boundary — §23 App/AppLink tables MUST attach via the documented FK pattern (no schema-shape restatement; Lesson #36)
+  - source: spec/22-git-logs-v2/05-auth-tempttoken.md
+    contract: TempToken Lane A — App.AuthMode='tempttoken' rows MUST cite the validation-order invariants here, never restate
+  - source: spec/22-git-logs-v2/31-ssh-key-auth.md
+    contract: SSH-Key Lane B — App.AuthMode='ssh' rows MUST cite the 10-step validation order + GL-SSH-*/GL-AUTH-*/GL-APP-* reject codes verbatim from §22/§31
+  - source: spec/22-git-logs-v2/15-error-codes.md
+    contract: GL-* error-code namespace — §23 MUST NOT mint App-specific codes outside this catalog (use ADS-* only when §22 has no equivalent)
+  - source: spec/22-git-logs-v2/19-permission-matrix.md
+    contract: Profile→Role→Permission union — App access checks resolve through this matrix; no parallel ACL table in §23
 ---
 
 # App Database
