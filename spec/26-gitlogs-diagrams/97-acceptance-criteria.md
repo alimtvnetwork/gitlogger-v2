@@ -199,6 +199,21 @@ GL_REJECT_CODE_FORMAT:     GL-{CATEGORY}-{NAME} (e.g. GL-AUTH-INVALID-TOKEN)
 
 ---
 
+### AC-DG-23 — Every `.mmd` source MUST begin with a 4-line narrative header block
+
+- **Given** any `.mmd` source file under `spec/26-gitlogs-diagrams/` (any depth, any slot),
+- **When** parsed line-by-line **before** the first non-comment Mermaid directive (`flowchart`, `erDiagram`, `sequenceDiagram`, `mindmap`, etc.),
+- **Then** the file MUST contain, in this exact order, four `%%`-prefixed comment lines as the first four non-blank lines:
+  1. `%% Diagram type: <flowchart TD|erDiagram|sequenceDiagram|mindmap|...>` — exact Mermaid directive name; MUST match the directive that follows.
+  2. `%% What this answers: <one-sentence reader question>` — ≤120 chars.
+  3. `%% Source spec: <relative path to the §22 file this diagram depicts>` — MUST resolve from repo root; for multi-source diagrams, list the primary first followed by `(+ N more)`.
+  4. `%% Audience: <diagram-authors|spec-readers|implementers|auditors>` — single token from the enum.
+- Optional 5th line `%% Re-render: mmdc -i <self> -o <self.svg> -p puppeteer.json -b transparent` MAY be present (recommended for ER + mindmap diagrams).
+- Blank lines between the header block and the directive are permitted. Comment lines that violate the order, omit any of the 4 keys, or use non-canonical key spelling (e.g. `%% Type:` instead of `%% Diagram type:`) MUST fail this AC.
+- **Verifies:** §26 `00-overview.md` "AI Implementer Quickstart" rule #2 (lifts the advisory rule to an enforceable contract); pins the canonical 4-key schema previously implicit across AC-DG-05 (type+intent) and AC-DG-19 (changelog binding); closes the F-07 advisory-vs-enforceable gap surfaced in the Session 9 scorecard.
+
+---
+
 ## Legacy Index (preserved for traceability)
 
 The following table-row criteria from v2.0.0 are preserved verbatim. They are NO LONGER authoritative — the GWT ACs above supersede them.
