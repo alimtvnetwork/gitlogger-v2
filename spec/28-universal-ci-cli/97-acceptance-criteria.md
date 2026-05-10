@@ -485,3 +485,21 @@ The following 12 ACs close the four error codes flagged "v1.1 deferred" in `99-c
 - Treating 502 as 4xx-class and aborting on attempt 1 (violates §06 5xx-is-transient).
 - Issuing a 5th retry beyond `max_retries`.
 - Producing two logical phase records server-side because of the prior 502s (idempotency violation — server keys on `(repo, sha, phase)` not on attempt count).
+
+---
+
+## Test Invariant Index (T-28-NN) — machine-checkable stubs (Sess-56 A-47)
+
+> Per-AC test stubs translating Given/When/Then prose into a fixture path, a runner invocation, and a single-line pass criterion. T-NN IDs are stable; adding a row is **append-only** within a phase. Inaugural set covers 5 ACs spanning the highest-risk surfaces (subprocess, network, streaming, deadline). Subsequent phases extend coverage AC-by-AC; an AC without a T-NN row is NOT load-proven and remains contract-proven only. The §27 toolchain `ac-test-invariant-coverage-check` gate (deferred — slot TBD) will mechanically reject §97 PRs that add a new AC without an accompanying T-NN row.
+
+| T-NN | Verifies AC | Fixture / harness | Runner invocation | Pass criterion |
+|---|---|---|---|---|
+| **T-28-29** | AC-28-29 (`GLCI-EXEC-RUNNER-CRASHED`) | `linter-scripts/fixtures/glci-exec-runner-crashed/` — wrapper script that `kill -9 $$` mid-phase | `glci ts-test --fixture <path> --json` | exit code = `1` AND stderr JSON `ErrorCode == "GLCI-EXEC-RUNNER-CRASHED"` AND `Signal` field present (e.g. `SIGKILL`) |
+| **T-28-30** | AC-28-30 (`GLCI-EXEC-TIMEOUT`) | `linter-scripts/fixtures/glci-exec-timeout/` — `sleep 600` runner; phase wall-clock cap forced to `2000 ms` via `--phase-timeout-ms=2000` | `glci ts-test --fixture <path> --phase-timeout-ms=2000` | exit code = `1` AND `ErrorCode == "GLCI-EXEC-TIMEOUT"` AND elapsed wall-clock `< 3000 ms` (cap + grace) |
+| **T-28-31** | AC-28-31 (`GLCI-PUSH-STREAM-BROKEN` recovery) | `linter-scripts/fixtures/glci-push-stream-broken/` — mock server that closes the chunked NDJSON stream after 3 frames | `glci ts-test --stream --server <mock-url>` | First request completes with `EOF` mid-stream; CLI MUST automatically fall back to **batched** mode and re-POST the un-acked frames; final exit code = `0` AND server receives both the truncated stream AND the full batched payload (frame de-dup is server-side per AC-28-23 idempotency) |
+| **T-28-36** | AC-28-36 (streaming buffer cap drops oldest with audit log) | `linter-scripts/fixtures/glci-stream-buffer-overflow/` — runner emits 50 000 NDJSON frames at 100×buffer rate; buffer cap forced to `1024` frames | `glci ts-test --stream --buffer-cap=1024` | `BufferDroppedCount > 0` field surfaces in final batched/stream-end summary AND audit log line `audit: dropped <N> oldest frames (buffer cap=1024)` written to stderr AND exit code = `0` (drop is non-fatal by contract) |
+| **T-28-48** | AC-28-48 (per-request timeout + total wall-clock deadline) | `linter-scripts/fixtures/glci-push-deadline-exceeded/` — mock server that sleeps `60 000 ms` per request; CLI configured with `push.request_timeout_ms=5000` + `push.total_deadline_ms=15000` | `glci ts-test --server <mock-url> --config <fixture>/glci.toml` | Each attempt aborts at ~5 000 ms (request timeout) AND total elapsed wall-clock `< 16 000 ms` (deadline + grace) AND exit code = `4` AND `ErrorCode == "GLCI-PUSH-DEADLINE-EXCEEDED"` (NOT `GLCI-PUSH-RETRIES-EXHAUSTED` — discriminates the two §AC-28-48 termination triggers) |
+
+**Self-enforcement chain (T-NN → AC → fixture → runner → CI):** Each row is the 5-link chain in one cell. Fixtures live under `linter-scripts/fixtures/<glci-...>/` per the §24 A-43 pattern. The §27 deferred gate `ac-test-invariant-coverage-check` will scan §97 ACs vs T-NN rows and fail any §97 PR that adds an AC without a corresponding T-NN row (or marks it `tier: contract-proven` with an explicit waiver block). Until that gate ships, T-NN rows are advisory but normative — an implementer auditing AC-28-29..AC-28-48 MUST consult this index for the canonical pass criterion (the GWT prose alone is non-machine-checkable).
+
+**Lesson #36 preservation:** T-NN rows cite AC IDs + fixture paths + ErrorCode strings only; they do NOT restate the AC's Given/When/Then bodies. The fixture corpora are the load-proven surface; the AC remains the contract-proven surface; the T-NN row is the pointer between them.
