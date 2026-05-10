@@ -255,10 +255,9 @@ detectable. New CAF entries MUST be co-introduced with a §27 backlog gate.
 **Given** a §25 audit finding contains an apparent App-layer claim (DDL, AC-ID, file path),  
 **When** an AI walker reads the finding in partial context,  
 **Then** the walker MUST treat the string as **auditor-quoted evidence** of the audited corpus (`spec/_archive/21-git-logs-v1/`), NOT as a §25-owned spec contract. §25 AC-AI-10/11 codify this disambiguation at the §25 surface; AC-CAF-05 lifts it to cross-cutting status so §23 + §24 walkers also apply the rule. Self-enforcing via §25 AC-AI-10/11 + §27 backlog gate `audit-quoted-evidence-marker-check` (NEW from T-12) + scope-lock memory clause.
+## Cross-References
 
 
-
-- [Module overview](./00-overview.md)
 - [Module changelog](./98-changelog.md)
 - [Module consistency report](./99-consistency-report.md)
 - [§07 Design System (canonical primitives)](../07-design-system/00-overview.md)
