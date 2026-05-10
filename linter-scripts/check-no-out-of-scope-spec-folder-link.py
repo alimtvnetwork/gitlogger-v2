@@ -244,6 +244,8 @@ def _resolve_href_to_spec(source_path: Path, href: str) -> str:
 def clause_no_md_links(surf: Surface) -> list[str]:
     errs: list[str] = []
     for path, text in surf.files:
+        if _is_structurally_exempt(path):
+            continue
         prose, _ = _strip_fences(text)
         for i, raw_line in enumerate(prose.splitlines(), 1):
             for href in MD_LINK_RE.findall(raw_line):
