@@ -1,8 +1,8 @@
 # Acceptance Criteria — 23 App Database
 
-**Version:** 3.5.0
-**Updated:** 2026-05-10 (Session 23 audit-task A-01 — added **AC-ADB-18** `[critical]` §22 operational-pattern inheritance: ErrorEnvelope shape (§22 AC-30) + AuditTrail row (§22 AC-21) + sink-side observability rule (§22 AC-04) + schema-drift three-surface invariant (§22 AC-23) inherited by namespace extension (`GL-*` → `ADB-*`). Closes Phase 4 forced guesses G23-4 (App-link resolution had no transport-layer error binding) + G23-5 (no audit-trail event contract). AC count 17 → 18; lifts §23 Implementability ceiling for blind-AI-execution test by binding the previously-implicit operational story to in-scope §22.)
-**Updated-prev:** 2026-05-06 (Phase 154 C-Sweep — added **AC-ADB-17** `[critical]` Cross-Module Externalized Citation Map per Lessons #36 + #37; explicit normative anchor table for 5 externalized citations: spec/05 (split-DB pattern), spec/13 §97 AC-22 (SQLite locking), spec/22 (entity DDL), spec/02 (naming conventions), spec/27 (script gates). Each row pins owning-AC + cite-source-file + purpose + restate-forbidden flag. Mirror of spec/22 AC-79 pattern. AC count 16 → 17.)
+**Version:** 3.6.0
+**Updated:** 2026-05-10 (Session 60 audit-task A-50 — restructured **AC-ADB-05** + **AC-ADB-06** into the A-44 5-link self-enforcement template: byte-exact source-of-truth pin, constraint pin, cross-AC pin, algorithm/index pin, CI-gate pin (deferred §27 gates `applink-xor-check-clause-present` + `applink-disconnect-check-clause-present`); Lesson #39 evidence triple promoted to normative auditor obligation; explicit invalidation triggers inline. AC count unchanged (18). Lifts §23 Raw-LLM C3 Testability 18→19.)
+**Updated-prev:** 2026-05-10 (Session 23 audit-task A-01 — added **AC-ADB-18** `[critical]` §22 operational-pattern inheritance: ErrorEnvelope shape (§22 AC-30) + AuditTrail row (§22 AC-21) + sink-side observability rule (§22 AC-04) + schema-drift three-surface invariant (§22 AC-23) inherited by namespace extension (`GL-*` → `ADB-*`). AC count 17 → 18.)
 **Scope:** `spec/23-app-database/`
 **Generated:** Hand-authored alongside the v4.0.0 overview (Phase 39a). Supersedes the auto-extracted v2.0.0 set.
 
@@ -70,17 +70,33 @@ Defines the App, AppLink, AppStatus, and AppLinkType tables — the polymorphic-
 - **Then** Exit code MUST be `0`. Any non-zero exit blocks merge.
 - **Verifies:** `00-overview.md` § Verification
 
-### AC-ADB-05: AppLink XOR target invariant  `[critical]`
-- **Given** An `INSERT` into `AppLink` with `AppLinkType.Name = 'Repo'`.
-- **When** The CHECK constraint is evaluated by SQLite.
-- **Then** The insert MUST succeed only if `TargetRepoId IS NOT NULL AND TargetGitProfileId IS NULL`. The symmetric rule applies when `Name = 'GitProfile'`.
-- **Verifies:** DDL `CHECK` clause for `AppLink` in `00-overview.md`
+### AC-ADB-05: AppLink XOR target invariant  `[critical]`  *(A-44 5-link self-enforcement template — Sess-60 A-50)*
+- **Given** An `INSERT` into `AppLink` with `AppLinkTypeId = (SELECT AppLinkTypeId FROM AppLinkType WHERE Name = 'Repo')`, OR symmetrically with `Name = 'GitProfile'`.
+- **When** SQLite evaluates the table-level `CHECK` clause defined in `00-overview.md` lines 159–166 (`AppLink` DDL block at lines 144–172).
+- **Then** The insert MUST succeed iff exactly one of `TargetRepoId` / `TargetGitProfileId` is non-NULL and matches the discriminator (Repo→`TargetRepoId NOT NULL AND TargetGitProfileId IS NULL`; GitProfile→symmetric). All other shapes (both NULL, both NOT NULL, mismatched discriminator) MUST fail with SQLite error `CHECK constraint failed: AppLink`.
+- **5-link self-enforcement chain:**
+  1. **Source-of-truth pin** — DDL block `AppLink` at `spec/23-app-database/00-overview.md` lines 144–172 (file 30775 bytes / 672 lines as of Sess-60).
+  2. **Constraint pin** — `CHECK (...)` clause at `00-overview.md` lines 159–166 (the XOR enforcer).
+  3. **Discriminator seed pin** — `INSERT OR IGNORE INTO AppLinkType(Name) VALUES ('GitProfile'), ('Repo');` at `00-overview.md` line 185 (cross-checked by AC-ADB-09).
+  4. **Resolution-algorithm pin** — `## Polymorphic AppLink Resolution (Normative)` at `00-overview.md` line 190 ff. (cross-verified by AC-ADB-14, WE-01).
+  5. **CI-gate pin** — `linter-scripts/check-spec22-inventory.py` (§27 slot 37) MUST keep `00-overview.md` present + non-empty; the deferred §27 gate `applink-xor-check-clause-present` (FUTURE — see §27 backlog) re-greps lines 159–166 for the `CHECK (...)` token. Removing or weakening either constituent breaks the chain.
+- **Evidence triple obligation** (Lesson #39): auditors MUST capture (a) `wc -l spec/23-app-database/00-overview.md` (expect 672 ±2), (b) `sed -n '159,166p' spec/23-app-database/00-overview.md` (expect the literal CHECK clause), (c) `grep -nE "TargetRepoId IS NOT NULL AND TargetGitProfileId IS NULL" spec/23-app-database/00-overview.md` (expect ≥1 match in the cited range).
+- **Invalidation triggers:** (i) `00-overview.md` line count drifts >±2 without re-pinning here; (ii) the XOR `CHECK` clause is removed, weakened, or moved outside lines 144–172; (iii) `AppLinkType` seed loses 'GitProfile' or 'Repo'; (iv) AC-ADB-14 resolution algorithm decoupled from the discriminator.
+- **Verifies:** DDL `CHECK` clause for `AppLink` in `00-overview.md` (lines 159–166).
 
-### AC-ADB-06: AppLink disconnect-timestamp invariant  `[high]`
-- **Given** Any row in `AppLink`.
-- **When** The row is inserted or updated.
-- **Then** `IsActive = 1` MUST imply `DisconnectedAt IS NULL`; `IsActive = 0` MUST imply `DisconnectedAt IS NOT NULL`.
-- **Verifies:** DDL `CHECK` clause for `AppLink` in `00-overview.md`
+### AC-ADB-06: AppLink disconnect-timestamp invariant  `[high]`  *(A-44 5-link self-enforcement template — Sess-60 A-50)*
+- **Given** Any row in `AppLink` undergoing `INSERT` or `UPDATE`.
+- **When** SQLite evaluates the second table-level `CHECK` clause defined in `00-overview.md` lines 168–171 (`AppLink` DDL block at lines 144–172).
+- **Then** `IsActive = 1` MUST imply `DisconnectedAt IS NULL`; `IsActive = 0` MUST imply `DisconnectedAt IS NOT NULL`. Any other combination MUST fail with `CHECK constraint failed: AppLink`.
+- **5-link self-enforcement chain:**
+  1. **Source-of-truth pin** — `AppLink` DDL at `spec/23-app-database/00-overview.md` lines 144–172.
+  2. **Constraint pin** — second `CHECK (...)` clause at `00-overview.md` lines 168–171 (the lifecycle-state enforcer).
+  3. **Lifecycle-rule pin** — Q3 reconnect rule cited by AC-ADB-07 (`00-overview.md` § "Q3 — Reconnect"): a NEW row is inserted on reconnect, never flipping `IsActive` back to 1; this guarantees the CHECK is never required to migrate state in-place.
+  4. **Index pin** — partial `IX_AppLink_Active ON AppLink(AppId, IsActive)` at `00-overview.md` line 178 (the active-set query path that depends on this invariant).
+  5. **CI-gate pin** — `linter-scripts/check-spec22-inventory.py` keeps the file present; deferred §27 gate `applink-disconnect-check-clause-present` (FUTURE — see §27 backlog) re-greps lines 168–171.
+- **Evidence triple obligation** (Lesson #39): (a) `wc -l spec/23-app-database/00-overview.md` (expect 672 ±2), (b) `sed -n '168,171p' spec/23-app-database/00-overview.md`, (c) `grep -nE "IsActive\s*=\s*1.*DisconnectedAt IS NULL|IsActive\s*=\s*0.*DisconnectedAt IS NOT NULL" spec/23-app-database/00-overview.md` (expect ≥1).
+- **Invalidation triggers:** (i) line drift >±2; (ii) clause removed or weakened; (iii) AC-ADB-07 reconnect rule weakened to in-place flip; (iv) `IX_AppLink_Active` dropped without ledger entry.
+- **Verifies:** DDL `CHECK` clause for `AppLink` in `00-overview.md` (lines 168–171).
 
 ### AC-ADB-07: Reconnect inserts a new row  `[medium]`
 - **Given** An AppLink row that was previously soft-disconnected (`IsActive = 0`).
