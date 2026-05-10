@@ -628,6 +628,31 @@ jobs:
         run: |
           python3 linter-scripts/check-ac-section-orphan-header.py --self-test
           python3 linter-scripts/check-ac-section-orphan-header.py
+
+      - name: §97 AC-prefix contract gate (#29 / T-22)
+        # Phase-5 T-22 / Slot 48 — closes §27 backlog ticket
+        # `ac-prefix-contract-check` (T-14, second-oldest un-shipped
+        # structural-hygiene entry). Cross-file complement to slot 47
+        # (gate #28). Walks the seven §97 files + every §00/§98/§99
+        # under each in-scope folder and asserts five clauses:
+        # clause-1 owner-folder (every `### AC-…` matches its folder's
+        # owned-root set per the slot 48 ownership map),
+        # clause-2 no-cross-folder-collision (every non-bare AC-ID
+        # globally unique across §97 files), clause-3
+        # bare-numeric-partition (no NEW bare-`AC-NN` collision among
+        # §22/§25/§26 outside the T-22 grandfathered baseline of
+        # 13 IDs `{1..8, 22..26}`), clause-4 no-foreign-in-meta
+        # (§00/§98/§99 MUST NOT declare a `### AC-…` header whose
+        # prefix isn't owned by that folder), clause-5
+        # ownership-map-round-trip (every prefix-root present on disk
+        # MUST appear in the script's KNOWN_ROOTS table — closes the
+        # silent-prefix-mint escape hatch). Same exit-code contract as
+        # gates #22..#35: 0/1/2/3. R5 vacuous-pass: zero §97 files OR
+        # zero AC headers parsed → exit 1.
+        # Spec: spec/27-spec-toolchain/48-check-ac-prefix-contract.md
+        run: |
+          python3 linter-scripts/check-ac-prefix-contract.py --self-test
+          python3 linter-scripts/check-ac-prefix-contract.py
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
