@@ -132,6 +132,8 @@ This file is the **single source of truth** for the App table family. Cross-refe
 
 ### DDL — Lookup tables
 
+**PRIMARY lane (SQLite — MATERIALISE):**
+
 ```sql
 -- AppStatus: Active / Disabled / Archived
 CREATE TABLE IF NOT EXISTS AppStatus (
@@ -147,6 +149,8 @@ CREATE TABLE IF NOT EXISTS AppLinkType (
 ```
 
 ### DDL — App
+
+**PRIMARY lane (SQLite — MATERIALISE):**
 
 ```sql
 CREATE TABLE IF NOT EXISTS App (
@@ -167,6 +171,8 @@ CREATE INDEX IF NOT EXISTS IX_App_AppStatusId ON App(AppStatusId);
 ```
 
 ### DDL — AppLink (polymorphic)
+
+**PRIMARY lane (SQLite — MATERIALISE):**
 
 ```sql
 CREATE TABLE IF NOT EXISTS AppLink (
@@ -317,6 +323,8 @@ Implementers MUST NOT:
 
 ### Q1 — Resolve App from inbound RepoUrl (push attribution)
 
+**PRIMARY lane (SQLite — MATERIALISE):**
+
 ```sql
 -- :repoUrl is the canonicalized inbound URL. Returns the FIRST active match
 -- ordered by specificity (Repo-link wins over GitProfile-link).
@@ -337,6 +345,8 @@ LIMIT 1;
 
 ### Q2 — Disconnect (soft) an AppLink
 
+**PRIMARY lane (SQLite — MATERIALISE):**
+
 ```sql
 UPDATE AppLink
    SET IsActive = 0,
@@ -347,12 +357,16 @@ UPDATE AppLink
 
 ### Q3 — Reconnect (always insert a new row; never reuse the disconnected row)
 
+**PRIMARY lane (SQLite — MATERIALISE):**
+
 ```sql
 INSERT INTO AppLink (AppId, AppLinkTypeId, TargetRepoId, TargetGitProfileId, IsActive, CreatedAt)
 VALUES (:appId, :appLinkTypeId, :targetRepoId, :targetGitProfileId, 1, strftime('%s','now'));
 ```
 
 ### Q4 — List active links for an App (admin UI)
+
+**PRIMARY lane (SQLite — MATERIALISE):**
 
 ```sql
 SELECT l.AppLinkId, lt.Name AS LinkType,
@@ -620,7 +634,7 @@ un-materialised — Raw-LLM persona could not ship the storage layer).
 
 ### DDL — Setting (seed defaults; immutable at runtime)
 
-PRIMARY lane (SQLite — MATERIALISE):
+**PRIMARY lane (SQLite — MATERIALISE):**
 
 ```sql
 CREATE TABLE IF NOT EXISTS Setting (
@@ -648,6 +662,8 @@ Column rules (binding):
 
 ### DDL — UserSettingOverride (per-user mutable layer)
 
+**PRIMARY lane (SQLite — MATERIALISE):**
+
 ```sql
 CREATE TABLE IF NOT EXISTS UserSettingOverride (
   UserId       INTEGER  NOT NULL,
@@ -673,6 +689,8 @@ Column rules (binding):
 
 ### R-09 merged-view query (PRIMARY lane — binding)
 
+**PRIMARY lane (SQLite — MATERIALISE):**
+
 ```sql
 SELECT s.Key,
        COALESCE(o.Value, s.Value) AS Value,
@@ -694,6 +712,8 @@ seed.Value)` cited in §24 §00 S-3 invariant 3 maps onto `COALESCE(o.Value,
 s.Value)` here (SQL alias `o`/`s` ↔ §24 prose alias `override`/`seed`).
 
 ### Seed-row migration shape (binding template)
+
+**PRIMARY lane (SQLite — MATERIALISE):**
 
 ```sql
 -- Forward-only; per Rule 12. Adds a single setting + its seed default.
@@ -729,6 +749,8 @@ gate #25 clause-3 trips at PR time)
 5. `ON DELETE NO ACTION` / `RESTRICT` on either FK — breaks S-3 invariant 4 forward-only paired removal (orphan-override class). ❌
 
 ### REFERENCE lane (PostgreSQL — DO NOT MATERIALISE; shown for parity audit only)
+
+**REFERENCE lane (PostgreSQL — DO NOT MATERIALISE; shown for parity audit only):**
 
 ```sql
 -- snake_case mirror per §00 line 101 REFERENCE-lane convention.
@@ -946,7 +968,9 @@ CREATE TRIGGER app_set_updated_at_trg
     FOR EACH ROW EXECUTE FUNCTION app_set_updated_at();
 ```
 
-### Row-Level Security policies (SQL DDL)
+### 🚫 REFERENCE-ONLY — Row-Level Security policies (SQL DDL, PostgreSQL appendix; DO NOT MATERIALISE)
+
+**REFERENCE lane (PostgreSQL — DO NOT MATERIALISE; shown for parity audit only):**
 
 ```sql
 ALTER TABLE app_profile ENABLE ROW LEVEL SECURITY;
