@@ -480,6 +480,20 @@ jobs:
           python3 linter-scripts/check-no-out-of-scope-spec-folder-link.py --self-test
           python3 linter-scripts/check-no-out-of-scope-spec-folder-link.py || echo "::warning::locked-7 perimeter drift present — see Phase-5 T-32 backlog"
 
+      - name: §23 REST PascalCase parity gate
+        # Slot 56 / Gate #34 — mechanises §23 §00 R-1/R-2/R-4 + §23 §97
+        # AC-ADB-REST-01 PascalCase parity. Six clauses (PascalCase shape,
+        # wire↔DDL bijection, boolean Is-prefix, R-4 literals incl.
+        # self-citation, AC-ADB-REST-01 surface, no-restate in §22/§24/§25).
+        # Spec: spec/27-spec-toolchain/56-check-rest-pascalcase-parity.md
+        # Wired SELF-TEST-LOAD-PROVEN initially — full disk run surfaces
+        # known §23 §00 R-2 vs DDL drift (Name/AppName, LinkId/AppLinkId,
+        # DiscriminatorId/AppLinkTypeId, TargetKey, RepoUrlCanonical) which
+        # is a separate §23 spec-side reconciliation backlog (G-6a-followup).
+        run: |
+          python3 linter-scripts/check-rest-pascalcase-parity.py --self-test
+          python3 linter-scripts/check-rest-pascalcase-parity.py || echo "::warning::§23 R-2 vs PRIMARY-lane DDL bijection drift — see G-6a-followup backlog"
+
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
