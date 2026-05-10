@@ -1,6 +1,6 @@
 # Changelog — Consolidated Audit Findings — `git-logs` App Specification
 
-**Version:** 1.3.0  
+**Version:** 1.4.0  
 **Updated:** 2026-05-10  
 **Scope:** `spec/25-app-issues/02-consolidated-audit-findings/`
 
@@ -17,6 +17,11 @@
 
 ## Releases
 
+### 1.4.0 — 2026-05-10 — Session 31 Task A-10: Disposition-map `Last touched` column wires D5
+- **Added** `Last touched` column to the v1→v2 Finding Disposition Map (`00-overview.md` §"v1→v2 Finding Disposition Map"); all 24 rows seeded at `Sess-24` (the section's creation session).
+- **Added** Audit invariant #5 — material edits MUST bump the row's `Last touched` to the editing session ID; editorial-only edits MUST NOT. Column is the sole input signal for §27 deferred lint rule **D5 `cohort-orphaned-finding`** (declared by A-03 / J-5; implementation pending per §27 §00 `## CI Gate Enumeration`).
+- **Result:** D5 now has a measurable signal in §25; unblocks the §27 PR that will ship D5. §25 Cursor/Lovable lift ~+1 via reduced testability gap.
+- **Lockstep:** §00 v1.2.0 → **v1.3.0**; §98 v1.3.0 → **v1.4.0**; §97 unchanged (no AC text change); §99 lockstep update deferred (mechanical).
 
 ### 1.3.0 — 2026-05-10 — Session 26 Task A-04: `FindingStatus` enum promoted to enforceable AC
 - **Added** `AC-09: Finding Status field is a closed enum` to `97-acceptance-criteria.md` declaring the canonical 4-member `FindingStatus` enum (`Open`, `InProgress`, `Resolved`, `DeScopedArchiveOnly`) as a `kind: contract` block, plus the markdown-label ↔ enum-member mapping table.
