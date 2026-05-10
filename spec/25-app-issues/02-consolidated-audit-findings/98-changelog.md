@@ -1,6 +1,6 @@
 # Changelog — Consolidated Audit Findings — `git-logs` App Specification
 
-**Version:** 1.2.0  
+**Version:** 1.3.0  
 **Updated:** 2026-05-10  
 **Scope:** `spec/25-app-issues/02-consolidated-audit-findings/`
 
