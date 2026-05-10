@@ -44,8 +44,10 @@ This is the **single source of truth** for every critical observation against th
 | Critical | 5 |
 | High | 9 |
 | Medium | 8 |
-| Low | 2 |
-| **Total** | **24** |
+| Low | 0 *(2 de-scoped — see [Appendix Z](#appendix-z--de-scoped-low-findings-archive-only))* |
+| **Active total** | **22** |
+| De-scoped (archive-only) | 2 |
+| **Grand total** | **24** |
 
 ---
 
@@ -218,20 +220,7 @@ Then close `OI-ALLOW-01` and `OI-ALLOW-05`.
 
 ### F-09 — `Provider::GitLab` reserved in enum but never explicitly rejected
 
-**Severity:** Low · **Category:** Maintainability · **Linked:** P2-GL-20, Checklist C13
-
-**Files:**
-- `spec/_archive/21-git-logs-v1/01-glossary-and-enums.md` (Provider enum declaration)
-- `spec/_archive/21-git-logs-v1/00-overview.md` · Line 47
-
-**Evidence (00-overview.md):**
-```
-47: | 9 | Provider scope | GitHub only (GitLab reserved in `Provider` enum, not used) |
-```
-
-**Why it fails.** The validation layer has no documented reject path. A row inserted with `Provider='GitLab'` would pass schema validation and break downstream callers expecting GitHub-only normalization.
-
-**Required fix.** Add explicit reject in `11-error-management.md`: code `GL-VAL-PROVIDER-DISABLED`, HTTP 400. Document in the Provider enum: "Inserts with `GitLab` MUST be rejected at the validation layer."
+**Status:** **De-scoped (archive-only)** · See [Appendix Z](#appendix-z--de-scoped-low-findings-archive-only). Target file lives under `spec/_archive/21-git-logs-v1/`, which is out of the active scope-lock; current §22 (`spec/22-git-logs-v2/`) supersedes the Provider enum semantics. Retained as a 1-line pointer for traceability.
 
 ---
 
