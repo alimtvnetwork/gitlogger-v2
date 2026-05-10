@@ -119,9 +119,11 @@ run_self_test() {
   fi
 
   if [ "$fail" -eq 0 ]; then
+    rm -rf "$td"
     echo "[check-axios-version --self-test] OK (6/6 fixtures)"
     return 0
   else
+    rm -rf "$td"
     echo "[check-axios-version --self-test] FAILED"
     return 1
   fi
