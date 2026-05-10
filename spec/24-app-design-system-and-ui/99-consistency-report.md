@@ -1,6 +1,6 @@
 # Consistency Report — 24-app-design-system-and-ui
 
-**Version:** 2.2.5
+**Version:** 2.2.6
 **Updated:** 2026-05-10 (Phase-5 T-39 — P18 §24 floor-lift; AC-ADS-17 minted; literal-cited via §27 gate #36 / slot 58; §24 reaches L120/C120 ceiling)
 
 > **v2.2.4 update (Sess-64 / Phase-5 T-03 — separation-of-concerns regression coverage):** Recorded negative-evidence sweep proving §24 no longer ships any SQL DDL block. Sweep command: `rg -c '^CREATE TABLE' spec/24-app-design-system-and-ui/00-overview.md`. **Result: 0 matches.** Closes audit finding F-24-01 (UI folder defines a SQL audit table — wrong folder). The previously-inlined `module_run_audit_p78` Postgres DDL (30 lines) was removed in §00 v4.7.0 → v4.8.0 and replaced with a link-only routing pin citing §27/§28 as canonical owners of execution-telemetry persistence. **No DDL was materialised elsewhere** in this turn — the §27/§28 promotion is a separate Phase-5 backlog task. Regression command MUST return 0 on every PR; future violation is a hard fail per the §07 dependency boundary (AC-ADS-16) and Lesson #36. Banners: §99 v2.2.3 → **v2.2.4** (this entry); §00 v4.7.0 → **v4.8.0**; §98 v4.11.0 → **v4.12.0**. **No §97 bump** (the removed DDL was never bound to an AC-ADS-* ID — its absence from the AC catalog is itself confirmation it didn't belong here).

@@ -21,7 +21,7 @@ produced_for:
 
 # App Design System & UI
 
-**Version:** 4.10.0
+**Version:** 4.11.0
 **Updated:** 2026-05-10 (Phase-5 T-39 — P18 §24 floor-lift; routing-pin loop opened by Sess-64 A-55 / Phase-5 T-03 (no-DDL surface) is now AC-bound via newly-minted AC-ADS-17 in §97 (literal-cited via §27 gate #36 / slot 58 `check-no-sql-ddl-in-ui-folder.py`). §24 advances Lovable 118→120, Cursor 116→120; Raw-LLM holds 118.)
 
 > 🤖 **Raw-LLM Auditor Pin (Lesson #36 link-don't-restate, applied to memory resolution — P16 friction sweep, T-37)**

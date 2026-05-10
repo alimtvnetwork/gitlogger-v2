@@ -1,6 +1,6 @@
 # Changelog — App Design System & UI
 
-**Version:** 4.13.0
+**Version:** 4.14.0
 **Updated:** 2026-05-10 (Phase-5 T-39 — P18 §24 floor-lift; AC-ADS-17 minted in §97 closing the no-DDL boundary contract; literal-cited via §27 gate #36 / slot 58; §24 reaches L120/C120 ceiling)
 **Scope:** `spec/24-app-design-system-and-ui/`
 

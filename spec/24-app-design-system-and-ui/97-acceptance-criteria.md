@@ -1,6 +1,6 @@
 # Acceptance Criteria — 24 App Design System & UI
 
-**Version:** 3.6.0
+**Version:** 3.7.0
 **Updated:** 2026-05-10 (Phase-5 T-39 — P18 §24 floor-lift. Minted AC-ADS-17 (§24 owns ZERO DDL surface; §23 is canonical owner) under new section "Acceptance Criteria — Boundary Closure". 6 invariants T-ADS-17-01..06; 6 fixtures F-1..F-6; literal-cited via gate #36 (`linter-scripts/check-no-sql-ddl-in-ui-folder.py`, slot 58). Closes routing-pin loop opened by Sess-64 A-55 / Phase-5 T-03. §24 Lovable 118→120, Cursor 116→120.)
 **Updated-prev:** 2026-05-10 (Session 55 audit-task A-41 — added per-AC Test invariant blocks (T-ADS-NN-NN) to AC-ADS-06, AC-ADS-09, AC-ADS-10 mirroring AC-ADS-15/16 format. Each AC gains 2-3 mechanical test stubs incl. negative-fixture proofs. No AC semantics change; minor version bump because new normative test surface.)
 **Updated-prev:** 2026-05-06 (Phase 154 C-Sweep — added **AC-ADS-14** `[critical]` Cross-Module Externalized Citation Map per Lessons #36 + #37; explicit normative anchor table for 2 externalized citations: spec/07 (primitive token registry), spec/27 (script gates). Mirror of spec/22 AC-79 pattern. AC count 13 → 14. spec/24's small citation surface reflects the strict-additive-overlay relationship to spec/07 — almost all design-system contracts already live in spec/07 by construction.)
