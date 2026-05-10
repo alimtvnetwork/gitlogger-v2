@@ -322,7 +322,108 @@ ORDER BY l.CreatedAt DESC;
 
 ---
 
-## Migration Template (Rule 12 — forward-only)
+## REST / RPC Contract (Normative — Phase-5 T-06)
+
+This section pins the over-the-wire contract for every operation that mutates
+or reads `App` and `AppLink`. Server implementations MUST expose these exact
+verb + path + payload shapes. Field names use **PRIMARY-lane** PascalCase
+(per § "Implementation Target Precedence"); on-the-wire JSON uses the same
+PascalCase keys to avoid a translation layer. Booleans serialise as JSON
+`true`/`false` and persist as INTEGER `1`/`0` (per AC-ADB-11).
+
+### R-1 — Endpoint matrix
+
+| ID    | Method | Path                              | Auth  | Maps to query | Idempotent | Returns                |
+|-------|--------|-----------------------------------|-------|---------------|------------|------------------------|
+| R-01  | POST   | `/api/v1/apps`                    | admin | INSERT App    | No         | 201 `{App}`            |
+| R-02  | GET    | `/api/v1/apps/{AppId}`            | user  | SELECT App    | Yes        | 200 `{App}` / 404      |
+| R-03  | GET    | `/api/v1/apps`                    | user  | SELECT App    | Yes        | 200 `{items:[App]}`    |
+| R-04  | POST   | `/api/v1/apps/{AppId}/links`      | admin | INSERT AppLink| No         | 201 `{AppLink}`        |
+| R-05  | GET    | `/api/v1/apps/{AppId}/links`      | user  | Q4            | Yes        | 200 `{items:[AppLink]}`|
+| R-06  | POST   | `/api/v1/applinks/resolve`        | svc   | Q1            | Yes        | 200 `{AppId,LinkId,State}` / 404 |
+| R-07  | POST   | `/api/v1/applinks/{LinkId}/disconnect` | admin | Q2       | Yes (no-op on 2nd call) | 200 `{LinkId,DisconnectedAt}` |
+| R-08  | POST   | `/api/v1/apps/{AppId}/links/reconnect` | admin | Q3       | No (always inserts new row per Q3) | 201 `{AppLink}` |
+
+### R-2 — Request / response schemas (JSON)
+
+```jsonc
+// App (response)
+{
+  "AppId": 42,                       // INTEGER
+  "Name": "demo-app",                // TEXT, unique
+  "RepoUrlCanonical": "github.com/acme/demo",  // TEXT
+  "IsActive": true,                  // boolean (DB: INTEGER 0/1)
+  "CreatedAt": "2026-05-10T12:34:56Z",
+  "UpdatedAt": "2026-05-10T12:34:56Z"
+}
+
+// AppLink (response)
+{
+  "LinkId": 17,
+  "AppId": 42,
+  "DiscriminatorId": 3,              // FK to LookupDiscriminator
+  "TargetKey": "github.com/acme/demo",
+  "ResolutionState": "active",       // enum: active|disconnected|orphaned
+  "IsActive": true,
+  "CreatedAt": "...",
+  "DisconnectedAt": null
+}
+
+// R-06 request
+{ "RepoUrl": "https://github.com/acme/demo.git" }
+
+// R-06 success (Q1 single-row hit, ResolutionState="active")
+{ "AppId": 42, "LinkId": 17, "ResolutionState": "active" }
+```
+
+### R-3 — Error envelope (uniform across all 8 endpoints)
+
+```jsonc
+{
+  "Error": {
+    "Code": "applink.disconnected",   // dotted, lowercase, stable
+    "Message": "Link 17 is disconnected; reconnect via R-08.",
+    "Field": "LinkId",                // optional, for 422
+    "TraceId": "01HXYZ..."            // ULID, required
+  }
+}
+```
+
+| HTTP | When                                                       | `Code` examples                          |
+|------|------------------------------------------------------------|------------------------------------------|
+| 400  | Malformed JSON / missing required field                    | `request.malformed`, `field.required`    |
+| 401  | Missing / invalid auth                                     | `auth.unauthenticated`                   |
+| 403  | Auth ok, role insufficient                                 | `auth.forbidden`                         |
+| 404  | App/Link not found, or R-06 no active row matches Q1       | `app.not_found`, `applink.unresolved`    |
+| 409  | Unique-name collision on R-01, R-04 with active row exists | `app.name_conflict`, `applink.duplicate` |
+| 422  | Body fails validation (e.g. empty `Name`)                  | `field.invalid`                          |
+| 500  | Server / DB fault                                          | `server.internal`                        |
+
+### R-4 — Contract invariants (binding)
+
+1. **PascalCase parity** — every JSON key matches its PRIMARY-lane DDL column 1:1. No camelCase, no snake_case on the wire. Self-enforcing via §27 backlog gate `rest-pascalcase-parity-check`.
+2. **Boolean parity** — wire `true`/`false` ↔ DB `1`/`0`. Never accept `0`/`1` integers in request bodies; reject with 422 `field.invalid`.
+3. **Timestamp parity** — every datetime is ISO-8601 UTC with `Z` suffix, matching AC-ADB-16.
+4. **Soft-delete parity** — R-07 sets `IsActive=0` + `DisconnectedAt=now()`; never DELETEs. R-08 always INSERTs a new row (per Q3); never UPDATEs the disconnected row.
+5. **Resolve-state parity** — R-06 response `ResolutionState` value MUST be one of the closed enumeration in § "Resolution states (closed enumeration)". Any other string is a contract violation.
+6. **Idempotency** — endpoints flagged Idempotent in R-1 MUST be safe to retry; R-07 second call returns 200 with the same `DisconnectedAt` timestamp from the first call (read, don't rewrite).
+7. **Trace ID** — every error response MUST carry `TraceId`; servers MUST log this ID alongside the corresponding query plan.
+
+### R-5 — Out-of-scope for §23
+
+- Authentication mechanism, session storage, JWT shape — owned by app-layer specs (out of locked-7 scope; live cross-refs forbidden per scope-lock).
+- UI representation of these payloads — owned by §24.
+- CI gate for parity enforcement — owned by §27 (`rest-pascalcase-parity-check`, `rest-boolean-parity-check` — both NEW backlog from T-06).
+
+### AC-ADB-REST-01 — REST/RPC contract present and parity-pinned
+
+The 8-row R-1 endpoint matrix, R-2 schemas, R-3 error envelope, and R-4
+invariants 1–7 MUST be present in `00-overview.md`. Removing any row of R-1,
+removing R-3, or removing R-4 invariants 1, 2, or 4 invalidates this AC.
+
+---
+
+
 
 ```sql
 -- migrations/2026XXXXNN-add-{column}-to-App.sql
