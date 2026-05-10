@@ -8,7 +8,7 @@ axis_rationale: "Git Logs WordPress plugin enforceable spec"
 
 # Git Logs v2 — Spec Overview
 
-**Version:** 3.22.5  
+**Version:** 3.23.0  
 **Updated:** 2026-05-10 (Phase L5 — §46 `46-server-upload-frames-endpoint.md` v1.0.0 → **v1.1.0**: appended §8 Worked Server Transcript (accept path 200 OK with all 10 §3 strict steps + 3 negative paths Lane-A reject / Idempotency-mutation 409 / per-SHA 429) per **Lesson #29** `kind: example`; mirror of §43 §8 client-side transcript per Lesson #36; normative §3/§4/§5 + §97 AC-88 unchanged. Patch banners across §00/§98/§99. No new AC.)
 <!-- h10-verified-phase: 158 -->
 **Status:** Draft (future-spec — plugin code lives downstream)
