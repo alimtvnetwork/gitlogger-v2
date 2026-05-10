@@ -1,0 +1,19 @@
+{
+  "fixture_id": "glci-stream-buffer-overflow",
+  "owning_ac": "AC-28-36",
+  "owning_test_invariant": "T-28-36",
+  "runner": "./runner.sh",
+  "invocation": "glci ts-test --fixture . --stream --buffer-cap=1024",
+  "expected": {
+    "exit_code": 0,
+    "summary_field": {
+      "BufferDroppedCount": ">0"
+    },
+    "stderr_regex_exactly_once": "^audit: dropped [0-9]+ oldest frames \\(buffer cap=1024\\)$"
+  },
+  "must_not": {
+    "exit_code": [1, 2, 3, 4],
+    "eviction_policy": ["drop-newest"],
+    "behavior": ["silent-drop", "per-drop-audit-line"]
+  }
+}
