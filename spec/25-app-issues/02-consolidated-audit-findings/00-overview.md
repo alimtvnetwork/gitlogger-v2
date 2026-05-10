@@ -558,6 +558,71 @@ See [`./lifecycle-25-app-issues-02-consolidated-audit-findings-lifecycle.mmd`](.
 
 ---
 
+## v1→v2 Finding Disposition Map (A-02, Session 24)
+
+**Purpose.** Every F-NN finding above targets a file under `spec/_archive/21-git-logs-v1/`, which is **outside** the active scope-lock (only `spec/22..28` are in scope). Without an explicit reconciliation, a blind-AI implementer reading this tracker has no way to know whether a finding is (a) already closed by a successor §22 file, (b) still-open as a v2 gap that must be carried into the §22 backlog, (c) made irrelevant by the v2 architecture, or (d) formally de-scoped. The Phase-3 audit measured this missing reconciliation as the single largest contributor to §25's blind-failure probability (~75 %). This map closes that gap by routing each F-NN to its v2 disposition and, where applicable, to the §22 file that now owns the topic.
+
+**Disposition vocabulary.**
+
+| Disposition | Meaning | Counts toward active rollup? |
+|---|---|---:|
+| **Closed-by-§22** | Topic is fully addressed in the named §22 v2 file(s); no further v1 remediation is required because v1 is archived. | No |
+| **Irrelevant-in-v2** | The v1 architectural assumption that produced the finding no longer applies in v2. | No |
+| **De-scoped** | Already promoted to Appendix Z; archive-only with no v2 successor needed. | No |
+| **Carried-open** | The underlying concern is still a real gap in v2 and MUST be tracked as a §22 backlog item; the v1 finding text is preserved here only for traceability. | No (counted under §22, not §25) |
+| **Conditional** | Disposition depends on an unresolved upstream decision (typically F-02's auth-model choice cascading to v2). | No until resolved |
+
+**Map (F-01..F-24 → v2 disposition).**
+
+| ID | One-line topic | Disposition | v2 owner / successor | Notes |
+|---|---|---|---|---|
+| F-01 | REST endpoints not consolidated | Closed-by-§22 | `04-rest-api-endpoints.md` + `17-openapi.yaml` | v2 ships a canonical OpenAPI source-of-truth. |
+| F-02 | HMAC-vs-Argon2id contradiction | Closed-by-§22 | `05-auth-and-validation.md` + `31-ssh-key-auth.md` | v2 replaces per-repo HMAC with SSH-key auth; storage contradiction dissolved. |
+| F-03 | `RevokedJti` table undefined | Conditional | `02-database-schema.md` + `18-schema.sql` | Closed iff v2 retains JWT denylist; otherwise Irrelevant-in-v2. Verify in §22 schema files (A-11 follow-up). |
+| F-04 | 10/16 promised files absent | Irrelevant-in-v2 | §22 `99-consistency-report.md` | v2 inventory is whole; v1 inventory drift is archive-bound. |
+| F-05 | Governance trio missing | Closed-by-§22 | `97-acceptance-criteria.md` · `98-changelog.md` · `99-consistency-report.md` | v2 ships all three. |
+| F-06 | `error-codes.json` registry absent | Closed-by-§22 | `15-error-codes.md` | v2 publishes the canonical error catalog (markdown source-of-truth; JSON emitted by §27 toolchain). |
+| F-07 | Trusted-proxy CIDR option unspecified | Carried-open | `03-admin-ui.md` + `20-observability.md` | Verify v2 declares `gitlogs_trusted_proxies` (or v2 equivalent) and IP-resolution precedence. Open §22 backlog ticket if absent. |
+| F-08 | Refresh-token idempotency window | Carried-open | `05-auth-and-validation.md` | Carry only if v2 retains a refresh-token flow; otherwise reclassify Irrelevant-in-v2 jointly with F-03/F-24. |
+| F-09 | `Provider::GitLab` reserved-but-unrejected | De-scoped | Appendix Z | Already de-scoped; pointer retained. |
+| F-10 | 1 MB cap encoding/chunked-transfer silent | Carried-open | `04-rest-api-endpoints.md` + `46-server-upload-frames-endpoint.md` | Verify v2 specifies decompressed-byte cap and chunked-transfer behaviour for the upload-frames endpoint. |
+| F-11 | `traceId` precedence on conflicting headers | Carried-open | `20-observability.md` | Verify v2 states explicit `Traceparent` ↔ `X-Request-Id` precedence rule. |
+| F-12 | Indefinite log retention / no partitioning | Closed-by-§22 | `22-retention-and-pruning.md` + `39-split-db-log-storage.md` | v2 ships retention policy + split-DB log storage; partitioning concern dissolved at the architecture layer. |
+| F-13 | Rate-limit transient assumes ext object cache | Carried-open | `05-auth-and-validation.md` + `20-observability.md` | Verify v2 declares the rate-limit storage substrate (transient-vs-DB-vs-Redis) and an activation guard. |
+| F-14 | CORS / origin policy not declared | Carried-open | `04-rest-api-endpoints.md` + `30-threat-model.md` | Verify v2 declares an origin allow-list option and default stance. |
+| F-15 | Schema vs allowlist disagreement on `LogSenderTokenVerifier` | Closed-by-§22 | `02-database-schema.md` + `31-ssh-key-auth.md` | Closed jointly with F-02; v2 schema drops the disputed column. |
+| F-16 | Inventory orphan — `17-spec-consistency-checklist.md` | De-scoped | Appendix Z | Already de-scoped; pointer retained. |
+| F-17 | Ad-hoc API contracts inside non-API files | Closed-by-§22 | `04-rest-api-endpoints.md` + `17-openapi.yaml` | Closed jointly with F-01; OpenAPI source-of-truth absorbs scattered contracts. |
+| F-18 | JWKS key-rotation policy unspecified | Carried-open | `05-auth-and-validation.md` + `31-ssh-key-auth.md` | Reclassify Irrelevant-in-v2 if v2 fully replaces JWT/JWKS with SSH-key auth (verify before closure). |
+| F-19 | WP auth bridge undocumented | Closed-by-§22 | `25-headless-auth-notes.md` + `05-auth-and-validation.md` | v2 documents the headless-auth surface explicitly. |
+| F-20 | Admin UI specification missing | Closed-by-§22 | `03-admin-ui.md` | v2 ships the Admin-UI spec. |
+| F-21 | Coding-guidelines-applied missing | Irrelevant-in-v2 | §24 design-system + §27 toolchain | Cross-cutting guideline application is owned by §24 (design system / UI rules) and §27 (toolchain enforcement) in the v2 cohort; per-folder applied-guidelines docs are not part of the v2 contract. |
+| F-22 | AC roll-up missing | Closed-by-§22 | `97-acceptance-criteria.md` + `49..59-ac-*-detail.md` | v2 publishes the canonical AC roll-up plus per-section AC-detail files. |
+| F-23 | `User-Agent` in refresh fingerprint | Carried-open | `05-auth-and-validation.md` | Carry jointly with F-08; reclassify Irrelevant-in-v2 if v2 drops the refresh-token model. |
+| F-24 | `RevokedJti` purge cadence | Conditional | `22-retention-and-pruning.md` | Disposition follows F-03: Closed-by-§22 if v2 retains the denylist (purge owned by retention policy); otherwise Irrelevant-in-v2. |
+
+**Disposition rollup.**
+
+| Disposition | Count | F-IDs |
+|---|---:|---|
+| Closed-by-§22 | 10 | F-01, F-02, F-05, F-06, F-12, F-15, F-17, F-19, F-20, F-22 |
+| Carried-open | 8 | F-07, F-08, F-10, F-11, F-13, F-14, F-18, F-23 |
+| Irrelevant-in-v2 | 2 | F-04, F-21 |
+| De-scoped (Appendix Z) | 2 | F-09, F-16 |
+| Conditional (depends on F-02 cascade) | 2 | F-03, F-24 |
+| **Total** | **24** |  |
+
+**Carry-forward backlog (8 v2-bound tickets).** The eight Carried-open findings (F-07, F-08, F-10, F-11, F-13, F-14, F-18, F-23) MUST be opened as §22 backlog items in the next §22 spec-improvement session and removed from any "still-applies-to-v1" interpretation. They are NOT counted in the §25 active severity rollup (the Severity Roll-Up table at the top of this document remains the authoritative §25 active count) because their remediation surface lives in §22, not in `_archive/21-git-logs-v1/`.
+
+**Audit invariants (binding on future sessions).**
+
+1. A blind-AI implementer reading this tracker MUST consult the disposition map before treating any F-NN as actionable; rows with disposition `Closed-by-§22` or `Irrelevant-in-v2` MUST NOT cause new edits inside `_archive/21-git-logs-v1/`.
+2. Reclassifying any row (e.g. flipping a Conditional to Closed) requires citing the specific §22 file + line that resolves it, recorded in the "Notes" column of the row.
+3. The disposition map MUST stay synchronised with §22's `99-consistency-report.md`; if §22 adds a new file that closes a Carried-open row, this map MUST be updated in the same PR.
+4. The Severity Roll-Up table MUST NOT be retroactively edited from this map — it remains a historical snapshot of the v1 audit. Disposition is additive context, not a rewrite of the original count.
+
+---
+
 ## Appendix Z — De-scoped Low Findings (archive-only)
 
 The two findings below were carried from the Phase-2 audit but target files under `spec/_archive/21-git-logs-v1/`, which is outside the active scope-lock (only `spec/22..28` are in scope). They are **non-actionable in the current spec lifecycle** and have been promoted to this de-scoped appendix to keep the active findings walker focused on remediable work. Pointers remain at their original IDs (F-09, F-16) for cross-reference traceability with the Phase-2 audit and the §27 dashboard.
