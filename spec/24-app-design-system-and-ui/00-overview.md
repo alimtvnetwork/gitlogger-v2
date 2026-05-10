@@ -349,9 +349,9 @@ either surfacing invalidates this AC.
 
 ---
 
+## Cross-References
 
 
-- [Design System (Core, §07)](../07-design-system/00-overview.md) — Source of all primitive tokens
 - [§07 Theme Variable Architecture](../07-design-system/02-theme-variable-architecture.md) — Token registry consumed by this overlay
 - [§07 Spacing & Layout](../07-design-system/04-spacing-layout.md) — Spacing scale this overlay reuses
 - [§07 Sidebar System](../07-design-system/10-sidebar-system.md) — Primitive consumed by AppSidebar
