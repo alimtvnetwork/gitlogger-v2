@@ -445,6 +445,22 @@ jobs:
           python3 linter-scripts/check-ci-cli-self-test-harness.py --self-test
           python3 linter-scripts/check-ci-cli-self-test-harness.py
 
+      - name: §27 lockstep meta-verify gate (#42 / Phase-5 T-36 / P19d)
+        # Reflexive cross-gate lockstep meta-verifier for §27 — walks
+        # every gate-bearing slot doc (NN-check-*.md / NN-audit-*.md /
+        # NN-meta-*.md) and asserts six clauses: slot enumeration ↔ §00,
+        # R5 vacuously-passing section, --self-test + ≥6 fixtures,
+        # 4-row exit-code contract, banner-triple gate-count lockstep
+        # + Lesson #15 self-citation, R5 vacuous-pass auto-fail.
+        # Built-in --self-test runs 6 fixtures F-1..F-6.
+        # Spec: spec/27-spec-toolchain/64-meta-verify-lockstep.md
+        # Wired as WARN-ONLY initially — surfaces existing drift across
+        # 49 slot docs (~34 violations on ship). Flips to hard-fail
+        # once §27 slot-doc backlog is groomed (tracked under post-P19
+        # cleanup wave).
+        run: |
+          python3 linter-scripts/meta-verify-lockstep.py --self-test
+          python3 linter-scripts/meta-verify-lockstep.py || echo "::warning::§27 meta-lockstep drift present — see Phase-5 T-36 backlog"
 
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
