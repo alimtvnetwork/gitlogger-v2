@@ -380,7 +380,7 @@ def self_test() -> int:
 
     # F-4 markdown link to out-of-scope
     surf = mk_complete({
-        "spec/27-spec-toolchain/01-x.md": "[old contract](../15-legacy/00-overview.md)\n"
+        "spec/26-gitlogs-diagrams/01-x.md": "[old contract](../15-legacy/00-overview.md)\n"
     })
     if not clause_no_md_links(surf):
         failures.append("F-4 should fail clause-3 (markdown link)")
