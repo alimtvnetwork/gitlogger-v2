@@ -365,6 +365,8 @@ This section is the **canonical, single-in-scope source-of-truth** for every CI 
 
 **Cohort uplift target.** All 9 deferred rules ship → cohort Raw-LLM gains ~+3 across all 7 folders (measured in Sess-25..Sess-29 scorecards as the dominant remaining ceiling).
 
+**External invoker binding (A-09, Session 31 — normative).** §28 (`spec/28-universal-ci-cli`) is the **canonical, sole-in-scope external invoker** of every Active gate above. §28's `00-overview.md` `consumes:` front-matter MUST cite this section by name; §28 MUST NOT re-declare gate semantics, exit codes, or invocation strings (link-don't-restate, Lesson #36). Conversely, §27 MUST NOT add a new Active gate without ensuring §28's invocation manifest can call it via the contract above. Any divergence is a `consumes-frontmatter-resolves` (D9) violation at meta-level. Deferred rules D1..D9 are NOT exposed to §28 until promoted to Active in the same PR that ships their implementation.
+
 ---
 
 
