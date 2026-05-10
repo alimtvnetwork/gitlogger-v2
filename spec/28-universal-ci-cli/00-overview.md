@@ -49,6 +49,27 @@ produced_for:
 
 ---
 
+## AI Quick-Nav Map (Lesson #88 — sprawl navigation aid)
+
+> 16 files / ~117 KB tier-1. Grouped by theme so a context-bounded agent (Lovable / Cursor / Raw-LLM) can locate the right entry file in one glance without loading the bundle. Pure index — no normative content; canonical contracts remain in §97 and the cited files.
+
+| Theme | Entry files | Purpose |
+|---|---|---|
+| **Scope & meta** | `00-overview.md`, `97-acceptance-criteria.md`, `98-changelog.md`, `99-consistency-report.md` | v2 scope banner, 48 ACs, version history, health report |
+| **Glossary & architecture** | `01-glossary-and-enums.md`, `02-architecture.md` | Terms, mode/phase/exit-code enums, component diagram |
+| **Runtime & commands** | `03-runtime-detection.md`, `04-command-surface.md`, `05-config-resolution.md` | Auto-detect markers, verb surface, `glci.toml` resolution |
+| **Log shipping & errors** | `06-log-shipping-contract.md`, `07-error-catalog.md`, `09-output-classification.md` | Server endpoints (mirrored from §22), GLCI-* codes, classifier rules |
+| **CI bindings (v2 = GitHub-only)** | `08-ci-provider-bindings.md` | GitHub Actions adapter; legacy provider tables historical-only |
+| **Machine-readable contracts** | `17-openapi-client.yaml`, `18-config-schema.json` | Client OpenAPI mirror (AC-28-40), config JSON Schema |
+| **Lifecycle** | `lifecycle-28-universal-ci-cli.mmd` | State diagram |
+
+**Entry-point heuristics:**
+- New to §28? Read `00-overview.md` (this file) → `97-acceptance-criteria.md` → §99 inventory.
+- Implementing log shipping? Start at `06-log-shipping-contract.md` + `07-error-catalog.md` (cross-verified by §27 gates #17/#18).
+- Adding a CI binding? STOP — v2 is GitHub-only (AC-28-47); non-GitHub work is v3-deferred.
+
+---
+
 ## AI Implementer Quickstart
 
 **Read in this order to land a change in ≤30 min:**
