@@ -142,6 +142,7 @@ Numbering convention inside this module:
 | 34 | [34-audit-ai-implementability.md](./34-audit-ai-implementability.md) | `linter-scripts/audit-ai-implementability.py` | LLM-driven deep-walk audit (5 dims × 0-20); walks `*.md\|*.json\|*.yaml\|*.tmpl\|*.toml`; cached, advisory-by-default |
 | 35 | [35-audit-bundle-budget.md](./35-audit-bundle-budget.md) | `linter-scripts/audit-bundle-budget.py` | Deterministic walker bundle-budget audit; classifies each module as CLEAR/AT_CEILING/OVER vs slot-34 `MAX_BYTES`; advisory-by-default with `--strict` for graduating gate (Lesson #65) |
 | 36 | [36-check-ads-boundaries.md](./36-check-ads-boundaries.md) | `linter-scripts/check-ads-boundaries.py` | Validator: §24 §97 AC-ADS-06/09/10 boundary scanner — marketing-no-AppShell + ui/app name-collision + `--app-status-*` leak-into-ui detection. Built-in `--self-test` against three negative-fixture corpora under `linter-scripts/fixtures/`. Gate #19 (Sess-55 A-43); first §27 gate dedicated to a §24-side AC family. |
+| 37 | [37-check-spec22-inventory.md](./37-check-spec22-inventory.md) | `linter-scripts/check-spec22-inventory.py` | Validator: §22 §97 AC-78 (module asset inventory pin) + AC-22-LV1 (locked-vacant slots 09..13) — verifies all required tier-1 + normative non-md fixtures exist on disk and that no locked-vacant slot is occupied. Built-in `--self-test` against 3 in-memory synthetic fixtures (no on-disk corpora needed; pure file-existence predicate). Gate #20 (Sess-56 A-48); second §27 gate dedicated to a §22-side AC family. |
 
 ### Runners
 
