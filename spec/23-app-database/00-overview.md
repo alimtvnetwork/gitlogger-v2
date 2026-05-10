@@ -218,7 +218,7 @@ The following seed shape is the **only conformant form** for both lanes.
 `INSERT OR IGNORE` (PRIMARY) and `ON CONFLICT DO NOTHING` (REFERENCE)
 without explicit IDs would let the database assign rowids and silently
 break AC-ADB-13's locked-ID contract (1=GitProfile, 2=Repo) referenced
-by the CHECK constraint, the Discriminator binding table, and Q1.
+by the CHECK constraint, the Discriminator binding table, the XOR target invariant (AC-ADB-05), and Q1. The boolean-policy parity (AC-ADB-11) and locked-ID parity together guarantee replay-safe seeding.
 
 **PRIMARY lane (SQLite — MATERIALISE):**
 
