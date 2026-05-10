@@ -187,6 +187,20 @@ jobs:
           python3 linter-scripts/check-spec22-inventory.py --check all
           python3 linter-scripts/check-spec22-inventory.py --self-test
 
+      - name: §25 verification ledger cadence gate (Sess-63 A-53, gate #21)
+        # Promotes §25 invariant 5 (A-46 Sess-56) from contract-proven to load-proven.
+        # Asserts that the latest sweep row in §25 02-consolidated-audit-findings/
+        # 00-overview.md "Verification cadence ledger" is at most --tolerance
+        # sessions behind --current-session. CURRENT_SESSION is hand-bumped each
+        # spec-improvement session by the audit author; if it drifts, this gate
+        # surfaces the §25 D5 latent failure mode at PR time instead of waiting
+        # for D5 to fire next session.
+        env:
+          CURRENT_SESSION: "63"
+        run: |
+          python3 linter-scripts/check-verification-ledger-cadence.py --self-test
+          python3 linter-scripts/check-verification-ledger-cadence.py --current-session "$CURRENT_SESSION"
+
       # === Phase P48-1-fu1-batch P4 module attestation (P3-graduated modules) ===
       # The following modules have closed their P3 gap (`**Verifies:**` clauses
       # on every §97 AC) and are explicitly attested here so `check-ai-confidence.py`
