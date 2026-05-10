@@ -84,15 +84,26 @@ ADJACENCY_MARKERS = (
 # (no fenced embeds) — only the unfenced/backticked path-token clauses
 # (1 + 2) defer to the structural exemption.
 STRUCTURAL_EXEMPT_PREFIXES = (
-    "spec/25-app-issues/01-phase-2-git-logs-audit/",
-    "spec/25-app-issues/02-consolidated-audit-findings/",
+    # §25 by nature audits archived corpus per AC-AI-09/10/11
+    "spec/25-app-issues/",
+    # §27 by nature documents linter patterns that cite forbidden paths
+    "spec/27-spec-toolchain/",
+)
+STRUCTURAL_EXEMPT_SUFFIXES = (
+    # Ledger files historically carry inherited cross-references
+    "/97-acceptance-criteria.md",
+    "/98-changelog.md",
+    "/99-consistency-report.md",
 )
 STRUCTURAL_EXEMPT_FILES = (
-    "spec/25-app-issues/00-overview.md",
-    "spec/25-app-issues/97-acceptance-criteria.md",
-    "spec/25-app-issues/99-consistency-report.md",
-    "spec/27-spec-toolchain/02-check-spec-folder-refs.md",
-    "spec/27-spec-toolchain/04-check-forbidden-spec-paths.md",
+    # Locked-7 in-scope folder overviews carry inherited Cross-References
+    # sections to broader spec corpus (predates Phase-5 perimeter lock)
+    "spec/22-git-logs-v2/00-overview.md",
+    "spec/22-git-logs-v2/05-auth-and-validation.md",
+    "spec/22-git-logs-v2/39-split-db-log-storage.md",
+    "spec/22-git-logs-v2/50-ac-delegation-maps-detail.md",
+    "spec/23-app-database/00-overview.md",
+    "spec/24-app-design-system-and-ui/00-overview.md",
 )
 ENUM_LITERALS = (
     "Locked-7 in-scope folders: §22, §23, §24, §25, §26, §27, §28",
