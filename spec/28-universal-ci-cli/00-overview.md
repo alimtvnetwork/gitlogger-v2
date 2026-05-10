@@ -4,6 +4,17 @@ axis_rationale: "Universal CI binary behavioural ACs"
 consumes:
   - spec/22-git-logs-v2 §97 AC-23  # PascalCase + AUTOINCREMENT PK + CHECK-constraint catalog (schema-drift gate; A-07 cross-flag, Sess-29) — CI binary emits drift-warning rows when server schema diverges
   - spec/27-spec-toolchain §00 "CI Gate Enumeration"  # 18 Active strict gates as of Sess-43 A-23 (deferred backlog closed 9/9): #1 tree-health-min-80, #2 lockstep-strict, #3 cross-links-resolve, #4 folder-refs-resolve, #5 forbidden-strings-absent, #6 version-parity, #7 audit-walker-tier-1, #8 summary-freshness, #9 stamp-bump, #10 consumes-frontmatter-resolves (A-09, Sess-31), #11 cohort-naming-check (A-16, Sess-36), #12 finding-status-enum-check (A-17, Sess-37), #13 cohort-orphaned-finding (A-18, Sess-38), #14 finding-vs-audit-distinction-check (A-19, Sess-39), #15 derives-from-restate-check (A-20, Sess-40 — self-enforces lockstep), #16 no-raw-color-in-app-component (A-21, Sess-41), #17 error-envelope-shape-check (A-22, Sess-42 — first integration-test gate, exit-code 3 = harness setup failure), #18 request-id-roundtrip-check (A-23, Sess-43 — second integration-test gate, shares fixture-replay engine with #17). §28 is the sole-in-scope canonical external invoker (A-09, Sess-31); §28 MUST NOT restate gate semantics, exit codes, or invocation strings (Lesson #36 link-don't-restate). Deferred backlog is empty as of Sess-43; future Wave-3+ deferred rules land at D-10+ in §27 §00 and are NOT invoked by §28 until promoted to Active.
+produced_for:
+  # Producer-side inverse-binding (A-29, Sess-49) — mirror of §26→§22 `produced_for:` (A-27, Sess-47)
+  # and §24 producer-side (A-12, Sess-33). Each row binds an in-folder §28 artifact to the §22 AC
+  # whose client-side fulfilment it OWNS. Resolved by gate #10 dual-key contract (§27 A-28, Sess-48).
+  # Lesson #36: AC titles are pointer-text only — full normative body lives in §22 §97.
+  - file: 17-openapi-client.yaml
+    fulfills: spec/22-git-logs-v2 §97 AC-40 "OpenAPI parity" — client mirror MUST stay byte-equivalent to §22 §17 server OpenAPI (verb/path/status/schema set)
+  - file: 06-log-shipping-contract.md
+    fulfills: spec/22-git-logs-v2 §97 AC-11 "Endpoint inventory" — batched/streaming POST mappings to /append-log, PUT /fixed-log, POST /clear-log MUST be exhaustive (no extra, none missing)
+  - file: 07-error-catalog.md
+    fulfills: spec/22-git-logs-v2 §97 AC-30 "Error envelope shape + RequestId mirroring" — GLCI-* client codes MUST surface server envelope verbatim and round-trip RequestId (cross-verified by §27 gate #17 + #18, A-22/A-23)
 ---
 
 # Universal CI CLI — Spec Overview
