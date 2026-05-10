@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.14.0  
-**Updated:** 2026-05-10 (Phase-5 T-22 — added slot 48 `check-ac-prefix-contract.py`, gate #29. Cross-file complement to slot 47/gate #28: enforces AC-prefix↔folder ownership map (§22 owns `AC-NN`/`AC-22-CE-NN`/`AC-22-LV-NN`/`AC-COHORT-NN`; §23 owns `AC-ADB-NN`; §24 owns `AC-ADS-NN`+`AC-CAF-NN`; §25 owns `AC-AI-NN`+legacy bare; §26 owns `AC-DG-NN`+legacy bare; §27 owns `AC-T-NN`; §28 owns `AC-28-NN`). Closes §27 backlog `ac-prefix-contract-check` minted T-14 — second-oldest un-shipped backlog entry. 5-clause cross-folder scan (owner-folder declaration / no cross-folder AC-ID collision / bare-numeric partition discipline / no foreign-prefix declaration in §00/§98/§99 meta surface / ownership-map round-trip detects new prefixes) with 6-fixture in-memory `--self-test`. Together slots 47+48 make AC-ID namespace globally unique by machine construction. Prior: T-21 — slot 47 `check-ac-section-orphan-header.py`, gate #28.)  
+**Version:** 4.15.0  
+**Updated:** 2026-05-10 (Phase-5 T-23 — added slot 49 `check-ui-component-binding-matrix.py`, gate #30. First §24 U-1 first-class structural gate; closes §27 backlog `ui-component-binding-matrix-check`. 6-clause cross-folder scan over §24 §00 U-1 (line 322) ↔ §23 §00 R-1 (line 370) (U-1 endpoint references resolve in R-1 / no orphan UI-consumable R-NN endpoints / U-2 four-state literal slots `<AppSkeleton/>`+`<AppEmptyState/>`+`<AppErrorState/>`+`(the component body)` plus `data-error-code`+`Error.TraceId`+`copy-to-clipboard` literals / U-1 role-gate enum closed-set discipline / U-3 boolean parity literal presence mirroring §23 R-4 inv-2 / no parallel R-1 matrix in §24 children) with 6-fixture in-memory `--self-test`. §24 advances toward 19-20 self-enforcing band (C3+C4+C5 each +1). Prior: T-22 — slot 48 `check-ac-prefix-contract.py`, gate #29.)  
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
