@@ -8,18 +8,18 @@
   "findings": [],
   "module": "22-git-logs-v2",
   "files_used": 3,
-  "files_total": 56,
+  "files_total": 57,
   "bytes_used": 140000,
-  "bundle_sha": "a60d650e775c60fd",
+  "bundle_sha": "a60314a5b3144053",
   "chunks": [
     {
       "tier": "T1",
-      "bundle_sha_chunk": "2bc0b5e105f3f682",
+      "bundle_sha_chunk": "8fdf2892e792da5c",
       "files": [
         "spec/22-git-logs-v2/00-overview.md",
         "spec/22-git-logs-v2/97-acceptance-criteria.md"
       ],
-      "bytes_used": 128296
+      "bytes_used": 124959
     },
     {
       "tier": "T1",
