@@ -56,6 +56,11 @@ synthetic fixtures:
 - **F-3** seed `INSERT` omits explicit IDs → fails (clause-3, T-10/WE-2)
 - **F-4** `IX_AppLink_TargetRepoId` partial-index `WHERE` clause stripped
   → fails (clause-4)
+- **F-5** disconnect-invariant CHECK clause absent (WE-3/WE-4 fixture
+  pair fails the reconnect-without-orphan-row predicate) → fails (clause-2)
+- **F-6** R5 vacuous-pass — empty corpus / no `CREATE TABLE AppLink` fence
+  found in any §23 source → fails as `vacuous-pass: empty walk → exit 3
+  fixture-rot` rather than silently passing on absence.
 
 ## 5-link self-enforcement chain (A-44 template)
 
