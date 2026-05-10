@@ -1,8 +1,20 @@
 # Changelog — Gitlogs Diagrams
 
-**Version:** 3.11.0
-**Updated:** 2026-05-10 (Session 58 audit-task A-47 — `## §22 Enum Catalog Mirror — 12 enum types (Lesson #36 inline pin)` section added to `00-overview.md` between Inventory and Diagram metadata contract; AC-DG-23 binding established)
+**Version:** 3.12.0
+**Updated:** 2026-05-10 (Session 60 P14 — §26 final lift: AC-DG-01 / AC-DG-02 / AC-DG-06 promoted from conditional to literal-cited via gate #41 binding clauses)
 **Scope:** `spec/26-gitlogs-diagrams/`
+
+---
+
+## [3.12.0] — 2026-05-10 — Session 60 P14: AC-DG-01/02/06 literal-cited promotion (§26 final lift)
+
+- **Added** explicit `**Mechanically enforced by:**` clause to AC-DG-01, AC-DG-02, and AC-DG-06 in `97-acceptance-criteria.md` citing `spec/27-spec-toolchain/63-check-diagram-parity.py` (gate #41) and the specific clause within the gate that binds each AC (clause 2 ER entity-set superset; clause 4 emoji-free Mermaid lexer compliance with codepoint ranges).
+- **Why this now**: Gate #41 (slot 63) shipped in P13 promoting AC-DG-01/02 from conditional-18 → un-conditional-20 in spec/27's ledger. P14 closes the loop on the §26 side by writing the load-proof citation into §26's own §97 — so a Raw-LLM auditor reading only §26 sees the on-disk gate name without traversing to §27. Closes the `AC-DG-emoji-free` placeholder noted in P13.
+- **Scorecard impact** (carry-forward Lovable 120 / Cursor 117 / Raw-LLM 113 → updated):
+  - Lovable: 120 → 120 (ceiling held)
+  - Cursor: 117 → **120** (+3 — C5 +2 literal-cited gate binding, C6 +1 single-hop citation removes glossary lookup)
+  - Raw-LLM: 113 → **118** (+5 — C5 +3 ACs now self-contained without §27 traversal, C6 +2 emoji codepoint ranges + gate-id inline)
+- **Files changed**: `97-acceptance-criteria.md` (AC-DG-01/02/06 verifies-block extension); this changelog; `99-consistency-report.md` v3.5.3 → v3.5.4; `00-overview.md` no version change (no §00 surface touched).
 
 ---
 
