@@ -1,8 +1,22 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.4.0
-**Updated:** 2026-05-10 (Session 52 audit-task A-32 — `linter-scripts/_lib/fixture_replay/` skeleton landed; A-31 contract now backed by code; gate #15 self-enforcement extension is LIVE)
+**Version:** 4.5.0
+**Updated:** 2026-05-10 (Session 55 audit-task A-43 — slot 36 `check-ads-boundaries.py` shipped; gate #19; first §27 gate dedicated to a §24-side AC family)
 **Scope:** `spec/27-spec-toolchain/`
+
+### 4.5.0 — 2026-05-10 — Session 55 audit-task A-43: slot 36 `check-ads-boundaries.py` (gate #19; first §24-side gate)
+
+- **Action**: Added §27 slot 36 `36-check-ads-boundaries.md` (v1.0.0, ~85 lines) specifying the `linter-scripts/check-ads-boundaries.py` contract that promotes §24 §97 AC-ADS-06 (marketing-no-AppShell) / AC-ADS-09 (ui×app name-collision) / AC-ADS-10 (--app-status-* leak-into-ui) from contract-proven to **load-proven** CI gates. Wired into `.github/workflows/spec-health.yml` as a hard-fail step ("§24 design-system boundary gate (Sess-55 A-43, gate #19)") that runs `--check all` followed by `--self-test`. §27 §00 inventory + Quick-Nav row updated. The script + 3 fixture corpora (`marketing-appshell-violation/`, `ownership-matrix-collision/`, `status-token-leak/`) shipped Sess-55 A-42; this turn promotes them to a §27 gate.
+- **Why now**: A-42 (Sess-55) shipped the scanner + fixtures with self-test green but stopped short of CI wiring; A-42 invalidation trigger (c) "Promoting `check-ads-boundaries.py` to §27 slot 36 + workflow row + §27 §97 AC + §27 §00 gate-table row → §24 C3 to 20 across personas" — this turn executes that trigger. Lifts §24 to its first criterion-20 ceiling (C3 Testability), which until now was reachable only via §27 (the cohort ceiling-folder).
+- **Self-enforcement chain**: gate #19 self-tests its own correctness via `--self-test` (vacuously-passing scanner is itself a fail). This is the same R5 resilience pattern §27 gate #15 (`derives-from-restate-check`) and gates #17/#18 (envelope/request-id) use. Without `--self-test`, a regression to a vacuously-passing regex would silently accept hostile input — the self-test closes that class.
+- **Lesson #36 preservation**: Slot 36 cites AC-ADS-06/09/10 by ID, does NOT restate the GWT bodies (those live in §24 §97). Workflow step comment is descriptive (forbidden patterns) but does not duplicate test invariants.
+- **Cross-folder impact**: §24 C3 Testability lifts L 19→**20** / C 19→**20** / R 18→**19** (Raw-LLM stays 19 because the walker bundle for §24 still does not surface the §27 gate row; lifts to 20 only when §24 §00 cites gate #19 in a Walker-Pin row). §27 unchanged (already at 120/120/120 ceiling). Cohort means: L 114.7 → **115.0** (+0.3); C 113.7 → **114.0** (+0.3); R 111.0 → **111.1** (+0.1).
+- **Scorecard delta — full**: §24 totals **L 115 / C 115 / R 110** (was 114/114/109; Δ +1/+1/+1). §24 is no longer the cohort floor on Cursor (C115 ≥ §28 C112). Raw-LLM cohort floor: §25 R108 (sole, unchanged from A-41).
+- **Invalidation triggers post-A-43**: (a) Removing the workflow step → §24 C3 drops back to 19/19/18 + A-42 trigger (c) reopens. (b) Modifying the scanner so any negative fixture passes → §24 C3 19→17. (c) Adding a Walker-Pin row in §24 §00 citing gate #19 + slot 36 → §24 R C3 19→20 (would unlock §24's first Raw-LLM ceiling-criterion). (d) Removing any negative fixture → A-42 trigger (a) reopens.
+- **Carry-forward**: A-42 invalidation triggers (a/b/d) carry forward unchanged. A-41 (a/b/d) carry forward. A-37 / A-39 / A-40 carry forward.
+- **Lockstep**: §27 §00 v4.4.0 → **v4.5.0** (minor — new slot + gate). §27 §97 unchanged this turn (AC-T-NN entry deferred per AC-T-29 delegation rule — slot file IS the contract). This file v4.4.0 → **v4.5.0** (this row). New artifacts: `spec/27-spec-toolchain/36-check-ads-boundaries.md` + workflow step. **No** §22 / §28 / §26 / §25 / §23 edits, **no** scope-lock breach.
+
+---
 
 ### 4.4.0 — 2026-05-10 — Session 52 audit-task A-32: `linter-scripts/_lib/fixture_replay/` skeleton landed (A-31 contract → code)
 
