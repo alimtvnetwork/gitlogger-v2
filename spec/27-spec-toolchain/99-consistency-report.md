@@ -1,7 +1,7 @@
 # Consistency Report — Spec Toolchain
 
-**Version:** 2.90.0
-**Updated:** 2026-05-10 (Phase 158 — slot 34 AC-34-19 anchor-pair AC-boundary splitter; closes spec/22 walker-cap data-loss; Lesson #87 codified)
+**Version:** 2.90.2
+**Updated:** 2026-05-10 (Session 18 F-15 + F-20 patch — banner-cascade audit row for §97 v2.17.0 → v2.18.0 AC-T-36 in-place amendment (Filler-band exemption + forward-looking `kind:` enforcement from slot 36+); §00 v2.95.0 → v2.95.1; §98 v2.96.0 → v2.97.0; this file v2.90.0 → v2.90.2. No consistency contract change; cohort parity stamp only per F-17 mirror pattern.)
 
 ---
 
