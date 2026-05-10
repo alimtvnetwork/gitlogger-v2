@@ -36,6 +36,18 @@ axis_rationale: "App-only token extensions (additive contract over §07)"
 
 ---
 
+## AI Implementer Quickstart
+
+**Read in this order to land a change in ≤30 min:**
+1. **Boundary** — `## Relationship to §07` (just below). Anything that re-defines a §07 token is a bug; this folder only **adds** app-scoped tokens.
+2. **Contract** — `## Inlined Contracts` (line 70) for app-token additions; `## Implementation reference — design-token consumers` (line 319) for consumer wiring.
+3. **ACs** — [`97-acceptance-criteria.md`](./97-acceptance-criteria.md). Worked Example `WE-01` (AC-ADS-04) shows the light/dark token-parity harness.
+4. **Components** — `## Phase 61 Reference: App UI Component Registry API` (line 485) before adding any new component.
+
+**Hard rules:** every app token MUST have light + dark values · never write raw colors in components, only token references · never override a §07 token name.
+
+---
+
 ## Relationship to §07 (Core Design System)
 
 This module is **NOT** a parallel design system. It is a strict, **additive overlay** on the canonical system defined in [`spec/07-design-system/`](../07-design-system/00-overview.md). The contract:

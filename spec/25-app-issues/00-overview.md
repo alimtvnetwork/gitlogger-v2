@@ -38,6 +38,19 @@ Any content that analyzes bugs, failures, root causes, or fixes for application-
 
 ---
 
+## AI Implementer Quickstart
+
+**This folder is `kind: index` — a routing parent over `kind: tracker` post-mortems. You do not "implement" findings here; you read them to avoid repeating the bug.**
+
+1. **Start here:** [`02-consolidated-audit-findings/`](./02-consolidated-audit-findings/00-overview.md) — single source of truth (24 numbered findings, line-anchored evidence).
+2. **Skip:** `01-phase-2-git-logs-audit/` — superseded; preserved only for traceability.
+3. **Before changing §22 (git-logs-v2):** grep this folder for the file path you're touching; if a finding cites it, read the resolution before editing.
+4. **New finding?** Add it to `02-consolidated-audit-findings/` with verbatim evidence snippet + file:line anchor; never inline post-mortems into the source spec.
+
+**Hard rules:** trackers are exempt from missing-contract / untestable rubric findings (Lesson #29) · never restate findings — link via AC-AI-17 · evidence MUST be line-anchored, not paraphrased.
+
+---
+
 ## Cross-References
 
 | Reference | Location |

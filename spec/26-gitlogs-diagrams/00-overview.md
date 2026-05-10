@@ -25,6 +25,20 @@ Authoritative source: [`../22-git-logs-v2/00-overview.md`](../22-git-logs-v2/00-
 >
 > **v2.1.0 (2026-04-26 — Phase 10 Diagram Render Pass):** No source `.mmd` edits. Rendered all 6 active sources to companion `.svg` build artifacts (`01-er-diagram.svg`, `05-auth-validation.svg`, `06-permission-flow.svg`, `07-rate-limit-flow.svg`, `08-encryption-v3-flow.svg`, `09-endpoints-mindmap.svg`) via `@mermaid-js/mermaid-cli` so reviewers without Mermaid tooling can preview directly. SVGs reflect the cumulative schema state shipped through Phase 9 (v2.9.2): split-DB boundary with `ShaRegistry` (Phase 4), SSH-Key Lane B (Phase 5/6), `Pipeline.PreviousHasError` boolean (Phase 9). Re-render command: `mmdc -i <file>.mmd -o <file>.svg -p puppeteer.json -b transparent`.
 
+## AI Implementer Quickstart
+
+**You are authoring/modifying Mermaid `.mmd` sources. Diagrams are owned artifacts — they DEPICT §22 but this folder OWNS the invariants.**
+
+1. **Contracts first** — [`97-acceptance-criteria.md`](./97-acceptance-criteria.md): AC-DG-01..AC-DG-22+ (table coverage, cardinality alignment, auth-flow order, permission resolution, emoji-free lexer, no JWT/RS256, mindmap completeness).
+2. **Header every `.mmd`** — start with `%% Diagram type: …` + `%% What this answers: …` + `%% Source spec: …` + `%% Audience: …` (per AC-DG-19/20).
+3. **Slot rule** — file slots are immutable; next new diagram = next free numeric prefix (currently `11-*`). Slots `02/03/04` are intentional locked gaps.
+4. **Re-render** — `mmdc -i <file>.mmd -o <file>.svg -p puppeteer.json -b transparent`. Commit `.mmd` + `.svg` together.
+5. **Touched §22 schema/auth/perms?** Re-render the affected diagram in the same commit; stale SVG = AC-DG breach.
+
+**Hard rules:** no emoji in `.mmd` · no JWT/RS256 references · ER is the only place data shape lives (no parallel domain hierarchy diagrams) · `puppeteer.json` MUST be checked in beside `.mmd` (AC-DG-18).
+
+---
+
 ## Why so few diagrams now (layman explainer)
 
 We previously had 8 `.mmd` files but several overlapped:
