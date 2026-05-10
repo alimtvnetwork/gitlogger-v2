@@ -1,12 +1,28 @@
 # Changelog — Gitlogs Diagrams
 
-**Version:** 3.7.0
-**Updated:** 2026-05-07 (Phase B2 — §97 added AC-26 Sibling Artifact Delegation Map per Lesson #21 (intra-module sibling-file axis); mirror of spec/22 AC-80; completes tier-1 audit-followability triplet AC-22 + AC-25 + AC-26)
+**Version:** 3.8.0
+**Updated:** 2026-05-10 (Session 13 — added AC-DG-23 narrative-header contract for `.mmd` sources + Session-13 self-application pass: corrected AC key spelling to `%% Authoritative source:` (matches shipped v2.0.0 convention) and patched 6 `.mmd` files missing `%% Audience:` line; full compliance verified across all 9 active sources)
 **Scope:** `spec/26-gitlogs-diagrams/`
 
 ---
 
+## [3.8.0] — 2026-05-10 — Session 13: AC-DG-23 narrative-header contract + self-application pass
+
+- **Added** `AC-DG-23` `[active]` — Every `.mmd` source MUST begin with a 4-line narrative header block (`%% Diagram type:` / `%% What this answers:` / `%% Authoritative source:` / `%% Audience:`) as the first four non-blank lines, with optional 5th `%% Re-render:` line. Promotes the previously advisory rule from `00-overview.md` "AI Implementer Quickstart" (Session 8) to an enforceable GWT contract; pins the canonical 4-key schema previously implicit across AC-DG-05 (type+intent) and AC-DG-19 (changelog binding).
+- **Self-application (Session 13, F-12):** scanned all 9 active `.mmd` sources for compliance. Findings:
+  - **Key-spelling drift:** the new AC originally specified `%% Source spec:` but all 9 shipped files use `%% Authoritative source:` (v2.0.0 convention). Per **Lesson #36** (preserve shipped conventions / link-don't-restate), corrected the AC text to declare `%% Authoritative source:` canonical and explicitly forbid `%% Source spec:` — avoided 9 file rewrites and preserved git blame.
+  - **Missing `%% Audience:` line** on 6 files: `05-auth-validation.mmd`, `06-permission-flow.mmd`, `07-rate-limit-flow.mmd`, `08-encryption-v3-flow.mmd`, `09-endpoints-mindmap.mmd`, `10-ssh-auth-validation.mmd` — patched in the same commit with audience values naming both implementer cohort and auditing reference into §22.
+  - **Already compliant (no edit):** `01-er-diagram.mmd`, `01-diagram-conventions/lifecycle-diagram-pairing.mmd`, `lifecycle-26-gitlogs-diagrams-lifecycle.mmd` (Session 6 / earlier audience patches).
+  - **Final state:** verified empty miss-list across all 9 files via `head -10 | grep -qF '%% <key>'` for each of the 4 required keys.
+- **Why:** Closes the F-07 advisory-vs-enforceable gap (Session 9 scorecard) + the F-12 self-application gap (Session 11 scorecard). Mirror of spec/22 AC-22-CE1 and spec/27 AC-T-36 advisory→enforceable lift pattern.
+- **Banners:** §97 v3.7.0 → **v3.8.0** (AC count 26 → 27, minor — new contract surface); §00 v3.7.0 → **v3.7.1** (patch — Quickstart rule now AC-pinned); §98 v3.7.0 → **v3.8.0** (this entry); §99 v3.5.2 → **v3.5.3** (patch).
+- **No** CI workflow change, **no** RUBRIC bump, **no** AC-31-31 cascade.
+- **Lessons applied:** **Lesson #36** (preserve shipped conventions when an AC drifts from reality — fix the AC, not the artefacts), **Lesson #88** (sprawl navigation aid — Quickstart rule lifted to AC keeps the nav-map honest).
+
+---
+
 ## [3.7.0] — 2026-05-07 — Phase B2: Sibling Artifact Delegation Map (Lesson #21 intra-module axis)
+
 
 - **Added** `AC-26` `[critical]` — Sibling Artifact Delegation Map: 18-row delegation table covering all sibling artifacts in spec/26 (6 active `.mmd` Mermaid sources + 6 paired `.svg` build artifacts + `puppeteer.json` render config + `lifecycle-26-gitlogs-diagrams-lifecycle.mmd` + `01-diagram-conventions/` sub-folder + 3 informative-exempt module-meta files). Each row binds artifact → governing §97 AC family + tier visibility + restate-forbidden flag. Closes the **Lesson #21 intra-module audit-boundary < verification-boundary gap** at the spec/26 derivative-spec axis.
 - **Why:** Mirror-pair with **AC-25** (cross-module externalized citation map, shipped 2026-05-06 in v3.6.1). Together with **AC-22** (derivative-context module-kind pin) forms the **complete tier-1 audit-followability triplet** for spec/26 per **Lesson #37** (integration-axis modules co-need Lesson #19 + Lesson #21 + Lesson #36 closures). Mirror of spec/22 AC-80 (33-sibling-file delegation map) and spec/02 AC-CG-21 (16-sub-folder delegation map) — same Lesson #21 pattern applied to the spec/26 derivative-artifact axis.
