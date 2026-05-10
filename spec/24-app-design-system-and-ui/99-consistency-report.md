@@ -112,3 +112,10 @@ These slots are immutable once shipped (per project memory rule).
 - New "UI Contract" section added between Theme parity rule and Cross-References; AC-ADS-UI-01 + AC-ADS-UI-02 minted.
 - Cross-spec binding: U-1 → §23 R-01..R-08; U-3 → §23 R-4 invariant 2; U-4 → existing AC-ADS-04 contrast rule.
 - Regression-grep: `rg -nc '^## UI Contract|AC-ADS-UI-01|AC-ADS-UI-02' spec/24-app-design-system-and-ui/00-overview.md` MUST return ≥3.
+
+### v2.2.6 — 2026-05-10 — A-57: Settings surface pinned (T-08)
+
+- New "Settings Surface" section bound to AppShellVariant.Settings (file-line 445); AC-ADS-UI-03 minted.
+- Seedable-config binding: S-3 mandates seed-row + UserSettingOverride table separation, COALESCE merge view, paired-removal migration.
+- DDL for Setting + UserSettingOverride tables MUST be materialised in §23 as T-08 follow-up.
+- Regression-grep: `rg -nc '^## Settings Surface|AC-ADS-UI-03|UserSettingOverride' spec/24-app-design-system-and-ui/00-overview.md` MUST return ≥3.
