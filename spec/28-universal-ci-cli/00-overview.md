@@ -19,9 +19,9 @@ produced_for:
 
 # Universal CI CLI — Spec Overview
 
-**Version:** 2.10.0  
+**Version:** 2.11.0  
 <!-- h10-verified-phase: 157 -->
-**Updated:** 2026-05-10 (Session 55 audit-task A-39 — added AI Quick-Nav Map header (Lesson #88), mirroring §22 pattern; expected lift §28 R C6 17→18. Banner-only patch; no contract change.)
+**Updated:** 2026-05-10 (Session 55 audit-task A-40 — banner-only patch reflecting §08 deprecated-provider-row trim landed in §98 [2.11.0]; §28 C6 +1 all personas → L113/C112/R109. No contract change.)
 **Status:** Draft  
 **AI Confidence:** Production-Ready  
 **Ambiguity:** Low  
