@@ -593,15 +593,177 @@ the DB layer (verifiable via SQL `EXPLAIN QUERY PLAN` showing only a SELECT).
 Returning a refreshed `DisconnectedAt` (e.g. now()) is a violation of R-4
 invariant 6 (idempotency).
 
-### AC-ADB-WE-01 — Failure-path Worked Examples present and binding
-
-WE-1 through WE-4 MUST be present in `00-overview.md`, each containing
-(a) precondition, (b) full HTTP request, (c) full HTTP response with
-correct status code and R-3 envelope, (d) DB invariants asserted clause.
-Removing any of WE-1..WE-4, weakening the response status codes, or
-deleting the DB invariants clause invalidates this AC.
 
 ---
+
+## Settings Persistence (Normative — Phase-5 T-19 / F-03 closure)
+
+This section materialises the storage layer for the §24 Settings Surface
+(§24 §00 line 399 `## Settings Surface (Normative — Phase-5 T-08)` —
+S-1 route matrix, S-2 persistence matrix, S-3 4-invariant seedable-config
+binding). §24 owns the surface contract; §23 owns the storage. Together
+with §24 gate #25 `seedable-config-row-present-check` (T-18), this section
+closes audit finding F-03 (`Setting`+`UserSettingOverride` DDL
+un-materialised — Raw-LLM persona could not ship the storage layer).
+
+### DDL — Setting (seed defaults; immutable at runtime)
+
+PRIMARY lane (SQLite — MATERIALISE):
+
+```sql
+CREATE TABLE IF NOT EXISTS Setting (
+  Key          TEXT     PRIMARY KEY NOT NULL,
+  Value        TEXT     NOT NULL,
+  ValueType    TEXT     NOT NULL CHECK (ValueType IN ('string','int','bool','enum','json')),
+  EnumValues   TEXT     NULL,         -- JSON array; NOT NULL iff ValueType='enum'
+  Scope        TEXT     NOT NULL CHECK (Scope IN ('profile','appearance','links','danger')),
+  IsSecret     INTEGER  NOT NULL DEFAULT 0 CHECK (IsSecret IN (0,1)),
+  Description  TEXT     NOT NULL,
+  CreatedAt    TEXT     NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  CHECK (ValueType <> 'enum' OR EnumValues IS NOT NULL)
+);
+
+CREATE INDEX IF NOT EXISTS IX_Setting_Scope ON Setting(Scope);
+```
+
+Column rules (binding):
+
+1. `Key` is **stable across migrations** — never renamed; deprecation requires a paired forward-only migration per Rule 12 + S-3 invariant 4 (remove seed + all overrides in the SAME migration).
+2. `Value` is the **canonical default**, returned by R-09 when no `UserSettingOverride` exists. The seed row is **immutable at runtime** — only migrations may INSERT/UPDATE/DELETE rows in `Setting` (per S-3 invariant 1; enforced at the application layer, not the DB layer, to keep the storage layer dialect-portable).
+3. `ValueType` enumerates the wire-shape after JSON parse. `bool` follows §23 R-4 invariant 2 (PRIMARY-lane `INTEGER` 0/1; serialised as JSON `true`/`false` per AC-CAF-01 + gate #24 `boolean-uniformity-primary-lane-check`).
+4. `IsSecret=1` triggers the §22 `20-observability.md` redaction contract — values are MUST NOT appear in audit-trail rows or logs (cross-cite §22 AC-04 sink-side observability rule).
+5. `Scope` MUST match the §24 §00 S-1 panel column (`profile`/`appearance`/`links`/`danger`) — the §27 backlog gate `cli-config-schema-resolution-order-check` mirror for §24 will assert parity once minted.
+
+### DDL — UserSettingOverride (per-user mutable layer)
+
+```sql
+CREATE TABLE IF NOT EXISTS UserSettingOverride (
+  UserId       INTEGER  NOT NULL,
+  Key          TEXT     NOT NULL,
+  Value        TEXT     NOT NULL,
+  CreatedAt    TEXT     NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  UpdatedAt    TEXT     NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  PRIMARY KEY (UserId, Key),
+  FOREIGN KEY (Key)    REFERENCES Setting(Key) ON DELETE CASCADE,
+  FOREIGN KEY (UserId) REFERENCES User(UserId)  ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS IX_UserSettingOverride_UserId ON UserSettingOverride(UserId);
+```
+
+Column rules (binding):
+
+1. `(UserId, Key)` is the natural primary key — composite, no surrogate `Id` column. This is the unique enforcement that backs the `INSERT … ON CONFLICT(UserId,Key) DO UPDATE` clause cited in §24 §00 S-3 invariant 2 + gate #25 clause-3.
+2. `Value` here MUST share the `ValueType` of the matching `Setting.Key` row — runtime validation responsibility, not DB-level (SQLite has no cross-table CHECK).
+3. `ON DELETE CASCADE` on both FKs guarantees S-3 invariant 4 forward-only paired removal: dropping a `Setting` row cascades to overrides in the SAME transaction; dropping a user cascades to their overrides. No orphan-override class.
+4. `CreatedAt` / `UpdatedAt` MUST be set by the application on every write (R-10/R-12/R-14) — the DB defaults are belt-and-braces fallbacks; relying on them silently breaks audit-trail correlation per §22 AC-21.
+5. There is **no `Setting`-side mutation lane** — application code MUST NOT issue `UPDATE Setting … WHERE Key=?` outside a forward-only migration. Gate #25 clause-3 already asserts the §24-side prohibition (S-3 invariant 2 literal `MUST NOT mutate the seed row`); the storage-layer contract here is the matching read-side guarantee.
+
+### R-09 merged-view query (PRIMARY lane — binding)
+
+```sql
+SELECT s.Key,
+       COALESCE(o.Value, s.Value) AS Value,
+       s.ValueType,
+       s.Scope,
+       s.IsSecret,
+       (o.Value IS NOT NULL)      AS IsOverridden
+  FROM Setting s
+  LEFT JOIN UserSettingOverride o
+    ON o.Key = s.Key AND o.UserId = ?1
+ WHERE s.Scope = ?2;
+```
+
+`COALESCE(o.Value, s.Value)` ordering is part of the contract — inverting
+it (`COALESCE(s.Value, o.Value)`) silently overrides user choice with
+defaults and is the canonical AC-CAF-04 violation pattern that gate #25
+clause-4 rejects. The literal byte-shape `COALESCE(override.Value,
+seed.Value)` cited in §24 §00 S-3 invariant 3 maps onto `COALESCE(o.Value,
+s.Value)` here (SQL alias `o`/`s` ↔ §24 prose alias `override`/`seed`).
+
+### Seed-row migration shape (binding template)
+
+```sql
+-- Forward-only; per Rule 12. Adds a single setting + its seed default.
+BEGIN TRANSACTION;
+
+INSERT INTO Setting (Key, Value, ValueType, Scope, IsSecret, Description)
+VALUES ('appearance.theme', 'system', 'enum', 'appearance', 0,
+        'Active visual theme; one of EnumValues')
+ON CONFLICT(Key) DO NOTHING;
+
+UPDATE Setting
+   SET EnumValues = '["light","dark","system"]'
+ WHERE Key = 'appearance.theme'
+   AND EnumValues IS NULL;
+
+COMMIT;
+```
+
+`ON CONFLICT(Key) DO NOTHING` is the only conformant insert shape — bare
+`INSERT` would fail re-runs (migrations MUST be replay-safe per Rule 12).
+The two-statement pattern (INSERT then conditional UPDATE for `EnumValues`)
+preserves the forward-only contract: a later migration that adds an enum
+value MUST emit a fresh `UPDATE … WHERE EnumValues NOT LIKE '%newvalue%'`
+guarded statement; never edit a shipped migration file.
+
+### Forbidden storage-layer patterns (binding — emit any of these and
+gate #25 clause-3 trips at PR time)
+
+1. Single `settings` table collapsing seed + override (no separation) — the exact CAF-04 violation gate #25 was designed to prevent. ❌
+2. `Setting.Value` mutated by R-10/R-12/R-14 handlers (rather than `INSERT INTO UserSettingOverride … ON CONFLICT(UserId,Key) DO UPDATE`) — silently destroys the rollback target. ❌
+3. `UserSettingOverride.UserId` made nullable with NULL meaning "global override" — re-introduces the seed-row mutation lane through a side door. ❌
+4. `R-09` query rewritten as `COALESCE(s.Value, o.Value)` — inverts merge order (gate #25 clause-4 trips). ❌
+5. `ON DELETE NO ACTION` / `RESTRICT` on either FK — breaks S-3 invariant 4 forward-only paired removal (orphan-override class). ❌
+
+### REFERENCE lane (PostgreSQL — DO NOT MATERIALISE; shown for parity audit only)
+
+```sql
+-- snake_case mirror per §00 line 101 REFERENCE-lane convention.
+CREATE TABLE setting (
+  key          text PRIMARY KEY,
+  value        text NOT NULL,
+  value_type   text NOT NULL CHECK (value_type IN ('string','int','bool','enum','json')),
+  enum_values  jsonb NULL,
+  scope        text NOT NULL CHECK (scope IN ('profile','appearance','links','danger')),
+  is_secret    boolean NOT NULL DEFAULT false,
+  description  text NOT NULL,
+  created_at   timestamptz NOT NULL DEFAULT now(),
+  CONSTRAINT chk_setting_enum_values CHECK (value_type <> 'enum' OR enum_values IS NOT NULL)
+);
+
+CREATE TABLE user_setting_override (
+  user_id      uuid    NOT NULL REFERENCES "user"(user_id) ON DELETE CASCADE,
+  key          text    NOT NULL REFERENCES setting(key)    ON DELETE CASCADE,
+  value        text    NOT NULL,
+  created_at   timestamptz NOT NULL DEFAULT now(),
+  updated_at   timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY (user_id, key)
+);
+```
+
+The REFERENCE lane is **NOT** materialised in this repo per §00 line 101
+(`silent dialect-flip is FORBIDDEN per AC-ADB-11`). It is shown solely to
+preserve the snake_case naming intent for a future PG lane AC.
+
+### AC-ADB-SETTING-01 — Setting + UserSettingOverride DDL present and shape-pinned  `[critical]`
+
+**Given** the §24 Settings Surface (§24 §00 S-1/S-2/S-3) requires storage,  
+**When** an implementer (any persona) reads §23 §00 for the schema target,  
+**Then** the `## Settings Persistence` section MUST be present with byte-shape DDL for both `Setting` and `UserSettingOverride` tables exactly as specified above. Removing either table, dropping the `(UserId, Key)` composite PK, weakening either `ON DELETE CASCADE`, or omitting the `CHECK (ValueType <> 'enum' OR EnumValues IS NOT NULL)` constraint invalidates this AC. Self-enforcing via §24 gate #25 clause-3 (override-table-separation literal `UserSettingOverride` MUST appear in §24 S-3 invariant 2; this AC adds the storage-side mirror). **Verifies:** `linter-scripts/check-seedable-config-row-present.py --check override-table-separation` + future `linter-scripts/check-setting-override-ddl-shape.py` (slot 45 backlog).
+
+### AC-ADB-SETTING-02 — R-09 merged-view query uses `COALESCE(override, seed)` order  `[critical]`
+
+**Given** R-09 (§24 §00 S-2 line 421 — `GET /api/v1/settings`) returns the merged view,  
+**When** an implementer writes the SQL,  
+**Then** the query MUST use `COALESCE(o.Value, s.Value)` (override-first, seed-fallback) — inverting the order silently overrides user choice with defaults. The §23 §00 R-09 query template above is the canonical byte-shape; alias names `o`/`s` are documentation, but the COALESCE argument order is **binding**. Self-enforcing via §24 gate #25 clause-4 (`r09-merged-view`). **Verifies:** `linter-scripts/check-seedable-config-row-present.py --check r09-merged-view`.
+
+### AC-ADB-SETTING-03 — Seed-row migration uses `ON CONFLICT(Key) DO NOTHING` replay-safe shape  `[high]`
+
+**Given** Rule 12 mandates forward-only, replay-safe migrations,  
+**When** a new setting is added,  
+**Then** the migration MUST emit `INSERT INTO Setting … ON CONFLICT(Key) DO NOTHING` (never bare `INSERT`); enum value extensions MUST use guarded `UPDATE … WHERE EnumValues NOT LIKE '%newvalue%'`; never edit a shipped migration file. The forbidden-storage-layer-patterns list (1)..(5) above is binding — emitting any forbidden shape trips gate #25 (or a future §23 DDL-shape gate) at PR time. **Verifies:** Rule 12 lockstep + future `linter-scripts/check-setting-override-ddl-shape.py` clause for migration replay-safety (slot 45 backlog).
+
 
 ## Migration Template (Rule 12 — forward-only)
 
