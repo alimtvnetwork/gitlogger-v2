@@ -274,7 +274,9 @@ F1_DS = """\
 
 F1_AC = """\
 ### AC-CAF-03: Idempotency contract is observable at every layer
-**Given** an endpoint flagged Idempotent=Yes in §23 R-1 (R-02, R-03, R-05, R-06, R-07, R-09, R-11, R-13),
+F1_AC = """\
+### AC-CAF-03: Idempotency contract is observable at every layer
+**Given** an endpoint flagged Idempotent=Yes in §23 R-1 / §24 S-2 (R-02, R-03, R-05, R-06, R-07, R-09, R-10, R-11, R-12, R-13, R-14),
 **Then** IDENTICAL body modulo TraceId, EXPLAIN QUERY PLAN shows SELECT only. WE-4 is the canonical fixture. Non-idempotent (R-01, R-04, R-08, R-15) MUST NOT be aliased.
 
 ### AC-NEXT
