@@ -30,7 +30,7 @@ consumes:
 # Gitlogs Diagrams
 
 **Version:** 3.8.0
-**Updated:** 2026-05-10 (Session 13 banner cascade — §00 3.7.0 → 3.7.1 patch to acknowledge that the "AI Implementer Quickstart" rule #2 (4-line `.mmd` narrative header) is now AC-pinned in §97 v3.8.0 as **AC-DG-23**. No content change to this file. Mirror of the §97 minor bump per Lesson #25 SemVer-track unification.)
+**Updated:** 2026-05-10 (Session 32 A-11 — §00 3.7.1 → 3.8.0 minor bump adds `consumes:` front-matter mapping each `.mmd` source to the exact §22 AC/file it depicts. Mirrors §28→§27 (A-09, Sess 31) and §25→§27 (A-10, Sess 31) binding pattern: spec/26 is a *consumer* of §22's normative architecture; the listed `source` field is the canonical authority for what each diagram MUST stay synchronised with. Drift between any `.mmd` and its cited source = AC-DG-01 (table-coverage) or AC-DG-02 (cardinality-alignment) breach. Unblocks deferred lint rule §27 D9 `consumes-frontmatter-resolves` for spec/26.)
 <!-- h10-verified-phase: 153 -->
 
 Authoritative source: [`../22-git-logs-v2/00-overview.md`](../22-git-logs-v2/00-overview.md).
