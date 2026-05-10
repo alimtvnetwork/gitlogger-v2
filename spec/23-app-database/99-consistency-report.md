@@ -118,3 +118,10 @@ These slots are immutable once shipped (per project memory rule). If content nee
 - Seed block rewritten to explicit `(AppLinkTypeId, Name) VALUES (1,'GitProfile'),(2,'Repo')` form for both lanes; 5-row parity matrix + 3-row Forbidden shapes table added.
 - Regression-grep: `rg -nc "VALUES \(1,'GitProfile'\),\(2,'Repo'\)" spec/23-app-database/00-overview.md` MUST return ≥1; `rg -nc "INSERT OR IGNORE INTO AppLinkType\(Name\)" spec/23-app-database/00-overview.md` MUST return 0 (forbidden shape).
 - Closes the line-106 deferred annotation; remediation status now "shipped v4.9.0".
+
+### v2.1.8 — 2026-05-10 — A-58: 4 failure-path Worked Examples pinned (T-11)
+
+- New "Worked Examples — Failure Paths" section added between REST/RPC contract and Migration Template; AC-ADB-WE-01 minted.
+- WE-1 (404 unresolved), WE-2 (201 always-insert reconnect), WE-3 (422 boolean-coercion reject), WE-4 (200 idempotent disconnect with preserved timestamp).
+- Regression-grep: `rg -nc '^### WE-[1-4]|AC-ADB-WE-01' spec/23-app-database/00-overview.md` MUST return ≥5.
+- C3 Testability score 20 is un-conditional (no §27 gate dependency) — examples ARE the fixtures.

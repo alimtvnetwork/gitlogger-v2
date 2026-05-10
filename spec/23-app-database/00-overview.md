@@ -457,7 +457,154 @@ The 8-row R-1 endpoint matrix, R-2 schemas, R-3 error envelope, and R-4
 invariants 1–7 MUST be present in `00-overview.md`. Removing any row of R-1,
 removing R-3, or removing R-4 invariants 1, 2, or 4 invalidates this AC.
 
+---
+
+## Worked Examples — Failure Paths (Normative — Phase-5 T-11)
+
+These four scenarios are the canonical fixtures for the failure paths most
+likely to drift across implementations. Each example is binding: the
+request, the DB state precondition, and the response MUST match byte-for-byte
+(modulo TraceId / timestamp values). Any divergence is a contract violation.
+
+### WE-1 — Resolve unknown RepoUrl → 404 `applink.unresolved`
+
+**Precondition:** `App` and `AppLink` tables are seeded per AC-ADB-13;
+no row exists where the canonicalised `RepoUrl` matches.
+
+**Request:**
+```http
+POST /api/v1/applinks/resolve HTTP/1.1
+Content-Type: application/json
+
+{ "RepoUrl": "https://github.com/unknown/unknown.git" }
+```
+
+**Expected response:**
+```http
+HTTP/1.1 404 Not Found
+Content-Type: application/json
+
+{
+  "Error": {
+    "Code": "applink.unresolved",
+    "Message": "No active AppLink resolves the canonicalised RepoUrl 'github.com/unknown/unknown'.",
+    "TraceId": "01HXYZABCDEF0123456789ABCD"
+  }
+}
+```
+
+**DB invariants asserted:** Q1 returns 0 rows; no row is INSERTed; no row is
+mutated. The `Code` value `applink.unresolved` is a closed enum (R-3 status
+table) — emitting `applink.not_found` or `repo.unknown` is a violation.
+
+### WE-2 — Reconnect when no disconnected row exists → 201 (always inserts new row, per Q3)
+
+**Precondition:** `App.AppId=42` exists; no `AppLink` row exists with
+`AppId=42` AND `TargetRepoId=99`.
+
+**Request:**
+```http
+POST /api/v1/apps/42/links/reconnect HTTP/1.1
+Content-Type: application/json
+
+{ "DiscriminatorId": 2, "TargetRepoId": 99 }
+```
+
+**Expected response:**
+```http
+HTTP/1.1 201 Created
+Content-Type: application/json
+
+{
+  "LinkId": 123,
+  "AppId": 42,
+  "DiscriminatorId": 2,
+  "TargetKey": "github.com/acme/repo99",
+  "ResolutionState": "active",
+  "IsActive": true,
+  "CreatedAt": "2026-05-10T12:34:56Z",
+  "DisconnectedAt": null
+}
+```
+
+**DB invariants asserted:** A NEW row is INSERTed (`LinkId` is fresh, never
+reuses a previous deleted/disconnected ID); no UPDATE of any existing row;
+the boolean `IsActive` serialises as `true` (R-4 invariant 2 — never `1`).
+Calling R-08 a second time with identical body MUST insert a SECOND row
+(R-08 is non-idempotent per R-1).
+
+### WE-3 — Boolean-coercion attack on R-01 → 422 `field.invalid`
+
+**Precondition:** Caller has admin role.
+
+**Request:**
+```http
+POST /api/v1/apps HTTP/1.1
+Content-Type: application/json
+
+{ "Name": "demo-app", "RepoUrlCanonical": "github.com/acme/demo", "IsActive": 1 }
+```
+
+**Expected response:**
+```http
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/json
+
+{
+  "Error": {
+    "Code": "field.invalid",
+    "Message": "Field 'IsActive' MUST be boolean true/false; integer 0/1 is not accepted on the wire (R-4 invariant 2).",
+    "Field": "IsActive",
+    "TraceId": "01HXYZABCDEF0123456789ABCE"
+  }
+}
+```
+
+**DB invariants asserted:** No row is INSERTed; the request is rejected at
+the validation layer BEFORE reaching the DB. Accepting `0`/`1` integers and
+silently coercing to boolean is a R-4 invariant 2 violation. The `Field`
+attribute MUST identify the offending key.
+
+### WE-4 — Disconnect already-disconnected link → 200 idempotent (timestamp preserved)
+
+**Precondition:** `AppLink.LinkId=17` exists with `IsActive=0` and
+`DisconnectedAt='2026-05-10T10:00:00Z'` from a prior R-07 call.
+
+**Request:**
+```http
+POST /api/v1/applinks/17/disconnect HTTP/1.1
+Content-Type: application/json
+
+{}
+```
+
+**Expected response:**
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{ "LinkId": 17, "DisconnectedAt": "2026-05-10T10:00:00Z" }
+```
+
+**DB invariants asserted:** No UPDATE is issued; the original
+`DisconnectedAt` timestamp from the first call is RETURNED (read-only second
+call). R-07 is flagged Idempotent in R-1 — second call MUST be a no-op at
+the DB layer (verifiable via SQL `EXPLAIN QUERY PLAN` showing only a SELECT).
+Returning a refreshed `DisconnectedAt` (e.g. now()) is a violation of R-4
+invariant 6 (idempotency).
+
+### AC-ADB-WE-01 — Failure-path Worked Examples present and binding
+
+WE-1 through WE-4 MUST be present in `00-overview.md`, each containing
+(a) precondition, (b) full HTTP request, (c) full HTTP response with
+correct status code and R-3 envelope, (d) DB invariants asserted clause.
+Removing any of WE-1..WE-4, weakening the response status codes, or
+deleting the DB invariants clause invalidates this AC.
+
+---
+
 ## Migration Template (Rule 12 — forward-only)
+
 
 
 BEGIN TRANSACTION;
