@@ -61,6 +61,7 @@
 - **Given** the entire `spec/` tree,
 - **When** `node linter-scripts/check-tree-health.cjs --min=80` is run,
 - **Then** this module MUST contribute `required=2/2` (overview + consistency report present) and the overall score MUST be ≥ 80.
+- **Worked example:** `node linter-scripts/check-tree-health.cjs --min=80 --json | jq '.modules["spec/27-spec-toolchain"].required'` MUST emit `"2/2"`; `jq '.score >= 80'` MUST emit `true`. Removing `00-overview.md` drops `required` to `1/2` and fails the gate with exit `1`.
 
 ### AC-T-10 — Spec cross-link gate (zero broken links)
 - **Given** every relative link inside `spec/**/*.md`,
