@@ -781,6 +781,27 @@ jobs:
         run: |
           python3 linter-scripts/check-no-toolchain-enum-in-issues-folder.py --self-test
           python3 linter-scripts/check-no-toolchain-enum-in-issues-folder.py
+
+      - name: locked-7 perimeter gate (#39 / T-32)
+        # Boundary-quartet 4/4 — completes the on-disk
+        # mechanization of mem://constraints/spec-scope.
+        # Walks every .md under the 7 in-scope folders and
+        # asserts no content reference crosses into out-of-
+        # scope spec/00..21/, spec/29-…/, or spec/_archive/.
+        # Six clauses: 1+2 path-token guards (with widened
+        # adjacency markers + structural exemptions for ledger
+        # files / §25 audit corpus / §27 toolchain specs);
+        # 3 Markdown-link guard (resolves relative paths,
+        # skips in-scope cross-folder links, honours structural
+        # exemptions); 4 fenced-embed source-attribution
+        # guard; 5 §27 §00 in-scope enumeration literal +
+        # Lesson #15 self-citation; 6 R5 vacuous-pass anchor
+        # (≥1 .md per in-scope folder + enumeration block
+        # located + adjacency-marker exemption exercised).
+        # Spec: spec/27-spec-toolchain/61-check-no-out-of-scope-spec-folder-link.md
+        run: |
+          python3 linter-scripts/check-no-out-of-scope-spec-folder-link.py --self-test
+          python3 linter-scripts/check-no-out-of-scope-spec-folder-link.py
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
