@@ -1,8 +1,8 @@
 # Acceptance Criteria
 
-**Version:** 2.8.0
-**Updated:** 2026-05-10 (Session 56 audit-task A-47 — added `## Test Invariant Index (T-28-NN)` section with inaugural 5 rows: T-28-29/30/31/36/48. Translates GWT prose to fixture path + runner invocation + single-line pass criterion. Lifts §28 C3 Testability +1 across personas; deferred §27 gate `ac-test-invariant-coverage-check` will mechanically enforce coverage.)
-**Prior banner — Version:** 2.7.0; **Updated:** 2026-05-07 (Phase 155 A4 — added **AC-28-47** `[critical]` Module Kind: GitHub Actions Only — pins v2 scope per Lesson #29; AC count 46 → 47.)
+**Version:** 2.9.0
+**Updated:** 2026-05-10 (Phase-5 T-38 / P19c — AC-28-49 promotes from literal-cited (18) → **load-proven (20)**: gate #40 `linter-scripts/check-ci-cli-self-test-harness.py` SHIPPED on disk (was vapor in v2.8.0), passes real-disk scan, hard-wired in `.github/workflows/spec-health.yml` step `§28 CI-CLI self-test harness gate (#40 / P19c)`. §04 v1.2.0 declares the cited `--self-test` flag + `--check <mode>` enum; §07 v1.2.0 carries the cited 4-row exit-code table. Phantom-script count 37 → 36.)
+**Prior banner — Version:** 2.8.0; **Updated:** 2026-05-10 (Session 56 audit-task A-47 — added `## Test Invariant Index (T-28-NN)` section with inaugural 5 rows.)
 
 Each AC is written **Given / When / Then** so it can be lifted directly into a test (bats / phpunit / go test). When this file and a normative source disagree, the normative source wins and this file MUST be patched.
 
