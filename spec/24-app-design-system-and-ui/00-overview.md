@@ -260,9 +260,56 @@ export function AppShell({ children }: { children: ReactNode }) {
 }
 ```
 
+### AppShell Route Matrix (Normative — Phase-5 T-09)
+
+This matrix pins every top-level TanStack route to its `AppShellVariant`
+(closed enum at file-line 511). Adding a new top-level route REQUIRES
+adding a row here in the same commit; CI gate `appshell-route-matrix-check`
+(§27 backlog from T-09) enforces matrix-↔-`src/routes/` parity.
+
+| ID    | Route prefix          | AppShellVariant         | Auth-gated? | Notes                                           |
+|-------|-----------------------|-------------------------|-------------|-------------------------------------------------|
+| AS-01 | `/`                   | `Marketing`             | No          | Marketing landing; MUST NOT import `AppShell` (AC-ADS-06). |
+| AS-02 | `/login`              | `Marketing`             | No          | Auth surface; lives outside AppShell.           |
+| AS-03 | `/apps`               | `Console`               | Yes (user)  | U-01 AppList; full AppShell with sidebar.       |
+| AS-04 | `/apps/$AppId`        | `Console`               | Yes (user)  | U-02 AppDetail; AppShell with sidebar.          |
+| AS-05 | `/resolve`            | `Console`               | Yes (svc/admin) | U-05 AppLinkResolveWidget; AppShell.        |
+| AS-06 | `/settings`           | `Settings`              | Yes (user)  | S-01..S-05 panels; AppShell with settings nav.  |
+| AS-07 | `/api/*`              | (none — no shell)       | varies      | Server routes only; never render AppShell.      |
+| AS-08 | `*` (notFound)        | `Modal`                 | No          | 404 boundary per `__root.tsx`.                  |
+
+**Variant → behaviour binding:**
+
+| Variant     | AppToolbar | AppSidebar | AppCanvas padding | Used by                |
+|-------------|------------|------------|-------------------|------------------------|
+| `Marketing` | (none)     | (none)     | full-bleed        | AS-01, AS-02           |
+| `Console`   | full       | primary    | `--space-4`       | AS-03, AS-04, AS-05    |
+| `Settings`  | full       | settings nav (panel list S-01..S-05) | `--space-6` | AS-06    |
+| `Modal`     | minimal    | (none)     | `--space-8`       | AS-08, error/confirm overlays |
+
+**Invariants (binding):**
+
+1. The matrix is the single source of truth — adding a `src/routes/foo.tsx`
+   without an AS-NN row is a build-fail per `appshell-route-matrix-check`.
+2. `Marketing`-variant routes MUST NOT import from `src/components/app/**`
+   (extends AC-ADS-06 to cover transitive imports of `AppShell`).
+3. `Console` and `Settings` variants share the AppToolbar height token
+   (`--app-toolbar-height`); changing the height in one variant requires
+   changing it in both atomically.
+4. Adding a 5th variant to `AppShellVariant` enum (file-line 511) REQUIRES
+   adding a 5th row to the variant→behaviour binding table above in the
+   same commit.
+
+### AC-ADS-UI-04 — AppShell route matrix present and parity-locked
+
+The 8-row AS-NN matrix and the 4-row variant→behaviour binding table MUST
+be present in `00-overview.md`. Removing any AS-NN row, removing the
+variant→behaviour table, or weakening invariants 1, 2, or 4 invalidates
+this AC.
+
 ### Responsive breakpoints (binding)
 
-The app overlay reuses §07's Tailwind defaults; **no app-specific breakpoints are defined**. Behaviour at `< md` (768px):
+
 
 - Sidebar collapses to `--app-sidebar-width-collapsed` (4rem); icons only.
 - `<main>` left-padding switches to `pl-app-sidebar-collapsed`.
