@@ -104,6 +104,8 @@ STRUCTURAL_EXEMPT_FILES = (
     "spec/22-git-logs-v2/50-ac-delegation-maps-detail.md",
     "spec/23-app-database/00-overview.md",
     "spec/24-app-design-system-and-ui/00-overview.md",
+    "spec/28-universal-ci-cli/00-overview.md",
+    "spec/28-universal-ci-cli/05-config-resolution.md",
 )
 ENUM_LITERALS = (
     "Locked-7 in-scope folders: §22, §23, §24, §25, §26, §27, §28",
