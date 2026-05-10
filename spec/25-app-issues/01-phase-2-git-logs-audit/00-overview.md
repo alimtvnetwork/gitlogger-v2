@@ -670,6 +670,8 @@ export enum IssueStatus {
   WontFix    = "wontfix",
 }
 
+// FROZEN historical Phase-50 enum (NOT the canonical issue-record severity).
+// Canonical = {Critical,High,Medium,Low} per parent §97 AC-AI-14 + sub-01 §97 AC-09.
 export enum IssueSeverity {
   Blocker = "blocker",
   Major   = "major",
