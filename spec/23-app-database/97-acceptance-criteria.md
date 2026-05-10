@@ -197,6 +197,36 @@ Defines the App, AppLink, AppStatus, and AppLinkType tables — the polymorphic-
 
 ---
 
+## Worked Examples
+
+> Non-normative `kind: example` — illustrative implementations of opaque ACs. If example and AC ever diverge, the AC wins.
+
+### WE-01 — AC-ADB-14 polymorphic AppLink resolution (4 outcomes walked)
+
+**Setup (seed):**
+| Table | Row |
+|---|---|
+| `App` | `{Id: 7, AppSlug: "billing", AppStatusId: 1 /*Active*/}` |
+| `App` | `{Id: 8, AppSlug: "billing-old", AppStatusId: 2 /*Inactive*/}` |
+| `GitProfile` | `{Id: 30, Handle: "acme"}` |
+| `Repo` | `{Id: 100, RepoUrl: "https://github.com/acme/billing", GitProfileId: 30}` |
+| `AppLink` | `{Id: 1, AppLinkTypeId: 2, RepoId: 100, AppId: 7, CreatedAt: 1714000000}` (Direct) |
+| `AppLink` | `{Id: 2, AppLinkTypeId: 1, GitProfileId: 30, AppId: 8, CreatedAt: 1715000000}` (Transitive, newer) |
+
+**Walk inbound `:repoUrl = "git@github.com:acme/billing.git"`:**
+1. **Canonicalise** → `https://github.com/acme/billing` (matches `Repo.RepoUrl` insertion pipeline).
+2. **Direct candidates** (`AppLinkTypeId=2`): join `AppLink → Repo` on canonical URL → `{AppLink.Id=1, AppId=7}`.
+3. **Transitive candidates** (`AppLinkTypeId=1`): from `Repo.GitProfileId=30` → `{AppLink.Id=2, AppId=8}`.
+4. **Tie-break:** Direct > Transitive → pick AppId=7. Check `AppStatusId=1=Active` → ✓.
+5. **Outcome:** `RESOLVED_DIRECT(AppId=7)`.
+
+**Negative paths:**
+- If AppId=7 had `AppStatusId=2`: outcome MUST be `REJECTED_INACTIVE_APP` — implementer MUST NOT silently fall through to AppId=8 (forbidden by AC).
+- If neither Direct nor Transitive candidates exist: outcome `REJECTED_NO_MATCH`.
+- If only Transitive exists and is Active: outcome `RESOLVED_TRANSITIVE(AppId=...)`.
+
+---
+
 ## Cross-References
 
 - [Module overview](./00-overview.md)

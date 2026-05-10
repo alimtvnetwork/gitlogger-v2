@@ -455,3 +455,33 @@ The following 12 ACs close the four error codes flagged "v1.1 deferred" in `99-c
 
 - **Source:** audit-v6 cache `.lovable/cache/audit-ai/28-universal-ci-cli.json` D3 finding "Missing timeout for log shipping"; Phase 156 (this AC + `06-log-shipping-contract.md` `## Request Timeout & Retry Discipline (Normative)` section).
 - **Verifies:** `06-log-shipping-contract.md` `## Request Timeout & Retry Discipline (Normative)` section (timeout table + retry envelope + termination triggers + 7 forbidden patterns). Codifies **Lesson #22** (closed Exception Ledger replaces open "etc." phrases — termination triggers are a 5-state closed enum, forbidden patterns are a 7-row closed table) + **Lesson #36** (jitter formula links to spec/27 AC-T-28 R3, never restated). Closes audit-v6 D3 MEDIUM finding.
+
+---
+
+## Worked Examples
+
+> Non-normative `kind: example` — illustrative implementations of opaque ACs. If example and AC ever diverge, the AC wins.
+
+### WE-01 — AC-28-12 / AC-28-13 retry envelope walked
+
+**Setup:** `max_retries=3`, `backoff_ms=[500, 2000, 8000]`, server scripted to return `502, 502, 502, 200`.
+
+**Wall-clock trace (T=0 at first POST):**
+| T (ms) | Event | Notes |
+|---:|---|---|
+| 0 | POST /append-log → 502 | attempt 1 of 4 (initial + 3 retries) |
+| ~5 | sleep 500 ms | `backoff_ms[0]` |
+| 505 | POST /append-log → 502 | attempt 2 |
+| ~510 | sleep 2000 ms | `backoff_ms[1]` |
+| 2510 | POST /append-log → 502 | attempt 3 |
+| ~2515 | sleep 8000 ms | `backoff_ms[2]` |
+| 10515 | POST /append-log → 200 | attempt 4 succeeds |
+| 10520 | exit 0 | one logical phase recorded server-side (idempotency) |
+
+**Negative path (AC-28-13):** if attempt 4 also returns 502, the CLI MUST exit `4` with `GLCI-PUSH-RETRIES-EXHAUSTED`. No 5th attempt — `max_retries` is a hard cap.
+
+**Forbidden behaviours (would break AC-28-12):**
+- Sleeping less than the `backoff_ms[i]` floor (e.g. 400 ms instead of 500 ms).
+- Treating 502 as 4xx-class and aborting on attempt 1 (violates §06 5xx-is-transient).
+- Issuing a 5th retry beyond `max_retries`.
+- Producing two logical phase records server-side because of the prior 502s (idempotency violation — server keys on `(repo, sha, phase)` not on attempt count).

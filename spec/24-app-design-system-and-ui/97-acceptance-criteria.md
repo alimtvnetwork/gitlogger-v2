@@ -157,6 +157,38 @@ Regex of forbidden substrings in `*.tsx` / `*.ts` / `*.css` under `src/component
 
 ---
 
+## Worked Examples
+
+> Non-normative `kind: example` — illustrative implementations of opaque ACs. If example and AC ever diverge, the AC wins.
+
+### WE-01 — AC-ADS-04 light/dark parity walked
+
+**Setup:** `:root` declares `--app-toolbar-bg: var(--surface-1)` and `--app-sidebar-fg: #1a1a1a` (raw literal — already a violation of AC-ADS-03 but we use it to demonstrate parity).
+
+**Parity check pseudo-code (the test harness AC-ADS-08 enforces):**
+```ts
+const rootTokens  = parseCssVars(":root");        // {--app-toolbar-bg: "var(--surface-1)", --app-sidebar-fg: "#1a1a1a"}
+const darkTokens  = parseCssVars(".dark");        // {--app-toolbar-bg: "var(--surface-1)"}  ← missing --app-sidebar-fg
+const sevenTokens = parseCssVars(":root, .dark", "@/07-design-system");
+
+for (const name of Object.keys(rootTokens)) {
+  if (!(name in darkTokens)) {
+    // not directly redeclared — must inherit via a §07 token that itself has both modes
+    const refs = extractCssVarRefs(rootTokens[name]);              // ["--surface-1"] for toolbar-bg; [] for sidebar-fg
+    const inheritedOk = refs.length > 0 && refs.every(r => sevenTokens.root[r] && sevenTokens.dark[r]);
+    if (!inheritedOk) fail(`AC-ADS-04: ${name} has no .dark resolution`);
+  }
+}
+```
+
+**Outcome on the seed:**
+- `--app-toolbar-bg` → passes (inherits `--surface-1` which has `:root` + `.dark` values in §07).
+- `--app-sidebar-fg` → **FAILS** AC-ADS-04 (raw `#1a1a1a` cannot inherit; no `.dark` declaration).
+
+**Fix:** add `.dark { --app-sidebar-fg: var(--foreground); }` AND replace `:root` raw literal with `var(--foreground)` (also closes AC-ADS-03).
+
+---
+
 ## Cross-References
 
 - [Module overview](./00-overview.md)
