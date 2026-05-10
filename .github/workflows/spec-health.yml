@@ -462,6 +462,24 @@ jobs:
           python3 linter-scripts/meta-verify-lockstep.py --self-test
           python3 linter-scripts/meta-verify-lockstep.py || echo "::warning::§27 meta-lockstep drift present — see Phase-5 T-36 backlog"
 
+      - name: Locked-7 perimeter gate (#39 / Phase-5 T-32 / P19e)
+        # Enforces mem://constraints/spec-scope on disk: no .md under
+        # the 7 in-scope folders (§22..§28) may reference out-of-scope
+        # spec/00-21/, spec/29-…/, or spec/_archive/ paths. Six clauses:
+        # (1) no unfenced numbered out-of-scope paths, (2) no unfenced
+        # spec/_archive/ paths, (3) no Markdown links to either,
+        # (4) no fenced embed source-attribution from out-of-scope,
+        # (5) §27 §00 enumeration + Lesson #15 cite literals,
+        # (6) R5 vacuous-pass auto-fail. Adjacency-marker exemption
+        # (out-of-scope/archived/superseded) applies to backticked cites
+        # in clauses 1/2 only — links break the perimeter regardless.
+        # Spec: spec/27-spec-toolchain/61-check-no-out-of-scope-spec-folder-link.md
+        # Wired WARN-ONLY initially — surfaces 237 latent
+        # historical-citation violations across 175 in-scope .md files.
+        run: |
+          python3 linter-scripts/check-no-out-of-scope-spec-folder-link.py --self-test
+          python3 linter-scripts/check-no-out-of-scope-spec-folder-link.py || echo "::warning::locked-7 perimeter drift present — see Phase-5 T-32 backlog"
+
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
