@@ -1,0 +1,79 @@
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "background": "#0b1020",
+    "primaryColor": "#1f2937",
+    "primaryTextColor": "#f9fafb",
+    "primaryBorderColor": "#9ca3af",
+    "lineColor": "#9ca3af",
+    "fontFamily": "Inter, system-ui, sans-serif",
+    "fontSize": "14px"
+  },
+  "flowchart": { "curve": "basis", "htmlLabels": true, "padding": 16, "nodeSpacing": 40, "rankSpacing": 60 }
+}}%%
+flowchart LR
+    %% =========================================================
+    %%  git-logs REST API — endpoint mind-map
+    %%  Each leaf shows:  METHOD  ·  AUTH MECHANISM  ·  CALLER
+    %% =========================================================
+
+    ROOT(["<b>git-logs REST API</b><br/><span style='font-size:11px'>/wp-json/git-logs/v1</span>"]):::root
+
+    %% -------- BRANCH 1 — Auth subsystem --------
+    ROOT --> AUTH(["<b>auth</b>"]):::branchAuth
+    AUTH --> A1["<b>POST /auth/token</b><br/>Plugin-token exchange<br/><i>Anonymous + plugin token body</i><br/><b>Caller:</b> External medium / CI runner"]:::leafAuth
+    AUTH --> A2["<b>POST /auth/refresh</b><br/>Rotating refresh<br/><i>Refresh token body (opaque)</i><br/><b>Caller:</b> External medium"]:::leafAuth
+    AUTH --> A3["<b>POST /auth/logout</b><br/>Revoke session<br/><i>Bearer JWT (RS256)</i><br/><b>Caller:</b> External medium"]:::leafAuth
+    AUTH --> A4["<b>GET /.well-known/jwks.json</b><br/>Public verification keys<br/><i>None (public, cached)</i><br/><b>Caller:</b> Any JWT verifier"]:::leafPublic
+
+    %% -------- BRANCH 2 — Users (admin) --------
+    ROOT --> USR(["<b>users</b>"]):::branchUsers
+    USR --> U1["<b>POST /users</b><br/>Create + issue plugin token<br/><i>WP cookie+nonce OR App Password</i><br/><b>Caller:</b> WP Admin"]:::leafAdmin
+    USR --> U2["<b>GET /users</b><br/>List<br/><i>Bearer JWT + RBAC: UserAdmin</i><br/><b>Caller:</b> WP Admin / Ops"]:::leafAdmin
+    USR --> U3["<b>GET PATCH DELETE /users/{id}</b><br/>Single user CRUD<br/><i>Bearer JWT + RBAC: UserAdmin</i><br/><b>Caller:</b> WP Admin"]:::leafAdmin
+    USR --> U4["<b>POST /users/{id}/token:rotate</b><br/>Rotate plugin token<br/><i>Bearer JWT + RBAC: UserAdmin</i><br/><b>Caller:</b> WP Admin"]:::leafAdmin
+
+    %% -------- BRANCH 3 — Repositories (allowlist) --------
+    ROOT --> REP(["<b>repositories</b>"]):::branchRepos
+    REP --> R1["<b>POST /repositories</b><br/>Add to allowlist<br/><i>Bearer JWT + RBAC: RepoAdmin</i><br/><b>Caller:</b> WP Admin"]:::leafRepo
+    REP --> R2["<b>GET /repositories</b><br/>List allowlist<br/><i>Bearer JWT + RBAC: RepoAdmin or LogReader</i><br/><b>Caller:</b> WP Admin / Ops"]:::leafRepo
+    REP --> R3["<b>GET PATCH DELETE /repositories/{id}</b><br/>Single repo CRUD<br/><i>Bearer JWT + RBAC: RepoAdmin</i><br/><b>Caller:</b> WP Admin"]:::leafRepo
+    REP --> R4["<b>POST /repositories/{id}/sender-token:rotate</b><br/>Rotate per-repo HMAC secret<br/><i>Bearer JWT + RBAC: RepoAdmin</i><br/><b>Caller:</b> WP Admin"]:::leafRepo
+
+    %% -------- BRANCH 4 — Logs (push + read) --------
+    ROOT --> LOG(["<b>logs</b>"]):::branchLogs
+    LOG --> L1["<b>POST /logs/push</b><br/>Ingest CI log batch (≤ 1 MB)<br/><i>Envelope JWT (HS256, per-repo LogSenderToken)<br/>+ allowlist check + rate limit</i><br/><b>Caller:</b> CI runner (GitHub Actions)"]:::leafPush
+    LOG --> L2["<b>GET /logs</b><br/>Cursor-paginated list<br/><i>Bearer JWT + RBAC: LogReader (scoped)</i><br/><b>Caller:</b> External medium / dashboard"]:::leafRead
+    LOG --> L3["<b>GET /logs/{id}</b><br/>Single entry<br/><i>Bearer JWT + RBAC: LogReader (scoped)</i><br/><b>Caller:</b> External medium / dashboard"]:::leafRead
+
+    %% -------- BRANCH 5 — Audit --------
+    ROOT --> AUD(["<b>audit-trail</b>"]):::branchAudit
+    AUD --> AT1["<b>GET /audit-trail</b><br/>Paginated audit query<br/><i>Bearer JWT + RBAC: Auditor</i><br/><b>Caller:</b> Compliance / Ops"]:::leafAudit
+
+    %% -------- LEGEND --------
+    subgraph LEGEND["<b>Legend — Auth Mechanisms</b>"]
+        direction LR
+        LG1["<b>Public</b><br/>No auth, edge-cached"]:::leafPublic
+        LG2["<b>WP Bridge</b><br/>Cookie+nonce or App Password"]:::leafAdmin
+        LG3["<b>Bearer JWT</b><br/>RS256, 24 h TTL, RBAC-gated"]:::leafRead
+        LG4["<b>Envelope JWT</b><br/>HS256 per-repo, allowlist-gated"]:::leafPush
+    end
+
+    LEGEND -.-> ROOT
+
+    %% ==================== STYLES ====================
+    classDef root fill:#0f172a,stroke:#f59e0b,stroke-width:3px,color:#fbbf24,font-weight:bold
+
+    classDef branchAuth  fill:#1e1b4b,stroke:#a78bfa,stroke-width:2px,color:#ede9fe,font-weight:bold
+    classDef branchUsers fill:#134e4a,stroke:#5eead4,stroke-width:2px,color:#ccfbf1,font-weight:bold
+    classDef branchRepos fill:#7c2d12,stroke:#fb923c,stroke-width:2px,color:#fed7aa,font-weight:bold
+    classDef branchLogs  fill:#831843,stroke:#f472b6,stroke-width:2px,color:#fce7f3,font-weight:bold
+    classDef branchAudit fill:#3f3f46,stroke:#a1a1aa,stroke-width:2px,color:#f4f4f5,font-weight:bold
+
+    classDef leafAuth   fill:#312e81,stroke:#a78bfa,stroke-width:1px,color:#ede9fe
+    classDef leafAdmin  fill:#0f766e,stroke:#5eead4,stroke-width:1px,color:#ccfbf1
+    classDef leafRepo   fill:#9a3412,stroke:#fb923c,stroke-width:1px,color:#fed7aa
+    classDef leafPush   fill:#9d174d,stroke:#f472b6,stroke-width:1px,color:#fce7f3
+    classDef leafRead   fill:#1e3a8a,stroke:#60a5fa,stroke-width:1px,color:#dbeafe
+    classDef leafAudit  fill:#52525b,stroke:#a1a1aa,stroke-width:1px,color:#f4f4f5
+    classDef leafPublic fill:#365314,stroke:#a3e635,stroke-width:1px,color:#ecfccb

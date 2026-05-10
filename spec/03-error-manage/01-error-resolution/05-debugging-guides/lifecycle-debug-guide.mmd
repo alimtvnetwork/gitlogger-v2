@@ -1,0 +1,10 @@
+flowchart TD
+    A[Recurring Issue Identified] --> B[Author debug guide]
+    B --> C[Steps: reproduce → diagnose → fix]
+    C --> D[Add code snippets + log examples]
+    D --> E[Cross-link to error codes]
+    E --> F{Peer Review Pass?}
+    F -- No --> G[Revise]
+    G --> F
+    F -- Yes --> H[Publish to debugging-guides/]
+    H --> I[Index in error-resolution overview]

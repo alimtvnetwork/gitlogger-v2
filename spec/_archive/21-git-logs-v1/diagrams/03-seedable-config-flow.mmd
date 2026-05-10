@@ -1,0 +1,74 @@
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "background": "#0b1020",
+    "primaryColor": "#1f2937",
+    "primaryTextColor": "#f9fafb",
+    "primaryBorderColor": "#9ca3af",
+    "lineColor": "#9ca3af",
+    "fontFamily": "Inter, system-ui, sans-serif",
+    "fontSize": "13px"
+  },
+  "flowchart": { "curve": "basis", "htmlLabels": true }
+}}%%
+flowchart TB
+    %% ============================================================
+    %%  git-logs — Seedable Config + Split-DB Bootstrap Flow
+    %%  Aligns with spec/06-seedable-config-architecture (CW Config)
+    %% ============================================================
+
+    START(["<b>Plugin / CLI start</b>"]):::start
+
+    Q1{"<code>./data/root.db</code><br/>exists?"}:::decision
+
+    START --> Q1
+
+    %% First-run path
+    Q1 -- "No (first run)" --> CREATE_ROOT["<b>Create root.db</b><br/>SQLite WAL mode<br/>journal_mode=WAL<br/>foreign_keys=ON"]:::action
+    CREATE_ROOT --> MIGRATE_ROOT["<b>Run migrations</b><br/>0001_create_user.sql<br/>0002_create_repository.sql<br/>0003_create_audit.sql<br/>…"]:::action
+    MIGRATE_ROOT --> READ_SEED["<b>Read</b> <code>config/config.seed.json</code>"]:::action
+    READ_SEED --> SEED_LOOKUPS["<b>Seed lookup tables</b><br/>UserStatus · Role · Provider<br/>AcceptanceMode · VersionMode<br/>RepositoryStatus · AuditAction<br/>AuditOutcome · JwtKeyState<br/>LogSeverity"]:::seed
+    SEED_LOOKUPS --> SEED_CFG["<b>INSERT AppConfig</b><br/>SchemaVersion · ConfigJson<br/>SeedVersion = seed file version"]:::seed
+    SEED_CFG --> GEN_KEY["<b>Generate first JWT keypair</b><br/>RSA-2048 · kid = k_YYYY_MM_DD_…<br/>INSERT JwtKey (StateId=Active)"]:::action
+    GEN_KEY --> AUDIT_BOOT["<b>INSERT AuditTrail</b><br/>Action=PluginBootstrap<br/>Outcome=Success"]:::action
+    AUDIT_BOOT --> READY
+
+    %% Subsequent-run path
+    Q1 -- "Yes" --> READ_VERSIONS["<b>Read versions</b><br/>AppConfig.SeedVersion (DB)<br/>config.seed.json.version (file)"]:::action
+    READ_VERSIONS --> Q2{"<code>file.version</code> &gt;<br/><code>db.SeedVersion</code>?"}:::decision
+
+    Q2 -- "No (in sync)" --> SKIP["Skip seeding<br/><i>(idempotent re-run)</i>"]:::skip
+    SKIP --> READY
+
+    Q2 -- "Yes (config newer)" --> MERGE["<b>SemVer-aware merge</b><br/>· Add new lookup rows<br/>· Update changed defaults that<br/>&nbsp;&nbsp;the user has NOT overridden<br/>· Prune removed defaults<br/>· Preserve user overrides"]:::seed
+    MERGE --> BUMP["<b>UPDATE AppConfig</b><br/>SeedVersion = file.version<br/>UpdatedAt = NOW()"]:::seed
+    BUMP --> CHANGELOG["<b>Append CHANGELOG.md</b><br/>vX.Y.Z — added/changed/removed keys"]:::seed
+    CHANGELOG --> AUDIT_MERGE["<b>INSERT AuditTrail</b><br/>Action=ConfigSeedMerge<br/>Outcome=Success<br/>DetailsJson = diff"]:::action
+    AUDIT_MERGE --> READY
+
+    %% Repository onboarding (runtime, after bootstrap)
+    READY(["<b>App ready — REST routes registered</b>"]):::ready
+
+    READY --> RPATH{"Endpoint reached:<br/>POST /repositories ?"}:::decision
+
+    RPATH -- "Yes" --> R1["<b>1) INSERT Repository</b><br/>LogsDbPath = NULL<br/>RepositoryStatusId = Active"]:::action
+    R1 --> R2["<b>2) Create per-repo logs DB</b><br/><code>./data/logs/repo-{id}-{owner}-{repo}.db</code><br/>WAL · foreign_keys=ON"]:::actionLog
+    R2 --> R3["<b>3) Run logs-DB migrations</b><br/>0001_create_pipeline.sql<br/>0002_create_log_entry.sql<br/>0003_create_envelope_nonce.sql<br/>0004_seed_log_severity.sql"]:::actionLog
+    R3 --> R4["<b>4) INSERT RepositoryMeta</b><br/>(self-describing row<br/>back-references RootRepositoryId)"]:::actionLog
+    R4 --> R5["<b>5) UPDATE Repository</b><br/>SET LogsDbPath = '…'"]:::action
+    R5 --> R6["<b>6) INSERT AuditTrail</b><br/>Action=RepositoryCreate<br/>Outcome=Success"]:::action
+    R6 --> DONE(["<b>201 Created</b>"]):::done
+
+    RPATH -- "No (other route)" --> NORMAL["Normal request handling<br/><i>(JWT verify · RBAC · query)</i>"]:::action
+    NORMAL --> DONE2(["<b>Response</b>"]):::done
+
+    %% ==================== STYLES ====================
+    classDef start     fill:#0f172a,stroke:#fbbf24,stroke-width:3px,color:#fbbf24,font-weight:bold
+    classDef ready     fill:#0f766e,stroke:#5eead4,stroke-width:3px,color:#ccfbf1,font-weight:bold
+    classDef done      fill:#365314,stroke:#a3e635,stroke-width:2px,color:#ecfccb,font-weight:bold
+
+    classDef decision  fill:#7c2d12,stroke:#fb923c,stroke-width:2px,color:#fed7aa
+    classDef action    fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.5px,color:#dbeafe
+    classDef actionLog fill:#831843,stroke:#f472b6,stroke-width:1.5px,color:#fce7f3
+    classDef seed      fill:#365314,stroke:#a3e635,stroke-width:1.5px,color:#ecfccb
+    classDef skip      fill:#3f3f46,stroke:#a1a1aa,stroke-width:1px,color:#f4f4f5

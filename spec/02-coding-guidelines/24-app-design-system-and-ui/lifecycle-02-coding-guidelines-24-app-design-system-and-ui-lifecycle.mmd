@@ -1,0 +1,16 @@
+---
+title: 02-coding-guidelines/24-app-design-system-and-ui index lifecycle
+---
+flowchart TD
+    Start([Trigger: index/tracker review])
+    List[Enumerate child specs / open issues]
+    Triage{Item state?}
+    Open[Mark as Open + assign owner]
+    Closed[Mark as Closed + link resolution]
+    Report[Update 99-consistency-report.md]
+    Done([End])
+
+    Start --> List --> Triage
+    Triage -- new --> Open --> Report
+    Triage -- resolved --> Closed --> Report
+    Report --> Done

@@ -1,0 +1,9 @@
+flowchart TD
+    A[Code Authored] --> B[Apply Boolean Principles]
+    B --> C[Apply Code Style]
+    C --> D[Apply File/Folder Naming]
+    D --> E[Apply Security Rules]
+    E --> F[Apply Static Analysis]
+    F --> G{All Sub-rulesets Pass?}
+    G -- No --> H[Block: MASTER-LINT-NNN]
+    G -- Yes --> I[Merge]

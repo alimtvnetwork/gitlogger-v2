@@ -1,0 +1,11 @@
+flowchart TD
+    A[Origin Site] --> B[apperror.New code, msg]
+    B --> C[Optionally apperror.Wrap cause]
+    C --> D[Carry through call stack]
+    D --> E[At boundary: apperror.As]
+    E --> F{Is AppError?}
+    F -- Yes --> G[Marshal to envelope]
+    F -- No --> H[Wrap as Internal AppError]
+    H --> G
+    G --> I[Log via diagnostics]
+    I --> J[Return to caller]

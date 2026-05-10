@@ -1,0 +1,10 @@
+flowchart TD
+    A[App Issue Reported] --> B[Categorize: bug/regression/UX]
+    B --> C{Severity}
+    C -- P0/P1 --> D[Hotfix Branch]
+    C -- P2/P3 --> E[Backlog]
+    D --> F[Reproduce + Diagnose]
+    F --> G[Apply Fix + Regression Test]
+    G --> H[Deploy via CI]
+    H --> I[Post-mortem in retrospectives/]
+    E --> J[Sprint Planning]

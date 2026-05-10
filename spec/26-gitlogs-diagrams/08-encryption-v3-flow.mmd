@@ -1,0 +1,29 @@
+%% Diagram type: flowchart / sequenceDiagram (NOT an ER diagram)
+%% What this answers: "If/when v3 encryption-at-rest ships, what is the
+%%   key-derivation chain (MasterKey -> DataKey -> LookupKey), where does
+%%   the migration ALTER + per-row encrypt run, and how is idempotency
+%%   guaranteed via MigrationState?"
+%% Authoritative source: spec/22-git-logs-v2/11-encryption-deferred-plan.md
+
+flowchart TD
+    A[Install or Upgrade to v3] --> B{GITLOGS_MASTER_KEY env set}
+    B -- no --> B1[Abort migration with clear error]
+    B -- yes --> C[Store MasterKey in WP option]
+    C --> D[Generate DataKey]
+    D --> E[Wrap DataKey with MasterKey]
+    E --> F[Save WrappedDataKey in ConfigKv]
+    F --> G[Derive LookupKey via HKDF]
+
+    G --> H[ALTER Profile ADD TempTokenLookupHash TEXT]
+    H --> I[For each Profile row]
+    I --> J[Encrypt TempToken AES-256-GCM]
+    I --> K[HMAC-SHA256 TempToken with LookupKey]
+    J --> L[UPDATE Profile TempToken to ciphertext]
+    K --> M[UPDATE Profile TempTokenLookupHash to hmac]
+    I --> N[Hash GeneratedKeyApi and Token Argon2id]
+    N --> O[UPDATE Profile credentials to hash]
+
+    L --> P[INSERT MigrationState 3.0.0]
+    M --> P
+    O --> P
+    P --> Q[v3 ready lookup-by-hash decrypt-on-match]

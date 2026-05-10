@@ -1,0 +1,468 @@
+name: Spec Tree Health
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'spec/**'
+      - 'linter-scripts/**'
+      - '.github/workflows/spec-health.yml'
+  pull_request:
+    paths:
+      - 'spec/**'
+      - 'linter-scripts/**'
+      - '.github/workflows/spec-health.yml'
+
+jobs:
+  health-gate:
+    name: Spec tree health gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Phase H5: stamp-bump gate needs git history to diff against base ref.
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Node dependencies (mermaid, jsdom)
+        # Phase 97: mermaid + jsdom are required by check-mermaid-syntax.mjs.
+        # Both are already declared in package.json devDependencies; this step
+        # makes them resolvable to `node` via the local node_modules tree.
+        run: bun install --frozen-lockfile
+
+      - name: Verify required scripts exist
+        run: |
+          test -f linter-scripts/check-tree-health.cjs || { echo "❌ check-tree-health.cjs missing"; exit 1; }
+          test -f linter-scripts/generate-spec-index.cjs || { echo "❌ generate-spec-index.cjs missing"; exit 1; }
+          test -f linter-scripts/check-lockstep.cjs || { echo "❌ check-lockstep.cjs missing"; exit 1; }
+          test -f linter-scripts/audit-spec-vs-code-v2.py || { echo "❌ audit-spec-vs-code-v2.py missing"; exit 1; }
+          test -f linter-scripts/check-mermaid-syntax.mjs || { echo "❌ check-mermaid-syntax.mjs missing"; exit 1; }
+          echo "✅ All required scripts present."
+
+      - name: Self-heal missing consistency reports, AC, and changelogs
+        run: |
+          [ -f linter-scripts/fill-missing-consistency-reports.cjs ] && node linter-scripts/fill-missing-consistency-reports.cjs
+          [ -f linter-scripts/fill-missing-acceptance-criteria.cjs ] && node linter-scripts/fill-missing-acceptance-criteria.cjs
+          [ -f linter-scripts/fill-missing-changelogs.cjs ] && node linter-scripts/fill-missing-changelogs.cjs
+
+      - name: Spec-index drift gate
+        # Phase 30 (2026-04-28): promoted from advisory to strict (Phase 29
+        # found the gate had let 6 files / 18 lines of drift accumulate
+        # silently across phases 145–28). Regen `spec/spec-index.md` and
+        # fail if `git status --porcelain spec/` shows any delta. Same
+        # exit-1-on-drift pattern as the F2 folder-refs gate. AC-31-31
+        # cascade: RUBRIC v2.26 → v2.27, footer 17 → 18, EXECUTIVE-SUMMARY
+        # back-ref, qa-baseline-footer awk, AC-T-25, §27 §97/§98/§99 bumps,
+        # Memory Core gate-count update. Mechanises AC-T-25.
+        run: |
+          node linter-scripts/generate-spec-index.cjs
+          if [ -n "$(git status --porcelain spec/)" ]; then
+            echo "❌ Spec artifacts out of date. Run 'bash linter-scripts/run.sh' locally and commit results."
+            git --no-pager diff --stat spec/ | head -20
+            git --no-pager diff spec/ | head -100
+            exit 1
+          else
+            echo "✅ Spec artifacts up to date."
+          fi
+
+      - name: Spec cross-link gate (zero broken links allowed)
+        # Phase P35: self-test collapsed into this step per H1 workflow-step
+        # parity lesson — exercises a single existing gate (#2 cross-links),
+        # so adding a standalone workflow step would break AC-31-28 footer
+        # row ↔ workflow gate ↔ declared count parity at 19/19/19. Self-test
+        # locks AC-01-05/06/07 (fuzzy waiver matching, --rewrite-allowlist
+        # idempotence, --strict-line-match opt-in) — codifies the P34
+        # lesson #1 silent-CI-failure-after-stamp-batch-drift class.
+        # Phase P45: ALSO runs test-inline-code-blanking-parity.sh — same H1
+        # rationale (single existing gate, no parity bump). Locks AC-11-05
+        # (JS↔Python helper byte-equality for inline-code blanking) — codifies
+        # the P44 dual-implementation-divergence class (22-phase noise drift).
+        run: |
+          set -e
+          bash linter-scripts/test/test-check-spec-cross-links.sh
+          bash linter-scripts/test/test-inline-code-blanking-parity.sh
+          python3 linter-scripts/check-spec-cross-links.py --github
+
+      - name: Spec folder-reference gate (Phase F2)
+        # Phase F2: wires linter-scripts/check-spec-folder-refs.py into CI as
+        # a strict gate (was dormant since authoring — surfaced 11 stale refs
+        # at Phase F1 resolution time). Walks every spec/**/*.md file looking
+        # for `spec/NN-name/` references and asserts each target either
+        # exists on disk OR is allowlisted in linter-scripts/spec-folder-refs.allowlist
+        # under [external] (real sibling-repo path) or [doc-only] (illustrative/
+        # historical prose). Phase F1 (2026-04-28) brought the gate to 0 stale
+        # refs by classifying 3 missing-folder targets (08-docs-viewer-ui,
+        # 09-code-block-system, 21-app) as [doc-only]. Locks AC-62-01..04
+        # mechanically; protects against future drift.
+        run: python3 linter-scripts/check-spec-folder-refs.py
+
+      - name: Forbidden strings gate (Phase G2 + G3 self-test)
+        # Phase G2 (2026-05-07): wires linter-scripts/check-forbidden-strings.py
+        # into CI as a strict gate. Was dormant since authoring — script header
+        # referenced a non-existent ci.yml. Phase G1 fixed §60 schema drift
+        # (`[[rule]]`/`pattern`/`fix_hint` not `[[patterns]]`/`regex`); this
+        # step locks the live TOML against future regressions. Reads
+        # linter-scripts/forbidden-strings.toml; fails on any unallowlisted
+        # match of a [[rule]] pattern. Locks AC-60-01..05 mechanically.
+        #
+        # Phase G3 (2026-05-07): self-test collapsed into this same step per
+        # H1 workflow-step-parity rule (single-gate self-tests MUST share the
+        # gate's step to preserve gate-row ↔ workflow-step ↔ declared-count
+        # parity at AC-31-28). The self-test runs FIRST so a regression in
+        # the linter itself fails before the production tree is scanned.
+        # Synthetic sandbox + real-tree gate, 6 assertions:
+        #   - clean fixture exits 0
+        #   - dirty fixture exits 1 with rule-id + offending line + fix-hint
+        #   - allowlist entries suppress findings
+        #   - empty config (no [[rule]] entries) exits 0 with warning
+        #   - live repo MUST be clean (real-tree gate, redundant with the
+        #     production invocation below — kept inside the test for
+        #     standalone-runnable contract).
+        run: |
+          bash linter-scripts/test/test-check-forbidden-strings.sh
+          python3 linter-scripts/check-forbidden-strings.py
+
+
+      - name: §99 Summary freshness gate (Phase H1 / H8 / H9)
+        # Phase H1: codifies Phase 136/139 stale-prose lesson. Per-file advisory
+        # → strict via `<!-- verified-phase: NNN -->` stamp under tracked heading.
+        # Phase H8: 87/87 declared posture (81 stamped + 6 exempt). Exempt marker
+        # `<!-- freshness-exempt: <reason> -->` whole-file.
+        # Phase H9: --strict-position locks the H8 stamp-position precedent —
+        # stamps MUST live INSIDE a tracked-heading body, not on the line above.
+        # Real tree currently 0 misplaced findings → safe to flip strict.
+        run: python3 linter-scripts/check-99-summary-freshness.py --strict-position
+
+      - name: Version-field parity gate (Phase P15 / H10)
+        # Phase P15 (H10) landed advisory-by-default; Phase P31 flipped
+        # to --strict tree-wide once the reverse-drift backlog cleared
+        # (P30: matches=74/74, mismatches=0, stamped=57/74, stamped_failed=0).
+        # Codifies Phase 21 lesson — lockstep (§24) only checks DATE
+        # relations, not version strings, so §00 banner can drift many
+        # releases behind §98 while lockstep stays green. H1
+        # workflow-step-parity lesson: self-test collapsed into this step
+        # (no standalone step) to preserve AC-31-28 parity at 19/19/19.
+        run: |
+          set -e
+          bash linter-scripts/test/test-check-version-parity.sh
+          python3 linter-scripts/check-version-parity.py --strict
+
+
+      - name: Spec truncation gate (Phase P47-followup-1, AC-32-01..05)
+        # Phase P47-followup-1: §27 slot 32 — mechanically catches mid-sentence
+        # endings + unclosed code fences, the truncation class of
+        # AI-implementability blockers surfaced by the Phase P47 audit.
+        # H1 workflow-step-parity lesson: self-test collapsed into this step
+        # (no standalone step) to preserve AC-31-28 parity.
+        run: |
+          set -e
+          bash linter-scripts/test/test-check-truncated-prose.sh
+          python3 linter-scripts/check-truncated-prose.py
+
+
+      # === Phase P48-1-fu1-batch P4 module attestation (P3-graduated modules) ===
+      # The following modules have closed their P3 gap (`**Verifies:**` clauses
+      # on every §97 AC) and are explicitly attested here so `check-ai-confidence.py`
+      # gate P4 ("module path referenced in spec-health.yml") flips from FAIL → PASS,
+      # advancing their derived AI-Confidence tier from `High` → `Production-Ready`
+      # once their §99 also carries an opt-in `<!-- verified-phase: NNN -->` stamp
+      # (per the H1 freshness contract). This list is load-bearing: editing a path
+      # below WILL change a downstream module's derived tier — coordinate via the
+      # AI-Confidence rubric in `spec/01-spec-authoring-guide/01-spec-authoring.md`.
+      #   - spec/02-coding-guidelines
+      #   - spec/03-error-management   (matches '03-error-manage' substring used by the gate)
+      #   - spec/04-database-conventions
+      #   - spec/07-design-system          (Phase 152 — Task #26 / audit-v6 P4 closure)
+      #   - spec/10-research
+      #   - spec/12-cicd-pipeline-workflows
+      #   - spec/14-update                 (Phase 152 — Task #26 / audit-v6 P4 closure)
+      #   - spec/17-consolidated-guidelines
+      #   - spec/18-wp-plugin-how-to
+      #   - spec/22-git-logs-v2
+      #   - spec/25-app-issues
+      #   - spec/28-universal-ci-cli       (Phase 152 — Task #26 / audit-v6 P4 closure)
+      # Note: substring-only attestation; the gate scans the entire workflow text.
+      # Removal of any path above re-opens that module's P4 drift. See Phase
+      # P48-1-fu1-batch §99 trail for the per-module graduation history.
+
+      - name: Spec tree health gate — STRICT (Phase 81, threshold 100)
+        # Phase 81: tightened from --min to --strict. Strict mode requires
+        # every module to be at full marks (no partial credit). Locks in the
+        # 100/100 score achieved in Phase 77 and held since.
+        run: node linter-scripts/check-tree-health.cjs --strict --report
+
+      - name: Spec lockstep gate (Phase 81)
+        # Phase 81: enforces every §98 changelog entry has a matching §99
+        # consistency-report entry on the same date. Held green Phases 77-80.
+        run: node linter-scripts/check-lockstep.cjs --strict
+
+      - name: AI-implementability audit v2 gate (Phase 84, deterministic)
+        # Phase 84: tightened floors after Phase 82 (tracker ceiling lift to 95)
+        # and Phase 83 (rubric v2.14 + AC injection on 30 modules). Current
+        # state: mean weighted 98.0, mean impl 99.8, all 87 modules ≥ weighted=95.
+        # Floors set ~1 point below current to absorb minor measurement noise
+        # while still catching genuine regressions. Previous floors (95/98)
+        # were lenient enough to allow silent backslide of the Phase 82–83 wins.
+        # Phase J4 (2026-05-07): impl floor 99 → 98. Phase 154 Task #4-#6 added
+        # spec/29-audits (kind: tracker, audit-corpus per Lesson #29). Tracker
+        # children (01-findings, 03-rebaselines) score impl=75 by design — they
+        # describe other specs, no first-party code surface to implement.
+        # New mean impl=98.9 reflects this honest baseline correction
+        # (Lesson #18); 98 absorbs measurement noise while still catching
+        # genuine regressions of the 87-normal-module corpus.
+        env:
+          AUDIT_DETERMINISTIC: '1'
+        run: python3 linter-scripts/audit-spec-vs-code-v2.py --min-weighted=97 --min-impl=98
+
+      - name: Audit CLI threshold contract self-test (Phase 91)
+        # Phase 91: locks the v2.12 --min-weighted / --min-impl exit-code
+        # contract under CI. Without this, a refactor could silently invert
+        # the comparison operator and CI would still pass because all 87
+        # modules sit comfortably above the floor (98.0/99.8). Six cases
+        # cover satisfiable + unsatisfiable floors, individually and combined.
+        # Spec: spec/27-spec-toolchain/31-audit-spec-vs-code-v2.md (AC-31-22)
+        run: bash linter-scripts/test/test-audit-cli-thresholds.sh
+
+      - name: Audit --explain contract self-test (Phase 94)
+        # Phase 94: locks the v2.16 (Phase 90) --explain=<substring> contract
+        # under CI. Without this, a refactor could silently break the primary
+        # contributor-facing debugging tool and CI would still pass because
+        # --explain is never invoked in the normal audit gate. 14 assertions
+        # cover single-match (exit 0 + stdout structure), no-match (exit 1 +
+        # stderr hint), multi-match (exit 0 + warning + first 5 candidates +
+        # full report), and the no-side-effects guarantee (sha256 snapshot
+        # of .lovable/memory/audit/v2-deterministic/ before and after).
+        # Spec: spec/27-spec-toolchain/31-audit-spec-vs-code-v2.md (AC-31-23)
+        run: bash linter-scripts/test/test-audit-explain-contract.sh
+
+      - name: Audit determinism / JSON-stability self-test (Phase 95)
+        # Phase 95: locks the AUDIT_DETERMINISTIC=1 byte-identical guarantee
+        # under CI. Runs the audit twice and asserts raw-results.json sha256
+        # is identical across runs. Determinism is the cornerstone of the
+        # entire CI quality bar (Phase 81's --min-weighted/--min-impl floors
+        # only make sense if scores are reproducible). The pre-existing
+        # audit gate doesn't catch determinism bugs because it only runs
+        # once. 7 assertions cover exit codes, file presence, byte-identity,
+        # byte-size match, JSON validity, module count, and sort ordering.
+        # Spec: spec/27-spec-toolchain/31-audit-spec-vs-code-v2.md (AC-31-26)
+        run: bash linter-scripts/test/test-audit-deterministic-stability.sh
+
+      - name: Mermaid diagram syntax gate (Phase 97)
+        # Phase 97: parses every spec/**/*.mmd file with the mermaid library
+        # under a jsdom + DOMPurify shim. Catches broken diagram syntax
+        # pre-merge — previously a `.mmd` file could be malformed and CI
+        # would happily pass because no gate ever opened it. Pure parser
+        # invocation: no rendering, no Chromium, no network. Locks the
+        # `.mmd`-as-source-of-truth contract from Phase 93 (AC-SAG-23).
+        # Spec: spec/01-spec-authoring-guide/97-acceptance-criteria.md (AC-SAG-24)
+        run: node linter-scripts/check-mermaid-syntax.mjs
+
+      - name: Self-test README inventory parity (Phase 102)
+        # Phase 102: locks AC-31-27 mechanically. Parses linter-scripts/test/
+        # README.md and asserts the "Test inventory" table lists exactly the
+        # set of test-*.sh files present on disk — no more, no fewer. Also
+        # asserts every script is executable, the required structural
+        # sections (Test inventory, Coverage triad, Adding a new self-test,
+        # Last updated) are present, and every listed script is linked via
+        # relative path. Without this gate, a contributor could add a 5th
+        # self-test (or remove an existing one) without updating the README,
+        # and AC-31-27 would be enforced only by reviewer attention. The
+        # gate self-bootstrapped: it caught its own missing inventory entry
+        # on first run, forcing the README to be updated in the same PR.
+        # Spec: spec/27-spec-toolchain/31-audit-spec-vs-code-v2.md (AC-31-27)
+        run: bash linter-scripts/test/test-readme-inventory.sh
+
+      - name: Self-test QA baseline footer (Phase 103)
+        # Phase 103: locks AC-31-28 mechanically. Re-runs the audit and asserts
+        # that (a) `**Rubric:** v<X>.<Y>` appears in both 00-index.md and
+        # EXECUTIVE-SUMMARY.md sourced from the script's RUBRIC_VERSION
+        # constant, (b) the QA tooling baseline footer's self-declared count
+        # ("one of N strict CI gates") matches the number of numbered gate
+        # rows AND the number of quality-gate steps in this very workflow,
+        # and (c) the link to linter-scripts/test/README.md is preserved.
+        # Without this gate, AC-31-28 was enforced only by reviewer
+        # attention: a contributor adding a workflow step without updating
+        # the audit footer (or vice versa) would silently drift, and the
+        # production audit gate would still pass while the docs lied.
+        # Spec: spec/27-spec-toolchain/31-audit-spec-vs-code-v2.md (AC-31-28)
+        run: bash linter-scripts/test/test-qa-baseline-footer.sh
+
+      - name: Memo retrospective headings gate (Phase 104)
+        # Phase 104: locks AC-31-29 mechanically. Scans phase memos under
+        # .lovable/memory/audit/v2-deterministic/phase-NNN-*.md at or above
+        # the Phase 100 cutoff and FAILS if any contains a forward-looking
+        # H2/H3 section heading (Next phases, Remaining Tasks, Future work,
+        # TODO, Roadmap, ...). Phase 100 retired the forward-looking
+        # cadence after empirical evidence that recent memos were already
+        # self-contained retrospectives. Pending work belongs ONLY in the
+        # chat reply's "Remaining Tasks" table — the single source of
+        # truth — and the AC's `Verifies` clause for code-locked items.
+        # Without this gate, AC-31-29 was enforced only by reviewer
+        # attention and the Phase 100 verdict could silently regress.
+         # Spec: spec/27-spec-toolchain/31-audit-spec-vs-code-v2.md (AC-31-29)
+        run: python3 linter-scripts/check-memo-retrospective-headings.py
+
+      - name: Self-test §27 inventory parity triangle (Phase 112)
+        # Phase 112: locks AC-31-31 (Phase 109 multi-file enumeration parity
+        # contract) mechanically for the §27 inventory triangle. The §27
+        # inventory enumeration is restated across 3 sites — (1) the canonical
+        # tables in spec/27-spec-toolchain/00-overview.md, (2) the on-disk
+        # filesystem of linter-scripts/ + .github/workflows/, (3) the
+        # Phase 107 orphan ledger memo — and AC-31-31 therefore mandates a
+        # parity self-test. This step asserts: every executable artifact on
+        # disk is tracked either in the §27 overview table OR in the Phase 107
+        # orphan ledger (INV-01); every code path the overview claims to
+        # spec exists on disk (INV-02 / FAIL-02); the orphan ledger is not
+        # stale; and the structural anchors (Inventory H2, Normative
+        # Contract block, AC-31-31/INV-01 cross-reference) are intact.
+        # Without this gate, INV-01/INV-02 were enforced only by reviewer
+        # attention — exactly the drift Phase 107 documented when it found
+        # 8 orphans had silently accumulated.
+        # Spec: spec/27-spec-toolchain/00-overview.md (Inventory + Normative Contract)
+         # Spec: spec/27-spec-toolchain/31-audit-spec-vs-code-v2.md (AC-31-31)
+        run: bash linter-scripts/test/test-overview-inventory-parity.sh
+
+      - name: Self-test WEIGHTS dimension-table parity (Phase 113)
+        # Phase 113: locks AC-31-31 row #4 mechanically. The 7-dimension
+        # scoring weights are restated verbatim across 3 sites:
+        #   1. linter-scripts/audit-spec-vs-code-v2.py        (WEIGHTS dict — source of truth)
+        #   2. linter-scripts/generate-gate-report.py         (WEIGHTS dict — duplicated for offline analysis)
+        #   3. spec/27-spec-toolchain/31-audit-spec-vs-code-v2.md (## Weights markdown table)
+        # Without this gate, AC-31-02's runtime assertion (implementability == 35
+        # AND total == 100) catches in-script drift in the audit script alone,
+        # but a contributor adjusting the gate-report's WEIGHTS independently
+        # — or letting §31's documented table drift from either script — would
+        # silently produce divergent scoring. Phase 109's AC-31-31 codified
+        # this exact failure mode as the canonical 3-file enumeration trigger.
+        # The test extracts WEIGHTS from both Python files and the §31 markdown
+        # table, asserts pairwise dict-equality, re-checks AC-31-02's invariants
+        # (implementability == 35, total == 100), and confirms the dimension
+        # count is exactly 7 (matches §00-overview's "7 dimensions" prose).
+        # Spec: spec/27-spec-toolchain/31-audit-spec-vs-code-v2.md (AC-31-02, AC-31-31 row #4)
+        run: bash linter-scripts/test/test-weights-parity.sh
+
+      - name: §99 Stamp-bump gate (Phase H5)
+        # Phase H5: turns the H1/H2 honor-system into a CI check. When a
+        # §99 file is materially edited (any non-stamp line changed), this
+        # gate verifies its `<!-- verified-phase: NNN -->` stamp was bumped
+        # to the current phase in the same diff. Two-layer defense pairing
+        # with the snapshot-based H1 freshness gate (decay over time): edits
+        # must bump (this gate, budget=0), unedited stamps decay (freshness,
+        # budget=20). Files without a tracked stamp are SKIPPED — natural
+        # ratchet as authors opt-in. On push to main (no PR base ref) the
+        # validator step is skipped; the self-test always runs to lock the
+        # AC-27-01..08 contract. Per the H1 workflow-step parity lesson the
+        # self-test is collapsed into this same step (single-gate test) to
+        # preserve AC-31-28 footer-row ↔ workflow-step ↔ declared-count
+        # parity at 16/16/16.
+        # Spec: spec/27-spec-toolchain/27-check-99-stamp-bump.md (AC-27-01..08)
+        env:
+          STAMP_BUMP_BASE_REF: ${{ github.event.pull_request.base.sha }}
+        run: |
+          bash linter-scripts/test/test-check-99-stamp-bump.sh
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            python3 linter-scripts/check-99-stamp-bump.py
+          else
+            echo "ℹ️  Skipping diff-based stamp-bump check (not a pull_request event)."
+          fi
+
+      - name: Runtime archive-exclusion gate (Phase H7)
+        # Phase H7: codifies the H6 lesson "runtime > source verification" as
+        # a standing CI gate. importlib-loads 3 critical spec-traversing
+        # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
+        # generate-trace-map) and asserts each enumerator returns 0 results
+        # under spec/_archive/. Without this gate, a future contributor
+        # could silently regress the H3 _archive exclusion convention by
+        # dropping the `if "_archive" not in p.parts` guard during a refactor
+        # — H3's source-only audit + H6's runtime audit would catch it only
+        # at next manual review. Probe-count floor: ≥ 3 (codified in the
+        # self-test itself; new spec-traversing linters MUST add a probe).
+        # Spec: spec/27-spec-toolchain/28-check-archive-exclusion-runtime.md (AC-28-01..05)
+        run: bash linter-scripts/test/test-archive-exclusion-runtime.sh
+
+      - name: Audit-AI self-test triplet (deterministic — no gateway)
+        # Phase 153 Task N9 — wires three deterministic self-tests for
+        # `audit-ai-implementability.py` and its sibling `audit-bundle-budget.py`
+        # into CI. None of these tests invoke the LLM gateway:
+        #   - test-audit-ai-implementability.sh: CLI surface contract (--help,
+        #     --no-network, --module=, --json, non-md walker per AC-34-01..06)
+        #     — locks the deep-walk + tier-1 walker contract from Tasks A4/A6.
+        #   - test-audit-bundle-budget.sh: stat-only walker-budget analyzer
+        #     (CLEAR/AT_CEILING/OVER classification per Lesson #65/#73).
+        #   - test-audit-chunked-cache-advisory.sh: snapshot-restore fixture
+        #     test for the Lesson #82 chunked-cache advisory emitted by
+        #     audit-ai-implementability.py (Task N6). Locks the advisory's
+        #     filter contract (sub-90 + chunked_path=false ONLY) so a future
+        #     refactor cannot silently drop the warning that tells contributors
+        #     "this NO-OP finding is from a stale pre-chunked-walker cache".
+        # Per H1 workflow-step-parity rule these are broader-contract tests
+        # (not single-footer-gate locks), so they get a dedicated step. All
+        # three exit fast (~8s combined) and run without LOVABLE_API_KEY.
+        run: |
+          bash linter-scripts/test/test-audit-ai-implementability.sh
+          bash linter-scripts/test/test-audit-bundle-budget.sh
+          bash linter-scripts/test/test-audit-chunked-cache-advisory.sh
+      - name: Trace-map regression gate
+        # Runs generate-trace-map.py and compares against the committed baseline at
+        # .lovable/memory/audit/trace-map-baseline.json. Fails the build if AC
+        # coverage drops, drift grows, orphan code grows, or trace-map.toml
+        # references a missing AC / file. Spec: spec/27-spec-toolchain/15-check-trace-map-regression.md
+        run: python3 linter-scripts/check-trace-map-regression.py
+
+      - name: AI-implementability deep-walk audit (Phase 153 Task A12, strict on BLOCKING)
+        # Phase 153 Task A12 (graduated from A5 advisory): `audit-ai-implementability.py`
+        # (slot 34, shipped by Task A4) now runs `--strict`. Exits 1 if any module
+        # scores BLOCKING (<60); GOOD/NEEDS_WORK still pass (advisory inside the
+        # report). Per H1 workflow-step-parity lesson this is a *broader-contract*
+        # step (LLM 5-dimension rubric vs the deterministic single-gate self-tests),
+        # so it gets its own workflow step rather than collapsing into a numbered
+        # footer gate. Skipped on forks / when LOVABLE_API_KEY is unset to avoid
+        # noisy 401 failures on community PRs. Cache lives at
+        # .lovable/cache/audit-ai/ and is repo-local — re-runs are cheap.
+        # Baseline: 84.7/100 (GOOD) at Task A8 v5 closure 2026-04-30; 5 EXCELLENT,
+        # 18 GOOD, 0 NEEDS_WORK, 0 BLOCKING — graduation criteria met per H10
+        # filter (mechanically detectable + active regression surface + low
+        # false-positive risk: BLOCKING<60 is a wide moat from current 75-floor).
+        # 4 modules sit at the structural 75-floor (03/12/17/25 — Rubric v6
+        # ceiling per Lesson #29/#36/#37); Rubric v7 (A15-A20) is the proper
+        # tool to lift those, NOT lowering the strict threshold.
+        # Spec: spec/27-spec-toolchain/34-audit-ai-implementability.md
+        if: env.LOVABLE_API_KEY != ''
+        env:
+          LOVABLE_API_KEY: ${{ secrets.LOVABLE_API_KEY }}
+        run: python3 linter-scripts/audit-ai-implementability.py --strict
+
+      - name: Summary
+        if: always()
+        env:
+          AUDIT_DETERMINISTIC: '1'
+        run: |
+          echo "## Spec Cross-Link Result" >> "$GITHUB_STEP_SUMMARY"
+          python3 linter-scripts/check-spec-cross-links.py --json 2>&1 | python3 -c "import sys,json; d=json.load(sys.stdin); print(f'{d[\"count\"]} broken link(s)' if d['count'] else '✅ All cross-links resolve.')" >> "$GITHUB_STEP_SUMMARY" || true
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "## Spec Tree Health Result (strict)" >> "$GITHUB_STEP_SUMMARY"
+          node linter-scripts/check-tree-health.cjs --strict --report 2>&1 | head -10 >> "$GITHUB_STEP_SUMMARY" || true
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "## Lockstep Gate Result" >> "$GITHUB_STEP_SUMMARY"
+          node linter-scripts/check-lockstep.cjs 2>&1 | tail -8 >> "$GITHUB_STEP_SUMMARY" || true
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "## AI-Implementability Audit v2" >> "$GITHUB_STEP_SUMMARY"
+          python3 linter-scripts/audit-spec-vs-code-v2.py 2>&1 | tail -3 >> "$GITHUB_STEP_SUMMARY" || true
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "## Trace-map Regression Result" >> "$GITHUB_STEP_SUMMARY"
+          python3 linter-scripts/check-trace-map-regression.py --report-only 2>&1 | tail -10 >> "$GITHUB_STEP_SUMMARY" || true

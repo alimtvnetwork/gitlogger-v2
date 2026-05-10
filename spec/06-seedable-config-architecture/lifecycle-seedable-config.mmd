@@ -1,0 +1,10 @@
+flowchart TD
+    A[Config Key Defined in Spec] --> B[Author seed migration]
+    B --> C[Validation helper registers schema]
+    C --> D[Apply migration on deploy]
+    D --> E[Runtime reads via config service]
+    E --> F{Update check finds new keys?}
+    F -- Yes --> G[Run incremental seed migration]
+    F -- No --> H[Cached config]
+    G --> E
+    H --> I[App consumes config]

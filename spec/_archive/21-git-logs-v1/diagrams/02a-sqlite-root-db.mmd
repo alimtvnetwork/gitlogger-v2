@@ -1,0 +1,106 @@
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "background": "#0b1020",
+    "primaryTextColor": "#f9fafb",
+    "primaryBorderColor": "#9ca3af",
+    "lineColor": "#9ca3af",
+    "fontFamily": "Inter, system-ui, sans-serif",
+    "fontSize": "14px"
+  },
+  "flowchart": { "curve": "basis", "htmlLabels": true, "padding": 18, "nodeSpacing": 50, "rankSpacing": 70 }
+}}%%
+flowchart TB
+    %% ============================================================
+    %%  git-logs — SQLite Split-DB design (PROPOSED, part 1 of 2)
+    %%  ROOT DB:  ./data/root.db   — one per installation
+    %%
+    %%  Aligns with spec/05-split-db-architecture
+    %%  PascalCase only · WAL mode · foreign_keys=ON
+    %%
+    %%  NOTE: the existing 02-database-schema-and-erd.md describes
+    %%  the MySQL/wpdb deployment. This is the SQLite re-cast for
+    %%  self-hosted / CLI deployments. Treat as a proposal until
+    %%  promoted into a normative 02b-sqlite-schema-and-erd.md.
+    %% ============================================================
+
+    HDR(["<b>Root DB — <code>./data/root.db</code></b><br/><span style='font-size:11px'>app metadata · users · allowlist · audit · JWT keys · config</span>"]):::header
+
+    %% -------- Identity & access --------
+    subgraph IAM["<b>Identity & Access</b>"]
+        direction TB
+        T_USER["<b>User</b><br/>UserId PK<br/>Username UQ · DisplayName · Email<br/>TokenHash (Argon2id)<br/>UserStatusId FK · IsLocked<br/>HasWordPressBridge<br/>CreatedAt · UpdatedAt"]:::tEntity
+        T_ROLE["<b>UserRole</b><br/>UserRoleId PK<br/>UserId FK · RoleId FK<br/>ScopeJson (per-repo / per-owner)<br/>CreatedAt"]:::tEntity
+        T_REFRESH["<b>RefreshToken</b><br/>RefreshTokenId PK<br/>UserId FK · TokenHash (Argon2id)<br/>TokenLookupHash UQ (sha256 hex)<br/>RotatedFromRefreshTokenId FK<br/>IsRevoked · IsRotated<br/>ExpiresAt · CreatedAt"]:::tTxn
+        T_USER --o T_ROLE
+        T_USER --o T_REFRESH
+    end
+
+    %% -------- Allowlist --------
+    subgraph ALLOW["<b>Allowlist</b>"]
+        direction TB
+        T_REPO["<b>Repository</b><br/>RepositoryId PK<br/>ProviderId FK · OwnerName · RepoName<br/>AcceptanceModeId FK · VersionModeId FK<br/>RepositoryStatusId FK<br/>LogSenderTokenHash<br/><b>LogsDbPath</b> VARCHAR(255) NULL<br/><span style='font-size:11px'>(soft FK to per-repo logs DB file)</span><br/>CreatedAt · UpdatedAt"]:::tEntity
+    end
+
+    %% -------- Auth security --------
+    subgraph SEC["<b>Auth Security (was WP options)</b>"]
+        direction TB
+        T_KEY["<b>JwtKey</b><br/>JwtKeyId PK<br/>Kid UQ · StateId FK<br/>PublicKeyPem<br/>PrivateKeyEnc (AEAD)<br/>CreatedAt · RetiringSince"]:::tTxn
+        T_DENY["<b>JwtDenylist</b><br/>JwtDenylistId PK<br/>Jti UQ · Sub<br/>RevokedAt · ExpiresAt<br/>ReasonId FK"]:::tTxn
+        T_WM["<b>JwtUserWatermark</b><br/>UserId PK FK<br/>MinIatEpoch<br/>UpdatedAt<br/><span style='font-size:11px'>(bulk-revocation watermark)</span>"]:::tTxn
+    end
+
+    %% -------- Audit & config --------
+    subgraph SYS["<b>Audit & Config</b>"]
+        direction TB
+        T_AUDIT["<b>AuditTrail</b><br/>AuditTrailId PK<br/>ActorUserId FK NULL · RepositoryId FK NULL<br/>ActionId FK · OutcomeId FK<br/>TraceId · DetailsJson<br/>OccurredAt · CreatedAt"]:::tTxn
+        T_CFG["<b>AppConfig</b><br/>AppConfigId PK (always 1)<br/>SchemaVersion · ConfigJson<br/>SeedVersion (CW Config)<br/>UpdatedAt"]:::tCfg
+    end
+
+    %% -------- Lookups --------
+    subgraph LK["<b>Lookup Tables (seeded from <code>config.seed.json</code>)</b>"]
+        direction LR
+        L1["<b>UserStatus</b><br/>Active · Disabled · Pending"]:::tLookup
+        L2["<b>Role</b><br/>UserAdmin · RepoAdmin<br/>LogReader · Auditor"]:::tLookup
+        L3["<b>Provider</b><br/>GitHub<br/>GitLab (reserved)"]:::tLookup
+        L4["<b>AcceptanceMode</b><br/>RepoUrl<br/>OwnerWildcard"]:::tLookup
+        L5["<b>VersionMode</b><br/>Exact · Wildcard"]:::tLookup
+        L6["<b>RepositoryStatus</b><br/>Active · Disabled"]:::tLookup
+        L7["<b>AuditAction</b><br/>UserCreate · TokenIssue<br/>LogPush · LogQuery<br/>JwtKeyRotate · …"]:::tLookup
+        L8["<b>AuditOutcome</b><br/>Success · Rejected · Error"]:::tLookup
+        L9["<b>JwtKeyState</b><br/>Active · Retiring · Retired"]:::tLookup
+        L10["<b>RevocationReason</b><br/>Logout · Admin · ChainRevoke"]:::tLookup
+    end
+
+    %% -------- Cross-FK links --------
+    HDR --> IAM
+    HDR --> ALLOW
+    HDR --> SEC
+    HDR --> SYS
+
+    T_USER -.->|UserStatusId| L1
+    T_ROLE -.->|RoleId| L2
+    T_REPO -.->|ProviderId| L3
+    T_REPO -.->|AcceptanceModeId| L4
+    T_REPO -.->|VersionModeId| L5
+    T_REPO -.->|RepositoryStatusId| L6
+    T_AUDIT -.->|ActionId| L7
+    T_AUDIT -.->|OutcomeId| L8
+    T_KEY -.->|StateId| L9
+    T_DENY -.->|ReasonId| L10
+
+    T_USER --o T_AUDIT
+    T_REPO --o T_AUDIT
+    T_USER --o T_WM
+
+    %% -------- Bridge to logs DB --------
+    BRIDGE(["<b>LogsDbPath</b><br/>→ see diagram 02b<br/>per-repo logs DB"]):::bridge
+    T_REPO -.->|points to file| BRIDGE
+
+    %% ==================== STYLES ====================
+    classDef header  fill:#0f172a,stroke:#fbbf24,stroke-width:3px,color:#fbbf24,font-weight:bold
+    classDef tEntity fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.5px,color:#dbeafe
+    classDef tTxn    fill:#7c2d12,stroke:#fb923c,stroke-width:1.5px,color:#fed7aa
+    classDef tLookup fill:#3f3f46,stroke:#a1a1aa,stroke-width:1px,color:#f4f4f5
+    classDef tCfg    fill:#365314,stroke:#a3e635,stroke-width:1.5px,color:#ecfccb
+    classDef bridge  fill:#831843,stroke:#f472b6,stroke-width:2px,color:#fce7f3,font-weight:bold

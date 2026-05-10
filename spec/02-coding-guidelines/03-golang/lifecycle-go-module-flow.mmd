@@ -1,0 +1,8 @@
+flowchart TD
+    A[New Go Module] --> B[Apply enum specification]
+    B --> C[Apply Go standards reference]
+    C --> D[Apply file/folder naming]
+    D --> E{All sub-rulesets pass?}
+    E -- No --> F[Block: GO-MASTER-001]
+    E -- Yes --> G[Build + test]
+    G --> H[Publish]

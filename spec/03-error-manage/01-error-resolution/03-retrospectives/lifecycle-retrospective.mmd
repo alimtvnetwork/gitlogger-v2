@@ -1,0 +1,10 @@
+flowchart TD
+    A[Incident Closed] --> B[Schedule retrospective]
+    B --> C[Collect: timeline, root cause, impact]
+    C --> D[Identify action items]
+    D --> E[Assign owners + due dates]
+    E --> F[Publish retro doc]
+    F --> G[Link from incident registry]
+    G --> H{Action items complete?}
+    H -- No --> I[Track in backlog]
+    H -- Yes --> J[Close retro loop]

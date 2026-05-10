@@ -1,0 +1,12 @@
+flowchart TD
+    A[Scheduled Check Tick] --> B[Read current version + channel]
+    B --> C[GET release manifest]
+    C --> D{HTTP OK?}
+    D -- No --> E[Log + retry with backoff]
+    D -- Yes --> F[Compare versions semver]
+    F --> G{Newer available?}
+    G -- No --> H[Sleep until next tick]
+    G -- Yes --> I[Verify checksum + signature]
+    I --> J{Verified?}
+    J -- No --> K[Reject: UPDATE-VERIFY-001]
+    J -- Yes --> L[Notify user / auto-install per policy]

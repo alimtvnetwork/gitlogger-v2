@@ -1,0 +1,7 @@
+flowchart TD
+    A[Module spec change] --> B[Linter sweep]
+    B --> C{Contract present?}
+    C -->|yes| D[Audit promotes impl]
+    C -->|no| E[Block & require fix]
+    D --> F[CI green]
+    E --> F

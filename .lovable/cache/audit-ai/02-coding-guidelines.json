@@ -1,0 +1,460 @@
+{
+  "d1": 19,
+  "d2": 19,
+  "d3": 17,
+  "d4": 20,
+  "d5": 18,
+  "issues": [],
+  "findings": [],
+  "module": "02-coding-guidelines",
+  "files_used": 9,
+  "files_total": 251,
+  "bytes_used": 140000,
+  "bundle_sha": "b7ec69baa4ffc623",
+  "chunks": [
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "c5526d3a41ec9424",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/01-cross-language/01-issues-and-fixes-log.md",
+        "spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md",
+        "spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md",
+        "spec/02-coding-guidelines/01-cross-language/02-boolean-principles/03-parameters-and-conditions.md",
+        "spec/02-coding-guidelines/01-cross-language/02-boolean-principles/04-quick-reference.md"
+      ],
+      "bytes_used": 133566
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "b3802e971068a34d",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/01-cross-language/02-boolean-principles/05-exemptions-and-api.md",
+        "spec/02-coding-guidelines/01-cross-language/02-boolean-principles.md",
+        "spec/02-coding-guidelines/01-cross-language/03-casting-elimination-patterns.md",
+        "spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md",
+        "spec/02-coding-guidelines/01-cross-language/04-code-style/02-conditions-and-extraction.md"
+      ],
+      "bytes_used": 135627
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "a80045d807664ba0",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/01-cross-language/04-code-style/03-blank-lines-and-spacing.md",
+        "spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md",
+        "spec/02-coding-guidelines/01-cross-language/04-code-style/05-multi-line-formatting.md",
+        "spec/02-coding-guidelines/01-cross-language/04-code-style/06-comments-and-documentation.md",
+        "spec/02-coding-guidelines/01-cross-language/04-code-style/07-checklist.md",
+        "spec/02-coding-guidelines/01-cross-language/05-cross-spec-contradiction-checks.md"
+      ],
+      "bytes_used": 136463
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "19bf04e5a66a0851",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/01-cross-language/06-cyclomatic-complexity.md",
+        "spec/02-coding-guidelines/01-cross-language/07-database-naming.md",
+        "spec/02-coding-guidelines/01-cross-language/08-dry-principles.md",
+        "spec/02-coding-guidelines/01-cross-language/09-dry-refactoring-summary.md",
+        "spec/02-coding-guidelines/01-cross-language/10-function-naming.md",
+        "spec/02-coding-guidelines/01-cross-language/11-key-naming-pascalcase.md"
+      ],
+      "bytes_used": 137175
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "db15896fcf97980c",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/01-cross-language/12-no-negatives.md",
+        "spec/02-coding-guidelines/01-cross-language/13-strict-typing.md",
+        "spec/02-coding-guidelines/01-cross-language/14-test-naming-and-structure.md"
+      ],
+      "bytes_used": 131510
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "8fbe70766ca6db89",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/01-naming-and-database.md",
+        "spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/02-boolean-and-enum.md",
+        "spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/03-code-style-and-errors.md",
+        "spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/04-type-safety.md",
+        "spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/05-magic-strings-and-organization.md",
+        "spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/06-advanced-patterns.md"
+      ],
+      "bytes_used": 137280
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "ba0986a61f3b61bf",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/07-checklist.md",
+        "spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines.md",
+        "spec/02-coding-guidelines/01-cross-language/16-lazy-evaluation-patterns.md",
+        "spec/02-coding-guidelines/01-cross-language/16-static-analysis/02-go-golangci-lint.md",
+        "spec/02-coding-guidelines/01-cross-language/16-static-analysis/03-php-phpcs-phpstan.md",
+        "spec/02-coding-guidelines/01-cross-language/16-static-analysis/04-csharp-stylecop.md",
+        "spec/02-coding-guidelines/01-cross-language/16-static-analysis/05-rust-clippy.md"
+      ],
+      "bytes_used": 137317
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "6c78fbd806431b05",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/01-cross-language/16-static-analysis/06-vb-dotnet-analyzers.md",
+        "spec/02-coding-guidelines/01-cross-language/16-static-analysis/07-nodejs-eslint.md",
+        "spec/02-coding-guidelines/01-cross-language/16-static-analysis/08-python-ruff.md",
+        "spec/02-coding-guidelines/01-cross-language/16-static-analysis/09-ci-pipeline-quality-gate.md"
+      ],
+      "bytes_used": 136080
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "8ae191cb91d606e1",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/01-cross-language/16-static-analysis/10-cross-language-rule-matrix.md",
+        "spec/02-coding-guidelines/01-cross-language/17-regex-usage-guidelines.md",
+        "spec/02-coding-guidelines/01-cross-language/18-code-mutation-avoidance.md",
+        "spec/02-coding-guidelines/01-cross-language/19-null-pointer-safety.md",
+        "spec/02-coding-guidelines/02-typescript/01-connection-status-enum.md",
+        "spec/02-coding-guidelines/02-typescript/02-entity-status-enum.md",
+        "spec/02-coding-guidelines/02-typescript/03-execution-status-enum.md",
+        "spec/02-coding-guidelines/02-typescript/04-export-status-enum.md",
+        "spec/02-coding-guidelines/02-typescript/05-http-method-enum.md",
+        "spec/02-coding-guidelines/02-typescript/06-message-status-enum.md"
+      ],
+      "bytes_used": 129504
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "547048529af3f17e",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/02-typescript/07-type-safety-remediation-plan.md",
+        "spec/02-coding-guidelines/02-typescript/08-typescript-standards-reference.md",
+        "spec/02-coding-guidelines/02-typescript/09-promise-await-patterns.md",
+        "spec/02-coding-guidelines/02-typescript/10-log-level-enum.md"
+      ],
+      "bytes_used": 132757
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "5c04bb890d4848da",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/02-typescript/11-eslint-enforcement.md",
+        "spec/02-coding-guidelines/02-typescript/12-discriminated-union-patterns.md",
+        "spec/02-coding-guidelines/03-golang/01-enum-specification/01-enum-pattern.md",
+        "spec/02-coding-guidelines/03-golang/01-enum-specification/02-required-methods.md",
+        "spec/02-coding-guidelines/03-golang/01-enum-specification/03-folder-structure.md",
+        "spec/02-coding-guidelines/03-golang/01-enum-specification/04-validation-checklist.md"
+      ],
+      "bytes_used": 138192
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "55796f7aae65f3ee",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/03-golang/01-enum-specification/05-info-object-pattern.md",
+        "spec/02-coding-guidelines/03-golang/02-boolean-standards.md",
+        "spec/02-coding-guidelines/03-golang/03-httpmethod-enum.md"
+      ],
+      "bytes_used": 135124
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "13479e15bf7096ad",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/03-golang/04-golang-standards-reference/01-file-and-function-rules.md",
+        "spec/02-coding-guidelines/03-golang/04-golang-standards-reference/02-type-safety-and-errors.md",
+        "spec/02-coding-guidelines/03-golang/04-golang-standards-reference/03-database-and-structs.md",
+        "spec/02-coding-guidelines/03-golang/04-golang-standards-reference/04-naming-and-organization.md",
+        "spec/02-coding-guidelines/03-golang/04-golang-standards-reference/05-enums-and-dry.md"
+      ],
+      "bytes_used": 132478
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "aaf6a254b5f09dbd",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/03-golang/04-golang-standards-reference/06-concurrency-and-patterns.md",
+        "spec/02-coding-guidelines/03-golang/04-golang-standards-reference.md",
+        "spec/02-coding-guidelines/03-golang/05-defer-rules.md",
+        "spec/02-coding-guidelines/03-golang/06-string-slice-internals.md",
+        "spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md",
+        "spec/02-coding-guidelines/03-golang/08-pathutil-fileutil-spec.md"
+      ],
+      "bytes_used": 121707
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "489a2558798e6be1",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/04-php/01-enums.md"
+      ],
+      "bytes_used": 124099
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "73d7031bade7edd7",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/04-php/02-forbidden-patterns.md",
+        "spec/02-coding-guidelines/04-php/03-naming-conventions.md"
+      ],
+      "bytes_used": 134988
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "0a2c29a81b0eaf35",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/04-php/05-response-array-standard.md",
+        "spec/02-coding-guidelines/04-php/07-php-standards-reference/01-naming-and-errors.md",
+        "spec/02-coding-guidelines/04-php/07-php-standards-reference/02-constants-and-deps.md",
+        "spec/02-coding-guidelines/04-php/07-php-standards-reference/03-initialization-and-booleans.md",
+        "spec/02-coding-guidelines/04-php/07-php-standards-reference/04-code-style.md"
+      ],
+      "bytes_used": 134311
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "1d788e09c35b3d63",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/04-php/07-php-standards-reference/05-forbidden-and-database.md",
+        "spec/02-coding-guidelines/04-php/07-php-standards-reference.md",
+        "spec/02-coding-guidelines/04-php/08-spacing-and-imports.md",
+        "spec/02-coding-guidelines/04-php/09-response-key-type-inventory.md"
+      ],
+      "bytes_used": 134724
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "45aad8a8b27b4686",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/04-php/10-php-go-consistency-audit.md",
+        "spec/02-coding-guidelines/05-rust/01-naming-conventions.md",
+        "spec/02-coding-guidelines/05-rust/02-error-handling.md",
+        "spec/02-coding-guidelines/05-rust/03-async-patterns.md",
+        "spec/02-coding-guidelines/05-rust/04-memory-safety.md"
+      ],
+      "bytes_used": 134964
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "637ebf7e59039465",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/05-rust/05-testing-standards.md",
+        "spec/02-coding-guidelines/05-rust/06-ffi-platform.md",
+        "spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md",
+        "spec/02-coding-guidelines/06-ai-optimization/02-ai-quick-reference-checklist.md"
+      ],
+      "bytes_used": 130355
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "168b87bc26aac44f",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/06-ai-optimization/03-common-ai-mistakes.md",
+        "spec/02-coding-guidelines/06-ai-optimization/04-condensed-master-guidelines.md",
+        "spec/02-coding-guidelines/06-ai-optimization/05-enum-naming-quick-reference.md",
+        "spec/02-coding-guidelines/06-cicd-integration/01-sarif-contract.md",
+        "spec/02-coding-guidelines/06-cicd-integration/02-plugin-model.md",
+        "spec/02-coding-guidelines/06-cicd-integration/03-language-roadmap.md",
+        "spec/02-coding-guidelines/06-cicd-integration/04-ci-templates.md"
+      ],
+      "bytes_used": 137289
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "2df98c8e3c05c193",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/06-cicd-integration/05-distribution.md",
+        "spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md",
+        "spec/02-coding-guidelines/06-cicd-integration/07-performance.md",
+        "spec/02-coding-guidelines/07-csharp/01-naming-and-conventions.md",
+        "spec/02-coding-guidelines/07-csharp/02-method-design.md",
+        "spec/02-coding-guidelines/07-csharp/03-error-handling.md",
+        "spec/02-coding-guidelines/07-csharp/04-type-safety.md",
+        "spec/02-coding-guidelines/08-file-folder-naming/01-cross-language.md",
+        "spec/02-coding-guidelines/08-file-folder-naming/02-php-wordpress.md",
+        "spec/02-coding-guidelines/08-file-folder-naming/03-golang.md",
+        "spec/02-coding-guidelines/08-file-folder-naming/04-typescript-javascript.md",
+        "spec/02-coding-guidelines/08-file-folder-naming/05-rust-csharp.md"
+      ],
+      "bytes_used": 134207
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "c15d1f384062923c",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/11-security/01-axios-version-control/01-implementation-rules.md",
+        "spec/02-coding-guidelines/11-security/01-axios-version-control/02-security-notes.md"
+      ],
+      "bytes_used": 107025
+    },
+    {
+      "tier": "T3",
+      "bundle_sha_chunk": "bc140908d4d8e987",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/01-cross-language/20-nesting-resolution-patterns.md",
+        "spec/02-coding-guidelines/01-cross-language/21-newline-styling-examples.md",
+        "spec/02-coding-guidelines/01-cross-language/22-variable-naming-conventions.md",
+        "spec/02-coding-guidelines/01-cross-language/23-solid-principles.md",
+        "spec/02-coding-guidelines/01-cross-language/24-boolean-flag-methods.md",
+        "spec/02-coding-guidelines/01-cross-language/25-generic-return-types.md"
+      ],
+      "bytes_used": 130568
+    },
+    {
+      "tier": "T3",
+      "bundle_sha_chunk": "7c8a98420baf0410",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/01-cross-language/26-magic-values-and-immutability.md",
+        "spec/02-coding-guidelines/01-cross-language/27-types-folder-convention.md",
+        "spec/02-coding-guidelines/01-cross-language/28-slug-conventions.md",
+        "spec/02-coding-guidelines/06-cicd-integration/98-faq.md"
+      ],
+      "bytes_used": 129814
+    },
+    {
+      "tier": "T3",
+      "bundle_sha_chunk": "dbc477c4f1ebff85",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/06-cicd-integration/99-troubleshooting.md",
+        "spec/02-coding-guidelines/consolidated-review-guide-condensed.md"
+      ],
+      "bytes_used": 119165
+    },
+    {
+      "tier": "T3",
+      "bundle_sha_chunk": "b44a77c586264daa",
+      "files": [
+        "spec/02-coding-guidelines/00-overview.md",
+        "spec/02-coding-guidelines/97-acceptance-criteria.md",
+        "spec/02-coding-guidelines/98-changelog.md",
+        "spec/02-coding-guidelines/99-consistency-report.md",
+        "spec/02-coding-guidelines/consolidated-review-guide.md"
+      ],
+      "bytes_used": 121742
+    }
+  ],
+  "chunked_path": true,
+  "total_v6": 93,
+  "axis": "normative-contract",
+  "axis_multipliers": {
+    "d1": 1.0,
+    "d2": 1.5,
+    "d3": 1.2,
+    "d4": 0.8,
+    "d5": 0.5
+  },
+  "axis_cap": 100,
+  "weighted_total": 92.9,
+  "total_v7": 93,
+  "total": 93,
+  "band": "EXCELLENT",
+  "rubric": "v7"
+}

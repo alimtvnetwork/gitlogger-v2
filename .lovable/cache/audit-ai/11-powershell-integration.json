@@ -1,0 +1,69 @@
+{
+  "d1": 19,
+  "d2": 18,
+  "d3": 18,
+  "d4": 16,
+  "d5": 19,
+  "issues": [],
+  "findings": [],
+  "module": "11-powershell-integration",
+  "files_used": 18,
+  "files_total": 19,
+  "bytes_used": 140000,
+  "bundle_sha": "ed6fee2984494502",
+  "chunks": [
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "9102b706156bf9f7",
+      "files": [
+        "spec/11-powershell-integration/00-overview.md",
+        "spec/11-powershell-integration/97-acceptance-criteria.md",
+        "spec/11-powershell-integration/98-changelog.md",
+        "spec/11-powershell-integration/99-consistency-report.md",
+        "spec/11-powershell-integration/01-configuration-schema.md",
+        "spec/11-powershell-integration/01-template-vs-project-differences.md",
+        "spec/11-powershell-integration/02-script-reference.md",
+        "spec/11-powershell-integration/03-integration-guide.md",
+        "spec/11-powershell-integration/04-error-codes.md",
+        "spec/11-powershell-integration/05-firewall-rules.md",
+        "spec/11-powershell-integration/06-php-known-issues.md",
+        "spec/11-powershell-integration/07-runner-interface.md"
+      ],
+      "bytes_used": 117364
+    },
+    {
+      "tier": "T3",
+      "bundle_sha_chunk": "2444c4fc1bb154b1",
+      "files": [
+        "spec/11-powershell-integration/00-overview.md",
+        "spec/11-powershell-integration/97-acceptance-criteria.md",
+        "spec/11-powershell-integration/98-changelog.md",
+        "spec/11-powershell-integration/99-consistency-report.md",
+        "spec/11-powershell-integration/25-multi-site-deployment.md",
+        "spec/11-powershell-integration/changelog.md",
+        "spec/11-powershell-integration/examples/server-client-project.json",
+        "spec/11-powershell-integration/parallel-work-sync-output.md",
+        "spec/11-powershell-integration/readme.md",
+        "spec/11-powershell-integration/schemas/powershell.schema.json",
+        "spec/11-powershell-integration/templates/powershell.json"
+      ],
+      "bytes_used": 94991
+    }
+  ],
+  "chunked_path": true,
+  "total_v6": 90,
+  "axis": "integration-spec",
+  "axis_multipliers": {
+    "d1": 0.9259,
+    "d2": 0.8333,
+    "d3": 0.8333,
+    "d4": 1.2963,
+    "d5": 1.1111
+  },
+  "axis_cap": 95,
+  "weighted_total": 89.4,
+  "total_v7": 89,
+  "total": 89,
+  "band": "GOOD",
+  "rubric": "v7"
+}

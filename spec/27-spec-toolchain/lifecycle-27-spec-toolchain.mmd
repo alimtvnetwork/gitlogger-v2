@@ -1,0 +1,12 @@
+flowchart TD
+    A[Spec change committed] --> B[Stage 1: detect changed modules]
+    B --> C[Stage 2: validate contracts]
+    C --> D[Stage 3: lint - audit-spec-vs-code-v2 strict]
+    D --> E{Lint pass?}
+    E -->|no| F[Block merge - emit fix checklist]
+    E -->|yes| G[Stage 4: tree-health gate strict]
+    G --> H[Stage 5: lockstep gate]
+    H --> I[Stage 6: promote artefacts]
+    I --> J[Stage 7: update consistency reports]
+    J --> K[CI green - merge unblocked]
+    F --> A

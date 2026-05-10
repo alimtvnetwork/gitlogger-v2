@@ -1,0 +1,11 @@
+flowchart TD
+    A[Diagram Authored] --> B[Add Header Comment]
+    B --> C[Use flowchart TD]
+    C --> D{Node Names Match Verb-Noun?}
+    D -- No --> E[Block: UPD-DIA-001]
+    D -- Yes --> F{All Edges Labeled?}
+    F -- No --> E
+    F -- Yes --> G[Render with mmdc]
+    G --> H{Render OK?}
+    H -- No --> E
+    H -- Yes --> I[Commit + 98-changelog entry]

@@ -1,0 +1,68 @@
+{
+  "d1": 18,
+  "d2": 19,
+  "d3": 17,
+  "d4": 18,
+  "d5": 20,
+  "issues": [
+    {
+      "severity": "MEDIUM",
+      "dim": "D3",
+      "title": "Conflicting Registry Table Definitions",
+      "why": "The parent (10-research/97-AC-10) and child (01-research-index/00-overview) define the 'RegistryEntry' table with different schemas (one has Domain/Slug PK, the other has RegistryEntryId PK).",
+      "fix": "Consolidate the RegistryEntry DDL into a single normative block in the child module and reference it from the parent."
+    },
+    {
+      "severity": "LOW",
+      "dim": "D1",
+      "title": "Date Format Ambiguity in Child Contract",
+      "why": "The JSON schema in 01-research-index/00-overview uses 'format: date' for openedAt, while the SQL DDL and parent AC-10 require ISO-8601 date-time.",
+      "fix": "Update the JSON schema 'openedAt' property to use 'format: date-time' for consistency with the SQL CHECK constraints."
+    },
+    {
+      "severity": "LOW",
+      "dim": "D4",
+      "title": "Stale Summary in Consistency Report",
+      "why": "The 'Known Gaps' section in 10-research/99-consistency-report.md claims 97-acceptance-criteria.md is 'planned' but it already exists and is populated.",
+      "fix": "Remove the 'Known Gaps' bullet point regarding missing AC files in the \u00a799 report."
+    }
+  ],
+  "module": "10-research",
+  "files_used": 8,
+  "files_total": 8,
+  "bytes_used": 42753,
+  "bundle_sha": "3508f746ab4b984c",
+  "chunks": [
+    {
+      "tier": "FULL",
+      "bundle_sha_chunk": "3508f746ab4b984c",
+      "files": [
+        "spec/10-research/00-overview.md",
+        "spec/10-research/97-acceptance-criteria.md",
+        "spec/10-research/98-changelog.md",
+        "spec/10-research/99-consistency-report.md",
+        "spec/10-research/01-research-index/00-overview.md",
+        "spec/10-research/01-research-index/97-acceptance-criteria.md",
+        "spec/10-research/01-research-index/98-changelog.md",
+        "spec/10-research/01-research-index/99-consistency-report.md"
+      ],
+      "bytes_used": 42753
+    }
+  ],
+  "chunked_path": false,
+  "total_v6": 92,
+  "axis": "audit-corpus",
+  "axis_multipliers": {
+    "d1": 1.0,
+    "d2": 0.5,
+    "d3": 0.5,
+    "d4": 1.5,
+    "d5": 1.5
+  },
+  "axis_cap": 95,
+  "weighted_total": 93.0,
+  "total_v7": 93,
+  "total": 93,
+  "band": "EXCELLENT",
+  "rubric": "v7"
+}

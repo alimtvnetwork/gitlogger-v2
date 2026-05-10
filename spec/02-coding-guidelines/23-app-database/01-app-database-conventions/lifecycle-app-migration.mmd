@@ -1,0 +1,11 @@
+flowchart TD
+    A[App Schema Change Needed] --> B[Author Forward Migration]
+    B --> C{Adds Column?}
+    C -- Yes --> D[Enforce NULL + no DEFAULT]
+    C -- No --> E{Adds Table?}
+    E -- Yes --> F[Enforce PascalCase + PK pattern]
+    D --> G[check-forbidden-strings.py]
+    F --> G
+    G --> H{Pass?}
+    H -- No --> I[Block: APP-DB-001]
+    H -- Yes --> J[Apply on Deploy]

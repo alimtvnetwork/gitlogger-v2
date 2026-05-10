@@ -1,0 +1,10 @@
+flowchart TD
+    A[Boolean Variable Authored] --> B{Has is/has/can/should prefix?}
+    B -- No --> C[Reject: BOOL-001]
+    B -- Yes --> D{Negation in name?}
+    D -- Yes (isNotReady) --> E[Reject: BOOL-002 invert]
+    D -- No --> F{Returns bool from function?}
+    F -- Yes --> G[Verify same prefix rule]
+    F -- No --> H[Lint Pass]
+    G --> H
+    H --> I[Merge]

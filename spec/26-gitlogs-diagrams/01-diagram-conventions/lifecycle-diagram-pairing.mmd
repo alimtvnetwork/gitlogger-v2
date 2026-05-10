@@ -1,0 +1,10 @@
+flowchart TD
+    A[New Diagram Authored] --> B[Author X.mmd]
+    B --> C[Run: mmdc -i X.mmd -o X.svg]
+    C --> D[Commit Both Files Same PR]
+    D --> E[CI: Re-render X.mmd]
+    E --> F{SHA-256 of new SVG == committed SVG?}
+    F -- No --> G[Block: GLD-001 stale render]
+    F -- Yes --> H[Merge]
+    H --> I{Diagram Retired?}
+    I -- Yes --> J[Delete BOTH .mmd and .svg]

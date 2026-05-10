@@ -1,0 +1,10 @@
+flowchart TD
+    A[New Issue Category Needed] --> B[Author Template APP-ISS-NNN]
+    B --> C[Define Required Fields]
+    C --> D[Validate Against JSON Schema]
+    D --> E{Schema Pass?}
+    E -- No --> F[Block: ISS-TPL-001]
+    E -- Yes --> G[Publish Template]
+    G --> H[Used by Issue Forms]
+    H --> I{Replacement Authored?}
+    I -- Yes --> J[Mark superseded_by]

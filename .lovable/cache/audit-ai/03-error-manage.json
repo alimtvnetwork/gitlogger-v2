@@ -1,0 +1,228 @@
+{
+  "d1": 18,
+  "d2": 17,
+  "d3": 17,
+  "d4": 18,
+  "d5": 18,
+  "issues": [],
+  "findings": [],
+  "module": "03-error-manage",
+  "files_used": 17,
+  "files_total": 166,
+  "bytes_used": 140000,
+  "bundle_sha": "b5fcadd0d5a15149",
+  "chunks": [
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "f583f5fa54e77436",
+      "files": [
+        "spec/03-error-manage/00-overview.md",
+        "spec/03-error-manage/97-acceptance-criteria.md",
+        "spec/03-error-manage/98-changelog.md",
+        "spec/03-error-manage/99-consistency-report.md",
+        "spec/03-error-manage/01-error-resolution/00-error-documentation-guideline.md",
+        "spec/03-error-manage/01-error-resolution/01-cross-reference-diagram.md",
+        "spec/03-error-manage/01-error-resolution/02-debugging-cheat-sheet.md",
+        "spec/03-error-manage/01-error-resolution/03-retrospectives/01-health-endpoint-mismatch.md",
+        "spec/03-error-manage/01-error-resolution/03-retrospectives/02-retry-debounce-dedup-fixes.md",
+        "spec/03-error-manage/01-error-resolution/03-retrospectives/03-zip-finalization-before-return.md",
+        "spec/03-error-manage/01-error-resolution/03-retrospectives/04-activation-endpoint-mismatch.md",
+        "spec/03-error-manage/01-error-resolution/04-verification-patterns/01-frontend-backend-sync.md",
+        "spec/03-error-manage/01-error-resolution/05-debugging-guides/01-debugging-php.md"
+      ],
+      "bytes_used": 125118
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "eb868e5c76354e25",
+      "files": [
+        "spec/03-error-manage/00-overview.md",
+        "spec/03-error-manage/97-acceptance-criteria.md",
+        "spec/03-error-manage/98-changelog.md",
+        "spec/03-error-manage/99-consistency-report.md",
+        "spec/03-error-manage/01-error-resolution/05-debugging-guides/02-debugging-go.md",
+        "spec/03-error-manage/01-error-resolution/05-debugging-guides/03-debugging-typescript.md",
+        "spec/03-error-manage/02-error-architecture/01-error-handling-reference.md",
+        "spec/03-error-manage/02-error-architecture/02-go-delegation-fix.md",
+        "spec/03-error-manage/02-error-architecture/03-notification-colors.md"
+      ],
+      "bytes_used": 131816
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "23ce9aadc67d78dc",
+      "files": [
+        "spec/03-error-manage/00-overview.md",
+        "spec/03-error-manage/97-acceptance-criteria.md",
+        "spec/03-error-manage/98-changelog.md",
+        "spec/03-error-manage/99-consistency-report.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats/01-compact-report.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats/02-full-report.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats/03-full-report-with-backend-logs.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats/04-error-log-txt.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats/05-full-log-txt.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats/06-error-log-with-delegated-info.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats/07-envelope-error-response.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats/08-session-diagnostics.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats/09-generator-code-reference.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/02-react-components/01-typescript-interfaces.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/02-react-components/02-error-store.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/02-react-components/03-api-types.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/02-react-components/04-hooks.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/02-react-components/05-component-hierarchy.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/02-react-components/06-component-source.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/02-react-components/07-report-generator.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/02-react-components/08-integration-guide.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/02-react-components.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/01-data-model.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/02-capture-pipeline.md"
+      ],
+      "bytes_used": 138500
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "d525cb0d6e82feca",
+      "files": [
+        "spec/03-error-manage/00-overview.md",
+        "spec/03-error-manage/97-acceptance-criteria.md",
+        "spec/03-error-manage/98-changelog.md",
+        "spec/03-error-manage/99-consistency-report.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/03-envelope-parsing.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/04-modal-structure.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/05-backend-tabs.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/06-frontend-tabs.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/07-request-chain.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/08-traversal-details.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/09-session-diagnostics.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/10-report-generation.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/11-queue-navigation.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/12-code-examples.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/13-file-reference.md"
+      ],
+      "bytes_used": 109863
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "6cbbeb965eaacc5a",
+      "files": [
+        "spec/03-error-manage/00-overview.md",
+        "spec/03-error-manage/97-acceptance-criteria.md",
+        "spec/03-error-manage/98-changelog.md",
+        "spec/03-error-manage/99-consistency-report.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/04-color-themes/01-design-tokens.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/04-color-themes/02-backend-tab-colors.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/04-color-themes/03-frontend-and-ui-colors.md"
+      ],
+      "bytes_used": 123774
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "a09a44864453a99e",
+      "files": [
+        "spec/03-error-manage/00-overview.md",
+        "spec/03-error-manage/97-acceptance-criteria.md",
+        "spec/03-error-manage/98-changelog.md",
+        "spec/03-error-manage/99-consistency-report.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/04-color-themes.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/05-error-history-persistence.md",
+        "spec/03-error-manage/02-error-architecture/04-error-modal/06-suppress-global-error.md",
+        "spec/03-error-manage/02-error-architecture/05-response-envelope/01-adr.md",
+        "spec/03-error-manage/02-error-architecture/05-response-envelope/02-changelog.md",
+        "spec/03-error-manage/02-error-architecture/05-response-envelope/03-configurability.md",
+        "spec/03-error-manage/02-error-architecture/05-response-envelope/04-response-envelope-reference.md",
+        "spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/01-overview-and-stack.md"
+      ],
+      "bytes_used": 134970
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "f7586825e812cff0",
+      "files": [
+        "spec/03-error-manage/00-overview.md",
+        "spec/03-error-manage/97-acceptance-criteria.md",
+        "spec/03-error-manage/98-changelog.md",
+        "spec/03-error-manage/99-consistency-report.md",
+        "spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/02-apperror-struct.md",
+        "spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/03-result-types.md",
+        "spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/04-codes-and-policy.md",
+        "spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/05-apperrtype-enums.md",
+        "spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/05-usage-and-adapters.md",
+        "spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/06-serialization-and-guards.md",
+        "spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference.md"
+      ],
+      "bytes_used": 135895
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "5eea4ba081dd653d",
+      "files": [
+        "spec/03-error-manage/00-overview.md",
+        "spec/03-error-manage/97-acceptance-criteria.md",
+        "spec/03-error-manage/98-changelog.md",
+        "spec/03-error-manage/99-consistency-report.md",
+        "spec/03-error-manage/02-error-architecture/07-logging-and-diagnostics/01-react-execution-logger.md",
+        "spec/03-error-manage/02-error-architecture/07-logging-and-diagnostics/02-session-based-logging.md",
+        "spec/03-error-manage/03-error-code-registry/01-registry.md",
+        "spec/03-error-manage/03-error-code-registry/02-integration-guide.md",
+        "spec/03-error-manage/03-error-code-registry/03-collision-resolution-summary.md",
+        "spec/03-error-manage/03-error-code-registry/04-error-code-utilization-report.md"
+      ],
+      "bytes_used": 137647
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "1e8a4d0ca5ccc648",
+      "files": [
+        "spec/03-error-manage/00-overview.md",
+        "spec/03-error-manage/97-acceptance-criteria.md",
+        "spec/03-error-manage/98-changelog.md",
+        "spec/03-error-manage/99-consistency-report.md",
+        "spec/03-error-manage/03-error-code-registry/05-overlap-validator.md",
+        "spec/03-error-manage/03-error-code-registry/06-lint-rule-catalog.md",
+        "spec/03-error-manage/03-error-code-registry/09-templates/01-error-codes-template.md"
+      ],
+      "bytes_used": 77977
+    },
+    {
+      "tier": "T3",
+      "bundle_sha_chunk": "9546d517e84e9f92",
+      "files": [
+        "spec/03-error-manage/00-overview.md",
+        "spec/03-error-manage/97-acceptance-criteria.md",
+        "spec/03-error-manage/98-changelog.md",
+        "spec/03-error-manage/99-consistency-report.md",
+        "spec/03-error-manage/01-error-resolution/app-issues/2026-04-02-url-error-casing-fix.md",
+        "spec/03-error-manage/01-error-resolution/app-issues/error-management-file-path-and-missing-file-code-red-rule.md",
+        "spec/03-error-manage/02-error-architecture/05-response-envelope/envelope-debug.json",
+        "spec/03-error-manage/02-error-architecture/05-response-envelope/envelope-error.json",
+        "spec/03-error-manage/02-error-architecture/05-response-envelope/envelope-minimal.json",
+        "spec/03-error-manage/02-error-architecture/05-response-envelope/envelope-multiple.json",
+        "spec/03-error-manage/02-error-architecture/05-response-envelope/envelope-single.json",
+        "spec/03-error-manage/02-error-architecture/05-response-envelope/envelope.schema.json",
+        "spec/03-error-manage/03-error-code-registry/07-schemas/error-code.schema.json",
+        "spec/03-error-manage/03-error-code-registry/07-schemas/error-codes-index.schema.json",
+        "spec/03-error-manage/03-error-code-registry/error-codes-master.json",
+        "spec/03-error-manage/structure.md"
+      ],
+      "bytes_used": 112221
+    }
+  ],
+  "chunked_path": true,
+  "total_v6": 88,
+  "axis": "normative-contract",
+  "axis_multipliers": {
+    "d1": 1.0,
+    "d2": 1.5,
+    "d3": 1.2,
+    "d4": 0.8,
+    "d5": 0.5
+  },
+  "axis_cap": 100,
+  "weighted_total": 87.3,
+  "total_v7": 87,
+  "total": 87,
+  "band": "GOOD",
+  "rubric": "v7"
+}

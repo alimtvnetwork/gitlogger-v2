@@ -1,0 +1,193 @@
+# Allowlist for check-spec-folder-refs.py
+#
+# Two categories, each under a [section] header:
+#
+#   [external]  — Folders that physically exist in a sibling repository
+#                 (notably `gitmap-v3`) and are intentionally NOT imported
+#                 into this repo per the avoid-app-sync rule
+#                 (see .lovable/memory/constraints/avoid-app-sync).
+#                 References are real and resolvable in the other repo.
+#
+#   [doc-only]  — Illustrative or historical folder names that do NOT exist
+#                 anywhere. They appear in narrative documentation
+#                 (changelogs, migration write-ups, examples) purely as
+#                 prose. They MUST NOT be used as live navigation links.
+#
+# Format:
+#   - Section headers: `[external]` or `[doc-only]` on their own line.
+#   - One folder name per line within a section.
+#   - Lines starting with `#` and blank lines are ignored.
+#   - Entries before the first section header default to [external] for
+#     backward compatibility with the pre-section format.
+
+[external]
+
+# --- gitmap-v3 sibling repo (app, app-issues, general layout) ---
+01-app
+02-app-issues
+03-general
+01-general-spec
+02-spec-management-software
+03-issues
+
+# --- gitmap-v3 CLI suite (cross-repo references) ---
+09-api-integration
+09-gsearch-cli
+10-brun-cli
+11-ai-bridge-cli
+12-nexus-flow-cli
+13-wp-plugin
+14-wp-plugin-builder
+15-spec-reverse-cli
+16-ai-transcribe-cli
+17-research-queries
+20-gsearch-cli
+21-brun-cli
+21-wp-seo-publish-cli
+22-ai-bridge-cli
+23-how-app-issues-track
+24-nexus-flow-cli
+28-wp-plugin-development
+31-generic-enforce
+33-ai-bridge-non-vector-rag
+
+[doc-only]
+
+# Add illustrative / historical folder names here. They must never appear
+# as live links — only inside prose, code fences, or example tables.
+
+# --- Removed/historical folders (referenced only in changelog docs) ---
+15-domain-migration
+19-ai-reliability
+
+# --- Sibling-repo umbrella folder referenced only in CI/CD issue write-ups
+# (see .lovable/cicd-issues/07-cross-spec-missing-file-link-checker.md).
+# Lives in gitmap-v3, not in this repo. Documentation-only here. ---
+26-spec-outsides
+
+# --- Allowlist documentation example (used in spec/17-consolidated-guidelines/27-linter-authoring-guide.md §6.1 Format B) ---
+99-future-work
+
+# --- Lesson #38 §G slug-validation memo: documents the original wrong slug
+# `spec/24-design-system/` (correct disk slug is `spec/24-app-design-system-and-ui/`).
+# Referenced verbatim in `mem://process/phase-153-lessons` Section G AND
+# `.lovable/memory/audit/v2-deterministic/phase-153-pL36-cluster-fix.md` AND
+# `.lovable/memory/index.md` Phase 153 ledger as the canonical "wrong slug"
+# example. Documentation-only — must never appear as a live link. ---
+24-design-system
+
+# --- Phase 153 Task A19 self-test fixture: synthetic module name used by
+# `linter-scripts/audit-ai-implementability.py` self-tests to exercise the
+# AC-34-12 fail-fast (missing `content_axis` raises exit 2) and the
+# axis-multiplier renormalization assertions. The folder is constructed
+# in-memory inside the test harness and never lives on disk. Referenced
+# verbatim in spec/27 §98/§99 release rows, the A19 closure memo, and the
+# memory index. Documentation-only — must never appear as a live link. ---
+00-aai-axis-test-fixture
+
+# --- Historical folder numbers from spec/26-spec-outsides/ archive ---
+# These appear in archived spec-outsides documents that reference an
+# older numbering scheme (pre-renumbering). The current equivalents are:
+#   04-generic-cli         → 13-generic-cli
+#   05-coding-guidelines   → 02-coding-guidelines
+#   07-generic-release     → 16-generic-release
+#   08-generic-update      → 14-update
+#   09-pipeline            → 12-cicd-pipeline-workflows
+#   12-consolidated-guidelines → 17-consolidated-guidelines
+# The archived files are preserved verbatim for historical accuracy and
+# are not converted to live links.
+04-generic-cli
+05-coding-guidelines
+07-generic-release
+08-generic-update
+09-pipeline
+12-consolidated-guidelines
+
+# --- Phase 143 (2026-04-28): documentation-example folder names that
+# appear ONLY inside narrative prose, GWT examples, or the allowlist
+# spec's own demonstration table. Verified each as "deliberate fake path
+# used to demonstrate the checker / audit narrative", not a typo or
+# planned future module. ---
+# 04-some-feature  → spec/17-consolidated-guidelines/31-full-tree-ai-audit-v4.md §3 narrative example
+# 30-cross-repo-foo  → spec/27-spec-toolchain/62-spec-folder-refs-allowlist.md §[external] example row
+# 31-cross-repo-bar  → spec/27-spec-toolchain/62-spec-folder-refs-allowlist.md §[external] example row
+# 99-nonexistent  → spec/27-spec-toolchain/02-check-spec-folder-refs.md AC GWT body
+04-some-feature
+30-cross-repo-foo
+31-cross-repo-bar
+99-nonexistent
+
+# --- Phase 143: archived/historical folder names that survive only in
+# audit memos and the v1-archive readme. These are intentional pointers
+# to the project's pre-renumbering past and the archived v1 spec. ---
+# 21-git-logs     → spec/17-consolidated-guidelines/33-full-tree-ai-audit-v5.md historical reference
+# 21-git-logs-v1  → spec/22-git-logs-v2/36-why-v1-archived.md → archived under spec/_archive/21-git-logs-v1/
+# 22-app-issues   → .lovable/memory/specs/full-tree-audit-v4.md historical reference (current name: 25-app-issues)
+# 29-app-issues-cli → .lovable/memory/audit/v2-deterministic/phase-126-folder-17-enumeration-sweep.md historical reference
+21-git-logs
+21-git-logs-v1
+22-app-issues
+29-app-issues-cli
+
+# --- Phase 143: deprecated/typo-example folder names used as DELIBERATE
+# negative examples in §27 linter specs (the linter spec uses these exact
+# strings to demonstrate what the checker should catch). They are
+# documentation-only by design — the spec USES the missing-folder name
+# inside its own GWT body. ---
+# 12-cicd-pipelines  → spec/27-spec-toolchain/02-check-spec-folder-refs.md AC GWT (typo example for 12-cicd-pipeline-workflows)
+# 14-generic-update  → spec/27-spec-toolchain/04-check-forbidden-spec-paths.md (deprecated pre-consolidation, merged into 14-update on 2026-04-17)
+# 15-self-update-app-update → spec/27-spec-toolchain/04-check-forbidden-spec-paths.md (same deprecation)
+12-cicd-pipelines
+14-generic-update
+15-self-update-app-update
+
+# --- Phase F1: aspirational / historical sibling-module names referenced
+# only in spec narrative (onboarding routing tables, design-system
+# cross-section "see also" pointers, consolidated-guidelines app-layer
+# narration). These three folders were planned during early scoping
+# (v2.x era) but never created; their content was either subsumed by
+# existing folders or remains aspirational. References live only as
+# prose in routing tables / "where to find this" hints — never as live
+# navigation. Keeping them here documents the intent without forcing
+# either (a) deleting the prose (loses contributor-routing value) or
+# (b) creating empty stub folders (creates real-but-empty modules). ---
+# 08-docs-viewer-ui    → spec/01-.../04-ai-onboarding-prompt.md routing table; spec/07-design-system/00-overview + 07-code-blocks + 99 cross-section pointers (planned docs-viewer module, never created)
+# 09-code-block-system → spec/01-.../04-ai-onboarding-prompt.md routing table (subsumed by spec/07-design-system/07-code-blocks.md)
+# 21-app               → spec/01-.../04-ai-onboarding-prompt.md routing table; spec/17-consolidated-guidelines/02-coding-guidelines.md + 13-app.md narrative (the "umbrella" concept that drives 23-app-database / 24-app-design-system-and-ui / 25-app-issues — described but no physical folder)
+08-docs-viewer-ui
+09-code-block-system
+21-app
+
+# --- Phase 154 Task #3: 4 historical memo slugs that survive only in
+# audit memo prose. Each is a deliberate documentation-only reference
+# — none are typos, none are planned future modules, none have ever
+# existed on disk. Per AC-62-04 (comments above entries, never inline). ---
+# 22-pre-fu29  → audit-memo prose label for "spec/22 state before Phase 153 follow-up #29"
+#                Referenced verbatim in: .lovable/memory/index.md;
+#                .lovable/memory/audit/v2-deterministic/phase-153-task-{A18-fu1-3,A20-fu7,S23-01}-*.md
+# 27-class     → narrative grouping label for "spec/27 audit/CI script class" used in
+#                spec/27-spec-toolchain/34-audit-ai-implementability.md prose section AND
+#                .lovable/memory/audit/v2-deterministic/phase-153-task-A18-impl-2-*.md
+# 25-fu26      → audit-memo prose label for "spec/25 follow-up #26" historical state
+#                Referenced verbatim in: .lovable/memory/audit/v2-deterministic/phase-153-task-P2-spec27-noop.md
+# 29-audits  REMOVED 2026-05-06 (Phase 154 Task #4) — spec/29-audits/ scaffolded as a live
+#            module; the prior [doc-only] suppression no longer applies. Future references to
+#            `spec/29-audits/` resolve to the live folder. Per the prior conditional-removal
+#            note, this removal is intentional to prevent prose↔folder drift.
+22-pre-fu29
+27-class
+25-fu26
+
+# --- Phase J3 (2026-05-07): 3 doc-only prose labels.
+# Per AC-62-04 (comments above entries, never inline).
+# 30-ci-provider-plugins → spec/28 §97 AC + §98 cite this as the future v3
+#                          plugin-model module; "v3 unblock trigger" prose
+#                          only — module not yet scaffolded.
+# 13-style              → audit-memo prose label "spec/13-style 20-sibling
+#                          mature-but-scattered case" in
+#                          .lovable/memory/audit/v2-deterministic/phase-j2-noop-spec04-below-threshold.md
+# 22-style              → audit-memo prose label "spec/22-style zero-bound
+#                          binding crisis" in same J2 memo.
+30-ci-provider-plugins
+13-style
+22-style

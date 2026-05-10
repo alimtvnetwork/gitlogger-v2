@@ -1,0 +1,9 @@
+flowchart TD
+    A[App-Specific Need Identified] --> B[Author Override APP-COD-NNN]
+    B --> C[Cross-link to Master Rule]
+    C --> D{PR Review}
+    D -- Approved --> E[Active]
+    D -- Rejected --> F[Withdrawn]
+    E --> G{Master Rule Updated?}
+    G -- Yes, reconciled --> H[Superseded]
+    G -- No --> E

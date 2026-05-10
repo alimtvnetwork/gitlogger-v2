@@ -1,0 +1,11 @@
+flowchart TD
+    A[Request Arrives] --> B[Resolve UserId from auth]
+    B --> C{Personal DB exists?}
+    C -- No --> D[Provision user_<id>.sqlite from migration]
+    C -- Yes --> E[Open existing personal DB]
+    D --> E
+    E --> F[Apply RBAC policy via Casbin]
+    F --> G{Authorized?}
+    G -- No --> H[403]
+    G -- Yes --> I[Execute query on user DB]
+    I --> J[Audit to shared system DB]

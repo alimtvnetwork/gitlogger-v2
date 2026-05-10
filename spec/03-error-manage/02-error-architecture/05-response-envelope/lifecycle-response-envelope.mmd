@@ -1,0 +1,9 @@
+flowchart TD
+    A[Handler Returns Result] --> B{Success or Error?}
+    B -- Success --> C[Wrap in data envelope]
+    B -- Error --> D[Wrap AppError in error envelope]
+    C --> E[Attach meta: requestId, timing]
+    D --> E
+    E --> F[Serialize JSON]
+    F --> G[Set HTTP Status from envelope]
+    G --> H[Send Response]

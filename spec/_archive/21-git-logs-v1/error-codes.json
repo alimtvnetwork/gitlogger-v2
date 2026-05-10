@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "namespace": "GL",
+  "version": "1.2.0",
+  "updated": "2026-04-25",
+  "authoritativeSource": "spec/21-git-logs/11-error-management.md §6",
+  "codes": [
+    { "code": "GL-AUTH-001", "httpStatus": 401, "publicMessage": "Authentication failed.", "debugOnly": false, "description": "Wrong username/rawToken on POST /auth/token." },
+    { "code": "GL-AUTH-002", "httpStatus": 401, "publicMessage": "Access JWT is invalid or expired.", "debugOnly": false, "description": "Generic outbound JWT failure. Specific sub-reason is logged via GL-AUTH-008..012." },
+    { "code": "GL-AUTH-003", "httpStatus": 401, "publicMessage": "Refresh token has been used or revoked.", "debugOnly": false, "description": "Refresh-token reuse-detection (chain revoked)." },
+    { "code": "GL-AUTH-004", "httpStatus": 401, "publicMessage": "Refresh token has expired.", "debugOnly": false, "description": "ExpiresAt < NOW." },
+    { "code": "GL-AUTH-005", "httpStatus": 423, "publicMessage": "Account is temporarily locked.", "debugOnly": false, "description": "User.IsLocked = 1." },
+    { "code": "GL-AUTH-006", "httpStatus": 401, "publicMessage": "WordPress credentials are invalid.", "debugOnly": false, "description": "WP App Password / cookie+nonce failure." },
+    { "code": "GL-AUTH-007", "httpStatus": 401, "publicMessage": "Authorization header missing or malformed.", "debugOnly": false, "description": "Bearer token absent or wrong scheme." },
+    { "code": "GL-AUTH-008", "httpStatus": 401, "publicMessage": "Access JWT is invalid or expired.", "debugOnly": true,  "description": "Internal sub-code. JWT signature failed. Logged as JwtValidationFailed_BadSignature. Outbound responses use GL-AUTH-002." },
+    { "code": "GL-AUTH-009", "httpStatus": 401, "publicMessage": "Access JWT is invalid or expired.", "debugOnly": true,  "description": "Internal sub-code. JWT exp in the past. Logged as JwtValidationFailed_Expired." },
+    { "code": "GL-AUTH-010", "httpStatus": 401, "publicMessage": "Access JWT is invalid or expired.", "debugOnly": true,  "description": "Internal sub-code. JWT iss mismatch. Logged as JwtValidationFailed_BadIssuer." },
+    { "code": "GL-AUTH-011", "httpStatus": 401, "publicMessage": "Access JWT is invalid or expired.", "debugOnly": true,  "description": "Internal sub-code. JWT aud mismatch. Logged as JwtValidationFailed_BadAudience." },
+    { "code": "GL-AUTH-012", "httpStatus": 401, "publicMessage": "Access JWT is invalid or expired.", "debugOnly": true,  "description": "Internal sub-code. JWT jti on denylist. Logged as JwtValidationFailed_RevokedJti." },
+
+    { "code": "GL-RBAC-001", "httpStatus": 403, "publicMessage": "The required role is not granted to this user.", "debugOnly": false, "description": "RBAC check failure." },
+
+    { "code": "GL-VAL-001", "httpStatus": 422, "publicMessage": "Request validation failed.", "debugOnly": false, "description": "Generic; populate ValidationErrors[]." },
+    { "code": "GL-VAL-002", "httpStatus": 422, "publicMessage": "A required field is missing.", "debugOnly": false, "description": "Per-field." },
+    { "code": "GL-VAL-003", "httpStatus": 422, "publicMessage": "A field value is not in the allowed set.", "debugOnly": false, "description": "Per-field enum." },
+    { "code": "GL-VAL-004", "httpStatus": 422, "publicMessage": "A field value exceeds the allowed length.", "debugOnly": false, "description": "Per-field length." },
+    { "code": "GL-VAL-005", "httpStatus": 422, "publicMessage": "A field value has an invalid format.", "debugOnly": false, "description": "Per-field regex/format." },
+
+    { "code": "GL-PUSH-001", "httpStatus": 403, "publicMessage": "Repository is not in the allowlist.", "debugOnly": false, "description": "ALLOWLIST_REJECTED_NOT_REGISTERED." },
+    { "code": "GL-PUSH-002", "httpStatus": 403, "publicMessage": "Repository is disabled.", "debugOnly": false, "description": "ALLOWLIST_REJECTED_DISABLED." },
+    { "code": "GL-PUSH-003", "httpStatus": 401, "publicMessage": "Envelope JWT signature is invalid.", "debugOnly": false, "description": "ENVELOPE_BAD_SIGNATURE." },
+    { "code": "GL-PUSH-004", "httpStatus": 401, "publicMessage": "Envelope JWT has expired.", "debugOnly": false, "description": "ENVELOPE_EXPIRED." },
+    { "code": "GL-PUSH-005", "httpStatus": 401, "publicMessage": "Envelope JWT TTL is too long.", "debugOnly": false, "description": "ENVELOPE_TTL_TOO_LONG." },
+    { "code": "GL-PUSH-006", "httpStatus": 401, "publicMessage": "Envelope JWT replay detected.", "debugOnly": false, "description": "ENVELOPE_REPLAYED." },
+    { "code": "GL-PUSH-007", "httpStatus": 400, "publicMessage": "Envelope JWT is malformed.", "debugOnly": false, "description": "Missing/invalid claims." },
+    { "code": "GL-PUSH-008", "httpStatus": 400, "publicMessage": "Provider is not supported.", "debugOnly": false, "description": "Non-GitHub URL." },
+    { "code": "GL-PUSH-009", "httpStatus": 413, "publicMessage": "Request body exceeds 1 MB.", "debugOnly": false, "description": "PAYLOAD_TOO_LARGE (post-decompression)." },
+
+    { "code": "GL-RES-001", "httpStatus": 404, "publicMessage": "Resource not found.", "debugOnly": false, "description": "Generic not-found." },
+    { "code": "GL-RES-002", "httpStatus": 409, "publicMessage": "Resource already exists.", "debugOnly": false, "description": "Unique-key collision (e.g., duplicate repo)." },
+
+    { "code": "GL-RATE-001", "httpStatus": 429, "publicMessage": "Too many requests.", "debugOnly": false, "description": "Per-route or per-repo bucket exceeded. Includes Retry-After header." },
+
+    { "code": "GL-ING-001", "httpStatus": 422, "publicMessage": "Log batch failed validation.", "debugOnly": false, "description": "IngestionFailed_ValidationError. Body schema mismatch after envelope JWT and allowlist passed." },
+    { "code": "GL-ING-002", "httpStatus": 207, "publicMessage": "Some entries were rejected; others persisted.", "debugOnly": false, "description": "IngestionPartial. Response body lists rejectedIndices[]." },
+    { "code": "GL-ING-003", "httpStatus": 500, "publicMessage": "Failed to persist log entries.", "debugOnly": false, "description": "IngestionFailed_DbError. wpdb insert failed for the entire batch." },
+    { "code": "GL-ING-004", "httpStatus": 422, "publicMessage": "Pipeline auto-creation failed.", "debugOnly": false, "description": "PipelineAutoCreateFailed. UNIQUE collision under contention or invalid BranchName/PipelineName." },
+
+    { "code": "GL-BG-001", "httpStatus": 0, "publicMessage": "Refresh-token sweep job failed.", "debugOnly": true, "description": "Internal-only. Never returned to a caller." },
+    { "code": "GL-BG-002", "httpStatus": 0, "publicMessage": "JWKS key rotation failed.", "debugOnly": true, "description": "Internal-only. Existing key remains active." },
+    { "code": "GL-BG-003", "httpStatus": 0, "publicMessage": "Audit-trail retry job failed.", "debugOnly": true, "description": "Internal-only. Deferred AuditTrail insert retry failed." },
+
+    { "code": "GL-SEC-001", "httpStatus": 0, "publicMessage": "Replay attack suspected.", "debugOnly": true, "description": "Internal-only. Envelope JWT jti re-presented inside the replay window." },
+    { "code": "GL-SEC-002", "httpStatus": 0, "publicMessage": "Brute-force pattern suspected.", "debugOnly": true, "description": "Internal-only. N consecutive GL-AUTH-001 from same RequestIp." },
+    { "code": "GL-SEC-003", "httpStatus": 0, "publicMessage": "Allowlist probing suspected.", "debugOnly": true, "description": "Internal-only. N consecutive GL-PUSH-001 from same caller." },
+    { "code": "GL-SEC-004", "httpStatus": 500, "publicMessage": "Plugin integrity check failed.", "debugOnly": false, "description": "IntegrityCheckFailed. Fatal. JWKS key missing, encryption secret missing, or AuditTrail+error_log both failed." },
+
+    { "code": "GL-INT-001", "httpStatus": 500, "publicMessage": "Internal server error. See SessionId for diagnostics.", "debugOnly": true, "description": "Uncaught Throwable; details visible only when gitlogs_debug_responses=1 and caller is admin." },
+    { "code": "GL-INT-002", "httpStatus": 500, "publicMessage": "Audit log write failed; operation completed.", "debugOnly": false, "description": "AuditTrail insert failed (mirrored to error_log)." },
+    { "code": "GL-INT-003", "httpStatus": 503, "publicMessage": "Plugin database is temporarily unavailable.", "debugOnly": false, "description": "wpdb connection lost." }
+  ]
+}

@@ -1,0 +1,150 @@
+%% v3.8.5 — Phase 4 re-render. Split-DB boundary: every entity below lives in the ROOT DB
+%% (wp-content/uploads/git-logs/git-logs.sqlite). LogEntry / ErrorLogEntry no longer exist;
+%% log lines live in per-SHA files at <ShaLogsRoot>/<aa>/<sha>.db (see §39). The ShaRegistry
+%% entity is the only pointer from root → per-SHA tree.
+erDiagram
+    Profile ||--o{ RoleAssignment : has
+    Role ||--o{ RoleAssignment : assigned
+    Role ||--o{ RolePermission : grants
+    Permission ||--o{ RolePermission : in
+    Profile ||--o{ GitProfile : owns
+    Provider ||--o{ GitProfile : provider
+    Acceptance ||--o{ GitProfile : acceptance
+    GitProfile ||--o{ Repo : contains
+    Repo ||--o{ RepoVersion : versions
+    RepoVersion ||--o{ Pipeline : runs
+    Pipeline ||--o{ ShaRegistry : sha
+    Profile ||--o{ App : owns
+    AppStatus ||--o{ App : status
+    App ||--o{ AppLink : links
+    AppLinkType ||--o{ AppLink : kind
+    GitProfile ||--o{ AppLink : targetGP
+    Repo ||--o{ AppLink : targetRepo
+    RepoVersion ||--o{ History : timeline
+    App ||--o{ History : actor
+    PipelineActionType ||--o{ History : actionKind
+    PipelineActionType ||--o{ PipelineAction : actionKind
+    RepoVersion ||--o{ PipelineAction : on
+    Pipeline ||--o{ PipelineAction : on
+    Profile ||--o{ PipelineAction : by
+    SystemEventType ||--o{ SystemEvent : kind
+    Profile ||--o{ SystemEvent : actor
+    AuditActionType ||--o{ AuditTrail : kind
+    AuditOutcome ||--o{ AuditTrail : outcome
+    Profile ||--o{ AuditTrail : actor
+
+    Profile {
+        int ProfileId PK
+        string UserName
+        string Email
+        string GeneratedKeyApi
+        string Token
+        string TempToken
+        int UserStatusId FK
+    }
+    GitProfile {
+        int GitProfileId PK
+        int ProviderId FK
+        int IsOrganization "0|1 v3.8.0 replaces OwnerType"
+        string OwnerName
+        string ProfileUrl
+        int AcceptanceId FK
+        string SelectedRepoUrl
+        int IsRestrictInBranch
+        string StrictBranch
+        int OwnedByProfileId FK
+    }
+    Repo {
+        int RepoId PK
+        int GitProfileId FK
+        string RootRepoName
+        string RootRepoUrl
+    }
+    RepoVersion {
+        int RepoVersionId PK
+        int RepoId FK
+        string VersionSuffix
+        string RepoUrl
+    }
+    Pipeline {
+        int PipelineId PK
+        int RepoVersionId FK
+        string BranchName
+        string PipelineName
+        int HasError
+        string LastGitSha256
+    }
+    ShaRegistry {
+        int ShaRegistryId PK "v2.9.0 split-DB pointer"
+        int PipelineId FK "UNIQUE PipelineId Sha"
+        string Sha "40 char lowercase hex"
+        string DbFilePath "ShaLogsRoot aa sha db"
+        int RowCount "mirror of per SHA file"
+        int FirstSeenAt
+        int LastSeenAt
+        int FileSizeBytes
+        string Sha256 "audit checksum"
+    }
+    App {
+        int AppId PK
+        string AppName
+        string AppSlug
+        string Description
+        int ProfileId FK
+        int AppStatusId FK
+    }
+    AppLink {
+        int AppLinkId PK
+        int AppId FK
+        int AppLinkTypeId FK
+        int TargetGitProfileId FK
+        int TargetRepoId FK
+        int IsActive
+    }
+    History {
+        int HistoryId PK
+        int RepoVersionId FK
+        int AppId FK
+        string BranchName
+        string PipelineName
+        string GitSha256
+        int PipelineActionTypeId FK
+        int HasError
+        string Summary
+        int OccurredAt
+    }
+    PipelineAction {
+        int PipelineActionId PK "v3.8.0 renamed from Action"
+        int PipelineActionTypeId FK
+        int RepoVersionId FK
+        int PipelineId FK
+        int ProfileId FK
+        int OccurredAt
+    }
+    SystemEvent {
+        int SystemEventId PK "NEW v3.8.0"
+        int SystemEventTypeId FK
+        int ActorProfileId FK
+        string TargetType "Profile GitProfile Repo App SshKey"
+        int TargetId
+        string Summary
+        string DetailJson
+        int OccurredAt
+    }
+    AuditTrail {
+        int AuditTrailId PK
+        int AuditActionTypeId FK
+        int AuditOutcomeId FK
+        int ActorProfileId FK
+        string RouteName
+        int HttpStatus
+        string RequestId
+        string Detail
+        int OccurredAt
+    }
+    MigrationState {
+        int MigrationStateId PK
+        string PluginVersion
+        int AppliedAt
+        string Checksum
+    }

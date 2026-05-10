@@ -1,0 +1,12 @@
+flowchart TD
+    A[C# File Edit] --> B[dotnet build]
+    B --> C{Build OK?}
+    C -- No --> D[Block: CS-BUILD-001]
+    C -- Yes --> E[dotnet format --verify-no-changes]
+    E --> F[StyleCop analyzers]
+    F --> G{Analyzers clean?}
+    G -- No --> D
+    G -- Yes --> H[dotnet test]
+    H --> I{Tests pass?}
+    I -- No --> D
+    I -- Yes --> J[Merge]

@@ -1,0 +1,36 @@
+%% Diagram type: flowchart LR (NOT an ER diagram)
+%% What this answers: "When a request hits the Admin UI, how do we decide
+%%   whether it's allowed? Walk: WP user -> plugin Profile -> Roles ->
+%%   Permission union -> required-permission check -> allow or deny."
+%% Authoritative source: spec/22-git-logs-v2/05-auth-and-validation.md
+%%                       spec/22-git-logs-v2/19-permission-matrix.md
+
+flowchart LR
+    Req([Admin UI HTTP request<br/>WP App Password / cookie]):::input
+    Req --> WP{{Resolve WP user}}:::step
+    WP -->|valid| Map{{Map WP user -> plugin Profile}}:::step
+    WP -->|missing| D1[Reject 401<br/>GL-AUTHZ-WP-AUTH-FAILED]:::deny
+
+    Map -->|found| Roles{{Load RoleAssignment rows<br/>for ProfileId}}:::step
+    Map -->|none| D2[Reject 403<br/>GL-AUTHZ-NO-PROFILE]:::deny
+
+    Roles --> Perms{{Resolve RolePermission union<br/>across all assigned Roles}}:::step
+    Perms --> Check{Required Permission<br/>in resolved set?}:::decision
+
+    Check -- Yes --> Handler([Handler executes<br/>+ AuditTrail Success]):::allow
+    Check -- No  --> D3[Reject 403<br/>GL-AUTHZ-PERMISSION-DENIED<br/>+ AuditTrail Rejected]:::deny
+
+    subgraph Seed[Seeded role -> permission map]
+        direction TB
+        Admin[Admin role<br/>= ALL Permissions]
+        Editor[Editor role<br/>= AppView, AppModify,<br/>HistoryView, RepoView]
+        Viewer[Viewer role<br/>= AppView, HistoryView, RepoView]
+    end
+
+    Perms -.lookup.-> Seed
+
+    classDef input  fill:#e0f2fe,stroke:#0369a1,stroke-width:2px;
+    classDef step   fill:#f1f5f9,stroke:#475569;
+    classDef decision fill:#fef9c3,stroke:#a16207,stroke-width:2px;
+    classDef allow  fill:#dcfce7,stroke:#15803d,stroke-width:2px;
+    classDef deny   fill:#fee2e2,stroke:#b91c1c,stroke-width:2px;

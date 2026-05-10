@@ -1,0 +1,61 @@
+{
+  "d1": 18,
+  "d2": 19,
+  "d3": 18,
+  "d4": 17,
+  "d5": 20,
+  "issues": [],
+  "findings": [],
+  "module": "27-spec-toolchain",
+  "files_used": 4,
+  "files_total": 57,
+  "bytes_used": 140000,
+  "bundle_sha": "7b2f4098162de5a0",
+  "chunks": [
+    {
+      "tier": "T1",
+      "bundle_sha_chunk": "2f2bee91c5fe17a7",
+      "files": [
+        "spec/27-spec-toolchain/00-overview.md",
+        "spec/27-spec-toolchain/97-acceptance-criteria.md"
+      ],
+      "bytes_used": 83219
+    },
+    {
+      "tier": "T1",
+      "bundle_sha_chunk": "53d47928c9682e42",
+      "files": [
+        "spec/27-spec-toolchain/00-overview.md",
+        "spec/27-spec-toolchain/97-acceptance-criteria.md",
+        "spec/27-spec-toolchain/98-changelog.md"
+      ],
+      "bytes_used": 135631
+    },
+    {
+      "tier": "T1",
+      "bundle_sha_chunk": "63c39b50d2f5ac3e",
+      "files": [
+        "spec/27-spec-toolchain/00-overview.md",
+        "spec/27-spec-toolchain/97-acceptance-criteria.md",
+        "spec/27-spec-toolchain/99-consistency-report.md"
+      ],
+      "bytes_used": 103675
+    }
+  ],
+  "chunked_path": true,
+  "total_v6": 92,
+  "axis": "tooling-spec",
+  "axis_multipliers": {
+    "d1": 0.9091,
+    "d2": 1.1818,
+    "d3": 0.9091,
+    "d4": 1.1818,
+    "d5": 0.8182
+  },
+  "axis_cap": 100,
+  "weighted_total": 91.6,
+  "total_v7": 92,
+  "total": 92,
+  "band": "EXCELLENT",
+  "rubric": "v7"
+}

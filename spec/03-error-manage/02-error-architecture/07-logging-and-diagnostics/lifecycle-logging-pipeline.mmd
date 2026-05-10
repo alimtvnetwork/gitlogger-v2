@@ -1,0 +1,11 @@
+flowchart TD
+    A[Event Emitted] --> B{Severity Filter}
+    B -- Debug/Trace --> C[Local stdout only]
+    B -- Info+ --> D[Structured JSON log]
+    D --> E[Add correlation ID]
+    E --> F[Add context: user, request, span]
+    F --> G[Emit to log sink]
+    G --> H{Severity >= Error?}
+    H -- Yes --> I[Forward to diagnostics aggregator]
+    H -- No --> J[Persist to log store]
+    I --> K[Trigger alert if rule matches]

@@ -1,0 +1,18 @@
+---
+title: PowerShell Bootstrap Flow
+---
+flowchart TD
+    Start([Trigger: code change / scheduled CI])
+    Detect[Detect spec scope and changed files]
+    Validate{Contract present?}
+    Lint[Run module linter scripts]
+    Gate{All gates pass?}
+    Promote[Promote artefact / merge change]
+    Block[Block + emit AppError ERR_SPEC_GATE_FAIL]
+    Report[Update 99-consistency-report.md]
+
+    Start --> Detect --> Validate
+    Validate -- yes --> Lint --> Gate
+    Validate -- no  --> Block
+    Gate -- yes --> Promote --> Report
+    Gate -- no  --> Block --> Report

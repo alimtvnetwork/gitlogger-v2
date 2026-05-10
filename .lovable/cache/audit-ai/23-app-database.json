@@ -1,0 +1,50 @@
+{
+  "d1": 19,
+  "d2": 20,
+  "d3": 18,
+  "d4": 20,
+  "d5": 20,
+  "issues": [
+    {
+      "severity": "MEDIUM",
+      "dim": "D1",
+      "title": "Conflicting DDL Dialects",
+      "why": "The module provides both SQLite (PascalCase) and PostgreSQL (snake_case) DDLs. While AC-ADB-11 designates SQLite as primary, having two distinct schemas in one file increases the risk of a mediocre coder picking the wrong one or mixing conventions.",
+      "fix": "Move the PostgreSQL DDL block to a clearly marked 'Reference Only' appendix or a separate file in the 01-96 slot range."
+    },
+    {
+      "severity": "LOW",
+      "dim": "D3",
+      "title": "Missing SQLite Busy Timeout/WAL configuration",
+      "why": "While it references spec/05 for architecture, a standalone implementation of this module might suffer from 'database is locked' errors during concurrent CI/CD push resolutions if the specific SQLite pragmas aren't inlined.",
+      "fix": "Add a 'Recommended Pragmas' section to the Query Patterns including WAL mode and busy_timeout."
+    },
+    {
+      "severity": "LOW",
+      "dim": "D1",
+      "title": "Timestamp Unit Ambiguity in Postgres Block",
+      "why": "The SQLite DDL explicitly uses Unix seconds (INTEGER), but the Postgres reference block uses 'timestamptz'. A coder porting logic between them might introduce unit mismatches in application code.",
+      "fix": "Add a note to the Postgres block stating that for application logic parity, timestamps should be handled as UTC Unix seconds."
+    }
+  ],
+  "module": "23-app-database",
+  "files_used": 4,
+  "files_total": 4,
+  "bytes_used": 61670,
+  "bundle_sha": "715e11148d2ca42b",
+  "total_v6": 97,
+  "axis": "normative-contract",
+  "axis_multipliers": {
+    "d1": 1.0,
+    "d2": 1.5,
+    "d3": 1.2,
+    "d4": 0.8,
+    "d5": 0.5
+  },
+  "axis_cap": 100,
+  "weighted_total": 96.6,
+  "total_v7": 97,
+  "total": 97,
+  "band": "EXCELLENT",
+  "rubric": "v7"
+}

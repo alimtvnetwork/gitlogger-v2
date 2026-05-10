@@ -1,0 +1,9 @@
+flowchart TD
+    A[Cross-Domain Research Proposed] --> B{Spans 2+ Domains?}
+    B -- No --> C[Reject: belongs in domain-scoped index]
+    B -- Yes --> D[Allocate TOP-RES-NNNN-NNN]
+    D --> E[Active]
+    E --> F[Completed]
+    F --> G{Promotable?}
+    G -- Yes --> H[Promote to New Spec Module]
+    G -- No --> I[Archive]

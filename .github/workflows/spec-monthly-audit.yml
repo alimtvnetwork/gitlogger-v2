@@ -1,0 +1,130 @@
+name: Spec Monthly Full-Tree Audit
+
+# Phase 35 (R3) — Full-tree audit cadence
+#
+# Complements `spec-health.yml` (event-driven, runs only when spec/ changes)
+# with a guaranteed monthly heartbeat. Catches drift that does not originate
+# from a spec edit:
+#   - external-repo references that have rotted (sibling repos moved/renamed)
+#   - rubric drift after a `check-tree-health.cjs` upgrade nobody re-ran
+#   - silent regressions in self-healing fillers
+#   - new tooling versions (Node, Python) that change linter behaviour
+#
+# Spec: spec/27-spec-toolchain/71-spec-monthly-audit-yml.md
+# Cadence rationale: monthly is the slowest cadence that still catches a
+# rotation/staleness regression before it accumulates into multi-phase debt
+# (Phases 26–31 took one session because the backlog was 67 items; quarterly
+# would have been ~200 items and unworkable in a single sweep).
+
+on:
+  schedule:
+    # 03:17 UTC on the 1st of every month (off-peak; avoids hourly congestion).
+    - cron: '17 3 1 * *'
+  workflow_dispatch:
+    # Allow manual re-runs from the Actions tab without a calendar wait.
+
+permissions:
+  contents: read
+  issues: write   # Open a tracking issue if the audit regresses.
+
+jobs:
+  monthly-audit:
+    name: Monthly full-tree audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Spec cross-link gate (zero broken links allowed)
+        id: links
+        run: python3 linter-scripts/check-spec-cross-links.py --github
+
+      - name: Spec tree health gate (rubric v2.0.0, --strict)
+        id: health
+        # Phase 36: --strict converts threshold from 100 to "ALL modules at
+        # full marks". Composite score can round to 100 while individual
+        # modules slip; --strict closes that loophole.
+        run: node linter-scripts/check-tree-health.cjs --strict --report
+
+      - name: Spec lockstep gate (Phase 41 — strict)
+        id: lockstep
+        # Phase 41: Baseline cleared (24 → 0 drifted modules). Flag flipped to
+        # --strict so any future banner / §98 / §99 desync hard-fails CI.
+        # Spec: spec/27-spec-toolchain/24-check-lockstep.md
+        run: node linter-scripts/check-lockstep.cjs --strict
+
+      - name: Dashboard data parity check (rubric v2.0.0)
+        id: dashboard
+        # Phase 34 invariant: dashboard score MUST equal health-gate score.
+        # If they diverge, one of the two scorers has drifted.
+        run: |
+          node linter-scripts/generate-dashboard-data.cjs --quiet
+          DASHBOARD_SCORE=$(python3 -c "import json; print(json.load(open('spec/dashboard-data.json'))['Health']['Score'])")
+          HEALTH_SCORE=$(node linter-scripts/check-tree-health.cjs --report | grep -oE 'tree health [0-9]+' | grep -oE '[0-9]+' | head -1)
+          echo "Dashboard: $DASHBOARD_SCORE | Health: $HEALTH_SCORE"
+          if [ "$DASHBOARD_SCORE" != "$HEALTH_SCORE" ]; then
+            echo "❌ Rubric parity broken: dashboard=$DASHBOARD_SCORE health=$HEALTH_SCORE"
+            exit 1
+          fi
+          echo "✅ Rubric parity confirmed at $DASHBOARD_SCORE/100."
+
+      - name: Trace-map regression gate
+        id: tracemap
+        run: python3 linter-scripts/check-trace-map-regression.py
+
+      - name: Build monthly summary
+        if: always()
+        id: summary
+        run: |
+          {
+            echo "# Monthly Full-Tree Audit — $(date -u +%Y-%m-%d)"
+            echo ""
+            echo "## Cross-link gate"
+            python3 linter-scripts/check-spec-cross-links.py --json 2>/dev/null \
+              | python3 -c "import sys,json; d=json.load(sys.stdin); print(f'- Broken links: {d[\"count\"]}')" || echo "- Broken links: (script error)"
+            echo ""
+            echo "## Tree health gate (rubric v2.0.0)"
+            node linter-scripts/check-tree-health.cjs --report 2>&1 | tail -3
+            echo ""
+            echo "## Dashboard parity"
+            python3 -c "import json; d=json.load(open('spec/dashboard-data.json')); h=d['Health']; r=d['RubricV2']; print(f'- Score: {h[\"Score\"]}/100 ({h[\"Grade\"]})  rubric v{h[\"RubricVersion\"]}'); print(f'- Required: {r[\"Required\"][\"Earned\"]}/{r[\"Required\"][\"Max\"]}'); print(f'- Recommended: {r[\"Recommended\"][\"Earned\"]}/{r[\"Recommended\"][\"Max\"]}'); print(f'- Quality: {r[\"Quality\"][\"Earned\"]}/{r[\"Quality\"][\"Max\"]}'); print(f'- Modules: {r[\"ModuleCount\"]}')"
+            echo ""
+            echo "## Trace-map regression gate"
+            python3 linter-scripts/check-trace-map-regression.py --report-only 2>&1 | tail -10
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Open tracking issue on regression
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `Monthly audit regression — ${new Date().toISOString().slice(0,10)}`;
+            const body = [
+              'The monthly full-tree spec audit failed. See the workflow run for details:',
+              `${context.payload.repository.html_url}/actions/runs/${context.runId}`,
+              '',
+              'Failure modes (any of):',
+              '- Broken cross-link surfaced (rotted external reference, deleted sibling repo)',
+              '- Tree health below threshold 100 (rubric v2.0.0 regression)',
+              '- Dashboard ↔ health-gate parity broken (one scorer drifted)',
+              '- Trace-map regression (AC coverage drop, drift growth, orphan code)',
+              '',
+              'Triage: see `spec/17-consolidated-guidelines/32-phase-26-31-rollup.md` §3 for the remediation pattern catalogue.',
+            ].join('\n');
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body,
+              labels: ['spec-audit', 'regression', 'automated'],
+            });

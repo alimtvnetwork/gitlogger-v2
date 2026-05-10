@@ -1,0 +1,11 @@
+flowchart TD
+    A[useError Hook Catches Error] --> B[ErrorContext Provider Updated]
+    B --> C[ErrorModal Subscribes]
+    C --> D{Severity}
+    D -- Critical --> E[Block UI + Modal]
+    D -- Warning --> F[Toast]
+    D -- Info --> G[Inline Banner]
+    E --> H[User Acknowledges]
+    F --> H
+    H --> I[Dispatch Clear Action]
+    I --> J[Modal Unmounts]

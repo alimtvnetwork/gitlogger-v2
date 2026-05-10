@@ -1,0 +1,18 @@
+---
+title: 12-cicd-pipeline-workflows/01-browser-extension-deploy
+---
+flowchart TD
+    Start([Trigger: pipeline event])
+    Validate{Inputs valid?}
+    Run[Execute module workflow]
+    Check{Exit code 0?}
+    Persist[Insert audit-log row]
+    Notify[Notify subscribers / emit metric]
+    Fail[Emit AppError + exit non-zero]
+    Done([End])
+
+    Start --> Validate
+    Validate -- yes --> Run --> Check
+    Validate -- no  --> Fail --> Done
+    Check -- yes --> Persist --> Notify --> Done
+    Check -- no  --> Fail

@@ -1,0 +1,61 @@
+%% Diagram type: flowchart TD (NOT an ER diagram)
+%% What this answers: "For a Lane B request using X-GL-Auth-Mode: ssh,
+%%   what is the exact 10-step server validation order from §22/§31, and
+%%   which GL-SSH-* / GL-AUTH-* / GL-APP-* error code is raised at each
+%%   rejection point?"
+%% Owner module: spec/26-gitlogs-diagrams/10-ssh-auth-validation.mmd
+%% Render target: svg
+%% Authoritative source: spec/22-git-logs-v2/31-ssh-key-auth.md (Server Validation Order)
+
+flowchart TD
+    Start([CI/CD request to write endpoint]) --> Mode{X-GL-Auth-Mode header}
+    Mode -- absent or temptoken --> FallTT([Fall through to TempToken lane<br/>see 05-auth-validation.mmd])
+    Mode -- ssh + TempToken body field both present --> R0[Reject GL-SSH-LANE-CONFLICT]
+    Mode -- ssh + ConfigKv.SshAuthMode=required missing TempToken --> SshLane
+    Mode -- ssh --> SshLane
+
+    SshLane[Enter SSH lane] --> Hdr{Headers complete?<br/>Fingerprint + Timestamp + Nonce + Signature}
+    Hdr -- No --> R1[Reject GL-SSH-HEADER-MISSING]
+    Hdr -- Yes --> Skew{abs now - X-GL-Timestamp<br/>less or equal ReplayWindowSeconds<br/>default 300s?}
+    Skew -- No --> R2[Reject GL-SSH-TIMESTAMP-SKEW]
+    Skew -- Yes --> KeyLookup{SshKey row found<br/>by Fingerprint?}
+    KeyLookup -- No row --> R3[Reject GL-SSH-KEY-UNKNOWN]
+    KeyLookup -- Row found, IsActive=0 --> R4[Reject GL-SSH-KEY-INACTIVE]
+    KeyLookup -- Row found, IsActive=1 --> RepoBind{Parsed RepoUrl<br/>resolves to RepoId<br/>equal SshKey.RepoId?}
+    RepoBind -- No --> R5[Reject GL-SSH-REPO-MISMATCH]
+    RepoBind -- Yes --> AccCheck{Acceptance + Branch<br/>per GitProfile rules<br/>see 05-auth-validation.mmd steps 3-4}
+    AccCheck -- Reject acceptance --> R6[Reject GL-VALIDATION-REPO-NOT-ALLOWED]
+    AccCheck -- Reject branch --> R7[Reject GL-VALIDATION-BRANCH-RESTRICTED]
+    AccCheck -- Pass --> Nonce{INSERT OR IGNORE<br/>SshNonce SshKeyId Nonce<br/>affected rows = 1?}
+    Nonce -- 0 rows, replay --> R8[Reject GL-SSH-NONCE-REUSED]
+    Nonce -- 1 row, fresh --> SigVerify{ssh-keygen -Y verify<br/>namespace git-logs@v2<br/>over canonical signing string}
+    SigVerify -- Verify failed --> R9[Reject GL-SSH-SIGNATURE-INVALID]
+    SigVerify -- Verified --> ProfStatus{OwnedByProfileId.UserStatus<br/>= Active?}
+    ProfStatus -- No --> R10[Reject GL-AUTH-PROFILE-INACTIVE]
+    ProfStatus -- Yes --> AppGate{Linked App resolvable?}
+    AppGate -- No active link --> Pass
+    AppGate -- App.Status=Active --> Pass
+    AppGate -- App.Status not Active --> R11[Reject GL-APP-NOT-ACTIVE]
+
+    Pass([Accept -> proceed to handler<br/>UPDATE SshKey LastUsedAt<br/>AuditTrail SshAuthSuccess])
+
+    R0 --> AuditReject
+    R1 --> AuditReject
+    R2 --> AuditReject
+    R3 --> AuditReject
+    R4 --> AuditReject
+    R5 --> AuditReject
+    R6 --> AuditReject
+    R7 --> AuditReject
+    R8 --> AuditReject
+    R9 --> AuditReject
+    R10 --> AuditReject
+    R11 --> AuditReject
+    AuditReject([AuditTrail AuthFail / Rejected])
+
+    classDef reject fill:#fee,stroke:#c33,color:#900
+    classDef accept fill:#efe,stroke:#393,color:#063
+    classDef gate fill:#eef,stroke:#33c,color:#006
+    class R0,R1,R2,R3,R4,R5,R6,R7,R8,R9,R10,R11,AuditReject reject
+    class Pass,FallTT accept
+    class Mode,Hdr,Skew,KeyLookup,RepoBind,AccCheck,Nonce,SigVerify,ProfStatus,AppGate gate

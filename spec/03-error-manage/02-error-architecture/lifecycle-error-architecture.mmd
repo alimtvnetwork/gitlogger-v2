@@ -1,0 +1,11 @@
+flowchart TD
+    A[Origin: panic/throw/return err] --> B[Wrap as AppError]
+    B --> C[Attach: Code, Severity, Cause]
+    C --> D[Propagate via Result/Either]
+    D --> E[Boundary: HTTP/CLI/UI]
+    E --> F[Marshal to Response Envelope]
+    F --> G[Log via diagnostics]
+    G --> H{Severity}
+    H -- Critical --> I[Modal]
+    H -- Warning --> J[Toast]
+    H -- Info --> K[Inline Banner]

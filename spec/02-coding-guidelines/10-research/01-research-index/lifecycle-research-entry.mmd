@@ -1,0 +1,8 @@
+flowchart TD
+    A[Research Proposed] --> B{Scope Approved?}
+    B -- No --> C[Withdrawn]
+    B -- Yes --> D[Active]
+    D --> E[Completed]
+    E --> F{Adoptable?}
+    F -- Yes --> G[Promoted to Spec]
+    F -- No --> H[Archived as Reference]

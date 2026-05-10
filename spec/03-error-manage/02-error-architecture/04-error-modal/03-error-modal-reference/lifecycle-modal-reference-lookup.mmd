@@ -1,0 +1,11 @@
+flowchart TD
+    A[Error Modal Triggered] --> B[Lookup error code in reference]
+    B --> C{Reference Entry Found?}
+    C -- No --> D[Fallback: generic modal]
+    C -- Yes --> E[Load: title, body, severity, actions]
+    E --> F[Render modal with reference data]
+    F --> G[User clicks action]
+    G --> H{Action type}
+    H -- Retry --> I[Re-invoke origin]
+    H -- Dismiss --> J[Close modal]
+    H -- Link --> K[Open external doc]

@@ -1,0 +1,38 @@
+%% Diagram type: flowchart TD (NOT an ER diagram)
+%% What this answers: "For a CI/CD write request, what is the exact
+%%   validation order and which GL-* error code is raised at each
+%%   rejection point?"
+%% Authoritative source: spec/22-git-logs-v2/05-auth-and-validation.md
+
+flowchart TD
+    Start([CI/CD request to write endpoint]) --> Parse[Parse RepoUrl<br/>provider, owner, repoName, versionSuffix]
+    Parse --> FindGP{GitProfile found<br/>by Provider+OwnerName?}
+    FindGP -- No --> R1[Reject GL-VALIDATION-PROFILE-NOT-FOUND]
+    FindGP -- Yes --> AccCheck{Acceptance check}
+    AccCheck -->|AcceptAllRepos| BranchCheck
+    AccCheck -->|AcceptSelectedRepoOnly: exact match?| BranchCheck
+    AccCheck -->|AcceptSelectedRepoInAllVersions: root match + vN suffix?| BranchCheck
+    AccCheck -->|fail| R2[Reject GL-VALIDATION-REPO-NOT-ALLOWED]
+    BranchCheck{IsRestrictInBranch=1?}
+    BranchCheck -- No --> TempTok
+    BranchCheck -- Yes, Branch=StrictBranch --> TempTok
+    BranchCheck -- Yes, mismatch --> R3[Reject GL-VALIDATION-BRANCH-RESTRICTED]
+    TempTok{TempToken matches a Profile?}
+    TempTok -- No --> R4[Reject GL-AUTH-TEMPTOKEN-INVALID]
+    TempTok -- Yes --> TokCheck{Token matches same Profile?}
+    TokCheck -- No --> R5[Reject GL-AUTH-TOKEN-MISMATCH]
+    TokCheck -- Yes --> Status{Profile UserStatus = Active?}
+    Status -- No --> R6[Reject GL-AUTH-PROFILE-INACTIVE]
+    Status -- Yes --> AppGate{Linked App resolvable?}
+    AppGate -- No active link --> Pass
+    AppGate -- App.Status=Active --> Pass
+    AppGate -- App.Status<>Active --> R7[Reject GL-APP-NOT-ACTIVE]
+    Pass([Accept -> proceed to handler<br/>AuditTrail AuthSuccess])
+    R1 --> AuditReject
+    R2 --> AuditReject
+    R3 --> AuditReject
+    R4 --> AuditReject
+    R5 --> AuditReject
+    R6 --> AuditReject
+    R7 --> AuditReject
+    AuditReject([AuditTrail AuthFail / Rejected])

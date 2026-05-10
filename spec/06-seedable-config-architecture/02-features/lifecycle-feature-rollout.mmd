@@ -1,0 +1,10 @@
+flowchart TD
+    A[Feature Flag Authored] --> B{Validation Helper Pass?}
+    B -- No --> R[Reject + Log RAG-VAL-001]
+    B -- Yes --> C[Seed via Migration]
+    C --> D[Runtime Read by App]
+    D --> E{Update Check Trigger}
+    E -- New Version --> F[Re-seed New Keys]
+    E -- No --> G[Cached Config]
+    F --> D
+    G --> D

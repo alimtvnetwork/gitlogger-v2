@@ -1,0 +1,88 @@
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "background": "#0b1020",
+    "primaryTextColor": "#f9fafb",
+    "primaryBorderColor": "#9ca3af",
+    "lineColor": "#9ca3af",
+    "fontFamily": "Inter, system-ui, sans-serif",
+    "fontSize": "14px"
+  },
+  "flowchart": { "curve": "basis", "htmlLabels": true, "padding": 18, "nodeSpacing": 50, "rankSpacing": 70 }
+}}%%
+flowchart TB
+    %% ============================================================
+    %%  git-logs — SQLite Split-DB design (PROPOSED, part 2 of 2)
+    %%
+    %%  PER-REPOSITORY LOGS DB
+    %%  Path: ./data/logs/repo-{RepositoryId}-{owner}-{repo}.db
+    %%  One file per Repository row · WAL mode · foreign_keys=ON
+    %%
+    %%  Pattern: spec/05-split-db-architecture (one DB per "item")
+    %% ============================================================
+
+    HDR(["<b>Logs DB — <code>./data/logs/repo-{id}-{owner}-{repo}.db</code></b><br/><span style='font-size:11px'>one file per allowlisted repository · WAL mode · self-describing</span>"]):::header
+
+    subgraph FS["<b>File System Layout (per project)</b>"]
+        direction TB
+        FS1["<code>./data/</code>"]:::folder
+        FS2["<code>./data/root.db</code><br/><span style='font-size:11px'>(see diagram 02a)</span>"]:::rootDb
+        FS3["<code>./data/logs/</code>"]:::folder
+        FS4["<code>repo-00001-acme-widget.db</code>"]:::logDb
+        FS5["<code>repo-00002-acme-widget-v2.db</code>"]:::logDb
+        FS6["<code>repo-00003-other-tool.db</code>"]:::logDb
+        FS7["<code>./config/config.seed.json</code>"]:::cfg
+        FS1 --> FS2
+        FS1 --> FS3
+        FS3 --> FS4
+        FS3 --> FS5
+        FS3 --> FS6
+    end
+
+    subgraph LOGDB["<b>Logs DB Schema (template — same in every per-repo file)</b>"]
+        direction TB
+        L_META["<b>RepositoryMeta</b> (RepositoryMetaId PK, always = 1)<br/>RootRepositoryId · OwnerName · RepoName<br/>SchemaVersion · CreatedAt<br/><span style='font-size:11px'>self-describing — survives detach / move / re-attach</span>"]:::tCfg
+        L_PIPE["<b>Pipeline</b><br/>PipelineId PK<br/>BranchName · PipelineName<br/>UQ(BranchName, PipelineName)<br/>FirstSeenAt · LastSeenAt"]:::tEntity
+        L_ENTRY["<b>LogEntry</b><br/>LogEntryId PK (BIGINT, &gt; 2 B rows expected)<br/>PipelineId FK<br/>LogSeverityId FK<br/>CommitSha · Message · MetadataJson<br/>OccurredAt · CreatedAt<br/>Notes · Comments<br/><br/><i>Idx(PipelineId, OccurredAt)<br/>Idx(CommitSha) · Idx(CreatedAt)</i>"]:::tTxn
+        L_NONCE["<b>EnvelopeNonce</b><br/>EnvelopeNonceId PK<br/>Nonce UQ · ReceivedAt<br/><span style='font-size:11px'>10-min replay window<br/>swept by background job</span>"]:::tTxn
+        L_LK["<b>LogSeverity</b> (lookup)<br/>Trace · Debug · Info<br/>Warn · Error · Fatal<br/><span style='font-size:11px'>seeded from config.seed.json</span>"]:::tLookup
+
+        L_PIPE --o L_ENTRY
+        L_ENTRY -.->|LogSeverityId| L_LK
+    end
+
+    subgraph LIFE["<b>Lifecycle — POST /repositories</b>"]
+        direction TB
+        S1["<b>1.</b> Root DB<br/>INSERT Repository (LogsDbPath = NULL)"]:::step
+        S2["<b>2.</b> mkdir <code>./data/logs/</code> if missing"]:::step
+        S3["<b>3.</b> Open new SQLite file<br/><code>repo-{id}-{owner}-{repo}.db</code><br/>WAL mode · foreign_keys=ON"]:::stepLog
+        S4["<b>4.</b> Run logs-DB migrations<br/>0001_create_pipeline.sql<br/>0002_create_log_entry.sql<br/>0003_create_envelope_nonce.sql<br/>0004_seed_log_severity.sql"]:::stepLog
+        S5["<b>5.</b> INSERT RepositoryMeta<br/>(self-describing back-reference)"]:::stepLog
+        S6["<b>6.</b> Root DB<br/>UPDATE Repository SET LogsDbPath = '…'"]:::step
+        S7["<b>7.</b> Root DB<br/>INSERT AuditTrail<br/>(RepositoryCreate · Success)"]:::step
+
+        S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> S7
+    end
+
+    HDR --> FS
+    HDR --> LOGDB
+    HDR --> LIFE
+
+    FS4 -.->|opened on demand<br/>by repo-aware<br/>connection pool| LOGDB
+    L_META -.->|RootRepositoryId<br/>back-reference| FS2
+    FS7 ==>|"first run only<br/>seeds LogSeverity"| L_LK
+
+    %% ==================== STYLES ====================
+    classDef header   fill:#0f172a,stroke:#fbbf24,stroke-width:3px,color:#fbbf24,font-weight:bold
+    classDef folder   fill:#1e293b,stroke:#64748b,stroke-width:1px,color:#cbd5e1,font-family:monospace
+    classDef rootDb   fill:#0f766e,stroke:#5eead4,stroke-width:2px,color:#ccfbf1,font-weight:bold
+    classDef logDb    fill:#831843,stroke:#f472b6,stroke-width:2px,color:#fce7f3,font-weight:bold
+    classDef cfg      fill:#365314,stroke:#a3e635,stroke-width:2px,color:#ecfccb
+
+    classDef tEntity  fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.5px,color:#dbeafe
+    classDef tTxn     fill:#7c2d12,stroke:#fb923c,stroke-width:1.5px,color:#fed7aa
+    classDef tLookup  fill:#3f3f46,stroke:#a1a1aa,stroke-width:1px,color:#f4f4f5
+    classDef tCfg     fill:#365314,stroke:#a3e635,stroke-width:1.5px,color:#ecfccb
+
+    classDef step     fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.5px,color:#dbeafe,font-weight:bold
+    classDef stepLog  fill:#9d174d,stroke:#f472b6,stroke-width:1.5px,color:#fce7f3,font-weight:bold

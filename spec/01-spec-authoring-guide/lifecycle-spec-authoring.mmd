@@ -1,0 +1,72 @@
+%% Lifecycle: Spec Authoring → Linter → CI Gates → Merge
+%% Source of truth for the spec/01-spec-authoring-guide lifecycle.
+%% Referenced by 00-overview.md (line ~995) as the authoring/CI flow diagram.
+%% --
+%% Updated: Phase 93 — fleshed out from 10-node skeleton to the full pipeline
+%% reflecting Phases 81–91 (kind: branching, lockstep enforcement, --strict
+%% gates, --min-weighted/--min-impl thresholds, CLI self-test, --explain).
+%% Validated: Phase 97 — `node linter-scripts/check-mermaid-syntax.mjs` parses cleanly.
+
+flowchart TD
+    %% ─── Author phase ──────────────────────────────────────────
+    Start([Author proposes new module<br/>or edit to existing module]):::phase
+
+    Start --> Kind{Pick <code>kind:</code><br/>front-matter}:::decision
+    Kind -->|active-spec| Scaffold
+    Kind -->|future-spec| ScaffoldFut[Scaffold + add<br/>drift_acknowledged: true]:::author
+    Kind -->|tracker| ScaffoldTrk[Scaffold tracker module<br/>03-issues/02-consolidated-audit-findings]:::author
+    Kind -->|index| ScaffoldIdx[Scaffold index module<br/>folder root with children]:::author
+    Kind -->|meta-toolchain| ScaffoldMeta[Scaffold meta-toolchain<br/>spec/27-spec-toolchain only]:::author
+
+    Scaffold[Run scaffold-spec-module.cjs<br/>creates 00 / 97 / 98 / 99]:::author
+    ScaffoldFut --> Authoring
+    ScaffoldTrk --> Authoring
+    ScaffoldIdx --> Authoring
+    ScaffoldMeta --> Authoring
+    Scaffold --> Authoring
+
+    Authoring[Author overview<br/>+ ACs in GWT format<br/>+ cross-references<br/>+ optional contracts<br/>SQL/TS/JSON/OpenAPI]:::author
+
+    Authoring --> Lockstep[Sync §98 changelog<br/>+ §99 consistency report<br/>same date as overview edit]:::author
+
+    %% ─── Local linter phase ────────────────────────────────────
+    Lockstep --> RunLocal{{Run linter-scripts/run.sh}}:::local
+
+    RunLocal --> L1[generate-spec-index.cjs<br/>regenerate spec-index.md]:::local
+    L1 --> L2[check-spec-cross-links.py<br/>--github mode]:::local
+    L2 --> L3[check-tree-health.cjs --strict<br/>threshold = 100]:::local
+    L3 --> L4[check-lockstep.cjs --strict<br/>§98 ↔ §99 date alignment]:::local
+    L4 --> L5[audit-spec-vs-code-v2.py<br/>AUDIT_DETERMINISTIC=1]:::local
+    L5 --> L6[check-trace-map-regression.py<br/>vs baseline.json]:::local
+
+    L6 --> Localpass{All local<br/>checks pass?}:::decision
+    Localpass -->|No| Fix[Read failure output<br/>OR run --explain=&lt;module&gt;<br/>for rubric trace]:::author
+    Fix --> Authoring
+    Localpass -->|Yes| Push[Push branch<br/>open PR]:::author
+
+    %% ─── CI phase ──────────────────────────────────────────────
+    Push --> PRTpl[PR template checklist<br/>4 gate commands shown]:::ci
+    PRTpl --> CI{{spec-health.yml<br/>GitHub Actions}}:::ci
+
+    CI --> G1[Cross-link gate<br/>0 broken links]:::ci
+    G1 --> G2[Tree health gate STRICT<br/>100/100 required]:::ci
+    G2 --> G3[Lockstep gate STRICT<br/>0 findings required]:::ci
+    G3 --> G4[Audit gate<br/>--min-weighted=97<br/>--min-impl=99]:::ci
+    G4 --> G5[CLI self-test<br/>6-case threshold contract<br/>Phase 91]:::ci
+    G5 --> G6[Trace-map regression gate<br/>AC coverage ↑ only]:::ci
+
+    G6 --> Allpass{All 6 gates<br/>green?}:::decision
+    Allpass -->|No| Fail[CI fails<br/>summary in PR]:::ci
+    Fail --> Fix
+    Allpass -->|Yes| Review[Reviewer reads PR<br/>+ confirms paired updates<br/>if audit script changed]:::ci
+
+    Review --> Merge([Merge to main]):::done
+    Merge --> Memo[Author writes phase memo<br/>.lovable/memory/audit/<br/>v2-deterministic/]:::author
+
+    %% ─── Styles ────────────────────────────────────────────────
+    classDef phase fill:#1e293b,stroke:#0ea5e9,stroke-width:2px,color:#f1f5f9
+    classDef author fill:#0f172a,stroke:#64748b,color:#e2e8f0
+    classDef local fill:#064e3b,stroke:#10b981,color:#d1fae5
+    classDef ci fill:#3b0764,stroke:#a855f7,color:#f3e8ff
+    classDef decision fill:#451a03,stroke:#f59e0b,color:#fef3c7
+    classDef done fill:#14532d,stroke:#22c55e,stroke-width:3px,color:#dcfce7

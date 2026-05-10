@@ -1,0 +1,199 @@
+openapi: 3.1.0
+info:
+  title: glci → Git Logs v2 outbound contract
+  version: 1.0.0
+  description: |
+    Subset of the Git Logs v2 server API that the glci CLI calls. This file is
+    a CLIENT contract — it MUST stay byte-compatible with
+    spec/22-git-logs-v2/17-openapi.yaml. When they diverge, the server file wins
+    and this file is patched.
+servers:
+  - url: "{server}"
+    variables:
+      server:
+        default: https://example.com/wp-json/git-logs/v2
+
+paths:
+  /append-log:
+    post:
+      summary: Append (or stream) logs for one (Repo, Branch, Pipeline)
+      parameters:
+        - in: header
+          name: X-GL-Auth-Mode
+          schema: { type: string, enum: [ssh] }
+          required: false
+        - in: header
+          name: X-GL-Fingerprint
+          schema: { type: string }
+        - in: header
+          name: X-GL-Timestamp
+          schema: { type: integer, format: int64 }
+        - in: header
+          name: X-GL-Nonce
+          schema: { type: string, minLength: 16 }
+        - in: header
+          name: X-GL-Signature
+          schema: { type: string }
+        - in: header
+          name: X-GL-Stream
+          schema: { type: string, enum: ["1"] }
+          required: false
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppendLogBatched"
+          application/x-ndjson:
+            schema:
+              $ref: "#/components/schemas/AppendLogStreamHeader"
+      responses:
+        "200":
+          description: Logs accepted
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Ack" }
+        "401": { $ref: "#/components/responses/AuthError" }
+        "403": { $ref: "#/components/responses/AuthError" }
+        "413": { $ref: "#/components/responses/PayloadTooLarge" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /fixed-log:
+    put:
+      summary: Mark a previously-failing pipeline as fixed
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/PipelineRef" }
+      responses:
+        "200":
+          description: Marked fixed
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Ack" }
+
+  /clear-log:
+    post:
+      summary: Clear logs for one pipeline
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/PipelineRef" }
+      responses:
+        "200":
+          description: Cleared
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Ack" }
+
+  /clear-log-all:
+    post:
+      summary: Clear all logs for one (Repo, Branch)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RepoBranchRef" }
+      responses:
+        "200":
+          description: Cleared
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Ack" }
+
+components:
+  schemas:
+    AppendLogBatched:
+      type: object
+      required: [RepoUrl, Branch, PipelineName, GitSha256]
+      properties:
+        RepoUrl:      { type: string, format: uri }
+        RootRepo:     { type: string, format: uri }
+        Branch:       { type: string, minLength: 1 }
+        TempToken:    { type: string }
+        Token:        { type: string }
+        PipelineName: { type: string, pattern: "^[a-z]+-(lint|build|test)$" }
+        GitSha256:    { type: string, pattern: "^[0-9a-f]{40,64}$" }
+        Logs:         { type: array, items: { type: string } }
+        ErrorLogs:    { type: array, items: { type: string } }
+        FilePaths:    { type: array, items: { type: string } }
+        HasError:     { type: boolean }
+
+    AppendLogStreamHeader:
+      type: object
+      required: [RepoUrl, Branch, PipelineName, GitSha256, StreamHeader]
+      properties:
+        RepoUrl:      { type: string, format: uri }
+        Branch:       { type: string }
+        TempToken:    { type: string }
+        Token:        { type: string }
+        PipelineName: { type: string }
+        GitSha256:    { type: string }
+        StreamHeader: { type: boolean, enum: [true] }
+
+    PipelineRef:
+      type: object
+      required: [RepoUrl, Branch, PipelineName]
+      properties:
+        RepoUrl:      { type: string }
+        RootRepo:     { type: string }
+        Branch:       { type: string }
+        TempToken:    { type: string }
+        Token:        { type: string }
+        PipelineName: { type: string }
+
+    RepoBranchRef:
+      type: object
+      required: [RepoUrl, Branch]
+      properties:
+        RepoUrl:   { type: string }
+        RootRepo:  { type: string }
+        Branch:    { type: string }
+        TempToken: { type: string }
+        Token:     { type: string }
+
+    Ack:
+      type: object
+      required: [Status, Message, TraceId]
+      properties:
+        Status:           { type: string, enum: [Success] }
+        Message:          { type: string }
+        TraceId:          { type: string, format: uuid }
+        PreviousHasError: { type: boolean, description: "v2 server SHOULD include this; CLI uses it to decide /fixed-log auto-fire" }
+        Retrieval:
+          type: object
+          properties:
+            Logs:      { type: string }
+            ErrorLogs: { type: string }
+            Pipeline:  { type: string }
+
+    ErrorEnvelope:
+      type: object
+      required: [Status, ErrorCode, Message, TraceId]
+      properties:
+        Status:    { type: string, enum: [Rejected] }
+        ErrorCode: { type: string, pattern: "^GL-[A-Z0-9-]+$" }
+        Message:   { type: string }
+        TraceId:   { type: string, format: uuid }
+
+  responses:
+    AuthError:
+      description: Authentication or authorization failure (lane B)
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+    PayloadTooLarge:
+      description: Payload exceeds server cap
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+    RateLimited:
+      description: Token bucket exhausted; honor Retry-After
+      headers:
+        Retry-After:
+          schema: { type: integer }
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorEnvelope" }

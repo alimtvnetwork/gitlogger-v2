@@ -1,0 +1,61 @@
+{
+  "d1": 18,
+  "d2": 19,
+  "d3": 17,
+  "d4": 20,
+  "d5": 17,
+  "issues": [],
+  "findings": [],
+  "module": "04-database-conventions",
+  "files_used": 8,
+  "files_total": 11,
+  "bytes_used": 140000,
+  "bundle_sha": "aded9a163fe22f4d",
+  "chunks": [
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "07402dae4008a75c",
+      "files": [
+        "spec/04-database-conventions/00-overview.md",
+        "spec/04-database-conventions/97-acceptance-criteria.md",
+        "spec/04-database-conventions/98-changelog.md",
+        "spec/04-database-conventions/99-consistency-report.md",
+        "spec/04-database-conventions/01-naming-conventions.md",
+        "spec/04-database-conventions/02-schema-design.md",
+        "spec/04-database-conventions/03-orm-and-views.md"
+      ],
+      "bytes_used": 132668
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "9e90ef28ced7ec8f",
+      "files": [
+        "spec/04-database-conventions/00-overview.md",
+        "spec/04-database-conventions/97-acceptance-criteria.md",
+        "spec/04-database-conventions/98-changelog.md",
+        "spec/04-database-conventions/99-consistency-report.md",
+        "spec/04-database-conventions/04-testing-strategy.md",
+        "spec/04-database-conventions/05-relationship-diagrams.md",
+        "spec/04-database-conventions/06-rest-api-format.md",
+        "spec/04-database-conventions/07-split-db-pattern.md"
+      ],
+      "bytes_used": 124777
+    }
+  ],
+  "chunked_path": true,
+  "total_v6": 91,
+  "axis": "normative-contract",
+  "axis_multipliers": {
+    "d1": 1.0,
+    "d2": 1.5,
+    "d3": 1.2,
+    "d4": 0.8,
+    "d5": 0.5
+  },
+  "axis_cap": 100,
+  "weighted_total": 91.4,
+  "total_v7": 91,
+  "total": 91,
+  "band": "EXCELLENT",
+  "rubric": "v7"
+}

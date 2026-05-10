@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/alimtvnetwork/glci/schemas/glci.toml.schema.json",
+  "title": "glci.toml",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["server"],
+  "properties": {
+    "server": {
+      "type": "object",
+      "required": ["url"],
+      "additionalProperties": false,
+      "properties": {
+        "url":           { "type": "string", "format": "uri" },
+        "auth_mode":     { "type": "string", "enum": ["temptoken", "ssh"], "default": "temptoken" },
+        "timeout_secs":  { "type": "integer", "minimum": 1, "maximum": 600, "default": 30 },
+        "verify_tls":    { "type": "boolean", "default": true }
+      }
+    },
+    "auth": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "temp_token":      { "type": "string" },
+        "token":           { "type": "string" },
+        "ssh_key_path":    { "type": "string" },
+        "ssh_fingerprint": { "type": "string", "pattern": "^SHA256:[A-Za-z0-9+/=]+$" }
+      }
+    },
+    "push": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode":             { "type": "string", "enum": ["batched", "streaming"], "default": "batched" },
+        "max_retries":      { "type": "integer", "minimum": 0, "maximum": 10, "default": 3 },
+        "backoff_ms":       { "type": "array", "items": { "type": "integer", "minimum": 0 }, "default": [500, 2000, 8000] },
+        "max_buffer_lines": { "type": "integer", "minimum": 100, "default": 5000 },
+        "batch_max_bytes":  { "type": "integer", "minimum": 1024, "maximum": 1048576, "default": 1048576 },
+        "preserve_ansi":    { "type": "boolean", "default": false }
+      }
+    },
+    "repo": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "url":       { "type": "string" },
+        "root_repo": { "type": "string" },
+        "branch":    { "type": "string" }
+      }
+    },
+    "pipeline": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name_template": {
+          "type": "string",
+          "default": "{runtime}-{phase}",
+          "pattern": "^[A-Za-z0-9_-]*\\{runtime\\}[A-Za-z0-9_-]*\\{phase\\}[A-Za-z0-9_-]*$|^[A-Za-z0-9_-]*\\{phase\\}[A-Za-z0-9_-]*\\{runtime\\}[A-Za-z0-9_-]*$"
+        }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ts":  { "$ref": "#/$defs/runtime" },
+        "go":  { "$ref": "#/$defs/runtime" },
+        "php": { "$ref": "#/$defs/runtime" }
+      }
+    },
+    "classify": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "error_patterns": { "type": "array", "items": { "type": "string" } },
+        "warn_patterns":  { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "ci_provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "override": { "type": "string", "enum": ["", "github", "gitlab", "azure", "bitbucket", "shell"], "default": "" }
+      }
+    }
+  },
+
+  "$defs": {
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled":      { "type": "boolean", "default": true },
+        "lint_runner":  { "type": "string" },
+        "lint_args":    { "type": "array", "items": { "type": "string" } },
+        "build_runner": { "type": "string" },
+        "build_args":   { "type": "array", "items": { "type": "string" } },
+        "test_runner":  { "type": "string" },
+        "test_args":    { "type": "array", "items": { "type": "string" } },
+        "phase_timeout_secs": { "type": "integer", "minimum": 30, "maximum": 7200, "default": 1800 }
+      }
+    }
+  }
+}

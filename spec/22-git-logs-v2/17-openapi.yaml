@@ -1,0 +1,562 @@
+openapi: 3.1.0
+info:
+  title: Git Logs Plugin API
+  version: 2.9.6
+  description: |
+    REST API for the Git Logs WordPress plugin.
+    Source spec: spec/22-git-logs-v2/04-rest-api-endpoints.md
+    Examples: spec/22-git-logs-v2/14-endpoint-examples.md
+    Errors: spec/22-git-logs-v2/15-error-codes.md (full GL-* enum mirrored in components.schemas.ErrorCode)
+    SSH lane: spec/22-git-logs-v2/31-ssh-key-auth.md
+    NDJSON streaming: spec/22-git-logs-v2/04-rest-api-endpoints.md §11 (Phase 8 v2.9.2 doc, Phase 11 v2.9.3 OpenAPI surface).
+      Endpoints #5–#10 (the 4 GET paths below) accept `Accept: application/x-ndjson` and respond with a
+      newline-delimited JSON stream of Header/Log/ErrorLog/Progress/End frames (mid-stream Error frame on
+      partial failure). See `components.schemas.NdjsonFrame` and per-endpoint `application/x-ndjson` content.
+
+servers:
+  - url: https://{host}/wp-json/git-logs/v2
+    variables:
+      host:
+        default: wp.example.com
+
+# ---------------------------------------------------------------------------
+# Security schemes
+# ---------------------------------------------------------------------------
+components:
+  securitySchemes:
+    WpAppPassword:
+      type: http
+      scheme: basic
+      description: WordPress Application Password (Lane A — admin/read).
+    TempTokenInBody:
+      type: apiKey
+      in: header
+      name: X-GitLogs-Body-Auth
+      description: |
+        Logical placeholder. Lane B endpoints carry `TempToken` and `Token`
+        inside the JSON body, not in headers. OpenAPI cannot model
+        body-based auth; consumers must read the request schema.
+    SshSignature:
+      type: apiKey
+      in: header
+      name: X-GL-Signature
+      description: |
+        Lane B SSH sub-mode (preferred from v2.7.0). Requires four headers:
+        `X-GL-Fingerprint`, `X-GL-Timestamp`, `X-GL-Nonce`, `X-GL-Signature`.
+        Signature is computed per §31 canonical string `GL-SSHSIG-V1`.
+        Mutually exclusive with body `TempToken`/`Token` — both present → GL-SSH-LANE-CONFLICT.
+
+  # -------------------------------------------------------------------------
+  # Reusable schemas
+  # -------------------------------------------------------------------------
+  schemas:
+    LogSeverity:
+      type: string
+      enum: [Trace, Debug, Info, Warn, Error, Fatal]
+
+    LogLine:
+      type: object
+      required: [Severity, Message, OccurredAt]
+      properties:
+        Severity: { $ref: '#/components/schemas/LogSeverity' }
+        Message:  { type: string, maxLength: 65536 }
+        OccurredAt:
+          type: integer
+          format: int64
+          description: Unix seconds.
+
+    WriteRequestBase:
+      type: object
+      required: [TempToken, Token, RepoUrl, Branch]
+      properties:
+        TempToken: { type: string }
+        Token:     { type: string }
+        RepoUrl:   { type: string, format: uri }
+        Branch:    { type: string }
+        AppSlug:   { type: string, nullable: true }
+        Pipeline:  { type: string, nullable: true }
+
+    AppendLogRequest:
+      allOf:
+        - $ref: '#/components/schemas/WriteRequestBase'
+        - type: object
+          required: [Pipeline, HasError, Logs, ErrorLogs]
+          properties:
+            HasError:  { type: boolean }
+            Logs:
+              type: array
+              items: { $ref: '#/components/schemas/LogLine' }
+            ErrorLogs:
+              type: array
+              items: { $ref: '#/components/schemas/LogLine' }
+
+    AckResponse:
+      type: object
+      required: [Status, PipelineId, Retrieval, PreviousHasError]
+      properties:
+        Status: { type: string, enum: [Ack] }
+        PipelineId: { type: integer }
+        AcceptedLogCount: { type: integer }
+        AcceptedErrorCount: { type: integer }
+        HasError: { type: boolean }
+        PreviousHasError:
+          type: boolean
+          description: |
+            True iff the prior Pipeline row for this (RepoVersionId, BranchName, PipelineName)
+            had HasError=1 immediately BEFORE this request was applied. On a fresh triple
+            with no prior row, MUST be false. Read in the same SQL transaction as the write
+            (BEGIN IMMEDIATE) per §97 AC-75 to avoid the read-modify-write race. Returned on
+            write endpoints #1–#4 only; absent on read endpoints #5–#10. Closes GAP-V2-04
+            (Phase P3) — clients use this to chain PUT /fixed-log per AC-13. See §04
+            "PreviousHasError field contract" subsection for full per-endpoint semantics.
+        Retrieval:
+          type: object
+          properties:
+            GetLogs:   { type: string }
+            GetErrors: { type: string }
+
+    LogEntryRow:
+      type: object
+      properties:
+        LogEntryId: { type: integer }
+        PipelineId: { type: integer }
+        Severity:   { $ref: '#/components/schemas/LogSeverity' }
+        Message:    { type: string }
+        OccurredAt: { type: integer, format: int64 }
+
+    ErrorLogEntryRow:
+      allOf:
+        - $ref: '#/components/schemas/LogEntryRow'
+        - type: object
+          properties:
+            ErrorLogEntryId: { type: integer }
+
+    LogPage:
+      type: object
+      required: [Items, NextCursor, TotalReturned]
+      properties:
+        Items:
+          type: array
+          items: { $ref: '#/components/schemas/LogEntryRow' }
+        NextCursor: { type: string, nullable: true }
+        TotalReturned: { type: integer }
+
+    ErrorLogPage:
+      type: object
+      required: [Items, NextCursor, TotalReturned]
+      properties:
+        Items:
+          type: array
+          items: { $ref: '#/components/schemas/ErrorLogEntryRow' }
+        NextCursor: { type: string, nullable: true }
+        TotalReturned: { type: integer }
+
+    ErrorCode:
+      type: string
+      description: |
+        Stable GL-* code; full catalog in 15-error-codes.md.
+        Build-time GL-RELEASE-* codes (CI gates per §36) are intentionally
+        excluded — they never surface in HTTP responses.
+      enum:
+        # Lane A — admin/read auth
+        - GL-AUTH-WP-MISSING
+        - GL-AUTH-WP-INVALID
+        - GL-AUTH-NOT-LOGGED-IN
+        - GL-AUTH-PROFILE-NOT-LINKED
+        - GL-AUTH-NO-PROFILE-LINK
+        - GL-AUTH-PROFILE-SUSPENDED
+        - GL-AUTH-WRONG-LANE
+        - GL-AUTHZ-PERMISSION-DENIED
+        # Lane B — TempToken
+        - GL-AUTH-TEMPTOKEN-INVALID
+        - GL-AUTH-TOKEN-MISMATCH
+        - GL-AUTH-PROFILE-INACTIVE
+        - GL-APP-NOT-ACTIVE
+        # Lane B — SSH sub-mode
+        - GL-SSH-HEADER-MISSING
+        - GL-SSH-TIMESTAMP-SKEW
+        - GL-SSH-KEY-UNKNOWN
+        - GL-SSH-KEY-INACTIVE
+        - GL-SSH-REPO-MISMATCH
+        - GL-SSH-NONCE-REUSED
+        - GL-SSH-SIGNATURE-INVALID
+        - GL-SSH-LANE-CONFLICT
+        - GL-AUTH-LANE-DISABLED
+        # Validation
+        - GL-VALIDATION-PROFILE-NOT-FOUND
+        - GL-VALIDATION-REPO-NOT-ALLOWED
+        - GL-VALIDATION-BRANCH-RESTRICTED
+        - GL-VALIDATION-REPOURL-MALFORMED
+        - GL-VALIDATION-MISSING-FIELD
+        - GL-VALIDATION-FIELD-TYPE
+        # Rate / payload
+        - GL-PAYLOAD-TOO-LARGE
+        - GL-LINES-TOO-MANY
+        - GL-RATE-LIMIT-EXCEEDED
+        # Read endpoints
+        - GL-READ-CURSOR-INVALID
+        - GL-READ-PIPELINE-NOT-FOUND
+        - GL-READ-LIMIT-OUT-OF-RANGE
+        # Operational
+        - GL-DB-UNAVAILABLE
+        - GL-MIGRATION-PENDING
+        - GL-CONFIG-MISSING
+        - GL-INTERNAL
+        # Per-SHA log storage (split-DB — see §39, added v2.9.3 to mirror §15 v2.9.0 entries)
+        - GL-SHA-DB-OPEN-FAILED
+        - GL-SHA-DB-CREATE-FAILED
+        - GL-SHA-DB-CHECKSUM-MISMATCH
+        - GL-SHA-DB-QUOTA-EXCEEDED
+        # NDJSON streaming retrieval (see §04 §11, added v2.9.3 Phase 11)
+        - GL-NDJSON-CLIENT-DISCONNECT
+        - GL-NDJSON-CURSOR-LOST
+        # NDJSON streaming ingest (see §04 §1.2, added v2.9.6 Phase P16 lockstep)
+        - GL-STREAM-NO-HEADER
+        - GL-STREAM-NO-FOOTER
+        - GL-STREAM-TOO-MANY-LINES
+        - GL-STREAM-UNKNOWN-FRAME
+
+    ErrorEnvelope:
+      type: object
+      required: [Status, Code, Message, RequestId, HttpStatus]
+      properties:
+        Status:     { type: string, enum: [Error] }
+        Code:       { $ref: '#/components/schemas/ErrorCode' }
+        Message:    { type: string }
+        RequestId:  { type: string }
+        HttpStatus: { type: integer }
+
+    # ---------------------------------------------------------------------
+    # NDJSON streaming frames (added v2.9.3 Phase 11; spec ref §04 §11.3)
+    # ---------------------------------------------------------------------
+    # Wire format: one JSON object per line, separated by exactly one `\n`
+    # (LF, U+000A) — never CRLF. Discriminator field is `Type`. Five frame
+    # types are normative; mid-stream `Error` is a sixth defined in §11.3.
+    # The OpenAPI document describes the *envelope* shape; clients MUST
+    # parse line-by-line and switch on `Type` rather than treating the body
+    # as a single JSON document.
+    NdjsonHeaderFrame:
+      type: object
+      required: [Type, Schema, StreamId, Endpoint, RequestId, ServerTimeMs]
+      properties:
+        Type:         { type: string, enum: [Header] }
+        Schema:       { type: string, enum: ['git-logs-v2/ndjson@1'], description: 'Stable schema identifier; bump on breaking change.' }
+        StreamId:     { type: string, format: uuid, description: 'Server-assigned UUID; required for resume via ?stream-id=.' }
+        Endpoint:     { type: string, description: 'Logical endpoint name (e.g. /get-logs).' }
+        RequestId:    { type: string, description: 'Mirrors the response RequestId for correlation with audit logs.' }
+        ServerTimeMs: { type: integer, format: int64, description: 'Server epoch ms at stream start.' }
+        Filters:      { type: object, additionalProperties: true, description: 'Echo of resolved query parameters (RepoUrl, Branch, PipelineId, Severity, Limit, Cursor, after-seq).' }
+        StateTransition:
+          type: string
+          enum: [still-green, first-failure, still-failing, just-recovered]
+          description: |
+            Optional (added v2.9.3 Phase 12). Pipeline run-state label derived
+            from the (PreviousHasError, HasError) tuple per §97 AC-73. Emitted
+            ONLY on single-pipeline scopes (endpoints #7–#10) when the request
+            resolves to exactly one Pipeline row. ABSENT entirely on repo-scope
+            endpoints (#5/#6) and on 404 / multi-pipeline resolutions per
+            §97 AC-74. Never null, never "unknown" — absence means
+            "not-applicable".
+
+    NdjsonLogFrame:
+      type: object
+      required: [Type, Seq, LogId, PipelineId, Sha, Severity, LogText, CreatedAt]
+      properties:
+        Type:       { type: string, enum: [Log] }
+        Seq:        { type: integer, format: int64, description: 'Monotonic per-stream sequence number; clients use this for ?after-seq= resume.' }
+        LogId:      { type: integer, format: int64 }
+        PipelineId: { type: integer, format: int64 }
+        Sha:        { type: string, description: 'Full git SHA the log row belongs to (per-SHA SQLite source).' }
+        Severity:   { $ref: '#/components/schemas/LogSeverity' }
+        LogText:    { type: string }
+        CreatedAt:  { type: integer, format: int64 }
+        Truncated:  { type: boolean, description: 'Present and true iff LogText was truncated to fit ConfigKv.NdjsonMaxFrameBytes (default 256 KiB).' }
+
+    NdjsonErrorLogFrame:
+      type: object
+      required: [Type, Seq, ErrorLogId, PipelineId, Sha, LogText, CreatedAt]
+      properties:
+        Type:       { type: string, enum: [ErrorLog] }
+        Seq:        { type: integer, format: int64 }
+        ErrorLogId: { type: integer, format: int64 }
+        PipelineId: { type: integer, format: int64 }
+        Sha:        { type: string }
+        LogText:    { type: string }
+        CreatedAt:  { type: integer, format: int64 }
+        Truncated:  { type: boolean }
+
+    NdjsonProgressFrame:
+      type: object
+      required: [Type, Seq, RowsEmitted, ElapsedMs]
+      properties:
+        Type:        { type: string, enum: [Progress] }
+        Seq:         { type: integer, format: int64 }
+        RowsEmitted: { type: integer, format: int64 }
+        ElapsedMs:   { type: integer, format: int64 }
+        CurrentSha:  { type: string, description: 'SHA the cursor is currently walking; helps clients show "now reading SHA abc123…".' }
+
+    NdjsonEndFrame:
+      type: object
+      required: [Type, Seq, Status, RowsEmitted, ElapsedMs]
+      properties:
+        Type:        { type: string, enum: [End] }
+        Seq:         { type: integer, format: int64 }
+        Status:      { type: string, enum: [Complete, Truncated, Error], description: 'Truncated = NdjsonMaxRowsPerStream cap hit; Error = preceded by an Error frame.' }
+        RowsEmitted: { type: integer, format: int64 }
+        ElapsedMs:   { type: integer, format: int64 }
+        NextAfterSeq: { type: integer, format: int64, description: 'On Status=Truncated, the Seq value to pass as ?after-seq= to resume.' }
+
+    NdjsonErrorFrame:
+      type: object
+      required: [Type, Seq, Code, Message]
+      description: |
+        Mid-stream error frame, emitted only when Header has already flushed
+        but the cursor cannot continue. The stream MUST then emit one End
+        frame with Status:"Error" and close. If the failure happens *before*
+        Header flushes, the server returns a conventional ErrorEnvelope
+        instead and never enters NDJSON mode.
+      properties:
+        Type:    { type: string, enum: [Error] }
+        Seq:     { type: integer, format: int64 }
+        Code:    { $ref: '#/components/schemas/ErrorCode' }
+        Message: { type: string }
+
+    NdjsonFrame:
+      description: 'Discriminated union of all valid NDJSON frame types. Use the `Type` field to discriminate.'
+      oneOf:
+        - $ref: '#/components/schemas/NdjsonHeaderFrame'
+        - $ref: '#/components/schemas/NdjsonLogFrame'
+        - $ref: '#/components/schemas/NdjsonErrorLogFrame'
+        - $ref: '#/components/schemas/NdjsonProgressFrame'
+        - $ref: '#/components/schemas/NdjsonEndFrame'
+        - $ref: '#/components/schemas/NdjsonErrorFrame'
+      discriminator:
+        propertyName: Type
+        mapping:
+          Header:   '#/components/schemas/NdjsonHeaderFrame'
+          Log:      '#/components/schemas/NdjsonLogFrame'
+          ErrorLog: '#/components/schemas/NdjsonErrorLogFrame'
+          Progress: '#/components/schemas/NdjsonProgressFrame'
+          End:      '#/components/schemas/NdjsonEndFrame'
+          Error:    '#/components/schemas/NdjsonErrorFrame'
+
+  responses:
+    BadRequest:        { description: Validation error,        content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } } }
+    Unauthorized:      { description: Auth failed,             content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } } }
+    Forbidden:         { description: Authorized but rejected, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } } }
+    NotFound:          { description: Resource not found,      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } } }
+    PayloadTooLarge:   { description: Body or line cap hit,    content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } } }
+    TooManyRequests:
+      description: Rate limit exceeded
+      headers:
+        Retry-After:
+          schema: { type: integer }
+          description: Seconds until next allowed request.
+      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } }
+    ServerError:       { description: Internal error, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } } }
+
+    # NDJSON streaming response (added v2.9.3 Phase 11; spec §04 §11). Used as
+    # a second `content` variant on the 200 response of every read endpoint
+    # (#5–#10). Servers select this representation when `Accept: application/x-ndjson`
+    # is present per RFC 7231 content negotiation; otherwise the JSON page
+    # response is returned. Servers MUST also set Transfer-Encoding: chunked
+    # and X-Content-Type-Options: nosniff and MUST NOT set Content-Length on
+    # NDJSON responses (§04 §11.2).
+    NdjsonStream:
+      description: |
+        Newline-delimited JSON stream of NdjsonFrame values. Frame ordering
+        per §04 §11.4: exactly one Header first, zero or more
+        Log/ErrorLog/Progress in cursor order, optional one Error, exactly
+        one End last. Clients parse line-by-line and switch on the `Type`
+        discriminator. Stream is best-effort resumable via `?after-seq=` +
+        `?stream-id=` (§04 §11.6).
+      headers:
+        X-Content-Type-Options:
+          schema: { type: string, enum: [nosniff] }
+          description: Always present on NDJSON responses; prevents MIME sniffing of partial bodies.
+        Transfer-Encoding:
+          schema: { type: string, enum: [chunked] }
+          description: Always chunked; Content-Length is never set on NDJSON responses.
+      content:
+        application/x-ndjson:
+          schema:
+            type: string
+            format: binary
+            description: |
+              Logical schema is `NdjsonFrame` per line; OpenAPI cannot model
+              line-delimited streams natively, so the wire body is declared
+              as binary. See `components.schemas.NdjsonFrame` for the per-line
+              object shape and `components.schemas.NdjsonHeaderFrame` … `NdjsonEndFrame`
+              for each variant.
+          example: |
+            {"Type":"Header","Schema":"git-logs-v2/ndjson@1","StreamId":"3f2a…","Endpoint":"/get-logs","RequestId":"req_abc","ServerTimeMs":1714032000000,"Filters":{"RepoUrl":"https://github.com/x/y","Branch":"main","Limit":1000}}
+            {"Type":"Log","Seq":1,"LogId":1042,"PipelineId":7,"Sha":"abc123…","Severity":"Info","LogText":"build start","CreatedAt":1714032001000}
+            {"Type":"Log","Seq":2,"LogId":1043,"PipelineId":7,"Sha":"abc123…","Severity":"Info","LogText":"npm install","CreatedAt":1714032002000}
+            {"Type":"Progress","Seq":3,"RowsEmitted":2,"ElapsedMs":42,"CurrentSha":"abc123…"}
+            {"Type":"End","Seq":4,"Status":"Complete","RowsEmitted":2,"ElapsedMs":58}
+# ---------------------------------------------------------------------------
+# Paths — 10 endpoints
+# ---------------------------------------------------------------------------
+paths:
+  /append-log:
+    post:
+      summary: Ingest log + error lines for a Pipeline
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AppendLogRequest' }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/AckResponse' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '413': { $ref: '#/components/responses/PayloadTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /fixed-log:
+    post:
+      summary: Mark Pipeline HasError back to false
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WriteRequestBase' }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/AckResponse' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /clear-log:
+    post:
+      summary: Truncate logs for one Pipeline
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WriteRequestBase' }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/AckResponse' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /clear-log-all:
+    post:
+      summary: Truncate logs for every Pipeline under one RepoVersion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WriteRequestBase' }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/AckResponse' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /get-logs:
+    get:
+      summary: List log entries by Repo + Branch (or ?q= shorthand)
+      description: |
+        Returns a paginated `LogPage` by default. Streams an NDJSON sequence
+        of `NdjsonFrame` lines when `Accept: application/x-ndjson` is sent
+        (Phase 11 v2.9.3, spec §04 §11). NDJSON adds two query params:
+        `after-seq` (resume from a previous stream's last `Seq`) and
+        `stream-id` (correlate with the original `Header.StreamId`).
+      security: [ { WpAppPassword: [] } ]
+      parameters:
+        - { name: RepoUrl, in: query, schema: { type: string, format: uri } }
+        - { name: Branch,  in: query, schema: { type: string } }
+        - { name: q,       in: query, schema: { type: string }, description: 'Shorthand: <RepoUrl>@<Branch>' }
+        - { name: Limit,   in: query, schema: { type: integer, minimum: 1, maximum: 1000, default: 100 } }
+        - { name: Cursor,  in: query, schema: { type: string } }
+        - { name: Severity, in: query, schema: { $ref: '#/components/schemas/LogSeverity' } }
+        - { name: after-seq, in: query, schema: { type: integer, format: int64, minimum: 0 }, description: 'NDJSON only — resume from this Seq (exclusive). Ignored on application/json responses.' }
+        - { name: stream-id, in: query, schema: { type: string, format: uuid }, description: 'NDJSON only — original Header.StreamId for resume correlation.' }
+      responses:
+        '200':
+          description: 'OK — JSON page by default; NDJSON stream when Accept application/x-ndjson.'
+          headers:
+            X-Content-Type-Options: { schema: { type: string }, description: 'Set to nosniff on NDJSON responses.' }
+            Transfer-Encoding:      { schema: { type: string }, description: 'chunked on NDJSON responses; absent on JSON.' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/LogPage' }
+            application/x-ndjson:
+              schema: { type: string, format: binary, description: 'See components.responses.NdjsonStream and components.schemas.NdjsonFrame.' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /get-pipeline-logs:
+    get:
+      summary: List log entries for one PipelineId
+      description: |
+        Returns a paginated `LogPage` by default. Streams NDJSON when
+        `Accept: application/x-ndjson` is sent (spec §04 §11).
+      security: [ { WpAppPassword: [] } ]
+      parameters:
+        - { name: PipelineId, in: query, schema: { type: integer } }
+        - { name: q,          in: query, schema: { type: string }, description: 'Shorthand: <PipelineId>' }
+        - { name: Limit,      in: query, schema: { type: integer, minimum: 1, maximum: 1000, default: 100 } }
+        - { name: Cursor,     in: query, schema: { type: string } }
+        - { name: after-seq,  in: query, schema: { type: integer, format: int64, minimum: 0 }, description: 'NDJSON only — resume from this Seq (exclusive).' }
+        - { name: stream-id,  in: query, schema: { type: string, format: uuid }, description: 'NDJSON only — original Header.StreamId.' }
+      responses:
+        '200':
+          description: 'OK — JSON page by default; NDJSON stream when Accept application/x-ndjson.'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/LogPage' }
+            application/x-ndjson:
+              schema: { type: string, format: binary, description: 'See components.responses.NdjsonStream and components.schemas.NdjsonFrame.' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /get-error-logs:
+    get:
+      summary: List error log entries by Repo + Branch
+      description: |
+        Returns a paginated `ErrorLogPage` by default. Streams NDJSON
+        (`ErrorLog` frames in place of `Log` frames) when
+        `Accept: application/x-ndjson` is sent (spec §04 §11).
+      security: [ { WpAppPassword: [] } ]
+      parameters:
+        - { name: RepoUrl, in: query, schema: { type: string, format: uri } }
+        - { name: Branch,  in: query, schema: { type: string } }
+        - { name: Limit,   in: query, schema: { type: integer, minimum: 1, maximum: 1000, default: 100 } }
+        - { name: Cursor,  in: query, schema: { type: string } }
+        - { name: after-seq, in: query, schema: { type: integer, format: int64, minimum: 0 }, description: 'NDJSON only — resume from this Seq (exclusive).' }
+        - { name: stream-id, in: query, schema: { type: string, format: uuid }, description: 'NDJSON only — original Header.StreamId.' }
+      responses:
+        '200':
+          description: 'OK — JSON page by default; NDJSON stream when Accept application/x-ndjson.'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorLogPage' }
+            application/x-ndjson:
+              schema: { type: string, format: binary, description: 'See components.responses.NdjsonStream and components.schemas.NdjsonFrame.' }
+
+  /get-pipeline-error-logs:
+    get:
+      summary: List error log entries for one PipelineId
+      description: |
+        Returns a paginated `ErrorLogPage` by default. Streams NDJSON
+        (`ErrorLog` frames) when `Accept: application/x-ndjson` is sent
+        (spec §04 §11).
+      security: [ { WpAppPassword: [] } ]
+      parameters:
+        - { name: PipelineId, in: query, schema: { type: integer } }
+        - { name: Limit,      in: query, schema: { type: integer, minimum: 1, maximum: 1000, default: 100 } }
+        - { name: Cursor,     in: query, schema: { type: string } }
+        - { name: after-seq,  in: query, schema: { type: integer, format: int64, minimum: 0 }, description: 'NDJSON only — resume from this Seq (exclusive).' }
+        - { name: stream-id,  in: query, schema: { type: string, format: uuid }, description: 'NDJSON only — original Header.StreamId.' }
+      responses:
+        '200':
+          description: 'OK — JSON page by default; NDJSON stream when Accept application/x-ndjson.'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorLogPage' }
+            application/x-ndjson:
+              schema: { type: string, format: binary, description: 'See components.responses.NdjsonStream and components.schemas.NdjsonFrame.' }
+        '404': { $ref: '#/components/responses/NotFound' }

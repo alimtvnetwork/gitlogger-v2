@@ -1,0 +1,33 @@
+%% Diagram type: sequenceDiagram (NOT an ER diagram)
+%% What this answers: "When a CI caller hits a write endpoint, how does
+%%   the per-Profile token bucket decide allow vs 429, and what gets
+%%   written to the WP transient store at each step?"
+%% Authoritative source: spec/22-git-logs-v2/10-rate-limit-and-payload.md
+
+sequenceDiagram
+    autonumber
+    participant CI as CI/CD Caller
+    participant API as REST Controller
+    participant RL as RateLimiter
+    participant TR as WP Transient
+    participant SVC as LogIngestService
+    participant AUD as AuditTrail
+
+    CI->>API: POST /append-log (TempToken, body)
+    API->>API: Resolve Profile from TempToken
+    API->>RL: check(ProfileId)
+    RL->>TR: read Tokens, LastRefillAt
+    TR-->>RL: Tokens=0.4, LastRefillAt=t0
+    RL->>RL: refill Tokens
+
+    alt Tokens >= 1
+        RL->>TR: write Tokens-1, now
+        RL-->>API: allow
+        API->>SVC: ingest(body)
+        SVC-->>API: ack
+        API-->>CI: 200 OK with Retrieval hints
+    else Tokens less than 1
+        RL-->>API: deny with retryAfter
+        API->>AUD: log LogPush Rejected rate
+        API-->>CI: 429 with Retry-After header
+    end

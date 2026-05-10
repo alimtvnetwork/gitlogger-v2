@@ -1,0 +1,10 @@
+flowchart TD
+    A[Enum Class Authored] --> B[Apply WP PSR-4 Naming]
+    B --> C[Add cases + label method]
+    C --> D[Register in Plugin Bootstrap]
+    D --> E{PHPCS Ruleset Pass?}
+    E -- No --> F[Block: WP-ENUM-001]
+    E -- Yes --> G[PHPUnit Cases Test]
+    G --> H{All Branches Covered?}
+    H -- No --> F
+    H -- Yes --> I[Merge]

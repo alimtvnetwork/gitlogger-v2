@@ -1,0 +1,10 @@
+flowchart TD
+    A[New Error Identified] --> B[Allocate Code: DOMAIN-NNN]
+    B --> C[Add to Registry YAML]
+    C --> D[Generate Schema Entry]
+    D --> E[Generate i18n Stubs]
+    E --> F{Linter Pass?}
+    F -- No --> G[Block: REGISTRY-001]
+    F -- Yes --> H[Generate Constants in 5 langs]
+    H --> I[Publish Registry]
+    I --> J[Consumers Auto-import]

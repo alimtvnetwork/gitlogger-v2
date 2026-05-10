@@ -1,0 +1,688 @@
+# ──────────────────────────────────────────────────────────────────────
+# Spec ↔ Code Trace Map
+# ──────────────────────────────────────────────────────────────────────
+# Each [[trace]] entry links ONE acceptance criterion to ONE OR MORE
+# concrete code targets (file, optional symbol, optional kind).
+#
+# Canonical AC identifier: "<spec-relpath-from-spec/>#<ac-id>"
+#   e.g. "27-spec-toolchain/31-audit-spec-vs-code-v2.md#AC-31-06"
+#
+# Field reference:
+#   ac        — canonical AC id (REQUIRED)
+#   files     — array of repo-relative file paths backing the AC (REQUIRED, ≥1)
+#   symbol    — optional function / class / endpoint / route name
+#   kind      — function | endpoint | config | workflow | cli-flag | env-var
+#   note      — optional one-line rationale
+#
+# Generated/maintained-with: linter-scripts/generate-trace-map.py
+# Consumed by:               linter-scripts/check-trace-map.py
+# ──────────────────────────────────────────────────────────────────────
+
+# ===== §27 spec-toolchain — auditor v2 =====
+
+[[trace]]
+ac     = "27-spec-toolchain/31-audit-spec-vs-code-v2.md#AC-31-01"
+files  = ["linter-scripts/audit-spec-vs-code-v2.py"]
+symbol = "OUT"
+kind   = "config"
+note   = "v2 outputs always under .lovable/memory/audit/v2/ (or v2-deterministic/)"
+
+[[trace]]
+ac     = "27-spec-toolchain/31-audit-spec-vs-code-v2.md#AC-31-02"
+files  = ["linter-scripts/audit-spec-vs-code-v2.py"]
+symbol = "WEIGHTS"
+kind   = "config"
+
+[[trace]]
+ac     = "27-spec-toolchain/31-audit-spec-vs-code-v2.md#AC-31-03"
+files  = ["linter-scripts/audit-spec-vs-code-v2.py"]
+symbol = "deterministic_metrics"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/31-audit-spec-vs-code-v2.md#AC-31-04"
+files  = ["linter-scripts/audit-spec-vs-code-v2.py"]
+symbol = "main"
+kind   = "function"
+note   = "high_blast = sorted(valid, key=lambda r: (-r['blast_radius'], r['weighted_overall']))"
+
+[[trace]]
+ac     = "27-spec-toolchain/31-audit-spec-vs-code-v2.md#AC-31-05"
+files  = ["linter-scripts/audit-spec-vs-code-v2.py"]
+symbol = "AUDIT_ONLY"
+kind   = "env-var"
+
+[[trace]]
+ac     = "27-spec-toolchain/31-audit-spec-vs-code-v2.md#AC-31-06"
+files  = ["linter-scripts/audit-spec-vs-code-v2.py"]
+symbol = "deterministic_score"
+kind   = "function"
+note   = "Pure-function rubric → byte-identical raw-results.json"
+
+[[trace]]
+ac     = "27-spec-toolchain/31-audit-spec-vs-code-v2.md#AC-31-07"
+files  = ["linter-scripts/audit-spec-vs-code-v2.py"]
+symbol = "DETERMINISTIC"
+kind   = "env-var"
+
+[[trace]]
+ac     = "27-spec-toolchain/31-audit-spec-vs-code-v2.md#AC-31-08"
+files  = ["linter-scripts/audit-spec-vs-code-v2.py"]
+symbol = "DETERMINISTIC"
+kind   = "env-var"
+note   = "lovable_ai import is gated behind `if not DETERMINISTIC`"
+
+# ===== §27 spec-toolchain — link checker =====
+
+[[trace]]
+ac     = "27-spec-toolchain/01-check-spec-cross-links.md#AC-01-01"
+files  = ["linter-scripts/check-spec-cross-links.py"]
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/01-check-spec-cross-links.md#AC-01-02"
+files  = ["linter-scripts/check-spec-cross-links.py"]
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/01-check-spec-cross-links.md#AC-01-03"
+files  = ["linter-scripts/check-spec-cross-links.py", "linter-scripts/spec-cross-links.allowlist"]
+kind   = "config"
+
+[[trace]]
+ac     = "27-spec-toolchain/01-check-spec-cross-links.md#AC-01-04"
+files  = ["linter-scripts/check-spec-cross-links.py"]
+symbol = "--json"
+kind   = "cli-flag"
+
+# ===== §27 module-level acceptance criteria =====
+
+[[trace]]
+ac     = "27-spec-toolchain/97-acceptance-criteria.md#AC-T-01"
+files  = ["linter-scripts/check-spec-folder-refs.py", "linter-scripts/check-tree-health.cjs"]
+note   = "Bijection between code and spec — enforced by tree health + folder refs"
+
+[[trace]]
+ac     = "27-spec-toolchain/97-acceptance-criteria.md#AC-T-08"
+files  = [".github/workflows/spec-health.yml"]
+kind   = "workflow"
+
+[[trace]]
+ac     = "27-spec-toolchain/97-acceptance-criteria.md#AC-T-09"
+files  = ["linter-scripts/check-tree-health.cjs"]
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/97-acceptance-criteria.md#AC-T-10"
+files  = ["linter-scripts/check-spec-cross-links.py"]
+kind   = "function"
+
+# ===== §27 spec-toolchain — trace-map regression gate (15) =====
+
+[[trace]]
+ac     = "27-spec-toolchain/17-check-trace-map-regression.md#AC-17-01"
+files  = ["linter-scripts/check-trace-map-regression.py"]
+symbol = "diff_against_baseline"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/17-check-trace-map-regression.md#AC-17-02"
+files  = ["linter-scripts/check-trace-map-regression.py"]
+symbol = "diff_against_baseline"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/17-check-trace-map-regression.md#AC-17-03"
+files  = ["linter-scripts/check-trace-map-regression.py"]
+symbol = "diff_against_baseline"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/17-check-trace-map-regression.md#AC-17-04"
+files  = ["linter-scripts/check-trace-map-regression.py"]
+symbol = "diff_against_baseline"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/17-check-trace-map-regression.md#AC-17-05"
+files  = ["linter-scripts/check-trace-map-regression.py"]
+symbol = "write_baseline"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/17-check-trace-map-regression.md#AC-17-06"
+files  = ["linter-scripts/check-trace-map-regression.py"]
+symbol = "--report-only"
+kind   = "cli-flag"
+
+[[trace]]
+ac     = "27-spec-toolchain/17-check-trace-map-regression.md#AC-17-07"
+files  = ["linter-scripts/check-trace-map-regression.py"]
+symbol = "run_generator"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/17-check-trace-map-regression.md#AC-17-08"
+files  = [".github/workflows/spec-health.yml"]
+kind   = "workflow"
+
+# ===== Phase G1 (2026-04-28): bind folder-refs allowlist + Phase 108-full migrated orphans =====
+
+[[trace]]
+ac     = "27-spec-toolchain/62-spec-folder-refs-allowlist.md#AC-62-02"
+files  = ["linter-scripts/check-spec-cross-links.py", "linter-scripts/spec-folder-refs.allowlist"]
+kind   = "function"
+note   = "doc-only entries are NOT covered by §01 link validator; cross-link gate must still flag them"
+
+[[trace]]
+ac     = "27-spec-toolchain/62-spec-folder-refs-allowlist.md#AC-62-03"
+files  = ["linter-scripts/check-spec-folder-refs.py", "linter-scripts/spec-folder-refs.allowlist"]
+kind   = "function"
+note   = "external-bucket entries are recognised by §02 and not reported stale"
+
+[[trace]]
+ac     = "27-spec-toolchain/62-spec-folder-refs-allowlist.md#AC-62-04"
+files  = ["linter-scripts/check-spec-folder-refs.py", "linter-scripts/spec-folder-refs.allowlist"]
+symbol = "buckets"
+kind   = "function"
+note   = "parser at line ~128 stores stripped line incl. inline `#` trailers; comments MUST be on separate lines above entries (Phase 143)"
+
+[[trace]]
+ac     = "27-spec-toolchain/97-acceptance-criteria.md#AC-T-22"
+files  = ["linter-scripts/check-mermaid-syntax.mjs"]
+kind   = "function"
+note   = "Slot 18 — validator in 10-19 generator band (slot-range exception, Phase 108-full)"
+
+[[trace]]
+ac     = "27-spec-toolchain/97-acceptance-criteria.md#AC-T-23"
+files  = ["linter-scripts/check-memo-retrospective-headings.py"]
+kind   = "function"
+note   = "Slot 19 — validator in 10-19 generator band (slot-range exception, Phase 108-full); enforces Phase 100 cadence retirement"
+
+[[trace]]
+ac     = "27-spec-toolchain/97-acceptance-criteria.md#AC-T-24"
+files  = ["linter-scripts/deepen-consistency-reports.py"]
+kind   = "function"
+note   = "Slot 25 — filler in 20-29 band, no slot-range exception"
+
+# ===== Phase G2 (2026-04-28): bind generators (gwt + fix-checklist + gate-report + fill-missing trio) =====
+
+[[trace]]
+ac     = "27-spec-toolchain/13-generate-gwt-acceptance.md#AC-13-01"
+files  = ["linter-scripts/generate-gwt-acceptance.py"]
+symbol = "select_modules_by_grade"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/13-generate-gwt-acceptance.md#AC-13-02"
+files  = ["linter-scripts/generate-gwt-acceptance.py"]
+symbol = "inline_contracts"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/13-generate-gwt-acceptance.md#AC-13-03"
+files  = ["linter-scripts/generate-gwt-acceptance.py"]
+symbol = "bump_changelog"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/15-generate-fix-checklist.md#AC-15-01"
+files  = ["linter-scripts/generate-fix-checklist.py"]
+symbol = "sort_by_implementability"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/15-generate-fix-checklist.md#AC-15-02"
+files  = ["linter-scripts/generate-fix-checklist.py"]
+symbol = "emit_action"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/15-generate-fix-checklist.md#AC-15-03"
+files  = ["linter-scripts/generate-fix-checklist.py"]
+symbol = "missing_contract_trigger"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/15-generate-fix-checklist.md#AC-15-04"
+files  = ["linter-scripts/generate-fix-checklist.py"]
+symbol = "--json"
+kind   = "cli-flag"
+note   = "byte-stable JSON output (sorted keys, fixed precision)"
+
+[[trace]]
+ac     = "27-spec-toolchain/15-generate-fix-checklist.md#AC-15-05"
+files  = ["linter-scripts/generate-fix-checklist.py"]
+symbol = "compute_effort_total"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/15-generate-fix-checklist.md#AC-15-06"
+files  = ["linter-scripts/generate-fix-checklist.py"]
+symbol = "main"
+kind   = "function"
+note   = "missing audit JSON → exit 1"
+
+[[trace]]
+ac     = "27-spec-toolchain/16-generate-gate-report.md#AC-16-01"
+files  = ["linter-scripts/generate-gate-report.py"]
+symbol = "explain_gate_firing"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/16-generate-gate-report.md#AC-16-02"
+files  = ["linter-scripts/generate-gate-report.py"]
+symbol = "build_leaderboard"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/16-generate-gate-report.md#AC-16-03"
+files  = ["linter-scripts/generate-gate-report.py"]
+symbol = "compute_dimension_loss"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/16-generate-gate-report.md#AC-16-04"
+files  = ["linter-scripts/generate-gate-report.py"]
+symbol = "--json"
+kind   = "cli-flag"
+
+[[trace]]
+ac     = "27-spec-toolchain/16-generate-gate-report.md#AC-16-05"
+files  = ["linter-scripts/generate-gate-report.py"]
+symbol = "main"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/16-generate-gate-report.md#AC-16-06"
+files  = ["linter-scripts/generate-gate-report.py"]
+symbol = "apply_gates"
+kind   = "function"
+note   = "final ≤ raw overall (gates only subtract)"
+
+[[trace]]
+ac     = "27-spec-toolchain/20-fill-missing-acceptance-criteria.md#AC-20-01"
+files  = ["linter-scripts/fill-missing-acceptance-criteria.cjs"]
+symbol = "main"
+kind   = "function"
+note   = "idempotent — second run is a no-op"
+
+[[trace]]
+ac     = "27-spec-toolchain/20-fill-missing-acceptance-criteria.md#AC-20-02"
+files  = ["linter-scripts/fill-missing-acceptance-criteria.cjs"]
+symbol = "AC_TEMPLATE"
+kind   = "config"
+
+[[trace]]
+ac     = "27-spec-toolchain/20-fill-missing-acceptance-criteria.md#AC-20-03"
+files  = ["linter-scripts/fill-missing-acceptance-criteria.cjs"]
+symbol = "skip_existing"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/21-fill-missing-changelogs.md#AC-21-01"
+files  = ["linter-scripts/fill-missing-changelogs.cjs"]
+symbol = "main"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/21-fill-missing-changelogs.md#AC-21-02"
+files  = ["linter-scripts/fill-missing-changelogs.cjs"]
+symbol = "today_iso"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/21-fill-missing-changelogs.md#AC-21-03"
+files  = ["linter-scripts/fill-missing-changelogs.cjs"]
+symbol = "CATEGORIES"
+kind   = "config"
+
+[[trace]]
+ac     = "27-spec-toolchain/22-fill-missing-consistency-reports.md#AC-22-01"
+files  = ["linter-scripts/fill-missing-consistency-reports.cjs"]
+symbol = "main"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/22-fill-missing-consistency-reports.md#AC-22-02"
+files  = ["linter-scripts/fill-missing-consistency-reports.cjs"]
+symbol = "scan_inventory"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/22-fill-missing-consistency-reports.md#AC-22-03"
+files  = ["linter-scripts/fill-missing-consistency-reports.cjs"]
+symbol = "skip_existing"
+kind   = "function"
+
+# ===== Phase G3 (2026-04-28): bind remaining 5 scripts (canonicals/install/memory-mirror/suggest/scaffold) =====
+
+[[trace]]
+ac     = "27-spec-toolchain/07-check-readme-canonicals.md#AC-07-01"
+files  = ["linter-scripts/check-readme-canonicals.py"]
+symbol = "detect_stale_slug"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/07-check-readme-canonicals.md#AC-07-02"
+files  = ["linter-scripts/check-readme-canonicals.py"]
+symbol = "CANONICAL_OVERRIDE"
+kind   = "env-var"
+
+[[trace]]
+ac     = "27-spec-toolchain/08-check-readme-install-section.md#AC-08-01"
+files  = ["linter-scripts/check-readme-install-section.py"]
+symbol = "verify_position"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/08-check-readme-install-section.md#AC-08-02"
+files  = ["linter-scripts/check-readme-install-section.py"]
+symbol = "verify_single_fence"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/08-check-readme-install-section.md#AC-08-03"
+files  = ["linter-scripts/check-readme-install-section.py"]
+symbol = "verify_no_inline_comment"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/09-check-memory-mirror-drift.md#AC-09-01"
+files  = ["linter-scripts/check-memory-mirror-drift.py"]
+symbol = "detect_new_keyword"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/09-check-memory-mirror-drift.md#AC-09-02"
+files  = ["linter-scripts/check-memory-mirror-drift.py"]
+symbol = "main"
+kind   = "function"
+note   = "missing section marker → exit 2"
+
+[[trace]]
+ac     = "27-spec-toolchain/12-suggest-spec-cross-link-fixes.md#AC-12-01"
+files  = ["linter-scripts/suggest-spec-cross-link-fixes.py"]
+symbol = "report_mode"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/12-suggest-spec-cross-link-fixes.md#AC-12-02"
+files  = ["linter-scripts/suggest-spec-cross-link-fixes.py"]
+symbol = "--apply"
+kind   = "cli-flag"
+
+[[trace]]
+ac     = "27-spec-toolchain/12-suggest-spec-cross-link-fixes.md#AC-12-03"
+files  = ["linter-scripts/suggest-spec-cross-link-fixes.py"]
+symbol = "emit_output"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/23-scaffold-spec-module.md#AC-23-01"
+files  = ["linter-scripts/scaffold-spec-module.cjs"]
+symbol = "scaffold"
+kind   = "function"
+note   = "fresh scaffold passes check-tree-health.cjs --strict"
+
+[[trace]]
+ac     = "27-spec-toolchain/23-scaffold-spec-module.md#AC-23-02"
+files  = ["linter-scripts/scaffold-spec-module.cjs"]
+symbol = "detect_slot_collision"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/23-scaffold-spec-module.md#AC-23-03"
+files  = ["linter-scripts/scaffold-spec-module.cjs"]
+symbol = "main"
+kind   = "function"
+note   = "no --force → idempotent (refuses to overwrite)"
+
+[[trace]]
+ac     = "27-spec-toolchain/23-scaffold-spec-module.md#AC-23-04"
+files  = ["linter-scripts/scaffold-spec-module.cjs"]
+symbol = "validate_slug_slot"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/23-scaffold-spec-module.md#AC-23-05"
+files  = ["linter-scripts/scaffold-spec-module.cjs"]
+symbol = "TEMPLATE"
+kind   = "config"
+note   = "quality-credit anchors (## Acceptance criteria, ## Inventory, etc.) present in template"
+
+# ===== Phase H1 (2026-04-28): bind §99 freshness gate ACs =====
+
+[[trace]]
+ac     = "27-spec-toolchain/26-check-99-summary-freshness.md#AC-26-01"
+files  = ["linter-scripts/check-99-summary-freshness.py"]
+symbol = "find_summary_stamp"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/26-check-99-summary-freshness.md#AC-26-02"
+files  = ["linter-scripts/check-99-summary-freshness.py"]
+symbol = "main"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/26-check-99-summary-freshness.md#AC-26-03"
+files  = ["linter-scripts/check-99-summary-freshness.py"]
+symbol = "main"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/26-check-99-summary-freshness.md#AC-26-04"
+files  = ["linter-scripts/check-99-summary-freshness.py"]
+symbol = "--report-only"
+kind   = "cli-flag"
+
+[[trace]]
+ac     = "27-spec-toolchain/26-check-99-summary-freshness.md#AC-26-05"
+files  = ["linter-scripts/check-99-summary-freshness.py"]
+symbol = "detect_current_phase"
+kind   = "function"
+
+# Phase H2 expansion — slot 26 v1.1.0 widened tracked-heading set.
+[[trace]]
+ac     = "27-spec-toolchain/26-check-99-summary-freshness.md#AC-26-06"
+files  = ["linter-scripts/check-99-summary-freshness.py"]
+symbol = "TRACKED_HEADING_RE"
+kind   = "regex"
+
+[[trace]]
+ac     = "27-spec-toolchain/26-check-99-summary-freshness.md#AC-26-07"
+files  = ["linter-scripts/check-99-summary-freshness.py"]
+symbol = "find_99_files"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/26-check-99-summary-freshness.md#AC-26-08"
+files  = ["linter-scripts/check-99-summary-freshness.py"]
+symbol = "find_summary_stamp"
+kind   = "function"
+
+# Phase H4 — slot 27 stamp-bump enforcement gate.
+[[trace]]
+ac     = "27-spec-toolchain/27-check-99-stamp-bump.md#AC-27-01"
+files  = ["linter-scripts/check-99-stamp-bump.py"]
+symbol = "git_diff_names"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/27-check-99-stamp-bump.md#AC-27-02"
+files  = ["linter-scripts/check-99-stamp-bump.py"]
+symbol = "find_summary_stamp"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/27-check-99-stamp-bump.md#AC-27-03"
+files  = ["linter-scripts/check-99-stamp-bump.py"]
+symbol = "diff_is_stamp_only"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/27-check-99-stamp-bump.md#AC-27-04"
+files  = ["linter-scripts/check-99-stamp-bump.py"]
+symbol = "main"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/27-check-99-stamp-bump.md#AC-27-05"
+files  = ["linter-scripts/check-99-stamp-bump.py"]
+symbol = "--report-only"
+kind   = "cli-flag"
+
+[[trace]]
+ac     = "27-spec-toolchain/27-check-99-stamp-bump.md#AC-27-06"
+files  = ["linter-scripts/check-99-stamp-bump.py"]
+symbol = "_archive"
+kind   = "literal"
+
+[[trace]]
+ac     = "27-spec-toolchain/27-check-99-stamp-bump.md#AC-27-07"
+files  = ["linter-scripts/check-99-stamp-bump.py"]
+symbol = "git diff failed"
+kind   = "literal"
+
+[[trace]]
+ac     = "27-spec-toolchain/27-check-99-stamp-bump.md#AC-27-08"
+files  = ["linter-scripts/check-99-stamp-bump.py"]
+symbol = "detect_current_phase"
+kind   = "function"
+
+[[trace]]
+ac     = "27-spec-toolchain/28-check-archive-exclusion-runtime.md#AC-28-01"
+files  = ["linter-scripts/test/test-archive-exclusion-runtime.sh"]
+symbol = "probe loaded successfully"
+kind   = "literal"
+
+[[trace]]
+ac     = "27-spec-toolchain/28-check-archive-exclusion-runtime.md#AC-28-02"
+files  = ["linter-scripts/test/test-archive-exclusion-runtime.sh"]
+symbol = "0 archive-leaked"
+kind   = "literal"
+
+[[trace]]
+ac     = "27-spec-toolchain/28-check-archive-exclusion-runtime.md#AC-28-03"
+files  = ["linter-scripts/test/test-archive-exclusion-runtime.sh"]
+symbol = "sanity"
+kind   = "literal"
+
+[[trace]]
+ac     = "27-spec-toolchain/28-check-archive-exclusion-runtime.md#AC-28-04"
+files  = ["linter-scripts/test/test-archive-exclusion-runtime.sh"]
+symbol = "PROBE_COUNT"
+kind   = "literal"
+
+[[trace]]
+ac     = "27-spec-toolchain/28-check-archive-exclusion-runtime.md#AC-28-05"
+files  = ["linter-scripts/test/test-archive-exclusion-runtime.sh"]
+symbol = "Results:"
+kind   = "literal"
+
+# ── Phase P44/P45 — Slot 11 generate-dashboard-data.cjs parity contract ────
+# AC-11-05 binds BOTH the JS implementation (P44) and the self-test (P45) so
+# trace-map regression catches future divergence: removing either file from
+# disk surfaces as missing-file; removing the AC surfaces as missing-ac.
+
+[[trace]]
+ac     = "27-spec-toolchain/11-generate-dashboard-data.md#AC-11-05"
+files  = [
+  "linter-scripts/generate-dashboard-data.cjs",
+  "linter-scripts/test/test-inline-code-blanking-parity.sh",
+]
+symbol = "blankInlineCode"
+kind   = "function"
+note   = "P44 ported strip_inline_code semantics from check-spec-cross-links.py; P45 mechanically locks parity via 8-fixture self-test (17 assertions)."
+
+# ─────────────────────────────────────────────────────────────────────────
+# Phase P47-followup-1 — slot 32 truncation gate
+# AC-32-01..05 bind the validator + self-test; trace-map regression catches
+# future removal of either file or the AC.
+
+[[trace]]
+ac     = "27-spec-toolchain/32-check-truncated-prose.md#AC-32-01"
+files  = [
+  "linter-scripts/check-truncated-prose.py",
+  "linter-scripts/test/test-check-truncated-prose.sh",
+]
+symbol = "classify"
+kind   = "function"
+note   = "Unclosed-fence detection (odd fence count → exit 1)."
+
+[[trace]]
+ac     = "27-spec-toolchain/32-check-truncated-prose.md#AC-32-02"
+files  = [
+  "linter-scripts/check-truncated-prose.py",
+  "linter-scripts/test/test-check-truncated-prose.sh",
+]
+symbol = "TERMINATOR_RE"
+kind   = "regex"
+note   = "Mid-sentence detection (last meaningful line lacks terminator)."
+
+[[trace]]
+ac     = "27-spec-toolchain/32-check-truncated-prose.md#AC-32-03"
+files  = [
+  "linter-scripts/check-truncated-prose.py",
+  "linter-scripts/test/test-check-truncated-prose.sh",
+]
+symbol = "STRUCTURAL_RE"
+kind   = "regex"
+note   = "Structural-ending allowance (heading/table/list/HR/blockquote/closing-fence/link-only)."
+
+[[trace]]
+ac     = "27-spec-toolchain/32-check-truncated-prose.md#AC-32-04"
+files  = [
+  "linter-scripts/check-truncated-prose.py",
+  ".github/workflows/spec-health.yml",
+]
+symbol = "main"
+kind   = "function"
+note   = "Live-tree gate wired into spec-health.yml between version-parity and tree-health steps."
+
+[[trace]]
+ac     = "27-spec-toolchain/32-check-truncated-prose.md#AC-32-05"
+files  = [
+  "linter-scripts/test/test-check-truncated-prose.sh",
+]
+symbol = "assert"
+kind   = "function"
+note   = "5 assertions including the live-tree gate (proves Phase P47-followup-1 fix landed)."
+
+
+# ===== §27 spec-toolchain — slot 35 audit-bundle-budget (Phase J9) =====
+
+[[trace]]
+ac     = "27-spec-toolchain/35-audit-bundle-budget.md#AC-35-01"
+files  = ["linter-scripts/audit-bundle-budget.py", "linter-scripts/audit-ai-implementability.py"]
+symbol = "MAX_BYTES"
+kind   = "config"
+note   = "Cap binds to slot 34 MAX_BYTES, NOT a duplicated literal (Lesson #36)"
+
+[[trace]]
+ac     = "27-spec-toolchain/35-audit-bundle-budget.md#AC-35-02"
+files  = ["linter-scripts/audit-bundle-budget.py"]
+symbol = "classify_module"
+kind   = "function"
+note   = "Deterministic + zero-network classification into {UNDER, NEAR, OVER}"
+
+[[trace]]
+ac     = "27-spec-toolchain/35-audit-bundle-budget.md#AC-35-03"
+files  = ["linter-scripts/audit-bundle-budget.py"]
+symbol = "--strict"
+kind   = "cli-flag"
+note   = "Graduating CI gate after the OVER class hits 0"
+
+[[trace]]
+ac     = "27-spec-toolchain/35-audit-bundle-budget.md#AC-35-04"
+files  = ["linter-scripts/audit-bundle-budget.py"]
+symbol = "main"
+kind   = "function"
+note   = "Default mode is advisory; exit 0 unless --strict + OVER non-empty"
+
+[[trace]]
+ac     = "27-spec-toolchain/35-audit-bundle-budget.md#AC-35-05"
+files  = ["linter-scripts/test/test-audit-bundle-budget.sh"]
+kind   = "function"
+note   = "10-assertion self-test, snapshot-restore-safe (Lesson #31)"

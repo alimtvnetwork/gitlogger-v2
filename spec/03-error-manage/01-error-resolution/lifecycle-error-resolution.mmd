@@ -1,0 +1,10 @@
+flowchart TD
+    A[Error Reported] --> B[Triage Severity]
+    B --> C{Reproducible?}
+    C -- No --> D[Request Repro Steps]
+    C -- Yes --> E[Debug Guide Lookup]
+    E --> F[Apply Fix]
+    F --> G[Add Regression Test]
+    G --> H[Write Retrospective]
+    H --> I[Update Error Registry]
+    I --> J[Close Incident]

@@ -1,0 +1,57 @@
+{
+  "d1": 18,
+  "d2": 14,
+  "d3": 16,
+  "d4": 12,
+  "d5": 16,
+  "issues": [],
+  "findings": [],
+  "module": "22-git-logs-v2",
+  "files_used": 2,
+  "files_total": 46,
+  "bytes_used": 140000,
+  "bundle_sha": "6d2442f88a12907e",
+  "chunks": [
+    {
+      "tier": "T1",
+      "bundle_sha_chunk": "dc4ee519a949ce3b",
+      "files": [
+        "spec/22-git-logs-v2/00-overview.md",
+        "spec/22-git-logs-v2/97-acceptance-criteria.md"
+      ],
+      "bytes_used": 140000
+    },
+    {
+      "tier": "T1",
+      "bundle_sha_chunk": "a2e65e484f51be1c",
+      "files": [
+        "spec/22-git-logs-v2/98-changelog.md"
+      ],
+      "bytes_used": 109579
+    },
+    {
+      "tier": "T1",
+      "bundle_sha_chunk": "b977992172d167fb",
+      "files": [
+        "spec/22-git-logs-v2/99-consistency-report.md"
+      ],
+      "bytes_used": 57099
+    }
+  ],
+  "chunked_path": true,
+  "total_v6": 76,
+  "axis": "normative-contract",
+  "axis_multipliers": {
+    "d1": 1.0,
+    "d2": 1.5,
+    "d3": 1.2,
+    "d4": 0.8,
+    "d5": 0.5
+  },
+  "axis_cap": 100,
+  "weighted_total": 75.8,
+  "total_v7": 76,
+  "total": 76,
+  "band": "GOOD",
+  "rubric": "v7"
+}

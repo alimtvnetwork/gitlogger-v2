@@ -1,0 +1,14 @@
+flowchart TD
+    A[PHP File Edit] --> B[php -l syntax check]
+    B --> C{Parse OK?}
+    C -- No --> D[Block: PHP-SYNTAX-001]
+    C -- Yes --> E[phpcs --standard=PSR12]
+    E --> F{Style clean?}
+    F -- No --> D
+    F -- Yes --> G[phpstan analyse]
+    G --> H{Static analysis clean?}
+    H -- No --> D
+    H -- Yes --> I[phpunit]
+    I --> J{Tests pass?}
+    J -- No --> D
+    J -- Yes --> K[Merge]

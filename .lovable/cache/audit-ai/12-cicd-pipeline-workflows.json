@@ -1,0 +1,120 @@
+{
+  "d1": 18,
+  "d2": 17,
+  "d3": 16,
+  "d4": 17,
+  "d5": 16,
+  "issues": [],
+  "findings": [],
+  "module": "12-cicd-pipeline-workflows",
+  "files_used": 17,
+  "files_total": 49,
+  "bytes_used": 140000,
+  "bundle_sha": "91b5524b47885aad",
+  "chunks": [
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "2bd7e9b363143df9",
+      "files": [
+        "spec/12-cicd-pipeline-workflows/00-overview.md",
+        "spec/12-cicd-pipeline-workflows/97-acceptance-criteria.md",
+        "spec/12-cicd-pipeline-workflows/98-changelog.md",
+        "spec/12-cicd-pipeline-workflows/99-consistency-report.md",
+        "spec/12-cicd-pipeline-workflows/01-browser-extension-deploy/01-ci-pipeline.md",
+        "spec/12-cicd-pipeline-workflows/01-browser-extension-deploy/02-release-pipeline.md",
+        "spec/12-cicd-pipeline-workflows/01-ci-pipeline.md",
+        "spec/12-cicd-pipeline-workflows/01-shared-conventions.md",
+        "spec/12-cicd-pipeline-workflows/02-github-release-standard.md",
+        "spec/12-cicd-pipeline-workflows/02-go-binary-deploy/01-ci-pipeline.md",
+        "spec/12-cicd-pipeline-workflows/02-go-binary-deploy/02-release-pipeline.md",
+        "spec/12-cicd-pipeline-workflows/02-go-binary-deploy/03-complete-workflow-reference.md",
+        "spec/12-cicd-pipeline-workflows/02-release-pipeline.md"
+      ],
+      "bytes_used": 134588
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "38cc42701ce99be2",
+      "files": [
+        "spec/12-cicd-pipeline-workflows/00-overview.md",
+        "spec/12-cicd-pipeline-workflows/97-acceptance-criteria.md",
+        "spec/12-cicd-pipeline-workflows/98-changelog.md",
+        "spec/12-cicd-pipeline-workflows/99-consistency-report.md",
+        "spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/01-forbidden-name-guard.md",
+        "spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/02-grandfather-baseline-naming.md",
+        "spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/03-cross-file-collision-audit.md",
+        "spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/04-baseline-diff-lint-gate.md",
+        "spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/05-actionable-lint-suggestions.md",
+        "spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/06-matrix-test-aggregator.md",
+        "spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/07-shared-cli-wrapper.md",
+        "spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/08-config-schema.md",
+        "spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/09-workflow-templates.md",
+        "spec/12-cicd-pipeline-workflows/03-vulnerability-scanning.md",
+        "spec/12-cicd-pipeline-workflows/04-install-script-generation.md",
+        "spec/12-cicd-pipeline-workflows/04-installation-flow.md",
+        "spec/12-cicd-pipeline-workflows/05-changelog-integration.md"
+      ],
+      "bytes_used": 138057
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "fb62d47be4b1c17a",
+      "files": [
+        "spec/12-cicd-pipeline-workflows/00-overview.md",
+        "spec/12-cicd-pipeline-workflows/97-acceptance-criteria.md",
+        "spec/12-cicd-pipeline-workflows/98-changelog.md",
+        "spec/12-cicd-pipeline-workflows/99-consistency-report.md",
+        "spec/12-cicd-pipeline-workflows/05-code-signing.md",
+        "spec/12-cicd-pipeline-workflows/06-self-update-mechanism.md",
+        "spec/12-cicd-pipeline-workflows/06-version-and-help.md",
+        "spec/12-cicd-pipeline-workflows/07-environment-variable-setup.md",
+        "spec/12-cicd-pipeline-workflows/07-release-body-and-changelog.md",
+        "spec/12-cicd-pipeline-workflows/08-terminal-output-standards.md",
+        "spec/12-cicd-pipeline-workflows/09-binary-icon-branding.md",
+        "spec/12-cicd-pipeline-workflows/10-release-pipeline-issues-rca.md"
+      ],
+      "bytes_used": 132094
+    },
+    {
+      "tier": "T2",
+      "bundle_sha_chunk": "9d2be5c6989764b7",
+      "files": [
+        "spec/12-cicd-pipeline-workflows/00-overview.md",
+        "spec/12-cicd-pipeline-workflows/97-acceptance-criteria.md",
+        "spec/12-cicd-pipeline-workflows/98-changelog.md",
+        "spec/12-cicd-pipeline-workflows/99-consistency-report.md",
+        "spec/12-cicd-pipeline-workflows/11-technical-interface.md"
+      ],
+      "bytes_used": 63385
+    },
+    {
+      "tier": "T3",
+      "bundle_sha_chunk": "401ba3147cac5c0c",
+      "files": [
+        "spec/12-cicd-pipeline-workflows/00-overview.md",
+        "spec/12-cicd-pipeline-workflows/97-acceptance-criteria.md",
+        "spec/12-cicd-pipeline-workflows/98-changelog.md",
+        "spec/12-cicd-pipeline-workflows/99-consistency-report.md",
+        "spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/99-ai-implementation-guide.md",
+        "spec/12-cicd-pipeline-workflows/readme.md"
+      ],
+      "bytes_used": 68923
+    }
+  ],
+  "chunked_path": true,
+  "total_v6": 84,
+  "axis": "integration-spec",
+  "axis_multipliers": {
+    "d1": 0.9259,
+    "d2": 0.8333,
+    "d3": 0.8333,
+    "d4": 1.2963,
+    "d5": 1.1111
+  },
+  "axis_cap": 95,
+  "weighted_total": 84.0,
+  "total_v7": 84,
+  "total": 84,
+  "band": "GOOD",
+  "rubric": "v7"
+}

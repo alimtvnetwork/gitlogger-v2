@@ -1,0 +1,11 @@
+flowchart TD
+    A[New App Component] --> B{Name Matches APP_UI_NAMING_RX?}
+    B -- No --> C[Block: APP-UI-001]
+    B -- Yes --> D[Use Semantic Tokens Only]
+    D --> E{Raw Color Detected?}
+    E -- Yes --> C
+    E -- No --> F[Apply WCAG Baseline]
+    F --> G{Composite Widget?}
+    G -- Yes --> H[Add Roving Tabindex]
+    G -- No --> I[Done]
+    H --> I
