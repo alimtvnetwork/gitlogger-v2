@@ -1,8 +1,17 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.63.0
-**Updated:** 2026-05-10 (Sess-66 G-6s — slot 51 `validate-guidelines.go` phantom-cleared via static-surface probe wired as gate #45; phantom 8 → 7; banner-triple recount goes 24 → **25**)
-**Total active gates: 25**
+**Version:** 4.64.0
+**Updated:** 2026-05-10 (Sess-66 G-6t — slot 52 `check-axios-version.sh` phantom-cleared; `--self-test` 6/6 fixtures wired as gate #46 alongside live disk run; phantom 7 → 6; banner-triple recount goes 25 → **26**)
+**Total active gates: 26**
+
+### 4.64.0 — 2026-05-10 — Sess-66 G-6t: slot 52 `check-axios-version.sh` load-proven (gate #46; six synthetic package.json fixtures + live disk run; phantom 7 → 6)
+- **Action**: Rewrote `linter-scripts/check-axios-version.sh` (~75 → ~135 LOC) to factor the version check into `check_pkg()` and add `--self-test` + `--pkg <path>` flags. The self-test creates a tmp dir with six synthetic `package.json` files and exercises the AC-52-01/02/03 contracts plus the NOT_FOUND vacuous-pass anchor: F-1 `^1.14.0` range MUST fail; F-2 `1.14.1` blocked MUST fail; F-3 `1.14.0` approved MUST pass; F-4 `0.30.3` (devDep path) MUST pass; F-5 `0.30.4` blocked MUST fail; F-6 missing axios MUST pass. `set -u` discipline preserved; tmp dir cleaned up on both success and failure paths (no EXIT trap to avoid `td: unbound variable` after function returns).
+- **Workflow wire**: New step `check-axios-version load-proven gate (#46 / G-6t / slot 52)` in `.github/workflows/spec-health.yml` immediately after gate #45. Two-line run: `bash linter-scripts/check-axios-version.sh --self-test` then `bash linter-scripts/check-axios-version.sh` (live disk run on repo `package.json`). The disk run is currently vacuous-pass (axios not declared) but provides defence-in-depth: any future `axios` addition immediately runs against the pin without a separate gate-bring-up.
+- **Slot-doc bump**: `spec/27-spec-toolchain/52-check-axios-version.md` 1.0.0 → 1.1.0; canonical `**Status:** Active gate #46` line added (recount goes 25 → 26 net +1).
+- **Self-test first-run**: 6/6 fixtures green.
+- **Phantom-script ledger**: 7 → 6 (-1 net; cumulative -28 across G-5 + G-6a..G-6t).
+- **Banner-triple gate count**: Rises from 25 → **26**. Recount basis: `grep -lE '^\*\*Status:\*\*\s+Active\s+gate\s+#' spec/27-spec-toolchain/*.md | wc -l` = **26**.
+- **Scorecard**: §27 R-band C6 +1 (axios pin self-enforcing even on no-axios repos via fixture defence-in-depth — repo-state independence is a stronger contract than pre-Sess-66 disk-only enforcement).
 
 ### 4.63.0 — 2026-05-10 — Sess-66 G-6s: slot 51 `validate-guidelines.go` load-proven (gate #45; static-surface probe with AC-51-01 parity anchor; phantom 8 → 7; paired-validator track complete)
 - **Action**: Created `linter-scripts/test/test-validate-guidelines-go-surface.sh` (~95 LOC, six clauses). The probe statically validates the Go validator's surface contract without requiring a Go runtime in the spec-health workflow runner. Clauses: (1) source file exists and non-empty; (2) `Version: X.Y.Z` banner present; (3) eight CODE-RED-001..008 rule IDs present in `.go`; (4) four CODE-RED-022..025 boolean-principle rule IDs present (P2/P3/P5/P7); (5a) `package main` declared, (5b) `func main()` declared (load-ready); (6) AC-51-01 parity anchor — every `CODE-RED-NNN` token in `.py` either appears in `.go` OR is in the frozen `TOLERATED_PY_ONLY` baseline-drift set. The drift set is pinned at exactly 10 rules (CODE-RED-009/013/014/015/016/017/018/019/020/021); any new `.py`-only rule fails clause-6 unless the porter explicitly grows the list — porter-discipline floor.

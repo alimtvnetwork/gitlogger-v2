@@ -832,6 +832,26 @@ jobs:
         # clause-6, forcing porter discipline. Companion to gate #44 (slot 50).
         # Spec: spec/27-spec-toolchain/51-validate-guidelines-go.md
         run: bash linter-scripts/test/test-validate-guidelines-go-surface.sh
+
+      - name: check-axios-version load-proven gate (#46 / G-6t / slot 52)
+        # Sess-66 G-6t — phantom-clearing for slot 52. Axios pin enforcer had
+        # a §27 §00 entry + 99-ledger row + on-disk script but no CI invocation;
+        # the disk run is also vacuous-pass on this repo (axios not declared
+        # in package.json), so a real-tree run alone could not load-prove the
+        # contract. Added `--self-test` mode to the bash script that exercises
+        # 6 synthetic package.json fixtures via tmp dir + node parser:
+        #   F-1 AC-52-01 range symbol `^1.14.0`     → MUST exit 1
+        #   F-2 AC-52-02 blocked exact `1.14.1`     → MUST exit 1
+        #   F-3 AC-52-03 approved exact `1.14.0`    → MUST exit 0
+        #   F-4 AC-52-03 second-approved `0.30.3`   → MUST exit 0 (devDep path)
+        #   F-5 AC-52-02 second-blocked `0.30.4`    → MUST exit 1
+        #   F-6 vacuous-pass NOT_FOUND              → MUST exit 0
+        # Also runs the live disk check against the real package.json so any
+        # future axios declaration is immediately validated against the pin.
+        # Spec: spec/27-spec-toolchain/52-check-axios-version.md
+        run: |
+          bash linter-scripts/check-axios-version.sh --self-test
+          bash linter-scripts/check-axios-version.sh
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
