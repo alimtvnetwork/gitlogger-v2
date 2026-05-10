@@ -119,3 +119,9 @@ These slots are immutable once shipped (per project memory rule).
 - Seedable-config binding: S-3 mandates seed-row + UserSettingOverride table separation, COALESCE merge view, paired-removal migration.
 - DDL for Setting + UserSettingOverride tables MUST be materialised in §23 as T-08 follow-up.
 - Regression-grep: `rg -nc '^## Settings Surface|AC-ADS-UI-03|UserSettingOverride' spec/24-app-design-system-and-ui/00-overview.md` MUST return ≥3.
+
+### v2.2.7 — 2026-05-10 — A-58: AppShell route matrix pinned (T-09)
+
+- New "AppShell Route Matrix" subsection added between AppShell skeleton and Responsive breakpoints; AC-ADS-UI-04 minted.
+- Binds AS-NN rows ↔ `AppShellVariant` enum (file-line 511) ↔ S-NN settings routes (T-08) ↔ U-NN component routes (T-07).
+- Regression-grep: `rg -nc '^### AppShell Route Matrix|AC-ADS-UI-04|AS-01.*Marketing' spec/24-app-design-system-and-ui/00-overview.md` MUST return ≥3.
