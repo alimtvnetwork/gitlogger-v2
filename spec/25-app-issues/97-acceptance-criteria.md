@@ -1,7 +1,7 @@
 # Acceptance Criteria — App Issues
 
-**Version:** 1.6.0  
-**Updated:** 2026-05-03 (Phase 153 Task S25-02 — added **AC-AI-17** Process terminology pin (`Phase NN` / `Lesson #NN` / `Task XNN`) anchored to canonical contributor-process memos per Lesson #36 link-don't-restate. Closes recurring v? LOW D1 `Ambiguous 'Phase 153' references` finding by adding a `## Process Terminology` glossary to `00-overview.md` (one-hop disambiguation pointer to `mem://index.md` + `mem://process/phase-153-lessons` + `.lovable/memory/audit/v2-deterministic/`). AC count 16 → 17.)  
+**Version:** 1.7.0  
+**Updated:** 2026-05-10 (Phase-5 T-14 — added **AC-AI-18** Parent/child AC-prefix contract for `kind: index` + `kind: tracker` modules. Codifies 4-clause discipline (AC-01..AC-08 generic floor across all 3 §97 files; `AC-AI-NN` parent-only; bare `AC-NN >= AC-09` child-extension folder-scoped; cross-child collisions EXPECTED and NOT a defect). Self-enforcing via in-spec catalogue + §27 backlog gate `ac-prefix-contract-check` (3-turn decay). Closes recurring audit-v? MEDIUM D2 `Inconsistent AC-ID prefixes across §25 tree` finding class. AC count 17 → 18. Prior: 1.6.0 — AC-AI-17 process-terminology pin.)  
 **Scope:** `spec/25-app-issues/`
 
 ---
