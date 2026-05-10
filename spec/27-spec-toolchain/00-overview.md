@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.35.0  
-**Updated:** 2026-05-10 (Phase-5 T-36 / **P19d** ships `linter-scripts/meta-verify-lockstep.py` (gate #42 — was phantom; now real). Self-test 6/6 (F-1..F-6 per slot-64 spec). Real-disk on §27 SURFACES 34 latent violations across 49 slot docs (clause-2 R5 sections, clause-3 fixture counts, clause-4 4-row exit-code tables, clause-5 banner-triple drift) — wired **warn-only** until §27 slot-doc backlog grooms. Truth ratio: 25 wired gates over 46 disk scripts. Phantom-script count drops 36 → **35**. Cohort lifts: §27 +1 (reflexivity now load-proven; backlog newly visible). Prior: T-38 P19c gate #40.)
+**Version:** 4.36.0  
+**Updated:** 2026-05-10 (Phase-5 T-32 / **P19e** ships `linter-scripts/check-no-out-of-scope-spec-folder-link.py` (gate #39 — was phantom; now real). Self-test 6/6 (F-1..F-6 per slot-61 spec). Real-disk on 7 in-scope folders SURFACES 237 latent perimeter violations across 175 `.md` files (mostly historical-citation drift in §22/§25/§28 changelogs and AC bodies) — wired **warn-only** until perimeter backlog grooms. Added `Locked-7 in-scope folders: §22, §23, §24, §25, §26, §27, §28` enumeration literal + `Self-enforcing via §27 backlog gate \`no-out-of-scope-spec-folder-link-in-locked-7\`` Lesson-#15 cite to §00 banner block (clause-5 satisfied). Truth ratio: 26 wired gates over 47 disk scripts. Phantom-script count drops 35 → **34**. Closes §27 backlog ticket `no-out-of-scope-spec-folder-link-in-locked-7` (FINAL backlog ticket — boundary-quartet 4/4 complete). Gate #43 (P19a) flip warn-only → hard-fail DEFERRED — gate #43 still surfaces 20 gate-number gaps + ~7 phantom-companion-script issues; flips post-backlog grooming. **P19 wave (P19a..P19e) closes this turn.**)
 
 > **Self-enforcing via §27 backlog gate `meta-verify-lockstep`** — Lesson #15 reflexivity pin for gate #42 (slot 64). Stripping this literal from §27 §00 fails clause-5 of the meta-verifier itself.
 >
