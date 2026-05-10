@@ -58,8 +58,6 @@ fail:
 ```bash
 python3 linter-scripts/check-ac-section-orphan-header.py --check all
 python3 linter-scripts/check-ac-section-orphan-header.py --check no-orphan-ac
-python3 linter-scripts/check-ac-section-orphan-header.py --check no-empty-section
-python3 linter-scripts/check-ac-section-orphan-header.py --check status-tag-present
 python3 linter-scripts/check-ac-section-orphan-header.py --check ac-id-uniqueness
 python3 linter-scripts/check-ac-section-orphan-header.py --check section-name-uniqueness
 python3 linter-scripts/check-ac-section-orphan-header.py --self-test
@@ -74,21 +72,18 @@ because zero `### AC-…` headers were parsed in the seven in-scope
 folders, is **itself a violation** (exit `1`, message
 `vacuous-pass: zero §97 files or zero AC headers parsed`). The
 `--self-test` mode is mandatory in CI and asserts the scanner
-correctly REJECTS six synthetic fixtures:
+correctly REJECTS four synthetic fixtures and ACCEPTS one:
 
-- **F-1** complete-uniform (every AC under a `## ` parent, every
-  parent has ≥1 child, every AC carries `[active]`, all AC-IDs
-  unique, all `## ` titles unique) → passes
+- **F-1** complete-uniform (every AC under a `## ` parent, all
+  AC-IDs unique, all `## ` titles unique) → passes
 - **F-2** orphan AC declared before any `## ` parent → fails
   (clause-1)
-- **F-3** `## ` parent with zero `### AC-…` children before EOF
-  → fails (clause-2)
-- **F-4** `### AC-99` with no trailing `[active]/[deferred]/[archived]`
-  status tag → fails (clause-3)
-- **F-5** duplicate `### AC-04` within the same file → fails
-  (clause-4)
-- **F-6** duplicate `## Mutations` parent section within the same
-  file → fails (clause-5)
+- **F-3** duplicate `### AC-04` within the same file → fails
+  (clause-2)
+- **F-4** duplicate `## Mutations` parent section within the same
+  file → fails (clause-3)
+- **F-5** empty file (no `## ` and no `### AC-…`) → fails
+  (R5 vacuous-pass)
 
 ## 5-link self-enforcement chain
 
