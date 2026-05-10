@@ -39,8 +39,22 @@ _(none)_
 
 | Code | Meaning |
 |------|---------|
-| 0 | Axios pinned to an approved exact version |
-| 1 | Axios pinned to a blocked version OR uses a range symbol OR not present when expected |
+| 0 | pass — axios pinned to an approved exact version OR axios not declared (vacuous-pass) |
+| 1 | violation — blocked version, range symbol, or unknown exact version |
+| 2 | invocation-error — unknown CLI flag |
+| 3 | fixture-rot — `--self-test` self-check inconsistency (reserved; currently surfaced via exit 1 message) |
+
+## Self-test fixtures (Sess-66 G-6t)
+
+`--self-test` exercises six in-memory `package.json` fixtures via `mktemp -d`:
+
+- **F-1** AC-52-01 — `"axios": "^1.14.0"` (range) → MUST exit 1
+- **F-2** AC-52-02 — `"axios": "1.14.1"` (blocked) → MUST exit 1
+- **F-3** AC-52-03 — `"axios": "1.14.0"` (approved) → MUST exit 0
+- **F-4** AC-52-03 — `"axios": "0.30.3"` (approved, devDep path) → MUST exit 0
+- **F-5** AC-52-02 — `"axios": "0.30.4"` (blocked) → MUST exit 1
+- **F-6** R5 vacuous-pass — axios absent → MUST exit 0
+
 
 ## Acceptance criteria
 
