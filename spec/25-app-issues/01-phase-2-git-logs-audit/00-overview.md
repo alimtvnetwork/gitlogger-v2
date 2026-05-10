@@ -602,7 +602,7 @@ SCOPE: 25 issue records produced 2026-Q1; no code-side mutations performed
 
 INV-01  every issue MUST have stable IssueId matching pattern P2-GLA-NNN
 INV-02  every issue MUST cite at least one source location (file path + line/section anchor)
-INV-03  Severity ∈ {blocker, major, minor, info} — no other values permitted
+INV-03  Severity ∈ {blocker, major, minor, info} — no other values permitted  // FROZEN HISTORICAL ENUM (Phase-50 internal-audit-process classifier). Canonical issue-record severity enum is `{Critical, High, Medium, Low}` per parent `../97-acceptance-criteria.md` AC-AI-14. See sub-01 §97 AC-09 for the binding contract; do NOT "reconcile" the two — they have disjoint scopes.
 INV-04  Status ∈ {open, in-progress, resolved, deferred, wontfix}
 INV-05  resolved/deferred/wontfix issues MUST carry a ResolutionRef (PR, ADR, or memory note)
 INV-06  the canonical count is 25; deltas require a 98-changelog entry + new IssueId
@@ -631,7 +631,7 @@ DEL-03  Re-audit cadence: quarterly OR when §22 spec version minor-bumps
   "additionalProperties": false,
   "properties": {
     "issue_id":  { "type": "string", "pattern": "^P2-GLA-\\d{3}$" },
-    "severity":  { "enum": ["blocker", "major", "minor", "info"] },
+    "severity":  { "enum": ["blocker", "major", "minor", "info"] },  // FROZEN historical Phase-50 enum; canonical issue-record severity = {Critical,High,Medium,Low} (parent §97 AC-AI-14, sub-01 §97 AC-09)
     "status":    { "enum": ["open", "in-progress", "resolved", "deferred", "wontfix"] },
     "summary":   { "type": "string", "minLength": 1, "maxLength": 200 },
     "details":   { "type": "string" },
@@ -670,6 +670,8 @@ export enum IssueStatus {
   WontFix    = "wontfix",
 }
 
+// FROZEN historical Phase-50 enum (NOT the canonical issue-record severity).
+// Canonical = {Critical,High,Medium,Low} per parent §97 AC-AI-14 + sub-01 §97 AC-09.
 export enum IssueSeverity {
   Blocker = "blocker",
   Major   = "major",
@@ -698,7 +700,7 @@ package contract
 type AppIssueRecord struct {
     ID            string `json:"id"`
     Status        string `json:"status"`   // open|in-progress|resolved|deferred|wontfix
-    Severity      string `json:"severity"` // blocker|major|minor|info
+    Severity      string `json:"severity"` // blocker|major|minor|info — FROZEN Phase-50 enum; canonical = {Critical,High,Medium,Low} (parent §97 AC-AI-14)
     OpenedAt      string `json:"opened_at"`           // YYYY-MM-DD
     ClosedAt      string `json:"closed_at,omitempty"`
     ResolutionRef string `json:"resolution_ref,omitempty"`
