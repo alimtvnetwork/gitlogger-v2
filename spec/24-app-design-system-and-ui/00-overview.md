@@ -21,8 +21,8 @@ produced_for:
 
 # App Design System & UI
 
-**Version:** 4.5.0
-**Updated:** 2026-05-10 (Session 55 audit-task A-37 — promoted AC-ADS-16 (+ AC-ADS-15 + AC-ADS-14) to a §00 Walker-Pin block mirroring §22 AC-78 pattern. Same-module §00↔§97 mirror only; no §97 contract change.)
+**Version:** 4.6.0
+**Updated:** 2026-05-10 (Session 55 audit-task A-44 — added AC-ADS-06/09/10 row to §00 Walker-Pin block citing §27 slot 36 / gate #19. Surfaces the CI-gated boundary at the §00 anchor for context-bounded walkers; lifts §24 R C3 19→20.)
 **AI Confidence:** Production-Ready
 <!-- h10-verified-phase: 153 -->
 **Ambiguity:** None
