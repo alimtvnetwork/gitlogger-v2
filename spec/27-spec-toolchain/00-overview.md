@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.5.0  
-**Updated:** 2026-05-10 (Session 55 audit-task A-43 — added slot 36 `check-ads-boundaries.py`, gate #19. Promotes §24 §97 AC-ADS-06/09/10 from contract-proven to load-proven via fixture-driven CI gate. Built-in `--self-test` rejects 3 negative-fixture corpora under `linter-scripts/fixtures/`. First §27 gate dedicated to a §24-side AC family.)
+**Version:** 4.6.0  
+**Updated:** 2026-05-10 (Session 56 audit-task A-48 — added slot 37 `check-spec22-inventory.py`, gate #20. Promotes §22 §97 AC-78 + AC-22-LV1 from contract-proven to load-proven via in-memory fixture self-test. Second §27 gate dedicated to a §22-side AC family.)  
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
