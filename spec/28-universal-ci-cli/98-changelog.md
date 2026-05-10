@@ -1,6 +1,6 @@
 # Changelog
 
-**Updated:** 2026-05-10 (Session 56 audit-task A-47 — §97 v2.7.0 → v2.8.0; appended `## Test Invariant Index (T-28-NN)` with inaugural 5 rows T-28-29/30/31/36/48; §28 C3 Testability +1 across personas)
+**Updated:** 2026-05-10 (Session 61 audit-task A-51 — authored 5 fixture corpora `linter-scripts/fixtures/glci-{exec-runner-crashed,exec-timeout,push-stream-broken,stream-buffer-overflow,push-deadline-exceeded}/` for T-28-29/30/31/36/48; load-proves §28 C3 Raw-LLM 19→20)
 
 
 All notable changes to `spec/28-universal-ci-cli/`.
