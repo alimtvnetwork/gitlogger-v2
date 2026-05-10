@@ -738,6 +738,22 @@ jobs:
         run: |
           python3 linter-scripts/check-seed-id-explicit-locked-form.py --self-test
           python3 linter-scripts/check-seed-id-explicit-locked-form.py
+
+      - name: §24 no-DDL boundary gate (#36 / T-29)
+        # Phase-5 T-29 / Slot 58 — closes §27 backlog ticket
+        # `no-sql-ddl-in-ui-folder-check` (Phase-5 T-09; paper-only
+        # multi-cycle). Walks every .md under §24 and asserts:
+        # clause-1 no SQL fences (8 forbidden langs); clause-2 no
+        # bare DDL keywords in unfenced prose (backtick spans
+        # exempt); clause-3 no §24-owned migration/schema/ddl path
+        # references; clause-4 R5 anchor — ≥1 U-1/U-3 row mentions
+        # a DDL column name (clause-4 exemption wired); clause-5
+        # §24 §00 boundary literal `App-side DDL is owned exclusively
+        # by §23` + gate self-citation (Lesson #15 reflexivity).
+        # Spec: spec/27-spec-toolchain/58-check-no-sql-ddl-in-ui-folder.md
+        run: |
+          python3 linter-scripts/check-no-sql-ddl-in-ui-folder.py --self-test
+          python3 linter-scripts/check-no-sql-ddl-in-ui-folder.py
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
