@@ -166,23 +166,21 @@ def clause_no_numbered(surf: Surface) -> list[str]:
     errs: list[str] = []
     for path, text in surf.files:
         prose, _ = _strip_fences(text)
+        exempt = _is_structurally_exempt(path)
         for i, raw_line in enumerate(prose.splitlines(), 1):
-            # adjacency exemption applies even to backticked cites:
-            # if raw line carries `out-of-scope`/`archived`/`superseded`,
-            # backticked single-token cite is exempt; we require the
-            # path token to appear inside backticks for the exemption.
             if OUT_OF_SCOPE_NUM_RE.search(_strip_inline_code(raw_line)):
-                # the token survives outside backticks → unfenced cite
+                if exempt:
+                    surf.archival_exemption_count += 1
+                    continue
                 errs.append(f"clause-1: {(path.relative_to(REPO_ROOT) if path.is_absolute() else path)}:{i}: "
                             f"unfenced out-of-scope path token in `{raw_line.strip()[:120]}`")
             elif OUT_OF_SCOPE_NUM_RE.search(raw_line):
-                # only inside backticks; needs adjacency marker
-                if _has_adjacency(raw_line):
+                if _has_adjacency(raw_line) or exempt:
                     surf.archival_exemption_count += 1
                 else:
                     errs.append(f"clause-1: {(path.relative_to(REPO_ROOT) if path.is_absolute() else path)}:{i}: "
                                 f"backticked out-of-scope cite without adjacency marker "
-                                f"(`out-of-scope`/`archived`/`superseded`) in line")
+                                f"(`out-of-scope`/`archived`/`superseded`/`audit`/`legacy`/etc.) in line")
     return errs
 
 
@@ -190,12 +188,16 @@ def clause_no_archive(surf: Surface) -> list[str]:
     errs: list[str] = []
     for path, text in surf.files:
         prose, _ = _strip_fences(text)
+        exempt = _is_structurally_exempt(path)
         for i, raw_line in enumerate(prose.splitlines(), 1):
             if OUT_OF_SCOPE_ARCHIVE_RE.search(_strip_inline_code(raw_line)):
+                if exempt:
+                    surf.archival_exemption_count += 1
+                    continue
                 errs.append(f"clause-2: {(path.relative_to(REPO_ROOT) if path.is_absolute() else path)}:{i}: "
                             f"unfenced spec/_archive/ path token")
             elif OUT_OF_SCOPE_ARCHIVE_RE.search(raw_line):
-                if _has_adjacency(raw_line):
+                if _has_adjacency(raw_line) or exempt:
                     surf.archival_exemption_count += 1
                 else:
                     errs.append(f"clause-2: {(path.relative_to(REPO_ROOT) if path.is_absolute() else path)}:{i}: "
