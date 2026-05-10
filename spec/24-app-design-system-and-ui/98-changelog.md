@@ -1,6 +1,22 @@
 # Changelog — App Design System & UI
 
-**Version:** 4.11.0
+**Version:** 4.12.0
+**Updated:** 2026-05-10 (Session 64 audit-task A-55 / Phase-5 T-03 — removed `module_run_audit_p78` SQL DDL block from §24; replaced with link-only routing pin citing §27/§28 as canonical owners of execution-telemetry persistence)
+**Scope:** `spec/24-app-design-system-and-ui/`
+
+---
+
+### 4.12.0 — 2026-05-10 — Session 64 audit-task A-55 (Phase-5 T-03): UI folder no longer owns SQL persistence schema
+- **Action**: §00 v4.7.0 → **v4.8.0** removed 30 lines (lines 710–739) containing the inlined `module_run_audit_p78` Postgres DDL block (BIGSERIAL PK, contract_hash, implementability score, partial index on non-zero exit_code) that previously sat under § "Module Run Audit Schema — Phase 78 Normative". Replaced with a 1-table routing pin at the same anchor naming the canonical owners: **§27** for per-module gate-run telemetry shape, **§28** for universal CI/CLI run audit (cross-module/cross-phase), **§23** for application-database persistence patterns. Routing pin explicitly states "**No DDL was materialised elsewhere** in this turn" so the followup §27/§28 promotion is a separate, traceable Phase-5 backlog task. Routing-pin block also restates §24's true ownership scope (token catalog, AppShell, §07 boundary, §22 operational-pattern inheritance) so a context-bounded walker reading only this section understands what §24 does and does NOT own.
+- **Why**: Phase-5 audit Phase 2 §2.2 finding **F-24-01** (CRIT) flagged the inlined DDL as a separation-of-concerns violation: §24 declares `derives_from: spec/07-design-system` + `restate_forbidden: true` (front-matter, line 7), and the §07 dependency boundary (AC-ADS-16) explicitly scopes §24 to additive token + layout overlay — not backend persistence. The inlined DDL also violated Lesson #36 (link-don't-restate) since execution-telemetry shape rightfully lives in §27 (script gate domain) or §28 (universal CI/CLI domain). Phase 4 §4.3 estimated single-finding blind-fail P=0.70 (AI may correctly route DB DDL to §23 OR may implement the table in the UI module per the spec text — coin flip). Removal closes the silent-conflict surface; the routing pin defends against future re-inlining.
+- **Lockstep**: §00 v4.7.0 → **v4.8.0** (minor — DDL removed, routing pin added; net -22 lines, line count 739 → ~725); this file v4.11.0 → **v4.12.0** (this entry); **no** §97 bump (no AC change — `module_run_audit_p78` was never bound to an `AC-ADS-*` ID, which is itself a confirmation that it didn't belong here); **no** §99 bump; **no** §07 edit (scope-lock — out of in-scope 7 folders); **no** new §27 slot (the §27/§28 promotion is a separate Phase-5 backlog task; routing pin currently links to folder-level surfaces, not specific slot files).
+- **Scorecard impact (Sess-64, A-55 / T-03)**: §24 Lovable **C5 Implementability 18→19** (separation-of-concerns boundary now machine-verifiable: §24 §00 contains 0 SQL DDL blocks; future regression catchable by `rg -c '^CREATE TABLE' spec/24-app-design-system-and-ui/00-overview.md` MUST return 0). §24 Cursor/CC **C5 18→19** (same reasoning). §24 Raw-LLM **C5 17→18** (Raw-LLM persona benefits less without a §27 gate enforcing the property; ceiling 19 deferred to `no-sql-ddl-in-ui-folder-check` §27 gate, ceiling 20 to that gate + §27/§28 owning the materialised DDL with cross-cite). §24 totals: L 118 / C 117 / R 114.
+- **Lesson #62 reapplication (3rd instance)**: F-24-01 was a true-positive, NOT a Phase-2 false-positive — this turn is the first **edit-required** T-task in Phase-5 remediation. Confirms the audit's finding-classification accuracy: F-23-01 / F-23-02 were fence-strength asymmetry (false-positives closed by re-anchoring), F-24-01 is a real misplacement closed by removal. Pattern: **prefer routing pins over inlined contracts when the contract belongs to a sibling module**.
+- **Audit-trail**: Closes Phase-5 T-03 (third of 22 remediation tasks; first edit-required T-task). Cohort blind-fail P projection: ~0.88 → ~0.82.
+
+---
+
+### 4.11.0 — 2026-05-10 — Session
 **Updated:** 2026-05-10 (Session 56 audit-task A-45 — §00 Quick-Nav header added; §24 R C6 Friction 18→19)
 **Scope:** `spec/24-app-design-system-and-ui/`
 
