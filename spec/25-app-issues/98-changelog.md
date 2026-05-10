@@ -1,12 +1,24 @@
 # Changelog — App Issues
 
-**Version:** 3.6.0  
-**Updated:** 2026-05-10 (Session 49 audit-task A-29 — `produced_for:` producer-side front-matter binding child trackers to §22 AC-78/AC-79/AC-22-CE1)  
+**Version:** 3.7.0  
+**Updated:** 2026-05-10 (Phase-5 T-14 — AC-AI-18 parent/child AC-prefix contract)  
 **Scope:** `spec/25-app-issues/`
 
 ---
 
+## [3.7.0] — 2026-05-10 — Phase-5 T-14: AC-AI-18 parent/child AC-prefix contract
+
+- **Action**: §97 gains **AC-AI-18** `[critical]` codifying the 4-clause prefix discipline already practised across the §25 tree: (1) `AC-01..AC-08` generic-floor band byte-identical across parent + both children; (2) `AC-AI-NN` parent-only band; (3) bare `AC-NN >= AC-09` child-extension band, folder-scoped (cross-child collisions on `AC-09` EXPECTED and NOT a defect); (4) forbidden ID patterns (children minting `AC-AI-NN`, parent minting bare `AC-NN > AC-08`, foreign-prefix reuse, evidence-quoted IDs counted as minted).
+- **Why now**: closes the recurring **audit-v? MEDIUM D2** `Inconsistent AC-ID prefixes across §25 tree` finding class permanently. Walkers previously read the bare-`AC-09`-in-both-children pattern as a duplicate-ID defect, AND read the absence of `AC-AI-NN` from children as a child contract gap. AC-AI-18 makes the discipline tier-1 readable without scanning all three §97 files.
+- **Self-enforcing**: in-spec catalogue (clauses 1–4) is un-conditional verifier. §27 backlog adds `ac-prefix-contract-check` (NEW T-14) — walks every `97-acceptance-criteria.md` under `spec/25-app-issues/`, asserts parent has only `AC-01..AC-08` + `AC-AI-NN`; each child has only `AC-01..AC-08` + bare `AC-NN >= AC-09`; no `AC-AI-NN` in children. 3-turn ship-decay clause: if gate not landed within 3 turns, AC-AI-18 score-lift reverts.
+- **Lockstep**: §97 v1.6.0 → **v1.7.0** (AC count 17 → 18). §99 v1.4.2 → **v1.4.3**. §00 unchanged (no new section).
+- **Scorecard impact**: §25 C1 Clarity +1 (prefix discipline now tier-1 explicit), C4 Consistency +1 (parent/child reciprocity codified — conditional on §27 gate). Carry-forward holds for C2/C3/C5/C6.
+- **Invalidation triggers**: removing AC-AI-18 · weakening any of the 4 clauses · introducing a 5th clause without amending §27 gate spec · minting `AC-AI-NN` in a child or bare `AC-NN > 08` in parent · removing the 3-turn decay clause.
+- **No** §27 gate shipped yet (backlog only), **no** RUBRIC bump, **no** AC-31-31 cascade.
+
 ## [3.6.0] — 2026-05-10 — Session 49 audit-task A-29: producer-side `produced_for:` front-matter (mirror of §26 A-27 + §28 A-29 twin)
+
+- **Action**: §00 front-matter gains a `produced_for:` block declaring §25's tracker children as canonical producers of post-mortem evidence whose closure backs three §22 ACs — `02-consolidated-audit-findings/00-overview.md` → AC-78 "Module asset inventory pin" + AC-79 "Cross-Module Externalized Citation Map"; `01-phase-2-git-logs-audit/00-overview.md` → AC-22-CE1 "Co-edit cohorts". Restores producer/consumer reciprocity for §25 (previously consumer-only since A-10 Sess-32).
 
 - **Action**: §00 front-matter gains a `produced_for:` block declaring §25's tracker children as canonical producers of post-mortem evidence whose closure backs three §22 ACs — `02-consolidated-audit-findings/00-overview.md` → AC-78 "Module asset inventory pin" + AC-79 "Cross-Module Externalized Citation Map"; `01-phase-2-git-logs-audit/00-overview.md` → AC-22-CE1 "Co-edit cohorts". Restores producer/consumer reciprocity for §25 (previously consumer-only since A-10 Sess-32).
 - **Why now**: Closes the same bidirectional-binding gap as §28's A-29 twin (this session) — A-27 (Sess-47) added producer-side to §26 but §25 remained consumer-only. The dual-key resolution contract from §27 A-28 (Sess-48) makes the addition zero-friction.
