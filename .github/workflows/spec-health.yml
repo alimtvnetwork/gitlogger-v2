@@ -424,6 +424,15 @@ jobs:
           # then the `|| true` MUST be removed to make this a hard gate.
           python3 linter-scripts/check-gate-ledger-vs-workflow.py || echo "::warning::gate-ledger drift present — see Sess-65 audit"
 
+      - name: §24 no-DDL boundary gate (#36 / Phase-5 T-29 / P19b)
+        # Enforces §24 §97 AC-ADS-17 (no-DDL boundary): the §24 folder owns
+        # ZERO DDL surface; canonical owner of App-side DDL is §23. Six
+        # invariants T-ADS-17-01..06; built-in --self-test runs 6 fixtures
+        # F-1..F-6. Spec: spec/27-spec-toolchain/58-check-no-sql-ddl-in-ui-folder.md
+        run: |
+          python3 linter-scripts/check-no-sql-ddl-in-ui-folder.py --self-test
+          python3 linter-scripts/check-no-sql-ddl-in-ui-folder.py
+
 
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
