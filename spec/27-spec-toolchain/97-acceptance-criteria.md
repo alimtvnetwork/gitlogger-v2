@@ -75,6 +75,7 @@
 - **When** the script is executed and produces findings,
 - **Then** ALL violation messages MUST be written to **stderr** (not stdout) and structured as `<file>:<line>: <rule-id>: <message>` so CI log parsers + IDE problem-matchers can extract them deterministically; success-summary lines (e.g. `0 findings`, `OK`) MAY go to stdout; mixing the two streams is FORBIDDEN because downstream tooling pipes stdout to JSON parsers and stderr to log aggregators.
 - **Verifies:** AC-T-03 exit-code contract; `linter-scripts/run.sh` orchestrator (relies on stderr separation to surface failures); `.github/workflows/spec-health.yml` problem-matcher convention.
+- **Worked example:** `python3 linter-scripts/check-spec-cross-links.py >/tmp/out 2>/tmp/err; wc -l </tmp/err` MUST be `0` on a clean tree; after injecting one broken link, `/tmp/err` MUST contain a `<file>:<line>: broken-link: <msg>` line and `/tmp/out` MUST stay parseable as a one-line summary (no findings interleaved).
 
 ### AC-T-12 — Filler scripts MUST be safe to run in a tight loop
 - **Given** any filler script in slots 20–29 (`fill-missing-acceptance-criteria.cjs`, `fill-missing-changelogs.cjs`, `fill-missing-consistency-reports.cjs`),
