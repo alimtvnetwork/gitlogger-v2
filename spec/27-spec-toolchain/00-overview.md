@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.6.0  
-**Updated:** 2026-05-10 (Session 56 audit-task A-48 — added slot 37 `check-spec22-inventory.py`, gate #20. Promotes §22 §97 AC-78 + AC-22-LV1 from contract-proven to load-proven via in-memory fixture self-test. Second §27 gate dedicated to a §22-side AC family.)  
+**Version:** 4.7.0  
+**Updated:** 2026-05-10 (Phase-5 T-15 — added slot 39 `check-applink-xor-clause.py`, gate #22. Promotes §23 AC-ADB-05 (XOR target invariant) + AC-ADB-13 (locked-ID seed) + AC-ADB-R-4 invariant 6 (disconnect CHECK) from contract-proven to load-proven via 4-fixture in-memory `--self-test`. Third §27 gate dedicated to a §23-side AC family. Closes §27 backlog entry `applink-xor-check-clause-present` minted Sess-43. Bindings: WE-2/WE-3/WE-4 from §23 §00 T-11 worked-examples block; partial coverage of CAF-01 (T-12) on the `IsActive` column.)  
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
