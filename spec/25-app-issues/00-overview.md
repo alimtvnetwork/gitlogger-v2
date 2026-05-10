@@ -19,7 +19,7 @@ produced_for:
 
 # App Issues
 
-**Version:** 3.7.0  
+**Version:** 3.8.0  
 <!-- h10-verified-phase: 153 -->
 **Updated:** 2026-05-10 (Session 49 audit-task A-29 — added `produced_for:` producer-side front-matter binding child trackers (02-consolidated, 01-phase-2) to §22 AC-78/AC-79/AC-22-CE1. Mirrors §26→§22 producer-side (A-27 Sess-47) and §28 producer-side (A-29 same-session twin). Resolved by §27 gate #10 dual-key contract (A-28 Sess-48). Lesson #29 tracker exemption preserved. Prior: Phase 153 Task S25-02.)
 **AI Confidence:** Production-Ready  
@@ -81,7 +81,7 @@ This module's prose (§97 / §98 / §99 + child trackers) routinely cites contri
 | **Phase NN** | Phase ordinal (e.g. `Phase 152`, `Phase 153`) | `mem://index.md` Core narrative + per-phase closing memo `.lovable/memory/audit/v2-deterministic/phase-NNN-*.md` |
 | **Lesson #NN** | Numbered contributor rule (e.g. `Lesson #29`, `Lesson #36`, `Lesson #50`) | `mem://process/phase-153-lessons` (consolidated catalogue, sections A–G) |
 | **Task XNN / X-NN-fu / SNN-NN** | Per-task tracker ID inside a phase (e.g. `A11c`, `A24-fu12`, `S22-01`, `S26-fu`) | `.lovable/memory/audit/v2-deterministic/phase-NNN-task-XNN-*.md` (one closing memo per task) |
-| **AC-NN** / **AC-XX-NN** | Numbered acceptance criterion in a §97 file | The owning module's `97-acceptance-criteria.md` (look up by ID prefix; e.g. `AC-AI-*` = `spec/25-app-issues/97-acceptance-criteria.md`, `AC-CG-*` = `spec/02-coding-guidelines/97-acceptance-criteria.md`) |
+| **AC-NN** / **AC-XX-NN** | Numbered acceptance criterion in a §97 file | The owning module's `97-acceptance-criteria.md` (look up by ID prefix; e.g. `AC-AI-*` = `spec/25-app-issues/97-acceptance-criteria.md`, `AC-ADB-*` = `spec/23-app-database/97-acceptance-criteria.md`). Out-of-scope-folder prefixes (e.g. anything mapping to `spec/00`–`spec/21`, `spec/29`, or `spec/_archive/`) are intentionally NOT enumerated here — those folders are outside the locked 7-folder spec scope and any reference to them inside §25 is permitted ONLY as audit-quoted evidence per AC-AI-10/11, never as a live cross-spec dependency. |
 
 These references are intentional bidirectional links between spec content and contributor memory — they are NOT spec-internal terminology. AC-AI-17 codifies this disambiguation contract and pins the `[D1] Ambiguous 'Phase 153' references` audit finding class as link-don't-restate compliance.
 
