@@ -4,6 +4,7 @@
 %%   the migration ALTER + per-row encrypt run, and how is idempotency
 %%   guaranteed via MigrationState?"
 %% Authoritative source: spec/22-git-logs-v2/11-encryption-deferred-plan.md
+%% Audience: encryption-v3 implementers; auditors verifying §22 §11 deferred-plan key chain + MigrationState idempotency.
 
 flowchart TD
     A[Install or Upgrade to v3] --> B{GITLOGS_MASTER_KEY env set}
