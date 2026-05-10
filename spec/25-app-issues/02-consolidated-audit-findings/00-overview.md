@@ -622,6 +622,7 @@ The `Last touched` column records the spec-improvement session in which the row 
 2. Reclassifying any row (e.g. flipping a Conditional to Closed) requires citing the specific §22 file + line that resolves it, recorded in the "Notes" column of the row.
 3. The disposition map MUST stay synchronised with §22's `99-consistency-report.md`; if §22 adds a new file that closes a Carried-open row, this map MUST be updated in the same PR.
 4. The Severity Roll-Up table MUST NOT be retroactively edited from this map — it remains a historical snapshot of the v1 audit. Disposition is additive context, not a rewrite of the original count.
+5. Any material edit to a row (disposition change, owner change, or notes change ≥ 1 sentence) MUST bump that row's `Last touched` cell to the editing session ID (`Sess-NN`). Editorial-only edits (typo, link rename) MUST NOT bump it. The `Last touched` column is the sole input for §27 deferred lint rule **D5 `cohort-orphaned-finding`**: any `Carried-open` row whose `Last touched` is more than 1 spec-improvement session older than the current session triggers a §22 backlog warning. (Wired by A-10, Sess-31; D5 implementation deferred per §27 §00 `## CI Gate Enumeration`.)
 
 ---
 
