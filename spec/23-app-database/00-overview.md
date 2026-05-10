@@ -25,8 +25,8 @@ consumes:
 # App Database
 
 <!-- h10-verified-phase: 153 -->
-**Version:** 4.4.0
-**Updated:** 2026-05-10 (Session 64 audit-task A-53 / Phase-5 T-01 — added "Implementation Target Precedence (Normative)" pin at §00 + escalated REFERENCE-lane PG section header to `🚫 REFERENCE-ONLY … DO NOT MATERIALISE`. Closes audit F-23-01 silent-conflict risk for context-bounded walkers; cohort blind-fail P projection 0.999 → ~0.92.)
+**Version:** 4.5.0
+**Updated:** 2026-05-10 (Session 66 / Phase-5 T-19 / F-03 closure — added `## Settings Persistence (Normative — Phase-5 T-19 / F-03 closure)` section: byte-shape DDL for `Setting` (8 columns + enum CHECK + scope index) and `UserSettingOverride` (composite PK + dual ON DELETE CASCADE), R-09 `COALESCE(o.Value, s.Value)` query template, replay-safe seed-row migration template, 5-row forbidden-storage-pattern list, REFERENCE-lane PG mirror (DO NOT MATERIALISE), 3 new in-spec ACs AC-ADB-SETTING-01..03 wired to §24 gate #25 clauses 3+4. Materialises §24 §00 S-5 line 456 follow-up; closes audit F-03; lifts Raw-LLM persona §23+§24 by ~5 each.)
 **AI Confidence:** Production-Ready
 **Ambiguity:** None
 
