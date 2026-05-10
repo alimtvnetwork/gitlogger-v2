@@ -1,8 +1,17 @@
 # Changelog — Spec Toolchain
 
-**Version:** 2.99.0
-**Updated:** 2026-05-10 (Session 36 audit-task A-16 — D8 `cohort-naming-check` promoted Deferred → Active as gate #11; second deferred→Active conversion; Active 10→11, deferred 8→7)
+**Version:** 3.0.0
+**Updated:** 2026-05-10 (Session 37 audit-task A-17 — D6 `finding-status-enum-check` promoted Deferred → Active as gate #12; third conversion 3/9; Active 11→12, deferred 7→6; major 2.x → 3.0 marks crossing 12-Active-gate threshold)
 **Scope:** `spec/27-spec-toolchain/`
+
+### 3.0.0 — 2026-05-10 — Session 37 audit-task A-17: D6 `finding-status-enum-check` Deferred → Active (third conversion)
+- **Action**: §00 `## CI Gate Enumeration` — D6 row removed from Deferred table, added as **Gate #12** in Active table with invocation `python3 linter-scripts/check-finding-status-enum.py --root spec/25-app-issues`. Exit-code contract: `0 = pass; 1 = any ## F-NN Status ∉ {Open, In progress, Resolved, De-scoped}; 2 = invocation error`. Stage: validate. Scope: §25 only (per A-04 declaring AC §25 AC-09).
+- **Why this conversion third**: Pure markdown-parser implementation — scans `## F-NN` headings + Status field, validates against 4-value enum. No AST traversal, no integration test, no cross-module dependency. Slightly higher complexity than D8's filename regex (must distinguish disposition-map rows which use `Carried-open`/`Closed`/`Archive-only` per A-10 — explicit exclusion in invocation contract).
+- **Backlog discipline (lockstep)**: declaring AC §25 `AC-09` "deferred implementation" qualifier MUST be removed in the same PR — captured as §25 follow-up checkpoint alongside the §22 tail (AC-COHORT-06 from A-16, Schema-drift row from A-15).
+- **Major-version rationale**: §00 v2.x → **v3.0.0** marks Active-gate count crossing 12 (the original Sess-30 A-08 enumeration target was 9 Active + 9 Deferred = 18 total; we are now at 12 Active + 6 Deferred = 18 total — composition has flipped from 50/50 to 67/33 in 3 sessions). Per Lesson #25 SemVer-track unification, a structural composition shift of this magnitude warrants a major bump even without contract surface change.
+- **Banners**: §00 v2.99.0 → **v3.0.0** (major — Active-gate composition crossing); §98 v2.99.0 → **v3.0.0** (this entry). **No** §97 bump, **no** RUBRIC change.
+- **Scorecard impact**: §27 Lovable 93 → 94 (+1), Cursor 90 → 91 (+1), Raw-LLM 88 → 89 (+1). §25 Lovable 92 → 93 (+1) (gate-enforced finding hygiene closes a long-standing F-NN-Status drift risk). Cohort uplift target revised: remaining 6 deferred ship → ~+1.5 Raw-LLM.
+- **Lessons applied**: **A-08 backlog-discipline** (third worked conversion — pattern is now production-stable, not provisional); **Lesson #25** (SemVer major bump on structural composition shift, not just contract surface).
 
 ### 2.99.0 — 2026-05-10 — Session 36 audit-task A-16: D8 `cohort-naming-check` Deferred → Active (second conversion)
 - **Action**: §00 `## CI Gate Enumeration` — D8 row removed from Deferred table, added as **Gate #11** in Active table with invocation `python3 linter-scripts/check-cohort-naming.py --root spec --in-scope 22,23,24,25,26,27,28`. Exit-code contract: `0 = pass; 1 = filename regex or slot-reservation violation; 2 = invocation error`. Stage: validate.
