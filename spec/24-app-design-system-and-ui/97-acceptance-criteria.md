@@ -1,7 +1,7 @@
 # Acceptance Criteria — 24 App Design System & UI
 
-**Version:** 3.4.0
-**Updated:** 2026-05-10 (Session 27 audit-task A-05 — added **AC-ADS-16** `[critical]` §07 dependency boundary promoted to normative + `restate_forbidden: true` front-matter binding; 5 binding rules + 4 test invariants. AC count 15 → 16.)
+**Version:** 3.4.1
+**Updated:** 2026-05-10 (Session 44 audit-task A-24 — lockstep tail sweep: AC-ADS-16 "Verifies" line stale "deferred implementation" qualifier for `derives-from-restate-check` retired in-place — gate now Active #15 per §27 §00 since Sess-40 A-20. No AC text/contract change; editorial-only patch bump.)
 **Updated-prev:** 2026-05-06 (Phase 154 C-Sweep — added **AC-ADS-14** `[critical]` Cross-Module Externalized Citation Map per Lessons #36 + #37; explicit normative anchor table for 2 externalized citations: spec/07 (primitive token registry), spec/27 (script gates). Mirror of spec/22 AC-79 pattern. AC count 13 → 14. spec/24's small citation surface reflects the strict-additive-overlay relationship to spec/07 — almost all design-system contracts already live in spec/07 by construction.)
 **Scope:** `spec/24-app-design-system-and-ui/`
 **Generated:** Hand-authored alongside the v4.0.0 overview (Phase 39a). Supersedes the auto-extracted v2.0.0 set.
