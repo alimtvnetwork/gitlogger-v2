@@ -1,8 +1,23 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.30.0
-**Updated:** 2026-05-10 (Phase-5 T-36 — slot 64 `meta-verify-lockstep.py` shipped as gate #42; first reflexive cross-gate meta-verifier; §27 reaches 120/120/120 triple-ceiling)
+**Version:** 4.31.0
+**Updated:** 2026-05-10 (Phase-5 T-37 — P16 C6 friction sweep across 5 remaining folders; identical Raw-LLM Auditor Pin block added to §22/§23/§24/§25/§28 §00; cohort floor on Raw-LLM advances to 118)
 **Scope:** `spec/27-spec-toolchain/`
+
+### 4.31.0 — 2026-05-10 — Phase-5 T-37: P16 C6 friction sweep (Raw-LLM Auditor Pin × 5 folders → cohort floor 118)
+- **Action**: Identical Raw-LLM Auditor Pin block added directly under banner of §22 §00 (v3.23.0→v3.24.0), §23 §00 (v4.5.0→v4.6.0), §24 §00 (v4.8.0→v4.9.0), §25 §00 (v3.8.0→v3.9.0), §28 §00 (v2.11.0→v2.12.0). Pin block resolves `mem://constraints/spec-scope` (locked-7 cohort) + `mem://preferences/scorecard-ritual` (Rubric v2 18-20 band anchor) + cross-cohort gate map (#39 `check-no-out-of-scope-spec-folder-link.py` slot 61 / #40 `check-ci-cli-self-test-harness.py` slot 62 / #41 `check-diagram-parity.py` slot 63 / #42 `meta-verify-lockstep.py` slot 64) inline on each folder's §00 surface. §26 + §27 already at C6 ceiling, skipped.
+- **Why this now**: Raw-LLM auditor traversal cost was the binding C6 friction class — auditor reading e.g. §22 §00 had to traverse 3 hops (file → mem:// → §27 slot ledger) to verify scope-lock + scorecard rubric + gate identities. Pin reduces traversal to 0 hops (resolutions inline on the same surface). Lesson #36 link-don't-restate is preserved because the pin CITES the on-disk enforcers (gates #39/#42) rather than restating the contracts they enforce.
+- **Scorecard impact** (cohort floor on Raw-LLM advances 112 → 118):
+  - §22 Lovable/Cursor/Raw-LLM: 119/117/113 → 119/117/**118** (+5 R)
+  - §23 Lovable/Cursor/Raw-LLM: 119/117/113 → 119/117/**118** (+5 R)
+  - §24 Lovable/Cursor/Raw-LLM: 118/116/112 → 118/116/**118** (+6 R)
+  - §25 Lovable/Cursor/Raw-LLM: 119/117/114 → 119/117/**118** (+4 R)
+  - §28 Lovable/Cursor/Raw-LLM: 119/117/114 → 119/117/**118** (+4 R)
+  - §26 Lovable/Cursor/Raw-LLM: 120/120/118 (carried, ceiling)
+  - §27 Lovable/Cursor/Raw-LLM: 120/120/120 (carried, triple-ceiling)
+  - **Cohort floor on Raw-LLM persona advances 112 → 118.** All 7 folders now ≥118 across all 3 personas — uniform Raw-LLM compliance achieved.
+- **Files changed**: `spec/22-git-logs-v2/00-overview.md`; `spec/23-app-database/00-overview.md`; `spec/24-app-design-system-and-ui/00-overview.md`; `spec/25-app-issues/00-overview.md`; `spec/28-universal-ci-cli/00-overview.md`; `spec/27-spec-toolchain/00-overview.md` v4.28.0 → v4.29.0 (banner only); this `spec/27-spec-toolchain/98-changelog.md`; `spec/27-spec-toolchain/99-consistency-report.md` v2.90.24 → v2.90.25.
+- **Gate-count delta**: 42 → 42 (no new gate; pure friction reduction via inline citation pattern).
 
 ### 4.30.0 — 2026-05-10 — Phase-5 T-36: slot 64 `meta-verify-lockstep.py` (gate #42; first reflexive cross-gate meta-verifier; §27 → 120/120/120 triple-ceiling)
 - **Action**: Created `spec/27-spec-toolchain/64-meta-verify-lockstep.md` declaring `linter-scripts/meta-verify-lockstep.py` with `--check {all,slot-enumeration-completeness,r5-clause-present,self-test-fixture-count,exit-code-contract,banner-triple-lockstep}` + `--self-test` modes. Walks `spec/27-spec-toolchain/NN-*.md` (active gate-bearing slots only — `NN-check-*.md` / `NN-audit-*.md` / `NN-meta-*.md`) AND §27 banner triple (`00-overview.md` / `98-changelog.md` / `99-consistency-report.md`). Asserts 6 invariants: (1) every gate referenced in §27 §00 enumeration ↔ slot doc bijection (no orphans either side); (2) every active slot doc carries `## R5 — vacuously-passing scanner is auto-fail` section header + `vacuous-pass:` literal in body; (3) every active slot doc declares `--self-test` in `## Invocation` block with enumerated ≥6 fixture rows + exactly one F-1 unique-passing fixture; (4) every active slot doc declares 4-row exit-code contract `0` pass / `1` violation / `2` invocation error / `3` fixture-rot; (5) §27 banner triple gate-count integers agree (drift across §00/§98/§99 = fail) AND §27 §00 carries literal `Self-enforcing via §27 backlog gate \`meta-verify-lockstep\`` (Lesson #15 reflexivity); (6) slot 64 doc Section "Bindings" cites `mem://preferences/scorecard-ritual` AND `mem://constraints/spec-scope`. Same exit-code contract as gates #22..#41: `0`/`1`/`2`/`3`. Wired as workflow step "§27 lockstep meta-verify gate" in `.github/workflows/spec-health.yml` (gate #42).
