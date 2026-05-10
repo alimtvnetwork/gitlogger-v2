@@ -65,8 +65,7 @@ python3 linter-scripts/check-ac-section-orphan-header.py --check section-name-un
 python3 linter-scripts/check-ac-section-orphan-header.py --self-test
 ```
 
-Exit codes: `0` pass · `1` violation · `2` invocation error · `3`
-fixture-rot.
+Exit codes: `0` pass · `1` violation · `2` invocation error · `3` fixture-rot.
 
 ## R5 — vacuously-passing scanner is auto-fail
 

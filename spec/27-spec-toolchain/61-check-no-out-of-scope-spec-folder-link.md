@@ -82,8 +82,7 @@ python3 linter-scripts/check-no-out-of-scope-spec-folder-link.py --check in-scop
 python3 linter-scripts/check-no-out-of-scope-spec-folder-link.py --self-test
 ```
 
-Exit codes: `0` pass · `1` violation · `2` invocation error · `3`
-fixture-rot.
+Exit codes: `0` pass · `1` violation · `2` invocation error · `3` fixture-rot.
 
 ## R5 — vacuously-passing scanner is auto-fail
 

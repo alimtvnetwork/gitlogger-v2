@@ -45,8 +45,7 @@ python3 linter-scripts/check-error-envelope-uniformity.py --check no-restate
 python3 linter-scripts/check-error-envelope-uniformity.py --self-test
 ```
 
-Exit codes: `0` pass · `1` violation · `2` invocation error · `3`
-fixture-rot (synthetic source missing; mirrors slot 39 / slot 27 A-22
+Exit codes: `0` pass · `1` violation · `2` invocation error · `3` fixture-rot (synthetic source missing; mirrors slot 39 / slot 27 A-22
 harness convention).
 
 ## R5 — vacuously-passing scanner is auto-fail

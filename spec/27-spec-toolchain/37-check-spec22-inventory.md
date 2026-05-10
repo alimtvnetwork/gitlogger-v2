@@ -25,15 +25,18 @@ python3 linter-scripts/check-spec22-inventory.py --check locked-vacant
 python3 linter-scripts/check-spec22-inventory.py --self-test
 ```
 
-Exit codes: `0` pass · `1` violation · `2` invocation error.
+Exit codes: `0` pass · `1` violation · `2` invocation error · `3` fixture-rot.
 
 ## R5 — vacuously-passing scanner is auto-fail
 
 Per the slot-36 R5 contract carried forward to slot 37, a scanner that
-returns 0 because it found no files to inspect is **itself a violation**.
+returns 0 because it found no files to inspect is **itself a violation**
+(`vacuous-pass: empty walk → exit 3 fixture-rot`).
 The `--self-test` mode is mandatory in CI: it asserts that the scanner
-correctly REJECTS three synthetic fixtures (complete-inventory passes;
-missing-`18-schema.sql` fails; locked-vacant slot 11 occupied fails).
+correctly REJECTS six synthetic fixtures: **F-1** complete-inventory passes;
+**F-2** missing-`18-schema.sql` fails; **F-3** locked-vacant slot 11 occupied
+fails; **F-4** duplicate slot number fails; **F-5** wrong-extension fails;
+**F-6** empty corpus fails as `vacuous-pass`.
 
 ## 5-link self-enforcement chain (A-44 template)
 
