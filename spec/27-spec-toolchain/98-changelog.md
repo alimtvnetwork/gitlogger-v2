@@ -1,8 +1,24 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.43.0
-**Updated:** 2026-05-10 (Phase-5 G-6a — slot 56 `check-rest-pascalcase-parity.py` shipped; gate #34 load-proven via `--self-test`, disk run wired warn-only)
+**Version:** 4.44.0
+**Updated:** 2026-05-10 (Phase-5 G-6a-followup — §23 §00 R-2 wire ↔ DDL reconciled; gate #34 disk run flipped warn-only → hard-fail; AC-ADB-REST-01 fully load-proven)
 **Total active gates: 23**
+
+### 4.44.0 — 2026-05-10 — Phase-5 G-6a-followup: §23 §00 R-2 wire ↔ DDL reconciliation; gate #34 hard-fail
+- **Action**: Edited §23 §00 § "REST / RPC Contract" R-1 / R-2 / R-3 / AC-ADB-REST-01 to align with PRIMARY-lane DDL column-name set:
+  - **App** response body: `{AppId, Name, RepoUrlCanonical, IsActive, CreatedAt, UpdatedAt}` → `{AppId, AppName, AppSlug, Description, ProfileId, AppStatusId, CreatedAt, UpdatedAt}` (matches the 8 columns in `## Inlined Contracts` § "DDL — App").
+  - **AppLink** response body: `{LinkId, AppId, DiscriminatorId, TargetKey, ResolutionState, IsActive, CreatedAt, DisconnectedAt}` → `{AppLinkId, AppId, AppLinkTypeId, TargetGitProfileId, TargetRepoId, IsActive, CreatedAt, DisconnectedAt}` (matches the 8 columns in `## Inlined Contracts` § "DDL — AppLink (polymorphic)"). `ResolutionState` retained on R-06 success body via the `{RepoUrl, ResolutionState}` request-only/response-only whitelist (closed enumeration `active|disconnected|orphaned` per § "Resolution states").
+  - **R-1 row R-06** returns updated `{AppId,LinkId,State}` → `{AppId,AppLinkId,ResolutionState}`; **R-1 row R-07** path+returns `{LinkId}` → `{AppLinkId}`.
+  - **R-3 envelope** `Field: "LinkId"` → `Field: "AppLinkId"`; message text updated `Link 17` → `AppLink 17`.
+  - **AC-ADB-REST-01 heading** gained ` [active]` status tag suffix (closes gate #34 clause-5 status-tag check).
+- **Mechanical re-verify**:
+  - `python3 linter-scripts/check-rest-pascalcase-parity.py` → **0 violations across all 6 clauses** (was 15: 14 × clause-2 wire ↔ DDL bijection drift + 1 × clause-5 missing status tag). All 5 wire-only-no-DDL tokens (`DiscriminatorId`, `LinkId`, `Name`, `RepoUrlCanonical`, `TargetKey`) and all 9 DDL-only-no-wire columns (`AppLinkId`, `AppLinkTypeId`, `AppName`, `AppSlug`, `AppStatusId`, `Description`, `ProfileId`, `TargetGitProfileId`, `TargetRepoId`) reconciled.
+  - Self-test still **6/6 fixtures pass**.
+  - `meta-verify-lockstep.py` still **0 violations**.
+- **Workflow flip**: `.github/workflows/spec-health.yml` step "§23 REST PascalCase parity gate" — second invocation flipped from `|| echo "::warning::..."` warn-only to **hard-fail**. CI now blocks any future PR that drifts §23 §00 R-2 / R-3 / R-1 / AC-ADB-REST-01 surface from the PRIMARY-lane DDL column-name set OR strips the Lesson #15 self-citation from R-4 invariant 1 OR introduces a parallel `## REST / RPC Contract` heading in §22/§24/§25.
+- **Phantom-script ledger**: unchanged at **25** (this turn is a §23 spec-side reconciliation; no new scripts).
+- **Scorecard impact**: §23 R-band Cursor **118 → 120** (C3 Testability +1 + C4 Consistency +1 — wire ↔ DDL bijection mechanically pinned with hard-fail enforcer); §23 R-band Raw-LLM **112 → 114** (C3 +1 + C4 +1, same delta-source). Lovable §23 already at 120 carried. AC-ADB-REST-01 promoted load-proven 20 → fully-load-proven 20 (no longer conditional on the warn-only disk-run dispensation).
+- **Bindings reaffirmed**: gate #34 (`check-rest-pascalcase-parity.py`) now hard-fail on disk; mechanism IS the cited self-enforcer in §23 §00 R-4 invariant 1. Triple-surface boolean parity (DB / wire / UI) still pending DB-side `check-boolean-uniformity-primary-lane.py` (G-6d) + §24 U-3 binding (G-8).
 
 ### 4.43.0 — 2026-05-10 — Phase-5 G-6a: slot 56 `check-rest-pascalcase-parity.py` shipped (gate #34 load-proven; phantom citations 26 → 25)
 - **Action**: Created `linter-scripts/check-rest-pascalcase-parity.py` (430 LOC, 6 clauses + R5 vacuous-pass + built-in `--self-test`). Implements the slot-56 contract: clause-1 PascalCase shape on every R-2 wire key (`^[A-Z][A-Za-z0-9]*$`, `Error`+`items` whitelisted); clause-2 wire ↔ DDL bijection on `App` + `AppLink` (modulo `{RepoUrl,ResolutionState}` request-only + `{Code,Message,Field,TraceId}` R-3 envelope whitelists); clause-3 boolean sample values restricted to `Is`-prefixed keys; clause-4 R-4 invariant 1 literal preservation incl. Lesson #15 self-citation `Self-enforcing via §27 backlog gate \`rest-pascalcase-parity-check\``; clause-5 AC-ADB-REST-01 surface presence (heading + `8-row R-1 endpoint matrix` + `R-4 invariants 1…` + `[active]`/`[deferred]`/`[archived]` status tag); clause-6 no-restate of `## REST / RPC Contract` heading in §22/§24/§25 (§22 `17-openapi.yaml` git-logs surface exempt). Same exit-code contract as gates #22..#33: `0`/`1`/`2`/`3`.
