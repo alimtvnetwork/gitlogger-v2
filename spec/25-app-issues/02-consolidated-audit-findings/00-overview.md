@@ -608,6 +608,7 @@ The `Last touched` column records **`max(last material edit, last freshness veri
 | Sweep session | Rows verified | Result | Next due |
 |---|---|---|---|
 | Sess-56 (A-46) | F-07, F-08, F-10, F-11, F-13, F-14, F-18, F-23 (all 8 Carried-open) | All still apply; no material change; F-08/F-18/F-23 remain pending F-02 cascade | Sess-57 (or next material edit, whichever is sooner) |
+| Sess-63 (A-53) | F-07, F-08, F-10, F-11, F-13, F-14, F-18, F-23 (all 8 Carried-open) | All still apply; no material change since Sess-56; F-08/F-18/F-23 still pending F-02 cascade resolution. Mechanically verified: §27 gate #21 `check-verification-ledger-cadence.py` (shipped this session) re-ran live and turned green after this row appended (drift 7→0). | Sess-64 (or next material edit, whichever is sooner) |
 
 **Disposition rollup.**
 
