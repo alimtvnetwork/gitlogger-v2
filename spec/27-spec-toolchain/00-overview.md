@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 3.2.0  
-**Updated:** 2026-05-10 (Session 39 audit-task A-19 — D2 `finding-vs-audit-distinction-check` promoted Deferred → Active as gate #14. Fifth deferred→Active conversion (5/9). Active gate count 13 → 14; deferred backlog 5 → 4. Compounds the A-17 markdown-parser pattern. Prior: Sess-38 A-18 D5 promotion.)
+**Version:** 3.3.0  
+**Updated:** 2026-05-10 (Session 40 audit-task A-20 — D7 `derives-from-restate-check` promoted Deferred → Active as gate #15. Sixth deferred→Active conversion (6/9). Active gate count 14 → 15; deferred backlog 4 → 3. Gate is now self-enforcing for the backlog-discipline meta-rule established in A-08. Last low-risk conversion; remaining D1/D3 are integration-test, D4 is AST-scan. Prior: Sess-39 A-19 D2 promotion.)
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
