@@ -21,8 +21,8 @@ produced_for:
 
 # App Design System & UI
 
-**Version:** 4.4.0
-**Updated:** 2026-05-10 (Session 55 audit-task A-36 — banner-only patch reflecting first native Rubric-v2 re-score landed in §98 v4.5.0; L 112 / C 112 / R 108. No contract change.)
+**Version:** 4.5.0
+**Updated:** 2026-05-10 (Session 55 audit-task A-37 — promoted AC-ADS-16 (+ AC-ADS-15 + AC-ADS-14) to a §00 Walker-Pin block mirroring §22 AC-78 pattern. Same-module §00↔§97 mirror only; no §97 contract change.)
 **AI Confidence:** Production-Ready
 <!-- h10-verified-phase: 153 -->
 **Ambiguity:** None
