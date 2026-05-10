@@ -19,9 +19,9 @@ produced_for:
 
 # Universal CI CLI — Spec Overview
 
-**Version:** 2.7.0  
+**Version:** 2.8.0  
 <!-- h10-verified-phase: 157 -->
-**Updated:** 2026-05-10 (Session 46 audit-task A-26 — `consumes:` front-matter resynchronised with §27 §00 "CI Gate Enumeration": 9 Active gates → 18 Active gates (A-08 → A-23 conversion arc). Adds gates #10-#18 by name + shipping-session citation; notes deferred backlog now empty (Sess-43); preserves Lesson #36 link-don't-restate (no gate semantics duplicated — names + session refs only). Closes a latent gate-#10 (`consumes-frontmatter-resolves`) drift risk where §28's manifest had been frozen at A-08 since Sess-31 while §27 shipped 9 new gates. Prior: Sess-31 A-09.)
+**Updated:** 2026-05-10 (Session 49 audit-task A-29 — added `produced_for:` producer-side front-matter binding 17-openapi-client.yaml/06-log-shipping-contract.md/07-error-catalog.md to §22 AC-40/AC-11/AC-30. Mirrors §26→§22 producer-side (A-27 Sess-47) and §24 producer-side (A-12 Sess-33). Resolved by §27 gate #10 dual-key contract (A-28 Sess-48). Lesson #36 preserved — AC titles as pointer-text only, no normative restatement. Prior: Sess-46 A-26.)
 **Status:** Draft  
 **AI Confidence:** Production-Ready  
 **Ambiguity:** Low  
