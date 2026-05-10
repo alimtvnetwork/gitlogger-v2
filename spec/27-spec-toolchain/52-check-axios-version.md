@@ -39,21 +39,25 @@ _(none)_
 
 | Code | Meaning |
 |------|---------|
-| 0 | pass — axios pinned to an approved exact version OR axios not declared (vacuous-pass) |
-| 1 | violation — blocked version, range symbol, or unknown exact version |
-| 2 | invocation-error — unknown CLI flag |
-| 3 | fixture-rot — `--self-test` self-check inconsistency (reserved; currently surfaced via exit 1 message) |
+| `0` | pass — axios pinned to an approved exact version OR axios not declared (vacuous-pass) |
+| `1` | violation — blocked version, range symbol, or unknown exact version |
+| `2` | invocation-error — unknown CLI flag |
+| `3` | fixture-rot — `--self-test` self-check inconsistency (reserved) |
+
+## R5 — vacuously-passing scanner is auto-fail
+
+A bare disk run on a repo without `axios` declared is a **vacuous-pass** path (returns `0` with no enforcement). To prevent this from masking a fixture-rot regression, gate #46 in `.github/workflows/spec-health.yml` ALWAYS runs `--self-test` first (six fixtures including the F-6 vacuous-pass anchor itself), and only then the live disk run. The self-test makes the vacuous-pass path explicitly load-proven rather than implicit.
 
 ## Self-test fixtures (Sess-66 G-6t)
 
 `--self-test` exercises six in-memory `package.json` fixtures via `mktemp -d`:
 
-- **F-1** AC-52-01 — `"axios": "^1.14.0"` (range) → MUST exit 1
-- **F-2** AC-52-02 — `"axios": "1.14.1"` (blocked) → MUST exit 1
-- **F-3** AC-52-03 — `"axios": "1.14.0"` (approved) → MUST exit 0
-- **F-4** AC-52-03 — `"axios": "0.30.3"` (approved, devDep path) → MUST exit 0
-- **F-5** AC-52-02 — `"axios": "0.30.4"` (blocked) → MUST exit 1
-- **F-6** R5 vacuous-pass — axios absent → MUST exit 0
+- **F-1** AC-52-01 — `"axios": "^1.14.0"` (range) → MUST exit `1`
+- **F-2** AC-52-02 — `"axios": "1.14.1"` (blocked) → MUST exit `1`
+- **F-3** AC-52-03 — `"axios": "1.14.0"` (approved) → MUST exit `0`
+- **F-4** AC-52-03 — `"axios": "0.30.3"` (approved, devDep path) → MUST exit `0`
+- **F-5** AC-52-02 — `"axios": "0.30.4"` (blocked) → MUST exit `1`
+- **F-6** R5 vacuous-pass — axios absent → MUST exit `0`
 
 
 ## Acceptance criteria
