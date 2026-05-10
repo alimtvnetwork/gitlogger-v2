@@ -574,32 +574,34 @@ See [`./lifecycle-25-app-issues-02-consolidated-audit-findings-lifecycle.mmd`](.
 
 **Map (F-01..F-24 → v2 disposition).**
 
-| ID | One-line topic | Disposition | v2 owner / successor | Notes |
-|---|---|---|---|---|
-| F-01 | REST endpoints not consolidated | Closed-by-§22 | `04-rest-api-endpoints.md` + `17-openapi.yaml` | v2 ships a canonical OpenAPI source-of-truth. |
-| F-02 | HMAC-vs-Argon2id contradiction | Closed-by-§22 | `05-auth-and-validation.md` + `31-ssh-key-auth.md` | v2 replaces per-repo HMAC with SSH-key auth; storage contradiction dissolved. |
-| F-03 | `RevokedJti` table undefined | Conditional | `02-database-schema.md` + `18-schema.sql` | Closed iff v2 retains JWT denylist; otherwise Irrelevant-in-v2. Verify in §22 schema files (A-11 follow-up). |
-| F-04 | 10/16 promised files absent | Irrelevant-in-v2 | §22 `99-consistency-report.md` | v2 inventory is whole; v1 inventory drift is archive-bound. |
-| F-05 | Governance trio missing | Closed-by-§22 | `97-acceptance-criteria.md` · `98-changelog.md` · `99-consistency-report.md` | v2 ships all three. |
-| F-06 | `error-codes.json` registry absent | Closed-by-§22 | `15-error-codes.md` | v2 publishes the canonical error catalog (markdown source-of-truth; JSON emitted by §27 toolchain). |
-| F-07 | Trusted-proxy CIDR option unspecified | Carried-open | `03-admin-ui.md` + `20-observability.md` | Verify v2 declares `gitlogs_trusted_proxies` (or v2 equivalent) and IP-resolution precedence. Open §22 backlog ticket if absent. |
-| F-08 | Refresh-token idempotency window | Carried-open | `05-auth-and-validation.md` | Carry only if v2 retains a refresh-token flow; otherwise reclassify Irrelevant-in-v2 jointly with F-03/F-24. |
-| F-09 | `Provider::GitLab` reserved-but-unrejected | De-scoped | Appendix Z | Already de-scoped; pointer retained. |
-| F-10 | 1 MB cap encoding/chunked-transfer silent | Carried-open | `04-rest-api-endpoints.md` + `46-server-upload-frames-endpoint.md` | Verify v2 specifies decompressed-byte cap and chunked-transfer behaviour for the upload-frames endpoint. |
-| F-11 | `traceId` precedence on conflicting headers | Carried-open | `20-observability.md` | Verify v2 states explicit `Traceparent` ↔ `X-Request-Id` precedence rule. |
-| F-12 | Indefinite log retention / no partitioning | Closed-by-§22 | `22-retention-and-pruning.md` + `39-split-db-log-storage.md` | v2 ships retention policy + split-DB log storage; partitioning concern dissolved at the architecture layer. |
-| F-13 | Rate-limit transient assumes ext object cache | Carried-open | `05-auth-and-validation.md` + `20-observability.md` | Verify v2 declares the rate-limit storage substrate (transient-vs-DB-vs-Redis) and an activation guard. |
-| F-14 | CORS / origin policy not declared | Carried-open | `04-rest-api-endpoints.md` + `30-threat-model.md` | Verify v2 declares an origin allow-list option and default stance. |
-| F-15 | Schema vs allowlist disagreement on `LogSenderTokenVerifier` | Closed-by-§22 | `02-database-schema.md` + `31-ssh-key-auth.md` | Closed jointly with F-02; v2 schema drops the disputed column. |
-| F-16 | Inventory orphan — `17-spec-consistency-checklist.md` | De-scoped | Appendix Z | Already de-scoped; pointer retained. |
-| F-17 | Ad-hoc API contracts inside non-API files | Closed-by-§22 | `04-rest-api-endpoints.md` + `17-openapi.yaml` | Closed jointly with F-01; OpenAPI source-of-truth absorbs scattered contracts. |
-| F-18 | JWKS key-rotation policy unspecified | Carried-open | `05-auth-and-validation.md` + `31-ssh-key-auth.md` | Reclassify Irrelevant-in-v2 if v2 fully replaces JWT/JWKS with SSH-key auth (verify before closure). |
-| F-19 | WP auth bridge undocumented | Closed-by-§22 | `25-headless-auth-notes.md` + `05-auth-and-validation.md` | v2 documents the headless-auth surface explicitly. |
-| F-20 | Admin UI specification missing | Closed-by-§22 | `03-admin-ui.md` | v2 ships the Admin-UI spec. |
-| F-21 | Coding-guidelines-applied missing | Irrelevant-in-v2 | §24 design-system + §27 toolchain | Cross-cutting guideline application is owned by §24 (design system / UI rules) and §27 (toolchain enforcement) in the v2 cohort; per-folder applied-guidelines docs are not part of the v2 contract. |
-| F-22 | AC roll-up missing | Closed-by-§22 | `97-acceptance-criteria.md` + `49..59-ac-*-detail.md` | v2 publishes the canonical AC roll-up plus per-section AC-detail files. |
-| F-23 | `User-Agent` in refresh fingerprint | Carried-open | `05-auth-and-validation.md` | Carry jointly with F-08; reclassify Irrelevant-in-v2 if v2 drops the refresh-token model. |
-| F-24 | `RevokedJti` purge cadence | Conditional | `22-retention-and-pruning.md` | Disposition follows F-03: Closed-by-§22 if v2 retains the denylist (purge owned by retention policy); otherwise Irrelevant-in-v2. |
+The `Last touched` column records the spec-improvement session in which the row was last materially edited (disposition change, owner change, or notes change ≥ 1 sentence). Editorial-only edits (typo, link rename) do NOT bump it. This column is the input signal for §27 deferred lint rule **D5 `cohort-orphaned-finding`** (declared by A-03 / J-5): any `Carried-open` row whose `Last touched` is more than **1 spec-improvement session** older than the current session triggers a §22 backlog warning. A-10 (Sess-31) wires this signal into the table; D5 implementation in §27 is still deferred.
+
+| ID | One-line topic | Disposition | v2 owner / successor | Last touched | Notes |
+|---|---|---|---|---|---|
+| F-01 | REST endpoints not consolidated | Closed-by-§22 | `04-rest-api-endpoints.md` + `17-openapi.yaml` | Sess-24 | v2 ships a canonical OpenAPI source-of-truth. |
+| F-02 | HMAC-vs-Argon2id contradiction | Closed-by-§22 | `05-auth-and-validation.md` + `31-ssh-key-auth.md` | Sess-24 | v2 replaces per-repo HMAC with SSH-key auth; storage contradiction dissolved. |
+| F-03 | `RevokedJti` table undefined | Conditional | `02-database-schema.md` + `18-schema.sql` | Sess-24 | Closed iff v2 retains JWT denylist; otherwise Irrelevant-in-v2. Verify in §22 schema files (A-11 follow-up). |
+| F-04 | 10/16 promised files absent | Irrelevant-in-v2 | §22 `99-consistency-report.md` | Sess-24 | v2 inventory is whole; v1 inventory drift is archive-bound. |
+| F-05 | Governance trio missing | Closed-by-§22 | `97-acceptance-criteria.md` · `98-changelog.md` · `99-consistency-report.md` | Sess-24 | v2 ships all three. |
+| F-06 | `error-codes.json` registry absent | Closed-by-§22 | `15-error-codes.md` | Sess-24 | v2 publishes the canonical error catalog (markdown source-of-truth; JSON emitted by §27 toolchain). |
+| F-07 | Trusted-proxy CIDR option unspecified | Carried-open | `03-admin-ui.md` + `20-observability.md` | Sess-24 | Verify v2 declares `gitlogs_trusted_proxies` (or v2 equivalent) and IP-resolution precedence. Open §22 backlog ticket if absent. |
+| F-08 | Refresh-token idempotency window | Carried-open | `05-auth-and-validation.md` | Sess-24 | Carry only if v2 retains a refresh-token flow; otherwise reclassify Irrelevant-in-v2 jointly with F-03/F-24. |
+| F-09 | `Provider::GitLab` reserved-but-unrejected | De-scoped | Appendix Z | Sess-24 | Already de-scoped; pointer retained. |
+| F-10 | 1 MB cap encoding/chunked-transfer silent | Carried-open | `04-rest-api-endpoints.md` + `46-server-upload-frames-endpoint.md` | Sess-24 | Verify v2 specifies decompressed-byte cap and chunked-transfer behaviour for the upload-frames endpoint. |
+| F-11 | `traceId` precedence on conflicting headers | Carried-open | `20-observability.md` | Sess-24 | Verify v2 states explicit `Traceparent` ↔ `X-Request-Id` precedence rule. |
+| F-12 | Indefinite log retention / no partitioning | Closed-by-§22 | `22-retention-and-pruning.md` + `39-split-db-log-storage.md` | Sess-24 | v2 ships retention policy + split-DB log storage; partitioning concern dissolved at the architecture layer. |
+| F-13 | Rate-limit transient assumes ext object cache | Carried-open | `05-auth-and-validation.md` + `20-observability.md` | Sess-24 | Verify v2 declares the rate-limit storage substrate (transient-vs-DB-vs-Redis) and an activation guard. |
+| F-14 | CORS / origin policy not declared | Carried-open | `04-rest-api-endpoints.md` + `30-threat-model.md` | Sess-24 | Verify v2 declares an origin allow-list option and default stance. |
+| F-15 | Schema vs allowlist disagreement on `LogSenderTokenVerifier` | Closed-by-§22 | `02-database-schema.md` + `31-ssh-key-auth.md` | Sess-24 | Closed jointly with F-02; v2 schema drops the disputed column. |
+| F-16 | Inventory orphan — `17-spec-consistency-checklist.md` | De-scoped | Appendix Z | Sess-24 | Already de-scoped; pointer retained. |
+| F-17 | Ad-hoc API contracts inside non-API files | Closed-by-§22 | `04-rest-api-endpoints.md` + `17-openapi.yaml` | Sess-24 | Closed jointly with F-01; OpenAPI source-of-truth absorbs scattered contracts. |
+| F-18 | JWKS key-rotation policy unspecified | Carried-open | `05-auth-and-validation.md` + `31-ssh-key-auth.md` | Sess-24 | Reclassify Irrelevant-in-v2 if v2 fully replaces JWT/JWKS with SSH-key auth (verify before closure). |
+| F-19 | WP auth bridge undocumented | Closed-by-§22 | `25-headless-auth-notes.md` + `05-auth-and-validation.md` | Sess-24 | v2 documents the headless-auth surface explicitly. |
+| F-20 | Admin UI specification missing | Closed-by-§22 | `03-admin-ui.md` | Sess-24 | v2 ships the Admin-UI spec. |
+| F-21 | Coding-guidelines-applied missing | Irrelevant-in-v2 | §24 design-system + §27 toolchain | Sess-24 | Cross-cutting guideline application is owned by §24 (design system / UI rules) and §27 (toolchain enforcement) in the v2 cohort; per-folder applied-guidelines docs are not part of the v2 contract. |
+| F-22 | AC roll-up missing | Closed-by-§22 | `97-acceptance-criteria.md` + `49..59-ac-*-detail.md` | Sess-24 | v2 publishes the canonical AC roll-up plus per-section AC-detail files. |
+| F-23 | `User-Agent` in refresh fingerprint | Carried-open | `05-auth-and-validation.md` | Sess-24 | Carry jointly with F-08; reclassify Irrelevant-in-v2 if v2 drops the refresh-token model. |
+| F-24 | `RevokedJti` purge cadence | Conditional | `22-retention-and-pruning.md` | Sess-24 | Disposition follows F-03: Closed-by-§22 if v2 retains the denylist (purge owned by retention policy); otherwise Irrelevant-in-v2. |
 
 **Disposition rollup.**
 
