@@ -19,9 +19,9 @@ produced_for:
 
 # Universal CI CLI — Spec Overview
 
-**Version:** 2.9.0  
+**Version:** 2.10.0  
 <!-- h10-verified-phase: 157 -->
-**Updated:** 2026-05-10 (Session 55 audit-task A-38 — banner-only patch reflecting first native Rubric-v2 re-score landed in §98 [2.9.0]; L 112 / C 111 / R 107. No contract change.)
+**Updated:** 2026-05-10 (Session 55 audit-task A-39 — added AI Quick-Nav Map header (Lesson #88), mirroring §22 pattern; expected lift §28 R C6 17→18. Banner-only patch; no contract change.)
 **Status:** Draft  
 **AI Confidence:** Production-Ready  
 **Ambiguity:** Low  
