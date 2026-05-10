@@ -1,12 +1,23 @@
 # Changelog — Gitlogs Diagrams
 
-**Version:** 3.9.0
-**Updated:** 2026-05-10 (Session 32 A-11 — added `consumes:` front-matter on §00 binding each `.mmd` to its §22 source-of-truth AC/file, mirroring the §28→§27 (A-09) and §25→§27 (A-10) consumer-binding pattern)
+**Version:** 3.10.0
+**Updated:** 2026-05-10 (Session 47 audit-task A-27 — added `produced_for:` block on §00 declaring each `.mmd` as the canonical depiction of a specific §22 AC; mirrors §24 producer-side from A-12, Sess-33; closes bidirectional link begun by A-11)
 **Scope:** `spec/26-gitlogs-diagrams/`
 
 ---
 
-## [3.9.0] — 2026-05-10 — Session 32 (A-11): §22 source-of-truth binding via `consumes:` front-matter
+## [3.10.0] — 2026-05-10 — Session 47 audit-task A-27: producer-side `produced_for:` binding (closes A-11 reciprocity)
+
+- **Added** `produced_for:` block to `00-overview.md` front-matter — 7 entries, one per active `.mmd` (slots 01, 05, 06, 07, 08, 09, 10), each declaring `fulfills: spec/22-git-logs-v2 §97 AC-NN "<role>"` to mark the diagram as the canonical depiction of that AC.
+- **Why this now**: First v2-native uplift (Rubric v2, A-25) for §26, the cohort-floor folder. A-11 (Sess-32) shipped the consumer side (`consumes:` — diagram → source AC); A-27 ships the producer side (`produced_for:` — AC → depicting diagram). Together they satisfy gate #10 (`consumes-frontmatter-resolves`) producer/consumer reciprocity and let a §22 AC reader resolve forward to the canonical visual depiction. The pattern mirrors §24 producer-side from A-12 (Sess-33).
+- **Friction (C6) win**: doc-to-code traceability now bidirectional. Implementer reading §22 AC-23 (schema catalog) can now resolve forward to `01-er-diagram.mmd` as the canonical depiction; previously the link existed only from diagram → AC. This is the same Friction class that drove A-26's §28 manifest resync.
+- **Lesson #36 preservation**: front-matter declares the binding only — no §22 AC text restated; `fulfills:` strings are short-form role labels.
+- **Bindings (7 rows)**: 01-er-diagram → AC-23 (schema catalog); 05-auth-validation → AC-08 (TempToken Lane A); 06-permission-flow → AC-11 (RBAC union); 07-rate-limit-flow → AC-13 (token-bucket); 08-encryption-v3-flow → AC-15 (deferred v3 encryption); 09-endpoints-mindmap → AC-04 (REST endpoints); 10-ssh-auth-validation → AC-09 (SSH Lane B).
+- **Banners**: §00 v3.8.0 → **v3.9.0** (minor — new front-matter contract surface); §98 v3.9.0 → **v3.10.0** (this entry). §97 unchanged (no AC text edit). §99 lockstep update deferred to next §97 touch (mechanical).
+- **Scorecard impact**: §26 C4 Consistency +2 (bidirectional binding now resolves both directions), C6 Friction +2 (AC-side reverse-lookup restored). §22 C6 Friction +1 transitively (AC readers gain forward-resolution to depicting diagrams).
+- **No** new AC, **no** CI workflow change, **no** restatement of §22 invariants (Lesson #36), **no** gate addition.
+
+
 
 - **Added** `consumes:` block to `00-overview.md` front-matter — 7 entries, one per active `.mmd` (slots 01, 05, 06, 07, 08, 09, 10), each citing the canonical §22 file + AC/section the diagram depicts.
 - **Why:** Mirror-pair with §28→§27 (A-09, Sess 31) and §25→§27 (A-10, Sess 31) — establishes spec/26 as a *consumer* of §22's normative architecture so deferred lint rule §27 D9 `consumes-frontmatter-resolves` has a parseable signal for spec/26. Drift between any `.mmd` and its cited `source` is now classified under existing AC-DG-01 (table-coverage) / AC-DG-02 (cardinality-alignment).
