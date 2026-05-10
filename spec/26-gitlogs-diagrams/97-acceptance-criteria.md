@@ -206,7 +206,7 @@ GL_REJECT_CODE_FORMAT:     GL-{CATEGORY}-{NAME} (e.g. GL-AUTH-INVALID-TOKEN)
 - **Then** the file MUST contain, in this exact order, four `%%`-prefixed comment lines as the first four non-blank lines:
   1. `%% Diagram type: <flowchart TD|erDiagram|sequenceDiagram|mindmap|...>` — exact Mermaid directive name; MUST match the directive that follows.
   2. `%% What this answers: <one-sentence reader question>` — ≤120 chars.
-  3. `%% Source spec: <relative path to the §22 file this diagram depicts>` — MUST resolve from repo root; for multi-source diagrams, list the primary first followed by `(+ N more)`.
+  3. `%% Authoritative source: <relative path to the §22 file this diagram depicts>` — MUST resolve from repo root; for multi-source diagrams, list the primary first followed by ` + <next path>` on the same or continuation line. (Key spelling matches the pre-existing v2.0.0 convention shipped across all 9 active `.mmd` files; do NOT use `%% Source spec:`.)
   4. `%% Audience: <diagram-authors|spec-readers|implementers|auditors>` — single token from the enum.
 - Optional 5th line `%% Re-render: mmdc -i <self> -o <self.svg> -p puppeteer.json -b transparent` MAY be present (recommended for ER + mindmap diagrams).
 - Blank lines between the header block and the directive are permitted. Comment lines that violate the order, omit any of the 4 keys, or use non-canonical key spelling (e.g. `%% Type:` instead of `%% Diagram type:`) MUST fail this AC.
