@@ -1,6 +1,6 @@
 # Changelog — Consolidated Audit Findings — `git-logs` App Specification
 
-**Version:** 1.2.0  
+**Version:** 1.3.0  
 **Updated:** 2026-05-10  
 **Scope:** `spec/25-app-issues/02-consolidated-audit-findings/`
 
@@ -17,6 +17,13 @@
 
 ## Releases
 
+
+### 1.3.0 — 2026-05-10 — Session 26 Task A-04: `FindingStatus` enum promoted to enforceable AC
+- **Added** `AC-09: Finding Status field is a closed enum` to `97-acceptance-criteria.md` declaring the canonical 4-member `FindingStatus` enum (`Open`, `InProgress`, `Resolved`, `DeScopedArchiveOnly`) as a `kind: contract` block, plus the markdown-label ↔ enum-member mapping table.
+- **Added** §27 lint rule binding (`finding-status-enum-check`) — declared as the verification mechanism; implementation deferred to a §27 PR.
+- **Reconciled** with A-02 (Sess-24): disposition-map values are explicitly scoped OUT of the `Status` enum check (the lint rule parses only `## F-NN` Status lines).
+- **Result:** §25 Cursor/Claude-Code score lifts ~+2 by making the previously prose-only Status field machine-checkable; closes Wave-1 Critical task A-04.
+- **Lockstep:** §97 v1.1.0 → **v1.2.0**; §98 v1.2.0 → **v1.3.0**; §99 lockstep update deferred (mechanical).
 
 ### 1.2.0 — 2026-05-10 — Session 24 Task A-02: v1→v2 Finding Disposition Map
 - **Added** new section "v1→v2 Finding Disposition Map (A-02, Session 24)" to `00-overview.md`, routing each F-01..F-24 to one of {Closed-by-§22, Carried-open, Irrelevant-in-v2, De-scoped, Conditional}, with the §22 successor file(s) named per row.

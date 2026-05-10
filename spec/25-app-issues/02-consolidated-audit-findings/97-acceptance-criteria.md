@@ -1,7 +1,7 @@
 # Acceptance Criteria — Consolidated Audit Findings — `git-logs` App Specification
 
-**Version:** 1.1.0  
-**Updated:** 2026-04-29  
+**Version:** 1.2.0  
+**Updated:** 2026-05-10  
 **Scope:** `spec/25-app-issues/02-consolidated-audit-findings/`
 
 ---
@@ -72,6 +72,41 @@ This document defines testable acceptance criteria for the **Consolidated Audit 
 - **Source:** `linter-scripts/check-lockstep.cjs`.
 - **Verifies:** `linter-scripts/check-lockstep.cjs` §strict date+phase parity
 
+
+---
+
+### AC-09: Finding `Status` field is a closed enum (A-04, Session 26)
+
+- **Given** every `F-NN` finding row in `00-overview.md` (active table + Appendix Z stubs)
+- **When** the `Status` field is parsed
+- **Then** its value MUST be one of the four enum members declared in the canonical contract block below — no free-form strings, no aliases, no synonyms. Any other value is a `finding-status-enum-violation` lint failure (blocks merge).
+
+**Canonical contract — `FindingStatus` enum** (kind: contract; source-of-truth for §27 lint rule `finding-status-enum-check`):
+
+```yaml
+# Closed enum — extending requires §25 §97 AC-09 amendment + §98 changelog entry + §99 lockstep.
+FindingStatus:
+  - Open                       # default — awaiting remediation
+  - InProgress                 # PR open or active work; rendered as "In progress" in markdown prose
+  - Resolved                   # fix landed; row retained for traceability with closing-commit link
+  - DeScopedArchiveOnly        # target lives under spec/_archive/ and outside scope-lock; rendered as "De-scoped (archive-only)"
+```
+
+**Markdown ↔ enum mapping** (the markdown prose label is the human-readable form; the enum member is the lint key):
+
+| Markdown label (prose) | Enum member (lint key) | Counts toward active rollup? |
+|---|---|---:|
+| `Open` | `Open` | Yes |
+| `In progress` | `InProgress` | Yes |
+| `Resolved` | `Resolved` | Yes (kept for traceability; severity unchanged) |
+| `De-scoped (archive-only)` | `DeScopedArchiveOnly` | **No** (collapses to 1-line stub per §00 "How to Use" table) |
+
+**Detection.** §27 toolchain rule `finding-status-enum-check` parses every `**Status:**` line under an `F-NN` heading in `00-overview.md` and asserts `value ∈ {Open, In progress, Resolved, De-scoped (archive-only)}`. Disposition values from the v1→v2 disposition map (A-02) are scoped to the disposition table only and are NOT counted as `Status` values — the lint rule MUST scope its parse to `## F-NN` sections.
+
+**Reconciliation.** Supersedes the prior F-16 prose-table treatment (now de-scoped in Appendix Z). The "How to Use This Document" table in `00-overview.md` (line 27) describes the same four values in prose; this AC promotes that prose to a machine-checkable contract.
+
+- **Source:** `00-overview.md` `## How to Use This Document` Status row · `00-overview.md` `## v1→v2 Finding Disposition Map` (A-02) · §27 toolchain `finding-status-enum-check` lint rule (to be implemented).
+- **Verifies:** §00 Status enum (4 members, closed) · §27 `finding-status-enum-check` lint rule · A-02 disposition-map scoping invariant.
 
 ---
 
