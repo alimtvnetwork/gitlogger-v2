@@ -25,8 +25,8 @@ consumes:
 # App Database
 
 <!-- h10-verified-phase: 153 -->
-**Version:** 4.3.0
-**Updated:** 2026-05-10 (Session 34 audit-task A-14 — expanded `consumes:` front-matter from 1 to 6 entries citing §22 schema/auth/error/permission files; closes the consumer-side binding-graph coverage on §23 so deferred lint §27 D9 reaches all in-scope cohort folders. Mirror of A-11/A-09.)
+**Version:** 4.4.0
+**Updated:** 2026-05-10 (Session 64 audit-task A-53 / Phase-5 T-01 — added "Implementation Target Precedence (Normative)" pin at §00 + escalated REFERENCE-lane PG section header to `🚫 REFERENCE-ONLY … DO NOT MATERIALISE`. Closes audit F-23-01 silent-conflict risk for context-bounded walkers; cohort blind-fail P projection 0.999 → ~0.92.)
 **AI Confidence:** Production-Ready
 **Ambiguity:** None
 
