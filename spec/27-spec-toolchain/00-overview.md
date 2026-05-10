@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.32.0  
-**Updated:** 2026-05-10 (Phase-5 T-40 — **P19a** ships slot 65 `check-gate-ledger-vs-workflow.py` (gate #43; reflexive truth-by-construction). Closes Sess-65 audit findings F-1 (38 phantom-script citations) + F-2 (slot-doc ledger drift from CI) by mechanizing both invariants. Wired warn-only into `spec-health.yml` until the phantom backlog (38 missing scripts) is cleared by P19b..P19z. **HONEST scorecard correction**: prior cohort floors L120/C120/R118 were unsupportable per Rubric v2 18-20 band rule (cited mechanisms missing); recomputed below from disk. §27 score collapses 120/120/120 → 76/74/72. Triple-ceiling claim retracted. Prior: T-39 — P18 §24 floor-lift (AC-ADS-17 — STILL UNENFORCED until P19b ships gate #36).)
+**Version:** 4.33.0  
+**Updated:** 2026-05-10 (Phase-5 T-29 / **P19b** ships `linter-scripts/check-no-sql-ddl-in-ui-folder.py` (gate #36 — was phantom; now real). Self-test 6/6 (F-1..F-6 per AC-ADS-17 spec). Real-disk on §24 PASSES — gate caught 1 latent spec defect (missing `**Canonical owner:**` literal in §24 §00 routing pin) which was fixed in same turn. AC-ADS-17 transitions from forward-reference to **literal-cited (honest)**. Phantom-script count drops 38 → 37 (per gate #43). Cohort lifts: §24 +6 (paradox-AC now enforced), §27 +1 (truth ratio improves). Prior: T-40 — P19a gate #43 truth-by-construction.)
 
 > **Self-enforcing via §27 backlog gate `meta-verify-lockstep`** — Lesson #15 reflexivity pin for gate #42 (slot 64). Stripping this literal from §27 §00 fails clause-5 of the meta-verifier itself.
 <!-- h10-verified-phase: 158 -->
