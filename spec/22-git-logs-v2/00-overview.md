@@ -35,6 +35,32 @@ axis_rationale: "Git Logs WordPress plugin enforceable spec"
 
 ---
 
+## AI Quick-Nav Map (Lesson #88 — sprawl navigation aid)
+
+> 60 files / ~1 MB. Grouped by theme so a context-bounded agent (Lovable / Cursor / Raw-LLM) can locate the right entry file in one glance without loading the full bundle. Pure index — no normative content; canonical contracts remain in §97 and the cited files.
+
+| Theme | Entry files | Purpose |
+|---|---|---|
+| **Schema & data model** | `01-glossary-and-enums.md`, `02-database-schema.md`, `16-seed-data.md`, `18-schema.sql`, `51-ac-enum-catalog-detail.md` | Tables, enums, seed rows, canonical DDL |
+| **REST surface** | `04-rest-api-endpoints.md`, `14-endpoint-examples.md`, `15-error-codes.md`, `17-openapi.yaml`, `57-ac-section-d-endpoints-detail.md` | HTTP endpoints, payloads, error codes |
+| **Plugin runtime (PHP)** | `03-admin-ui.md`, `05-auth-and-validation.md`, `06-migrations-and-logger.md`, `07-app-entity.md`, `08-history-and-action.md`, `19-permission-matrix.md`, `20-observability.md`, `59-ac-section-e-logger-detail.md` | WordPress admin UI, auth, logger, permissions |
+| **Operations** | `22-retention-and-pruning.md`, `23-backup-restore.md`, `24-multisite.md`, `29-uninstall-policy.md`, `58-ac-section-e-multisite-detail.md` | Lifecycle, multisite, retention |
+| **Security** | `25-headless-auth-notes.md`, `30-threat-model.md`, `31-ssh-key-auth.md` | Threat model, SSH keys, headless auth |
+| **CLI client** | `40-cli-overview.md`, `41-cli-pointer-file-schema.md`, `42-cli-classifier-rules.md`, `43-cli-upload-protocol.md`, `44-cli-autofix-protocol.md`, `45-cli-test-plan.md`, `54-ac-j-series-cli-detail.md` | Companion CLI binary spec |
+| **Server-side CLI endpoints** | `46-server-upload-frames-endpoint.md`, `47-server-autofix-endpoint.md`, `48-server-refresh-pointer-endpoint.md`, `52-ac-k-series-server-detail.md` | Upload/autofix/refresh frame endpoints |
+| **Tests & CI** | `28-example-github-actions.md`, `32-cli-test-plan.md`, `33-bats-test-skeleton.md`, `34-phpunit-test-skeleton.md`, `35-reference-ci-yml.md`, `38-test-plan-superseded.md` | Test fixtures, CI workflows |
+| **Docs & narrative** | `26-readme-and-screenshots.md`, `27-wp-cli-reference.md`, `36-why-v1-archived.md`, `37-blind-ai-gap-analysis.md`, `39-split-db-log-storage.md` | Reader-facing docs, history, gap analyses |
+| **AC detail files** | `49-ac-section-a-detail.md`, `50-ac-delegation-maps-detail.md`, `53-ac-section-e-detail.md`, `55-ac-section-d-detail.md`, `56-ac-section-d-constraints-detail.md` | Promoted AC bodies (auditor-visible §97 satellites) |
+| **Authoritative & meta** | `97-acceptance-criteria.md`, `98-changelog.md`, `99-consistency-report.md` | All ACs · version history · health report |
+| **Locked-vacant** | slots `09–13` | Intentionally absent per AC-22-LV1 — do NOT fill |
+
+**Entry-point heuristics:**
+- New to §22? Read `00-overview.md` (this file) → `97-acceptance-criteria.md` → §99 inventory.
+- Implementing an endpoint? Start at the REST or CLI-endpoint row.
+- Debugging an audit finding? Read AC-78 + AC-22-LV1 in the Walker-Pin block above.
+
+---
+
 ## Walker-Cap Finding Disposition (Normative)
 
 > Mirrors AC-78's full body into §00 so any context-bounded auditor that exhausts its byte budget on tier-1 files reads the contract before flagging duplicate findings. **Internal mirror only** — Lesson #36 forbids cross-module restatement; same-module §00↔§97 mirroring is permitted and required for harness-saturated modules (Lesson #65 + #71-#74; precedent: spec/13 P3 §10/§18 mirror, spec/27 AC-T-34, spec/05 AC-SD-21 walker fix).
