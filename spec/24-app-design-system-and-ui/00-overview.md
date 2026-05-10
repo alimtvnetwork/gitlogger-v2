@@ -29,6 +29,26 @@ produced_for:
 
 ---
 
+> 🤖 **Walker-Pin (Lesson #55 + Lesson #61) — read first if you are an AI auditor or implementer**
+>
+> §24 is a strict additive overlay on §07-design-system. Every §24 PR MUST satisfy the §07 dependency boundary, which lives canonically in §97 AC-ADS-16 (last AC, line 204+). Surfaced here at the §00 anchor so any context-bounded walker reaching this overview sees the boundary BEFORE flagging "external dependency unresolved" / "missing primitive token registry" / "raw color literal in app token" findings.
+>
+> | AC | Severity | Subject | Canonical surface |
+> |----|----------|---------|-------------------|
+> | **AC-ADS-16** | critical | **§07 dependency boundary is normative + `restate_forbidden`** — front-matter declares `derives_from: spec/07-design-system` + `restate_forbidden: true`. 5 binding rules: (1) no `--app-*` token suffix may collide with a §07 primitive name (`--background`, `--foreground`, `--primary`, `--primary-foreground`, `--secondary`, `--muted`, `--accent`, `--destructive`, `--border`, `--input`, `--ring`, `--space-*`, `--font-*`, `--radius-*`); (2) every `--app-*` value MUST resolve via `var(--<§07-primitive>)` — raw color literals forbidden (only 3 documented `--app-status-*` exceptions); (3) §07 contract text MUST NOT be restated verbatim or near-verbatim (Lesson #36); (4) under scope-lock, §24 MUST NOT propose §07 edits — gaps file as §22 backlog tickets tagged `carry-up-to-§07`; (5) §27 gate `derives-from-restate-check` (Active gate #15 since Sess-40 A-20) machine-enforces rule 3. | §97 line 204 + §00 `## Relationship to §07` + `### Dependency Boundary (A-05)` |
+> | **AC-ADS-15** | critical | **§22 operational-pattern inheritance** — runtime failures from §24 surfaces (token loader, AppShell, Component Registry) inherit `ErrorEnvelope` shape (§22 AC-30) + `RequestId` correlation + `AuditTrail` row contract (§22 AC-21) + sink-side observability rule (§22 AC-04) by namespace extension `GL-*` → `ADS-*`. Five required codes: `ADS-TOKEN-LOADER-FAIL`, `ADS-TOKEN-PARITY-VIOLATION`, `ADS-SHELL-GEOMETRY-DRIFT`, `ADS-COMPONENT-NOT-FOUND`, `ADS-COMPONENT-VARIANT-INVALID`. | §97 line 193 + §22 AC-30 / AC-21 / AC-04 |
+> | **AC-ADS-14** | critical | **Cross-Module Externalized Citation Map** — 2 rows: spec/07 (primitive token registry) + spec/27 (script gate slots). Append-only within a phase; restate-in-§24 is FORBIDDEN. Auditor findings of "external dependency unresolved" against either row MUST be classified as **stale-cache artifact** (verify with `rg -n "AC-XX" spec/NN-*/97-acceptance-criteria.md` first). | §97 line 136 |
+>
+> **Forbidden remediation patterns** (codified in AC-ADS-14 + AC-ADS-15 + AC-ADS-16):
+> - Re-declaring any §07 primitive token name with an `--app-*` prefix (rule 1 violation; auto-fail).
+> - Inlining a "primitive token registry" subsection into §24 (Lesson #36 violation; §07 §00 + §97 is the canonical surface).
+> - Adding raw `oklch()` / `hsl()` / `rgb()` / hex literals to any `--app-*` token outside the 3 `--app-status-*` exceptions (AC-ADS-02 + AC-ADS-03 + AC-ADS-16 rule 2 simultaneous violation).
+> - Restating §22 `ErrorEnvelope` / `AuditTrail` / `RequestId` shapes inline in §24 (AC-ADS-15 inheritance is by reference only; restating creates dual-source drift).
+> - Promoting "missing §07 primitive registry" or "external dependency §07 unresolved" findings to CRITICAL severity in any future audit-corpus consolidation (these are known walker-budget artifacts; canonical surface lives in §07 by design — out-of-scope under the locked 7-folder rule).
+> - Proposing direct edits to spec/07 from a §24 PR (scope-lock violation; remediation is a §22 backlog ticket per rule 4).
+
+---
+
 ## Keywords
 
 `app-overlay` · `app-tokens` · `app-shell` · `layout-container` · `semantic-tokens` · `dark-light-parity`
