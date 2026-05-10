@@ -145,9 +145,16 @@ def clause_s1_s2_coverage(s: Surface) -> list[str]:
         else:
             for r in cited:
                 key = f"R-{r}"
-                if key not in s2_rs:
-                    errs.append(f"clause-1: §24 §00 S-1 row {sid} cites "
-                                f"{key} which is absent from S-2 matrix")
+                if key in s2_rs:
+                    continue
+                # Accept R-NN cites that resolve to §23 §00 R-1 endpoint
+                # matrix (S-04 reuses §23 endpoints by design — S-2 is the
+                # settings-specific extension, not the universe).
+                if s.db and re.search(rf"\bR-{r}\b", s.db):
+                    continue
+                errs.append(f"clause-1: §24 §00 S-1 row {sid} cites "
+                            f"{key} which is absent from S-2 matrix "
+                            f"AND from §23 §00 R-1 endpoint matrix")
 
     # every R-NN in S-2 must be cited by at least one S-NN OR be R-09/R-10
     # (merged seed read + override write — bound to all panels implicitly)
