@@ -1,7 +1,9 @@
 # Consistency Report — 24-app-design-system-and-ui
 
-**Version:** 2.2.3
-**Updated:** 2026-05-06
+**Version:** 2.2.4
+**Updated:** 2026-05-10
+
+> **v2.2.4 update (Sess-64 / Phase-5 T-03 — separation-of-concerns regression coverage):** Recorded negative-evidence sweep proving §24 no longer ships any SQL DDL block. Sweep command: `rg -c '^CREATE TABLE' spec/24-app-design-system-and-ui/00-overview.md`. **Result: 0 matches.** Closes audit finding F-24-01 (UI folder defines a SQL audit table — wrong folder). The previously-inlined `module_run_audit_p78` Postgres DDL (30 lines) was removed in §00 v4.7.0 → v4.8.0 and replaced with a link-only routing pin citing §27/§28 as canonical owners of execution-telemetry persistence. **No DDL was materialised elsewhere** in this turn — the §27/§28 promotion is a separate Phase-5 backlog task. Regression command MUST return 0 on every PR; future violation is a hard fail per the §07 dependency boundary (AC-ADS-16) and Lesson #36. Banners: §99 v2.2.3 → **v2.2.4** (this entry); §00 v4.7.0 → **v4.8.0**; §98 v4.11.0 → **v4.12.0**. **No §97 bump** (the removed DDL was never bound to an AC-ADS-* ID — its absence from the AC catalog is itself confirmation it didn't belong here).
 
 > **v2.2.3 update (Phase 154 C-Sweep — Cross-Module Externalized Citation Map):** Added **AC-ADS-14** `[critical]` Cross-Module Externalized Citation Map per Lessons #36 + #37; explicit normative anchor table for 2 externalized citations (spec/07 primitive token registry, spec/27 script gates). Mirror of spec/22 AC-79 pattern. spec/24's small citation surface (only 2 rows) reflects the strict-additive-overlay relationship to spec/07 — almost all design-system contracts already live in spec/07 by construction. Banners: §97 v3.1.0 → **v3.2.0** (AC 13 → 14); §00 v4.1.3 → **v4.1.4**; §98 v4.1.3 → **v4.1.4**. **No CI workflow change, no RUBRIC bump, no gate-count change.**
 
