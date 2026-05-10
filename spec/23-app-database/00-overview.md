@@ -430,8 +430,8 @@ PascalCase keys to avoid a translation layer. Booleans serialise as JSON
 {
   "Error": {
     "Code": "applink.disconnected",   // dotted, lowercase, stable
-    "Message": "Link 17 is disconnected; reconnect via R-08.",
-    "Field": "LinkId",                // optional, for 422
+    "Message": "AppLink 17 is disconnected; reconnect via R-08.",
+    "Field": "AppLinkId",             // optional, for 422
     "TraceId": "01HXYZ..."            // ULID, required
   }
 }
