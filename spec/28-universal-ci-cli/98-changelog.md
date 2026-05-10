@@ -1,9 +1,19 @@
 # Changelog
 
-**Updated:** 2026-05-10
+**Updated:** 2026-05-10 (Session 46 audit-task A-26 — `consumes:` resync with §27 §00; 9→18 Active gates enumerated; closes latent gate-#10 drift)
 
 
 All notable changes to `spec/28-universal-ci-cli/`.
+
+## [2.7.0] — 2026-05-10 — Session 46 audit-task A-26: `consumes:` front-matter resync with §27 §00 (9 → 18 Active gates)
+
+- **Action**: §00 front-matter `consumes:` block updated. The §27 "CI Gate Enumeration" reference had been frozen at 9 Active gates since Sess-31 (A-09). Between Sess-31 and Sess-43, §27 shipped 9 new gates (A-15 through A-23 conversion arc — `consumes-frontmatter-resolves`, `cohort-naming-check`, `finding-status-enum-check`, `cohort-orphaned-finding`, `finding-vs-audit-distinction-check`, `derives-from-restate-check`, `no-raw-color-in-app-component`, `error-envelope-shape-check`, `request-id-roundtrip-check`). §28's manifest now enumerates all 18 by name + shipping session.
+- **Why this resync now**: First Friction (C6) uplift task under Rubric v2 (A-25, Sess-45). The stale manifest was a latent gate-#10 (`consumes-frontmatter-resolves`) drift risk: §27 §00 normative binding (A-09, Sess-31) requires §28's `consumes:` to cite §27's gate inventory, and any drift is a meta-level gate-#10 violation. Sess-46 closes the drift before it becomes a CI failure on the next §27 §00 contract change.
+- **Lesson #36 preservation**: gate names + shipping-session refs only — NO gate semantics, exit codes, or invocation strings restated in §28. The §27 §00 enumeration remains the sole canonical surface (link-don't-restate).
+- **Deferred-backlog note**: explicit "deferred backlog empty as of Sess-43; future Wave-3+ deferred rules land at D-10+ in §27 §00 and are NOT invoked by §28 until promoted to Active" clause added — preserves the original A-09 deferred-rule exclusion contract while acknowledging the current empty state.
+- **Lockstep**: §00 v2.6.0 → **v2.7.0** (minor — `consumes:` manifest is contract-tier surface). §97 unchanged (no AC text change). §99 lockstep update deferred to Sess-46+ first §97 touch (mechanical). h10 stamp unchanged (no walker contract change).
+- **Scorecard impact**: §28 C4 Consistency +1 (manifest no longer drifts from §27); C6 Friction +1 (doc-to-code traceability for invocation surface restored — implementer reading §28 §00 now sees the full gate inventory citation, not a 9-gate stale snapshot).
+- **No** §97 AC change, **no** CI workflow change, **no** RUBRIC bump (Rubric v2 already shipped Sess-45 A-25), **no** gate-count change in §27 (§28 is the consumer; §27 owns the gate inventory).
 
 ## [2.5.2] — 2026-05-10 — Phase 157: D4 worked example — SSH-mode signed request transcript
 

@@ -3,14 +3,14 @@ content_axis: normative-contract
 axis_rationale: "Universal CI binary behavioural ACs"
 consumes:
   - spec/22-git-logs-v2 §97 AC-23  # PascalCase + AUTOINCREMENT PK + CHECK-constraint catalog (schema-drift gate; A-07 cross-flag, Sess-29) — CI binary emits drift-warning rows when server schema diverges
-  - spec/27-spec-toolchain §00 "CI Gate Enumeration"  # 9 Active strict gates (A-08, Sess-30): tree-health-min-80, lockstep-strict, cross-links-resolve, folder-refs-resolve, forbidden-strings-absent, version-parity, audit-walker-tier-1, summary-freshness, stamp-bump — §28 is the canonical external invoker (A-09, Sess-31); deferred lint rules D1..D9 are NOT invoked by §28 until §27 promotes them to Active
+  - spec/27-spec-toolchain §00 "CI Gate Enumeration"  # 18 Active strict gates as of Sess-43 A-23 (deferred backlog closed 9/9): #1 tree-health-min-80, #2 lockstep-strict, #3 cross-links-resolve, #4 folder-refs-resolve, #5 forbidden-strings-absent, #6 version-parity, #7 audit-walker-tier-1, #8 summary-freshness, #9 stamp-bump, #10 consumes-frontmatter-resolves (A-09, Sess-31), #11 cohort-naming-check (A-16, Sess-36), #12 finding-status-enum-check (A-17, Sess-37), #13 cohort-orphaned-finding (A-18, Sess-38), #14 finding-vs-audit-distinction-check (A-19, Sess-39), #15 derives-from-restate-check (A-20, Sess-40 — self-enforces lockstep), #16 no-raw-color-in-app-component (A-21, Sess-41), #17 error-envelope-shape-check (A-22, Sess-42 — first integration-test gate, exit-code 3 = harness setup failure), #18 request-id-roundtrip-check (A-23, Sess-43 — second integration-test gate, shares fixture-replay engine with #17). §28 is the sole-in-scope canonical external invoker (A-09, Sess-31); §28 MUST NOT restate gate semantics, exit codes, or invocation strings (Lesson #36 link-don't-restate). Deferred backlog is empty as of Sess-43; future Wave-3+ deferred rules land at D-10+ in §27 §00 and are NOT invoked by §28 until promoted to Active.
 ---
 
 # Universal CI CLI — Spec Overview
 
-**Version:** 2.6.0  
+**Version:** 2.7.0  
 <!-- h10-verified-phase: 157 -->
-**Updated:** 2026-05-10 (Session 31 audit-task A-09 — `consumes:` front-matter now cites §27 "CI Gate Enumeration" as canonical source for all 9 Active gates; §28 is the sole-in-scope external invoker, no gate-semantics restatement (Lesson #36). Prior: Phase 157 D4 SSH-signature example.)
+**Updated:** 2026-05-10 (Session 46 audit-task A-26 — `consumes:` front-matter resynchronised with §27 §00 "CI Gate Enumeration": 9 Active gates → 18 Active gates (A-08 → A-23 conversion arc). Adds gates #10-#18 by name + shipping-session citation; notes deferred backlog now empty (Sess-43); preserves Lesson #36 link-don't-restate (no gate semantics duplicated — names + session refs only). Closes a latent gate-#10 (`consumes-frontmatter-resolves`) drift risk where §28's manifest had been frozen at A-08 since Sess-31 while §27 shipped 9 new gates. Prior: Sess-31 A-09.)
 **Status:** Draft  
 **AI Confidence:** Production-Ready  
 **Ambiguity:** Low  
