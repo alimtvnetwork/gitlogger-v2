@@ -10,16 +10,16 @@
   "files_used": 3,
   "files_total": 57,
   "bytes_used": 140000,
-  "bundle_sha": "a60314a5b3144053",
+  "bundle_sha": "699d812bad76478a",
   "chunks": [
     {
       "tier": "T1",
-      "bundle_sha_chunk": "8fdf2892e792da5c",
+      "bundle_sha_chunk": "b6dee8f0b12da318",
       "files": [
         "spec/22-git-logs-v2/00-overview.md",
         "spec/22-git-logs-v2/97-acceptance-criteria.md"
       ],
-      "bytes_used": 124959
+      "bytes_used": 131889
     },
     {
       "tier": "T1",
