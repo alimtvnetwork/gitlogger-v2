@@ -45,11 +45,11 @@ following invariants fail:
    `enum: [0, 1]` as a stand-in for boolean. Coercion patterns
    open a parsing-ambiguity attack surface and fail clause-4.
 5. **§24 U-3 surface presence** — `spec/24-app-design-system-and-ui/00-overview.md`
-   line ~359 MUST contain the U-3 boolean render parity sub-clause
-   with literals `boolean` AND `true`/`false` AND `IsActive`
-   (canonical example) AND a back-reference to either AC-ADB-11
-   or AC-CAF-01. Stripping U-3 collapses the UI side of the
-   triple and fails clause-5.
+   MUST contain a `### U-3` heading whose body carries literals
+   `boolean` AND `true` AND `false` AND `IsActive` (canonical
+   example) AND a back-reference to one of {AC-ADB-11, AC-CAF-01,
+   `§23 R-4 invariant 2`}. Stripping U-3 collapses the UI side of
+   the triple and fails clause-5.
 6. **No-restate in §22/§24/§25** — no `.md` under §22 (excluding
    `17-openapi.yaml` git-logs source), §24 (excluding the U-3
    binding row), or §25 may carry a parallel boolean encoding
