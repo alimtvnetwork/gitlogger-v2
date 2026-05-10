@@ -1,8 +1,9 @@
 # Acceptance Criteria — Spec Toolchain
 
-**Version:** 2.17.0
-**Updated:** 2026-05-07 (Phase J9 — AC-T-35 binds slot 35 `audit-bundle-budget.py` into §97 with delegation-map + family-prefix + trace-map triplet (Lesson #19 + #21 + #36 + #65). AC count 32 → 33; module-level total 33 + delegated ≥105 = ≥138.)
-**Updated-prev:** 2026-05-05 (Phase 153 Task A18-impl-3: slot 34 §00 v1.7.0 → v1.8.0 codifies AC-34-17 — chunked re-scoring promoted to default-on; `audit_module()` routes multi-chunk modules through gateway-per-chunk + `merge_chunk_scores()` weighted-merge; FULL-tier parity invariant preserved verbatim (spec/16 cross-flag bundle_sha equality `e16de187513b288e`); new `--no-chunked` rollback flag. Live re-scores: spec/27 83→88, spec/12 87→84 (honest baseline per Lesson #18). Closes AC-34-15(e) "promotion to default" milestone.)
+**Version:** 2.18.0
+**Updated:** 2026-05-10 (Session 18 F-15 — AC-T-36 amended in-place with two documented exemption clauses (Filler-band drift in slots 24–29 made exhaustive; `kind:` frontmatter forward-looking from slot 36+; legacy slots 01–35 grandfathered). Lesson #36 reapplied (fix the AC, not 49 artefacts). AC count unchanged at 36; one AC body lifted from advisory to verifiable-against-disk-truth.)
+**Updated-prev:** 2026-05-07 (Phase J9 — AC-T-35 binds slot 35 `audit-bundle-budget.py` into §97 with delegation-map + family-prefix + trace-map triplet (Lesson #19 + #21 + #36 + #65). AC count 32 → 33; module-level total 33 + delegated ≥105 = ≥138.)
+**Updated-prev2:** 2026-05-05 (Phase 153 Task A18-impl-3: slot 34 §00 v1.7.0 → v1.8.0 codifies AC-34-17 — chunked re-scoring promoted to default-on; `audit_module()` routes multi-chunk modules through gateway-per-chunk + `merge_chunk_scores()` weighted-merge; FULL-tier parity invariant preserved verbatim (spec/16 cross-flag bundle_sha equality `e16de187513b288e`); new `--no-chunked` rollback flag. Live re-scores: spec/27 83→88, spec/12 87→84 (honest baseline per Lesson #18). Closes AC-34-15(e) "promotion to default" milestone.)
 **Scope:** `spec/27-spec-toolchain/`
 
 ---
