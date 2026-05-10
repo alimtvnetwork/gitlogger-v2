@@ -8,9 +8,9 @@ consumes:
 
 # Universal CI CLI — Spec Overview
 
-**Version:** 2.5.2  
+**Version:** 2.6.0  
 <!-- h10-verified-phase: 157 -->
-**Updated:** 2026-05-10 (Phase 157 — D4 worked example: SSH-mode signed request transcript added to §06 (illustrative, kind: example); no §97 contract change; closes audit-v6 D4 finding "Missing SSH-signature worked example". Prior: Phase 156 AC-28-48 Log-shipping timeout.)
+**Updated:** 2026-05-10 (Session 31 audit-task A-09 — `consumes:` front-matter now cites §27 "CI Gate Enumeration" as canonical source for all 9 Active gates; §28 is the sole-in-scope external invoker, no gate-semantics restatement (Lesson #36). Prior: Phase 157 D4 SSH-signature example.)
 **Status:** Draft  
 **AI Confidence:** Production-Ready  
 **Ambiguity:** Low  
