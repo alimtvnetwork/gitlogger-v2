@@ -106,3 +106,9 @@ These slots are immutable once shipped (per project memory rule).
 - CI workflow contract inlined: 5 stages (detect, validate, lint, promote, report).
 - Implementability raised 90 → 95 (deterministic audit).
 
+
+### v2.2.5 — 2026-05-10 — A-56: UI contract pinned (T-07)
+
+- New "UI Contract" section added between Theme parity rule and Cross-References; AC-ADS-UI-01 + AC-ADS-UI-02 minted.
+- Cross-spec binding: U-1 → §23 R-01..R-08; U-3 → §23 R-4 invariant 2; U-4 → existing AC-ADS-04 contrast rule.
+- Regression-grep: `rg -nc '^## UI Contract|AC-ADS-UI-01|AC-ADS-UI-02' spec/24-app-design-system-and-ui/00-overview.md` MUST return ≥3.

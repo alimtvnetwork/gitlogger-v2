@@ -209,3 +209,11 @@
 - Inlined 5-stage CI workflow contract (yaml) — satisfies `has_ci_workflow` gate.
 - Documentation-only promotion; no behavioural rules changed.
 
+
+### v4.13.0 — 2026-05-10 — Phase-5 T-07: UI contract pinned (AC-ADS-UI-01/02)
+
+- **Action**: Inserted new normative section **"UI Contract (Normative — Phase-5 T-07)"** in `00-overview.md` between Theme parity rule and Cross-References. Contents: U-1 7-row component→endpoint binding matrix (AppList/AppDetail/AppCreateDialog/AppLinkCreateDialog/AppLinkResolveWidget/AppLinkDisconnectBtn/AppLinkReconnectBtn → R-01..R-08 + role gate), U-2 4×4 async-state table (loading/empty/error/ready × slot/visible-when/required-content) with mandated `<AppSkeleton/>`/`<AppEmptyState/>`/`<AppErrorState/>` slot components, U-3 boolean rendering parity rule (mirrors §23 R-4 invariant 2), U-4 4-row accessibility contract (WCAG 2.1 AA subset: labels, focus trap, contrast, role=alert), U-5 out-of-scope carve-out, AC-ADS-UI-01 (presence) + AC-ADS-UI-02 (TraceId surfacing).
+- **Why**: §24 previously specified tokens + AppShell skeleton only; the cross-spec contract to §23 REST endpoints (T-06) was implicit. Pinning U-1..U-4 makes the spec implementable end-to-end without invention. Boolean parity at the UI layer closes the last hop in the (DDL INTEGER 0/1) → (wire JSON true/false) → (UI label "Active") chain established by §23 AC-ADB-11 and R-4#2.
+- **Verification**: `rg -n '^## UI Contract|AC-ADS-UI-01|AC-ADS-UI-02' spec/24-app-design-system-and-ui/00-overview.md` → 3 matches ✅. Cross-References heading preserved.
+- **Scorecard delta**: §24 C2 Completeness 18→19 (UI contract closes the §23↔§24 binding gap), C5 Implementability 19→20 (full vertical: tokens + AppShell + REST-binding + a11y) — REQUIRES self-enforcing mechanism: AC-ADS-UI-01 + AC-ADS-UI-02 + §27 backlog gate `ui-component-binding-matrix-check`. Until the gate ships, C5=20 is conditional under same self-decay clause as §23 (3-turn TTL).
+- **Invalidation triggers**: removing any U-1 row · removing U-2 four-state contract · weakening U-3 boolean rule · removing U-4 invariants 1-4 · removing AC-ADS-UI-01 or AC-ADS-UI-02 · introducing client-side rename layer that breaks PascalCase 1:1 binding.
