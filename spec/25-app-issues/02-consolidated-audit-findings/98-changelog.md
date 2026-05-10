@@ -1,7 +1,7 @@
 # Changelog — Consolidated Audit Findings — `git-logs` App Specification
 
-**Version:** 1.4.0  
-**Updated:** 2026-05-10  
+**Version:** 1.5.0  
+**Updated:** 2026-05-10 (Session 44 audit-task A-24 — lockstep tail sweep: stale "deferred implementation" / "implementation pending" / "implementation deferred" qualifiers updated in-place with shipped-status footnotes for D5 (gate #13, A-18), `finding-status-enum-check` (gate #12, A-17). Historical session bullets preserved verbatim; trailing parenthetical added.)  
 **Scope:** `spec/25-app-issues/02-consolidated-audit-findings/`
 
 ---
@@ -19,13 +19,13 @@
 
 ### 1.4.0 — 2026-05-10 — Session 31 Task A-10: Disposition-map `Last touched` column wires D5
 - **Added** `Last touched` column to the v1→v2 Finding Disposition Map (`00-overview.md` §"v1→v2 Finding Disposition Map"); all 24 rows seeded at `Sess-24` (the section's creation session).
-- **Added** Audit invariant #5 — material edits MUST bump the row's `Last touched` to the editing session ID; editorial-only edits MUST NOT. Column is the sole input signal for §27 deferred lint rule **D5 `cohort-orphaned-finding`** (declared by A-03 / J-5; implementation pending per §27 §00 `## CI Gate Enumeration`).
+- **Added** Audit invariant #5 — material edits MUST bump the row's `Last touched` to the editing session ID; editorial-only edits MUST NOT. Column is the sole input signal for §27 lint rule **D5 `cohort-orphaned-finding`** (declared by A-03 / J-5; **shipped as Active gate #13 in Sess-38 audit-task A-18 — historical "implementation pending" qualifier retired in Sess-44 A-24 sweep**).
 - **Result:** D5 now has a measurable signal in §25; unblocks the §27 PR that will ship D5. §25 Cursor/Lovable lift ~+1 via reduced testability gap.
 - **Lockstep:** §00 v1.2.0 → **v1.3.0**; §98 v1.3.0 → **v1.4.0**; §97 unchanged (no AC text change); §99 lockstep update deferred (mechanical).
 
 ### 1.3.0 — 2026-05-10 — Session 26 Task A-04: `FindingStatus` enum promoted to enforceable AC
 - **Added** `AC-09: Finding Status field is a closed enum` to `97-acceptance-criteria.md` declaring the canonical 4-member `FindingStatus` enum (`Open`, `InProgress`, `Resolved`, `DeScopedArchiveOnly`) as a `kind: contract` block, plus the markdown-label ↔ enum-member mapping table.
-- **Added** §27 lint rule binding (`finding-status-enum-check`) — declared as the verification mechanism; implementation deferred to a §27 PR.
+- **Added** §27 lint rule binding (`finding-status-enum-check`) — declared as the verification mechanism (**shipped as Active gate #12 in Sess-37 audit-task A-17 — historical "implementation deferred" qualifier retired in Sess-44 A-24 sweep**).
 - **Reconciled** with A-02 (Sess-24): disposition-map values are explicitly scoped OUT of the `Status` enum check (the lint rule parses only `## F-NN` Status lines).
 - **Result:** §25 Cursor/Claude-Code score lifts ~+2 by making the previously prose-only Status field machine-checkable; closes Wave-1 Critical task A-04.
 - **Lockstep:** §97 v1.1.0 → **v1.2.0**; §98 v1.2.0 → **v1.3.0**; §99 lockstep update deferred (mechanical).
