@@ -71,7 +71,7 @@ synthetic fixtures:
 5. **Workflow step** — `.github/workflows/spec-health.yml` "§23 AppLink
    XOR clause gate" hard-fails CI on any violation.
 6. **§00 Walker-Pin row** — spec/23 `00-overview.md` Walker-Pin block
-   gains a row citing this slot + gate #21 + workflow step name
+   gains a row citing this slot + gate #22 + workflow step name
    (deferred to next §23 §00 touch; in-spec catalogue holds until then).
 
 ## Bindings to Worked Examples (T-11)
