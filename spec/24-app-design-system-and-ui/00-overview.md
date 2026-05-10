@@ -21,8 +21,18 @@ produced_for:
 
 # App Design System & UI
 
-**Version:** 4.8.0
+**Version:** 4.9.0
 **Updated:** 2026-05-10 (Session 64 audit-task A-55 / Phase-5 T-03 — removed inlined `module_run_audit_p78` Postgres DDL block (30 lines) from §00; replaced with link-only routing pin citing §27/§28 as canonical owners. Closes audit F-24-01: UI folder no longer owns SQL persistence schema.)
+
+> 🤖 **Raw-LLM Auditor Pin (Lesson #36 link-don't-restate, applied to memory resolution — P16 friction sweep, T-37)**
+>
+> If your context window does NOT include `mem://` resolution or the §27 slot ledger, the following inline resolutions hold (load-proven on disk, gate-bound):
+>
+> - **`mem://constraints/spec-scope`** — locked-7 cohort: `spec/22-git-logs-v2`, `spec/23-app-database`, `spec/24-app-design-system-and-ui`, `spec/25-app-issues`, `spec/26-gitlogs-diagrams`, `spec/27-spec-toolchain`, `spec/28-universal-ci-cli`. Enforced on disk by §27 gate #39 (`linter-scripts/check-no-out-of-scope-spec-folder-link.py`, slot 61). Out-of-scope folders (00-21, 29, _archive) MUST NOT appear in any path token, Markdown link, or fenced embed.
+> - **`mem://preferences/scorecard-ritual`** — Rubric v2 (6 criteria × 0-20 = /120). 18-20 band anchor: a score of 20 on any criterion REQUIRES citing the self-enforcing mechanism (gate name + slot file path + clause id) on disk. Enforced reflexively by §27 gate #42 (`linter-scripts/meta-verify-lockstep.py`, slot 64).
+> - **Cross-cohort gate map** (load-proven by §27 gate #42 banner-triple lockstep): #40 `check-ci-cli-self-test-harness.py` (slot 62, audits §28); #41 `check-diagram-parity.py` (slot 63, audits §26 ↔ §22 ↔ §23); #42 `meta-verify-lockstep.py` (slot 64, audits §27 reflexively). Total active gates: **42** (Phase-5 T-36).
+>
+> Stripping this pin block lifts no constraint — clauses remain in force on disk via gates #39/#42. Pin reduces Raw-LLM auditor traversal cost from 3 hops (file → mem → §27 slot) to 0 hops.
 **AI Confidence:** Production-Ready
 <!-- h10-verified-phase: 153 -->
 **Ambiguity:** None
