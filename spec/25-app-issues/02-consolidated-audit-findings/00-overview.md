@@ -24,6 +24,7 @@ This is the **single source of truth** for every critical observation against th
 | Field | Meaning |
 |---|---|
 | **ID** | Stable identifier `F-NN` for cross-referencing |
+| **Status** | One of: **Open** (default — awaiting remediation), **In progress** (PR open or active work), **Resolved** (fix landed; kept for traceability with link to the closing commit), **De-scoped (archive-only)** (target file is under `spec/_archive/` and out of active scope-lock — see [Appendix Z](#appendix-z--de-scoped-low-findings-archive-only)). De-scoped findings MUST collapse to a 1-line stub (no evidence/why-fail/fix bodies) and MUST NOT count toward the active severity rollup. |
 | **Severity** | Critical / High / Medium / Low |
 | **Category** | Coverage · Correctness · Security · Edge Cases · Governance · Maintainability · Testability · Scalability |
 | **File** | Audited spec path (clickable) |
