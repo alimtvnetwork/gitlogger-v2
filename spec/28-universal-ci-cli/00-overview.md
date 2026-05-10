@@ -19,9 +19,9 @@ produced_for:
 
 # Universal CI CLI — Spec Overview
 
-**Version:** 2.8.0  
+**Version:** 2.9.0  
 <!-- h10-verified-phase: 157 -->
-**Updated:** 2026-05-10 (Session 49 audit-task A-29 — added `produced_for:` producer-side front-matter binding 17-openapi-client.yaml/06-log-shipping-contract.md/07-error-catalog.md to §22 AC-40/AC-11/AC-30. Mirrors §26→§22 producer-side (A-27 Sess-47) and §24 producer-side (A-12 Sess-33). Resolved by §27 gate #10 dual-key contract (A-28 Sess-48). Lesson #36 preserved — AC titles as pointer-text only, no normative restatement. Prior: Sess-46 A-26.)
+**Updated:** 2026-05-10 (Session 55 audit-task A-38 — banner-only patch reflecting first native Rubric-v2 re-score landed in §98 [2.9.0]; L 112 / C 111 / R 107. No contract change.)
 **Status:** Draft  
 **AI Confidence:** Production-Ready  
 **Ambiguity:** Low  
