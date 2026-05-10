@@ -273,7 +273,83 @@ Every `--app-*` token MUST resolve to a real value in BOTH `:root` and `.dark` (
 
 ---
 
-## Cross-References
+## UI Contract (Normative — Phase-5 T-07)
+
+This section pins the UI surface that consumes §23's REST contract
+(AC-ADB-REST-01 / endpoints R-01..R-08). Every component listed here MUST
+exist, MUST consume the named endpoint, and MUST render the four canonical
+async states. Field bindings use PRIMARY-lane PascalCase keys 1:1 (no
+client-side rename layer).
+
+### U-1 — Component → Endpoint binding matrix
+
+| ID    | Component               | Route (TanStack)                  | Endpoint(s) | Role gate | Renders               |
+|-------|-------------------------|-----------------------------------|-------------|-----------|-----------------------|
+| U-01  | `AppList`               | `/apps`                           | R-03        | user      | table of `App`        |
+| U-02  | `AppDetail`             | `/apps/$AppId`                    | R-02, R-05  | user      | `App` + child links   |
+| U-03  | `AppCreateDialog`       | (modal in `/apps`)                | R-01        | admin     | form → 201/409        |
+| U-04  | `AppLinkCreateDialog`   | (modal in `/apps/$AppId`)         | R-04        | admin     | form → 201/409        |
+| U-05  | `AppLinkResolveWidget`  | `/resolve` (or embed)             | R-06        | svc/admin | RepoUrl → AppId       |
+| U-06  | `AppLinkDisconnectBtn`  | inline in U-02 row                | R-07        | admin     | confirm → toast       |
+| U-07  | `AppLinkReconnectBtn`   | inline in U-02 (if disconnected)  | R-08        | admin     | confirm → 201 + toast |
+
+### U-2 — Async-state contract (binding for ALL 7 components)
+
+Every endpoint-consuming component MUST render exactly four states using the
+named slot components (no ad-hoc spinners, no inline error text):
+
+| State    | Slot component       | Visible when                                  | Required content                          |
+|----------|----------------------|-----------------------------------------------|-------------------------------------------|
+| loading  | `<AppSkeleton/>`     | request in flight, no cached data             | shimmer matching final layout dimensions  |
+| empty    | `<AppEmptyState/>`   | request 200 + items=[] (or single 404)        | icon + label + primary CTA (if writable)  |
+| error    | `<AppErrorState/>`   | non-2xx response with R-3 error envelope      | `Error.Message` + `TraceId` + Retry btn   |
+| ready    | (the component body) | request 200 with data                         | full payload bound 1:1 to PascalCase keys |
+
+The `<AppErrorState/>` slot MUST surface `Error.Code` as a stable
+`data-error-code` attribute for E2E tests; `Error.TraceId` MUST be visible as
+copy-to-clipboard text (not hidden), per accessibility AC-ADS-UI-02 below.
+
+### U-3 — Boolean rendering parity
+
+Wire `IsActive: true` → label "Active" with `--app-status-active` token.
+Wire `IsActive: false` → label "Inactive" with `--app-status-inactive` token.
+Components MUST NOT render raw `0`/`1` integers, MUST NOT invert the boolean,
+and MUST NOT introduce a third "unknown" state. Mirrors §23 R-4 invariant 2.
+
+### U-4 — Accessibility contract (WCAG 2.1 AA, binding subset)
+
+1. Every interactive element (U-03..U-07 buttons, U-05 input) MUST have a
+   visible label OR an `aria-label`. Icon-only buttons MUST have `aria-label`.
+2. The disconnect/reconnect confirm dialogs (U-06, U-07) MUST trap focus and
+   restore it to the trigger on close.
+3. Color contrast: every `--app-*` token pair (fg on bg) MUST meet 4.5:1 for
+   text and 3:1 for non-text UI per existing AC-ADS-04 theme-parity rule.
+4. The R-3 error envelope MUST be announced via `role="alert"` (live region).
+
+### U-5 — Out-of-scope for §24
+
+- Wire schema definitions — owned by §23 (R-2).
+- Server-side validation rules — owned by §23 (R-3 status-code table).
+- CI gate enforcing component presence — owned by §27 (`ui-component-binding-matrix-check`, NEW backlog from T-07).
+- AppShell route matrix detail — pinned separately under T-09.
+
+### AC-ADS-UI-01 — UI contract present and endpoint-bound
+
+The 7-row U-1 matrix, U-2 async-state table (4 states × 4 columns), U-3
+boolean parity rule, and U-4 invariants 1–4 MUST be present in
+`00-overview.md`. Removing any U-1 row, removing the U-2 four-state contract,
+or weakening U-3 invalidates this AC.
+
+### AC-ADS-UI-02 — Error envelope surfaces TraceId
+
+Every component in U-1 MUST, when rendering the error state, expose
+`Error.TraceId` as copy-to-clipboard visible text and `Error.Code` as the
+`data-error-code` attribute on the `<AppErrorState/>` root element. Removing
+either surfacing invalidates this AC.
+
+---
+
+
 
 - [Design System (Core, §07)](../07-design-system/00-overview.md) — Source of all primitive tokens
 - [§07 Theme Variable Architecture](../07-design-system/02-theme-variable-architecture.md) — Token registry consumed by this overlay
