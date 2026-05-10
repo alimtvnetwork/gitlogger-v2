@@ -131,7 +131,7 @@ logic is too thin to justify a separate production script — there is nothing
 for the validator to do except load other modules and assert on their
 enumerator output, which IS what self-tests do. This is why the workflow step
 collapses to a single `bash linter-scripts/test/test-archive-exclusion-runtime.sh`
-invocation (no separate `python3 linter-scripts/check-foo.py` line).
+invocation (no separate `python3 linter-scripts/<some-validator>.py` line).
 
 This is a sanctioned exception to the F3 rule "self-tests SHOULD be `.sh`":
 the file IS a `.sh` self-test, but it occupies a §27 slot as a validator

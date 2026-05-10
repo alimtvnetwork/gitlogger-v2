@@ -325,7 +325,7 @@ The following map enumerates every occupied slot in the range 01–79 with its g
 | 25 | [25-deepen-consistency-reports.md](./25-deepen-consistency-reports.md) | `linter-scripts/deepen-consistency-reports.py` | `AC-DCR-*` | AC-T-24 |
 | 26 | [26-check-99-summary-freshness.md](./26-check-99-summary-freshness.md) | `linter-scripts/check-99-summary-freshness.py` | `AC-SF-*` | AC-T-03 |
 | 27 | [27-check-99-stamp-bump.md](./27-check-99-stamp-bump.md) | `linter-scripts/check-99-stamp-bump.py` | `AC-SB-*` | AC-T-03 |
-| 28 | [28-check-archive-exclusion-runtime.md](./28-check-archive-exclusion-runtime.md) | `linter-scripts/check-archive-exclusion-runtime.py` | `AC-AER-*` | AC-T-03 |
+| 28 | [28-check-archive-exclusion-runtime.md](./28-check-archive-exclusion-runtime.md) | `linter-scripts/test/test-archive-exclusion-runtime.sh` (the self-test IS the gate per slot 28 contract — no separate `.py` validator) | `AC-AER-*` | AC-T-03 |
 | 29 | [29-check-version-parity.md](./29-check-version-parity.md) | `linter-scripts/check-version-parity.py` | `AC-29-*` (incl. AC-29-15) | AC-T-26 |
 
 ### Auditors (30–39)

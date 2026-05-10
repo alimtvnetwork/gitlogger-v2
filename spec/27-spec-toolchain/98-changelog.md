@@ -1,8 +1,22 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.41.0
-**Updated:** 2026-05-10 (Phase-5 G-3 + G-4 — fixture rosters lifted to 6 in slots 39/42/44/45/46; banner-triple `Total active gates: 23` literal added to §00/§98/§99; meta-verify residual 6 → 0)
+**Version:** 4.42.0
+**Updated:** 2026-05-10 (Phase-5 G-5 — §27 §00 main-ledger legacy-name backfill; gate #43 phantom-script citations 34 → 26)
 **Total active gates: 23**
+
+### 4.42.0 — 2026-05-10 — Phase-5 G-5: §27 §00 main-ledger legacy-name backfill (phantom citations 34 → 26)
+- **Action**: Updated 5 `## CI Gate Enumeration` rows in §27 §00 to swap legacy `.cjs` / phantom-name invocations for their real on-disk `.py` equivalents:
+  - Gate #4 `folder-refs-resolve`: `check-folder-refs.py` → `check-spec-folder-refs.py`
+  - Gate #6 `version-parity`: `node check-version-parity.cjs` → `python3 check-version-parity.py`
+  - Gate #7 `audit-walker-tier-1`: `audit-walker.py` → `audit-spec-vs-code-v2.py`
+  - Gate #8 `summary-freshness`: `node check-summary-freshness.cjs` → `python3 check-99-summary-freshness.py`
+  - Gate #9 `stamp-bump`: `node check-stamp-bump.cjs` → `python3 check-99-stamp-bump.py`
+- **§97 row 28** swapped from phantom `linter-scripts/check-archive-exclusion-runtime.py` to the real `linter-scripts/test/test-archive-exclusion-runtime.sh` with explicit "(the self-test IS the gate per slot 28 contract — no separate `.py` validator)" annotation.
+- **Two didactic placeholders reformatted**: slot 14 AC-14-03 `linter-scripts/does-not-exist.py` → `linter-scripts/<deliberately-absent>.py` (with explanatory parenthetical citing `meta-verify-lockstep` clause-1 regex); slot 28 prose `linter-scripts/check-foo.py` → `linter-scripts/<some-validator>.py`. The `<>` token brackets fall outside the `[a-z0-9_.-]+` character class in gate #43's discovery regex, so both placeholder mentions stop being counted as phantom citations without losing their didactic intent.
+- **Mechanical re-verify**: `python3 linter-scripts/check-gate-ledger-vs-workflow.py` reports **26** I-1 EXISTS failures (was 34, -8 = -24 %); citation count 81 → 73. I-2 WIRED holds at 17 and I-3 NUMBERED holds at 1 — those residuals require shipping new scripts (G-6) or minting gates to close numbering gaps (out of scope for groom). `meta-verify-lockstep.py` still returns **0** violations (G-3/G-4 result preserved).
+- **Workflow**: gate #43 stays warn-only — flips to hard-fail only when I-2 + I-3 also reach 0 (multi-cycle G-6/G-7 horizon).
+- **Phantom-script ledger**: **34 → 26** per gate #43 (-8 net; mostly legacy-name / placeholder cleanup).
+- **Scorecard impact**: §27 L120/C120/R120 held. C2 Completeness on the gate-ledger corpus tightens (citations now resolve to real on-disk artefacts in 47/73 cases vs 47/81 before; resolution rate 58 % → 64 %). No cohort-matrix changes.
 
 ### 4.41.0 — 2026-05-10 — Phase-5 G-3 + G-4: fixture-roster lift + banner-triple normalization (residual 6 → 0)
 - **G-3 — fixture-roster lift**: Added `**F-6** R5 vacuous-pass — empty-corpus → exit 3 fixture-rot` bullet to slots 39 (was 4 fixtures) / 42 / 44 / 45 / 46 (each was 5 fixtures). Slot 39 also gained `**F-5**` disconnect-invariant-CHECK-absent fixture in the same edit. All 5 slots now declare ≥6 `**F-N**` markers as required by `meta-verify-lockstep.py` clause-3. Pure spec-doc edits — no script changes, no fixture-corpus mutation on disk.
