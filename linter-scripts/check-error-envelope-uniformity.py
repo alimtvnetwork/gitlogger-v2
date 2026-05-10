@@ -207,11 +207,10 @@ def clause_code_prefix(s: Surface) -> list[str]:
             errs.append(f"clause-4: §23 §00 JSON `Code` literal "
                         f"`{code}` violates dotted lowercase shape "
                         f"`^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+$`")
-    # Also walk the §23 R-3 table examples for dotted form (backtick-fenced)
-    for tbl_match in re.finditer(r"`([a-zA-Z][a-zA-Z0-9_.]*)`", s.db_overview):
+    # Also walk inline backtick tokens for foreign envelope-code prefixes.
+    for tbl_match in re.finditer(r"`([A-Za-z][A-Za-z0-9_.\-]*)`",
+                                 s.db_overview):
         token = tbl_match.group(1)
-        if "." not in token:
-            continue
         if token.startswith(("DB-", "GL-", "ADS-", "CAF-")):
             errs.append(f"clause-4: §23 §00 inline-code `{token}` uses "
                         f"foreign envelope-code prefix (DB/GL/ADS/CAF)")
