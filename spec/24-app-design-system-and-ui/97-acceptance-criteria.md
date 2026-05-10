@@ -244,9 +244,9 @@ detectable. New CAF entries MUST be co-introduced with a §27 backlog gate.
 
 ### AC-CAF-03: Idempotency contract is observable at every layer  `[high]`
 
-**Given** an endpoint flagged `Idempotent=Yes` in §23 R-1 (R-02, R-03, R-05, R-06, R-07, R-09, R-11, R-13),  
+**Given** an endpoint flagged `Idempotent=Yes` in §23 R-1 / §24 S-2 (R-02, R-03, R-05, R-06, R-07, R-09, R-10, R-11, R-12, R-13, R-14),  
 **When** the same request is issued N times,  
-**Then** the second-and-subsequent responses MUST return the IDENTICAL body (modulo TraceId) AND no DB row mutation occurs (verifiable via `EXPLAIN QUERY PLAN` showing only SELECT after the first call). WE-4 is the canonical fixture for the disconnect path. Non-idempotent endpoints (R-01, R-04, R-08, R-15) MUST NOT be aliased as Idempotent in the UI layer (§24 U-1 binding column).
+**Then** the second-and-subsequent responses MUST return the IDENTICAL body (modulo TraceId) AND no DB row mutation occurs beyond the upsert convergence point (verifiable via `EXPLAIN QUERY PLAN` showing only SELECT after the first call for read endpoints, and `INSERT … ON CONFLICT … DO UPDATE` converging to the same end-state for PATCH upserts per §24 S-2 Notes column). WE-4 is the canonical fixture for the disconnect path. Non-idempotent endpoints (R-01, R-04, R-08, R-15) MUST NOT be aliased as Idempotent in the UI layer (§24 U-1 binding column). Self-enforcing via §27 backlog gate `idempotency-observability-check` (T-19).
 
 ### AC-CAF-04: Seed-row/override separation extends seedable-config to App-layer  `[high]`
 

@@ -566,6 +566,26 @@ jobs:
           python3 linter-scripts/check-seedable-config-row-present.py --self-test
           python3 linter-scripts/check-seedable-config-row-present.py
 
+      - name: §22+§23+§24 idempotency observability gate
+        # Slot 45 / Gate #26 — five clauses + R5 vacuous-pass guard.
+        # Mechanises AC-CAF-03 (T-12) end-to-end: set-parity (Yes/No
+        # union of §23 R-1 + §24 S-2 columns reproduces AC-CAF-03 prose
+        # enumeration exactly — drift in either direction fails),
+        # observability-marker (AC-CAF-03 prose carries all four literals
+        # `EXPLAIN QUERY PLAN`, `IDENTICAL body`, `modulo TraceId`, `WE-4`),
+        # we4-cite (§23 §00 WE-4 carries `idempotent`/`200`/`DisconnectedAt`
+        # + canonical no-op phrasing, and §23 R-4 invariant 6 names R-07
+        # as the worked example), ui-no-alias (§24 U-1 rows citing
+        # non-idempotent endpoints {R-01, R-04, R-08, R-15} MUST NOT
+        # contain the literal `Idempotent` token), no-restate (§22
+        # OpenAPI / observability + §25 audit findings MUST NOT inline a
+        # parallel "Idempotency contract" matrix re-listing R-NN flags).
+        # Promotes AC-CAF-03 from conditional 20 → un-conditional 20
+        # (load-proven). Fourth cross-cutting CAF gate after #23/#24/#25.
+        # Spec: spec/27-spec-toolchain/45-check-idempotency-observability.md
+        run: |
+          python3 linter-scripts/check-idempotency-observability.py --self-test
+          python3 linter-scripts/check-idempotency-observability.py
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
