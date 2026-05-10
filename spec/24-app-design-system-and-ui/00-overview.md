@@ -307,9 +307,9 @@ be present in `00-overview.md`. Removing any AS-NN row, removing the
 variant→behaviour table, or weakening invariants 1, 2, or 4 invalidates
 this AC.
 
+### Responsive breakpoints (binding)
 
 
-The app overlay reuses §07's Tailwind defaults; **no app-specific breakpoints are defined**. Behaviour at `< md` (768px):
 
 - Sidebar collapses to `--app-sidebar-width-collapsed` (4rem); icons only.
 - `<main>` left-padding switches to `pl-app-sidebar-collapsed`.
