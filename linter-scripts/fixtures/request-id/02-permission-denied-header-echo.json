@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/push",
+    "headers": { "x-request-id": "req-9d2e1a8c-0002" },
+    "body": { "Sha": "cafebabe" }
+  },
+  "response": {
+    "status": 403,
+    "headers": { "content-type": "application/json", "x-request-id": "req-9d2e1a8c-0002" },
+    "body": {
+      "Status": "Error",
+      "Code": "GL-AUTHZ-PERMISSION-DENIED",
+      "Message": "Caller lacks push permission for this app",
+      "RequestId": "req-9d2e1a8c-0002",
+      "HttpStatus": 403
+    }
+  },
+  "meta": { "echo_path": "header", "fixture_kind": "happy-path" }
+}
