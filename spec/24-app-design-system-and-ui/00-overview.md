@@ -21,11 +21,25 @@ produced_for:
 
 # App Design System & UI
 
-**Version:** 4.6.0
-**Updated:** 2026-05-10 (Session 55 audit-task A-44 — added AC-ADS-06/09/10 row to §00 Walker-Pin block citing §27 slot 36 / gate #19. Surfaces the CI-gated boundary at the §00 anchor for context-bounded walkers; lifts §24 R C3 19→20.)
+**Version:** 4.7.0
+**Updated:** 2026-05-10 (Session 56 audit-task A-45 — added Quick-Nav header so context-bounded walkers can reach Walker-Pin / §97 / §27-gate / §22-inheritance anchors in one hop without scanning 700 lines. Lifts §24 R C6 Friction 18→19.)
 **AI Confidence:** Production-Ready
 <!-- h10-verified-phase: 153 -->
 **Ambiguity:** None
+
+---
+
+## Quick-Nav (Walker Index — read first if context-budgeted)
+
+| Anchor | Location | When to jump |
+|--------|----------|--------------|
+| Walker-Pin (4 critical ACs surfaced) | §00 below (line 32) | Before flagging "external dep unresolved" / "missing primitive registry" / "raw color literal" / "boundary not enforced" |
+| Full AC catalog (16 ACs) | `97-acceptance-criteria.md` | Authoring/auditing any AC-ADS-* |
+| §07 dependency boundary (5 binding rules) | `97-acceptance-criteria.md` AC-ADS-16 (line 204+) + §00 `### Dependency Boundary (A-05)` | Adding/changing any `--app-*` token |
+| §22 inheritance contract (5 ADS-* error codes) | `97-acceptance-criteria.md` AC-ADS-15 (line 193) | Surfacing a runtime failure from §24 |
+| §27 CI gates enforcing §24 | gate #15 `derives-from-restate-check` + gate #19 `check-ads-boundaries.py` (slot 36) | Verifying machine-enforcement before raising a manual finding |
+| Externalized citation map (anti-restate) | `97-acceptance-criteria.md` AC-ADS-14 (line 136) | Encountering a §07 / §27 reference |
+| Changelog | `98-changelog.md` | Tracing when a contract changed |
 
 ---
 
