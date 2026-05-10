@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.8.0  
-**Updated:** 2026-05-10 (Phase-5 T-16 — added slot 42 `check-error-envelope-uniformity.py`, gate #23. First §27 gate dedicated to a cross-cutting App-framework AC family (CAF). Promotes AC-CAF-02 (T-12) from conditional 20 (paper-only, 3-turn decay) to un-conditional 20 (load-proven). 5-clause uniformity scan (schema-pin / DB-mirror / UI-mirror / code-prefix / no-restate) with 5-fixture in-memory `--self-test`. Closes §27 backlog entry `error-envelope-uniformity-check` minted T-12.)  
+**Version:** 4.9.0  
+**Updated:** 2026-05-10 (Phase-5 T-17 — added slot 43 `check-boolean-uniformity-primary-lane.py`, gate #24. Second cross-cutting App-framework gate (CAF). Promotes AC-CAF-01 (T-12) from conditional 20 (paper-only, 3-turn decay; gate-#22 partial `IsActive`-only coverage) to un-conditional 20 (load-proven end-to-end DB ↔ REST ↔ UI). 5-clause uniformity scan (DB primary-lane / REST wire-shape / UI render parity / no-coercion-attack / no-restate) with 6-fixture in-memory `--self-test`. Closes §27 backlog entry `boolean-uniformity-primary-lane-check` minted Sess-43.)  
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
