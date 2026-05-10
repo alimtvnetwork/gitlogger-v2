@@ -6,8 +6,8 @@ description: Consolidated audit findings tracker for git-logs App spec. Not a co
 # Consolidated Audit Findings — `git-logs` App Specification
 
 **Document ID:** `AUDIT-GL-2026-04-25`  
-**Version:** 1.1.1  
-**Updated:** 2026-04-29  
+**Version:** 1.2.0  
+**Updated:** 2026-05-10  
 <!-- h10-verified-phase: 32 -->
 **Audit Mode:** Spec-only (no code reviewed)  
 **Scope:** every file in `spec/_archive/21-git-logs-v1/`  
