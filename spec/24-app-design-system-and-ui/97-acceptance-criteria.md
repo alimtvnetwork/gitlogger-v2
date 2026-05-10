@@ -216,7 +216,47 @@ for (const name of Object.keys(rootTokens)) {
 
 ---
 
-## Cross-References
+---
+
+## Cross-cutting App Framework (CAF) — Phase-5 T-12
+
+This section mints the `AC-CAF-NN` namespace covering cross-cutting App-layer
+concerns that span §23 (database) + §24 (UI shell) + §25 (issues). CAF
+contracts are deliberately thin pointers — each one binds an §24-anchored
+contract to its mirror in §23 or §25 to make cross-module drift mechanically
+detectable. New CAF entries MUST be co-introduced with a §27 backlog gate.
+
+### AC-CAF-01: Wire-boolean parity is end-to-end (DB ↔ REST ↔ UI)  `[critical]`
+
+**Given** the boolean field `IsActive` on `App` and `AppLink` rows,  
+**When** a value flows DB → REST response → UI render OR UI input → REST request → DB write,  
+**Then** the chain MUST be: DB INTEGER 0/1 ↔ JSON boolean true/false ↔ UI label "Active"/"Inactive" with `--app-status-active`/`--app-status-inactive` token. No layer is permitted to accept the integer form on the wire (§23 R-4 invariant 2 + §24 U-3 + AC-ADB-11). Self-enforcing via §27 backlog gate `rest-boolean-parity-check` (T-06) + WE-3 (T-11) byte-for-byte fixture.
+
+### AC-CAF-02: Error envelope is uniform across DB-fault and UI-render paths  `[critical]`
+
+**Given** any non-2xx response from R-01..R-15,  
+**When** the §24 `<AppErrorState/>` slot renders the failure,  
+**Then** the response body MUST match §23 R-3 envelope (Code/Message/Field/TraceId), AND `<AppErrorState/>` MUST surface `Code` as `data-error-code` attribute and `TraceId` as visible copy-to-clipboard text (§24 AC-ADS-UI-02). Inheriting §22 AC-ADS-15 ErrorCode taxonomy (`ADS-*` codes extend `GL-*`). Self-enforcing via §24 AC-ADS-UI-02 + §27 backlog gate `error-envelope-uniformity-check` (NEW from T-12).
+
+### AC-CAF-03: Idempotency contract is observable at every layer  `[high]`
+
+**Given** an endpoint flagged `Idempotent=Yes` in §23 R-1 (R-02, R-03, R-05, R-06, R-07, R-09, R-11, R-13),  
+**When** the same request is issued N times,  
+**Then** the second-and-subsequent responses MUST return the IDENTICAL body (modulo TraceId) AND no DB row mutation occurs (verifiable via `EXPLAIN QUERY PLAN` showing only SELECT after the first call). WE-4 is the canonical fixture for the disconnect path. Non-idempotent endpoints (R-01, R-04, R-08, R-15) MUST NOT be aliased as Idempotent in the UI layer (§24 U-1 binding column).
+
+### AC-CAF-04: Seed-row/override separation extends seedable-config to App-layer  `[high]`
+
+**Given** any setting introduced under §24 S-1..S-2 (Settings Surface),  
+**When** the setting is mutated via R-10/R-12/R-14,  
+**Then** the mutation MUST INSERT/UPDATE the `UserSettingOverride` row only — the seed row in `Setting` MUST remain immutable as the documented default and rollback target (§24 S-3 invariants 1+2). Removing a setting requires paired removal of seed + overrides in a single forward-only migration (§23 Rule 12 + §24 S-3 invariant 4). Self-enforcing via §27 backlog gate `seedable-config-row-present-check` (T-08).
+
+### AC-CAF-05: Audit-finding strings cite, never restate (Lessons #36/#37 + AC-AI-10/11)  `[critical]`
+
+**Given** a §25 audit finding contains an apparent App-layer claim (DDL, AC-ID, file path),  
+**When** an AI walker reads the finding in partial context,  
+**Then** the walker MUST treat the string as **auditor-quoted evidence** of the audited corpus (`spec/_archive/21-git-logs-v1/`), NOT as a §25-owned spec contract. §25 AC-AI-10/11 codify this disambiguation at the §25 surface; AC-CAF-05 lifts it to cross-cutting status so §23 + §24 walkers also apply the rule. Self-enforcing via §25 AC-AI-10/11 + §27 backlog gate `audit-quoted-evidence-marker-check` (NEW from T-12) + scope-lock memory clause.
+
+
 
 - [Module overview](./00-overview.md)
 - [Module changelog](./98-changelog.md)
