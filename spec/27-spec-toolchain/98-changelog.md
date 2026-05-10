@@ -1,8 +1,14 @@
 # Changelog — Spec Toolchain
 
-**Version:** 2.95.0
-**Updated:** 2026-05-10 (Phase 158 — slot 34 AC-34-19 anchor-pair AC-boundary splitter; closes spec/22 walker-cap data-loss path; Lesson #87 codified.)
+**Version:** 2.96.0
+**Updated:** 2026-05-10 (Phase 159 — slot 34 AC-34-20 module-level `content_axis` cascade contract; closes per-chunk axis re-detection class observed on spec/22 cache; Lesson #88 codified.)
 **Scope:** `spec/27-spec-toolchain/`
+
+### 2.96.0 — 2026-05-10 — Phase 159: slot 34 AC-34-20 axis cascade contract (Lesson #88)
+- **Action**: Slot 34 `34-audit-ai-implementability.md` grew **AC-34-20** `[critical]` — gateway prompt for every chunk MUST pin `axis = root_module_axis`; `parse_score()` MUST overwrite any LLM-returned axis with the module-level value; `merge_chunk_scores()` MUST raise `ValueError` on axis-mismatch input; cache JSON `per_chunk_v7[i].axis` MUST be uniform per module (asserted by new `linter-scripts/test/test-axis-cascade.sh`).
+- **Why**: Phase 154 cache audit observed `spec/22-git-logs-v2` (declared `axis: normative-contract`) emitting `per_chunk_v7[1].axis == "audit-corpus"` + `per_chunk_v7[2].axis == "audit-corpus"` — chunks 2+3 (test plans + AC-detail slices) re-classified by the LLM, dragging `weighted_total` from 84 raw → **73.1 weighted (GOOD band)** despite the module being normative-contract. AC-34-19 fixed the data-loss path; AC-34-20 fixes the axis-misclassification path. Together they unblock spec/22's score ceiling.
+- **Lockstep**: slot 34 `34-audit-ai-implementability.md` v1.11.0 → **v1.12.0** (minor — new AC-34-20); §00 v2.95.0 → **v2.96.0** (minor — auditor prompt contract change, h10 stamp 158 → 159); this file v2.95.0 → **v2.96.0** (this row); §99 v2.90.0 → **v2.90.1**. **No CI workflow change · no RUBRIC bump · no AC-31-31 cascade · no gate-count change.** Live re-score deferred per Lesson #20 (HTTP 402 at landing — Lesson #86 oscillation re-confirmed). Expected lift: spec/22 73.1 → ≥84 weighted; spec/25 confirm-no-regression.
+- **Lesson #88 (codified at AC-34-20 ship)**: When LLM auditors are given a chunk slice without the binding axis context, they default to per-slice content classification (a test-plan slice "looks like" audit-corpus regardless of the parent module's declared contract role) — the durable fix is at the prompt + merger boundary (this AC), NOT at the slice-content boundary (which would require re-architecting the module). Mirror of Lesson #29 (auditor-misreading pin) at the multi-chunk axis-detection axis.
 
 ### 2.95.0 — 2026-05-10 — Phase 158: slot 34 AC-34-19 anchor-pair AC-boundary splitter (Lesson #87)
 - **Action**: Slot 34 `audit-ai-implementability.py` `pack_chunks()` inner branch (anchor pair > MAX_BYTES) replaced — was `[:max_bytes]` truncation last-resort; now splits the LARGER anchor file at `^### AC-` heading boundaries via `re.split(r"(?m)(?=^### AC-)", big_raw)` and pairs each slice with the smaller anchor as context. Slot 34 §97 grew **AC-34-19** `[high]`. Live verification on spec/22-git-logs-v2: chunk count 3 → 4; chunks 1+2 each carry §00 (26 KB) + §97-slice (124 KB and 113 KB respectively); full §97 (188 KB total) now visible to auditor (was: 115 KB visible / 73 KB silently dropped — including AC-80 sibling delegation map landed Phase 154).
