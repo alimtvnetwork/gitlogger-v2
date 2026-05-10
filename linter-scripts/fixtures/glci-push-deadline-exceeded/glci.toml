@@ -1,0 +1,4 @@
+# Fixture config for T-28-48 — pins the two normative knobs under test.
+[push]
+request_timeout_ms = 5000
+total_deadline_ms  = 15000
