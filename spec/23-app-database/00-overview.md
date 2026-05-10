@@ -25,8 +25,8 @@ consumes:
 # App Database
 
 <!-- h10-verified-phase: 153 -->
-**Version:** 4.2.3
-**Updated:** 2026-05-04
+**Version:** 4.3.0
+**Updated:** 2026-05-10 (Session 34 audit-task A-14 — expanded `consumes:` front-matter from 1 to 6 entries citing §22 schema/auth/error/permission files; closes the consumer-side binding-graph coverage on §23 so deferred lint §27 D9 reaches all in-scope cohort folders. Mirror of A-11/A-09.)
 **AI Confidence:** Production-Ready
 **Ambiguity:** None
 
