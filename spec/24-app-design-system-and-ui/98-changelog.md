@@ -1,8 +1,18 @@
 # Changelog — App Design System & UI
 
-**Version:** 4.4.0
-**Updated:** 2026-05-10 (Session 33 audit-task A-12 — `produced_for:` inverse-binding front-matter declaring §24 as the canonical producer of `--app-*` tokens; mirror of §26→§22 `consumes:` (A-11) from the producer side)
+**Version:** 4.5.0
+**Updated:** 2026-05-10 (Session 55 audit-task A-36 — first native Rubric-v2 re-score; carried v1×1.20 retired)
 **Scope:** `spec/24-app-design-system-and-ui/`
+
+---
+
+### 4.5.0 — 2026-05-10 — Session 55 audit-task A-36: first native Rubric-v2 re-score (carried v1×1.20 retired)
+- **Action**: Hand-scored §24 against Rubric v2 (6 criteria × 0-20 = /120) per persona. Result: **L 112 / C 112 / R 108** (was carried 110/108/105 under v1×1.20). Delta +2/+4/+3. §24 no longer sole cohort floor — now tied with §28 on Raw-LLM (R108).
+- **Per-criterion breakdown**: C1 Clarity 19/19/18 (HSL pattern, TS enums, ADS-* code regex pinned; `--app-toolbar-height: 3.5rem` is a raw value not bound to §07 spacing token — minor reviewer gap). C2 Completeness 18/18/18 (only 1 worked example WE-01 across 16 ACs; no §00 walker-pin like §22 AC-78). C3 Testability 18/18/17 (AC-ADS-15 T-01..T-05 + AC-ADS-16 T-01..T-04 cover runtime + boundary; AC-ADS-06/09/10 prose-only; no fixture corpus). C4 Consistency 19/19/19 (AC-ADS-14 explicit citation map + `derives_from` + `restate_forbidden` + `produced_for` inverse-binding all wired). C5 Implementability 19/19/18 (Go/Python/PHP reference loaders + Tailwind config + React skeleton + ASCII layout + JSON Schema; Phase 55 reference loaders may exit Raw-LLM tier-1 walker window). C6 Friction 19/19/18 (tier-1 sum ~57 KB well under 120 KB walker cap; AI Implementer Quickstart present; lifecycle-component-render.mmd present; Quick-Nav-Map header missing for Raw-LLM).
+- **No score reaches 20 on any criterion** — §24 has no self-enforcing meta-rule (no walker-pin, no lockstep verifier, no parity-test policing §24's own backlog discipline). Breaking 20 on any criterion would require a §24-specific machine-enforced gate (e.g., a CI gate that fails when `--app-*` tokens lack a `produced_for` consumer entry).
+- **Cohort impact**: cohort floor on Raw-LLM now §24 R108 ≈ §28 R108 (was §24 alone at R105). Cohort mean lifts L 114.1→114.4, C 112.7→113.3, R 110.3→110.7.
+- **Invalidation triggers post-A-36**: (a) Removing AC-ADS-15 T-05 boundary regex drops C2 by 1 across personas. (b) Restating any §07 token definition inline drops C4 19→17. (c) Adding per-AC GWT for AC-06/09/10 lifts C3 by +1 across personas. (d) Adding §00 Quick-Nav header lifts R C6 18→19. (e) Promoting AC-ADS-16 to a §00 walker-pin lifts C2 18→19.
+- **Lockstep**: §00 v4.3.0 → **v4.4.0** (banner-only — no contract change); this file v4.4.0 → **v4.5.0** (this row). **No** §97 bump (no AC change), **no** §99 inventory change, **no** CI workflow change, **no** §07 / §22 / §27 edits.
 
 ---
 

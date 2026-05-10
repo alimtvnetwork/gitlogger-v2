@@ -21,8 +21,8 @@ produced_for:
 
 # App Design System & UI
 
-**Version:** 4.3.0
-**Updated:** 2026-05-10 (Session 33 audit-task A-12 — added `produced_for:` inverse-binding front-matter declaring §24 as the canonical producer of `--app-*` tokens; lists in-scope consumers (§22 cohort overview, §26 future diagrams, app source) so deferred lint §27 D9 has a parseable producer-side signal. Mirrors §26→§22 `consumes:` (A-11, Sess 32) from the producer side.)
+**Version:** 4.4.0
+**Updated:** 2026-05-10 (Session 55 audit-task A-36 — banner-only patch reflecting first native Rubric-v2 re-score landed in §98 v4.5.0; L 112 / C 112 / R 108. No contract change.)
 **AI Confidence:** Production-Ready
 <!-- h10-verified-phase: 153 -->
 **Ambiguity:** None
