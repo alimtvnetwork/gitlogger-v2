@@ -1,7 +1,9 @@
 # Consistency Report — 23-app-database
 
-**Version:** 2.1.4
-**Updated:** 2026-05-06
+**Version:** 2.1.5
+**Updated:** 2026-05-10
+
+> **v2.1.5 update (Sess-64 / Phase-5 T-02 — boolean-uniformity verification pass):** Negative-evidence sweep over §00 PRIMARY-lane DDL (lines 105–385) for any `boolean`/`BOOLEAN`/`tinyint`/`BOOL ` token or non-`Is/Has`-prefixed boolean column. **Result: 0 violations.** Single boolean column in PRIMARY lane is `IsActive INTEGER NOT NULL  -- 0/1` (file-line 174, AppLink table) — fully conformant with Convention recap line 99 (`INTEGER 0/1 + Is prefix`). REFERENCE lane's `boolean NOT NULL DEFAULT true` (line ~432) is fenced by Sess-64 / T-01 precedence pin (`🚫 REFERENCE-ONLY … DO NOT MATERIALISE`) — not in scope for boolean-uniformity check. Closes Phase-5 audit finding F-23-02 by verification (no remediation edit required). Audit method recorded for future regression: `sed -n '105,385p' 00-overview.md | grep -nE 'boolean|BOOLEAN|TINYINT|tinyint|BOOL '` — MUST return zero matches. Banners: §99 v2.1.4 → **v2.1.5** (this entry); §98 v4.6.0 → **v4.7.0**. **No §00 edit (verification confirms compliance), no §97 bump.**
 
 > **v2.1.4 update (Phase 154 C-Sweep — Cross-Module Externalized Citation Map):** Added **AC-ADB-17** `[critical]` Cross-Module Externalized Citation Map per Lessons #36 + #37; explicit normative anchor table for 5 externalized citations (spec/05 split-DB, spec/13 §97 AC-22, spec/22 entity DDL, spec/02 naming conventions, spec/27 script gates). Mirror of spec/22 AC-79 pattern. Closes audit-followability gap for integration-axis modules. Banners: §97 v3.3.0 → **v3.4.0** (AC 16 → 17); §00 v4.2.2 → **v4.2.3**; §98 v4.2.2 → **v4.2.3**. **No CI workflow change, no RUBRIC bump, no gate-count change, no AC-31-31 cascade.**
 
