@@ -103,6 +103,7 @@
 - **When** the file is loaded by its consumer validator,
 - **Then** the consumer MUST refuse to start (exit `2`, NOT exit `1`) if the config is malformed: TOML files MUST be parseable by `tomllib.load()`; `.allowlist` files MUST follow the documented `# comment` + `<path>` line format; every allowlist entry MUST carry a trailing `# reason: <free-text>` comment explaining why the exception exists (silent allowlist entries accumulate as zombie waivers). The consumer's spec section MUST cite the config's spec section bidirectionally — §03 ↔ §60, §01 ↔ §61, §02 ↔ §62.
 - **Verifies:** AC-T-06 bidirectional source links; §03/§60 contract; §01/§61 contract; §02/§62 contract.
+- **Worked example:** `python3 -c "import tomllib; tomllib.load(open('linter-scripts/forbidden-strings.toml','rb'))"` MUST exit `0`; `awk '!/^#/ && NF && !/# reason:/' linter-scripts/spec-cross-links.allowlist` MUST print zero lines (every entry carries a `# reason:` comment). A malformed TOML config MUST cause its consumer to exit `2` (config error), NOT `1` (findings).
 
 ### AC-T-16 — Runners (slots 40–49) MUST be functionally equivalent across platforms
 - **Given** the two orchestrator entry points `linter-scripts/run.sh` (slot 40) and `linter-scripts/run.ps1` (slot 41),
