@@ -1,9 +1,20 @@
 # Changelog
 
-**Updated:** 2026-05-10 (Session 55 audit-task A-38 — first native Rubric-v2 re-score; carried v1×1.20 retired)
+**Updated:** 2026-05-10 (Session 55 audit-task A-39 — AI Quick-Nav Map header added, §28 R C6 17→18)
 
 
 All notable changes to `spec/28-universal-ci-cli/`.
+
+## [2.10.0] — 2026-05-10 — Session 55 audit-task A-39: AI Quick-Nav Map header (Lesson #88 — sprawl navigation aid)
+
+- **Action**: Added `## AI Quick-Nav Map` block to §00 between the v2 scope banner and `## AI Implementer Quickstart`, mirroring §22 (the only other in-scope module carrying this header). Indexes all 16 §28 files into 7 themes (Scope & meta · Glossary & architecture · Runtime & commands · Log shipping & errors · CI bindings · Machine-readable contracts · Lifecycle) with 3 entry-point heuristics (new readers · log-shipping implementers · CI-binding STOP). Pure index — no normative content; canonical contracts remain in §97 and the cited files. Tier-1 footprint unchanged (~117 KB; the new block is ≤1.2 KB and offset by no other edit, so the cohort cap headroom remains tight but unchanged).
+- **Why now**: A-38 (Sess-55, [2.9.0]) flagged the absent Quick-Nav header as the cheapest path to lift §28 Raw-LLM C6 Friction 17→18 without touching contract surface; pinned as invalidation trigger (c). §28 is the **sole Raw-LLM cohort floor** (R107 post-A-38) so this single-byte-cheap edit is the highest-leverage friction reduction available without archiving deprecated provider tables (deferred to next pass).
+- **Scorecard delta**: §28 R C6 17→18 (+1 Raw-LLM). §28 totals: L 112 / C 111 / **R 108** (was 112/111/107 post-A-38). §28 R C6 lift narrows the sole-floor gap; cohort Raw-LLM floor reverts to a tie at R108 with §24 (post-A-37). Cohort means: L 114.4 unchanged; C 113.4 unchanged; R 110.6 → **110.7** (+0.1).
+- **Invalidation triggers post-A-39**: (a) Removing the Quick-Nav block → §28 R C6 18→17. (b) Adding normative content (ACs, exit codes, schema fragments) inside the Quick-Nav block → §28 C4 19→17 (Lesson #36 violation; index files MUST stay pointer-only). (c) Renaming any §28 root-level file without updating the matching Quick-Nav row → §28 C4 19→18. (d) Adding a new §28 root-level file (e.g., 10-*) without a same-PR Quick-Nav row → §28 C2 19→18. (e) Archiving deprecated provider tables in §03/§08 → §28 C6 +1 across personas (still pending; would lift L/C/R C6 by 1 each).
+- **Carry-forward**: A-38 invalidation (c) "Adding §00 Quick-Nav-Map header to §28 → R C6 17→18" is now SHIPPED. Remaining A-38 triggers (b/d/e/f) carry forward unchanged.
+- **Lockstep**: §00 v2.9.0 → **v2.10.0** (banner-only — no contract change); this file [2.9.0] → **[2.10.0]** (this row). **No** §97 AC change, **no** §99 inventory change, **no** CI workflow change, **no** §22 / §27 / §24 / §26 edits, **no** scope-lock breach.
+
+---
 
 ## [2.9.0] — 2026-05-10 — Session 55 audit-task A-38: first native Rubric-v2 re-score (carried v1×1.20 retired)
 
