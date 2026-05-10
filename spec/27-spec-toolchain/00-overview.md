@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.31.0  
-**Updated:** 2026-05-10 (Phase-5 T-39 — P18 §24 floor-lift. AC-ADS-17 minted in §24 §97 (no-DDL boundary closure under new section "Acceptance Criteria — Boundary Closure"); literal-cited via gate #36 (`linter-scripts/check-no-sql-ddl-in-ui-folder.py`, slot 58, all 6 invariants T-ADS-17-01..06). §24 advances Lovable 118 → **120** and Cursor 116 → **120** — §24 reaches Lovable + Cursor ceiling. Cohort now: §22/§23/§25 hold prior, §24 L120/C120/R118, §26 L120/C120/R118, §27 L120/C120/R120 (triple-ceiling), §28 L120/C120/R118. No new gate (42). Prior: T-38 — P17 §28 floor-lift via gate #40.)
+**Version:** 4.32.0  
+**Updated:** 2026-05-10 (Phase-5 T-40 — **P19a** ships slot 65 `check-gate-ledger-vs-workflow.py` (gate #43; reflexive truth-by-construction). Closes Sess-65 audit findings F-1 (38 phantom-script citations) + F-2 (slot-doc ledger drift from CI) by mechanizing both invariants. Wired warn-only into `spec-health.yml` until the phantom backlog (38 missing scripts) is cleared by P19b..P19z. **HONEST scorecard correction**: prior cohort floors L120/C120/R118 were unsupportable per Rubric v2 18-20 band rule (cited mechanisms missing); recomputed below from disk. §27 score collapses 120/120/120 → 76/74/72. Triple-ceiling claim retracted. Prior: T-39 — P18 §24 floor-lift (AC-ADS-17 — STILL UNENFORCED until P19b ships gate #36).)
 
 > **Self-enforcing via §27 backlog gate `meta-verify-lockstep`** — Lesson #15 reflexivity pin for gate #42 (slot 64). Stripping this literal from §27 §00 fails clause-5 of the meta-verifier itself.
 <!-- h10-verified-phase: 158 -->

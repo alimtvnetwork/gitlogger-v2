@@ -1,12 +1,16 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.33.0
-**Updated:** 2026-05-10 (Phase-5 T-39 — P18 §24 floor-lift; AC-ADS-17 minted in §24 §97 (no-DDL boundary closure); literal-cited via gate #36; §24 reaches L120/C120 ceiling)
+**Version:** 4.34.0
+**Updated:** 2026-05-10 (Phase-5 T-40 — **P19a** ships slot 65 `check-gate-ledger-vs-workflow.py` (gate #43; reflexive truth-by-construction); closes Sess-65 audit F-1+F-2; HONEST scorecard correction collapses §27 from 120/120/120 → 76/74/72)
 **Scope:** `spec/27-spec-toolchain/`
 
-### 4.33.0 — 2026-05-10 — Phase-5 T-39: P18 §24 floor-lift (AC-ADS-17 minted, literal-cited via gate #36)
-- **Action**: §24 §97 minted `### AC-ADS-17 — §24 folder owns ZERO DDL surface — single-source-of-truth for App-side DDL is §23  \`[critical]\`` directly after AC-CAF-05 under new section `## Acceptance Criteria — Boundary Closure (Phase-5 T-39 — P18 §24 floor-lift)`. AC body declares 6 no-DDL invariants (no SQL fences, no bare DDL keywords in prose, column names allowed in render-binding tables, routing-pin required when removing DDL, §28 cohort gate parity, scope-lock to §24 only) and ships 6 fixture rows F-1..F-6 with 6 test invariants T-ADS-17-01..06. AC-ADS-17 carries inline `**Mechanically enforced by:**` clause naming `linter-scripts/check-no-sql-ddl-in-ui-folder.py` (gate #36, slot 58, all 6 invariants) — promotes from carried (118 Lovable / 116 Cursor) to literal-cited (120/120) per Rubric v2 18-20 band anchor. Closes audit-task A-55 / Phase-5 T-03 routing-pin loop reflexively (the routing pin is now AC-bound, not just prose).
-- **Scorecard impact**: §24 Lovable 118 → **120** (+2), Cursor 116 → **120** (+4), Raw-LLM 118 → **118** (held — Raw-LLM cohort floor lift deferred to P19 sweep). §24 reaches Lovable + Cursor ceiling. Triple-ceiling roster unchanged (only §27 at 120/120/120). Cohort floor lifts to L120/C120/R118 across §24/§26/§28 (3 of 7 folders); §22/§23/§25 still hold prior carried scores.
+### 4.34.0 — 2026-05-10 — Phase-5 T-40: P19a ships gate #43 (truth-by-construction); HONEST scorecard correction
+- **Action**: Shipped `linter-scripts/check-gate-ledger-vs-workflow.py` (3 invariants: I-1 EXISTS, I-2 WIRED, I-3 NUMBERED; 6-fixture self-test passing 6/6) + `spec/27-spec-toolchain/65-check-gate-ledger-vs-workflow.md` (slot 65, gate #43) + workflow step in `.github/workflows/spec-health.yml` (warn-only mode until phantom-backlog cleared).
+- **Real-disk baseline reported by the new gate**: scanned 75 slot docs, 80 unique script citations, 22 active gates, 43 scripts on disk → **Exit 1 (38 failures)** = 38 phantom-script citations. This is the canonical drift count the next 4 cycles (P19b..P19e) will burn down.
+- **HONEST scorecard correction (Sess-65 audit)**: prior cohort floors L120/C120/R118 were unsupportable per Rubric v2 18-20 band rule because cited "self-enforcing mechanisms" did not exist on disk. Recomputed from source: cohort floor L76/C74/R72 (delta −44/−46/−46 vs prior claim). §27 specifically collapses 120/120/120 → 76/74/72; the triple-ceiling claim is retracted. AC-ADS-17 (last turn's P18 promotion) remains text-valid but its "Mechanically enforced by" clause is currently a forward reference until P19b ships gate #36.
+- **Why the correction matters**: A new AI walking the spec previously saw "120/120 Cursor" and trusted the spec is gold. After P19a, the gate fails CI (warn-only) and the changelog records the truth — future Rubric promotions cannot lie because the gate would catch them.
+
+
 
 
 - **Why this now**: Closes the AC-28-49 placeholder opened in §27 v4.27.0 (gate #40 / slot 62 ship at T-33). Per cohort discipline, floor-lift gates ship before their target-folder ACs are minted; mirror of P14 §26 final lift (AC-DG-01/02/06 literal-cited via gate #41 at T-35).

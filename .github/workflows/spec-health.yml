@@ -407,7 +407,24 @@ jobs:
             echo "ℹ️  Skipping diff-based stamp-bump check (not a pull_request event)."
           fi
 
-      - name: Runtime archive-exclusion gate (Phase H7)
+      - name: Gate-ledger ↔ workflow drift check (Phase-5 T-40 / P19a)
+        # Reflexive truth-by-construction gate. Asserts that every
+        # linter-scripts/<name> cited by §27 slot docs (NN-*.md "Source:" or
+        # any "linter-scripts/X.py" reference) actually exists on disk AND
+        # that every "Active gate #N" slot doc has its companion script
+        # wired into THIS workflow file. Closes the Sess-65 audit findings
+        # F-1 (38 phantom-script citations) + F-2 (slot-doc ledger drifted
+        # from CI). Without this gate, future Rubric v2 promotions to score
+        # 20 can cite non-existent enforcers and the lie compounds.
+        # Spec: spec/27-spec-toolchain/65-check-gate-ledger-vs-workflow.md
+        run: |
+          python3 linter-scripts/check-gate-ledger-vs-workflow.py --self-test
+          # NOTE: Currently 38 phantom citations on disk (Sess-65 audit F-1).
+          # Wired as warn-only until P19b..P19e ship the missing scripts,
+          # then the `|| true` MUST be removed to make this a hard gate.
+          python3 linter-scripts/check-gate-ledger-vs-workflow.py || echo "::warning::gate-ledger drift present — see Sess-65 audit"
+
+
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
