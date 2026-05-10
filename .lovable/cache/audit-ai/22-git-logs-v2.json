@@ -1,45 +1,45 @@
 {
-  "d1": 18,
-  "d2": 14,
-  "d3": 16,
-  "d4": 12,
+  "d1": 14,
+  "d2": 13,
+  "d3": 15,
+  "d4": 17,
   "d5": 16,
   "issues": [],
   "findings": [],
   "module": "22-git-logs-v2",
-  "files_used": 2,
-  "files_total": 46,
+  "files_used": 3,
+  "files_total": 56,
   "bytes_used": 140000,
-  "bundle_sha": "6d2442f88a12907e",
+  "bundle_sha": "a60d650e775c60fd",
   "chunks": [
     {
       "tier": "T1",
-      "bundle_sha_chunk": "dc4ee519a949ce3b",
+      "bundle_sha_chunk": "2bc0b5e105f3f682",
       "files": [
         "spec/22-git-logs-v2/00-overview.md",
         "spec/22-git-logs-v2/97-acceptance-criteria.md"
       ],
-      "bytes_used": 140000
+      "bytes_used": 128296
     },
     {
       "tier": "T1",
-      "bundle_sha_chunk": "a2e65e484f51be1c",
+      "bundle_sha_chunk": "a673ba63a0da5355",
       "files": [
         "spec/22-git-logs-v2/98-changelog.md"
       ],
-      "bytes_used": 109579
+      "bytes_used": 27244
     },
     {
       "tier": "T1",
-      "bundle_sha_chunk": "b977992172d167fb",
+      "bundle_sha_chunk": "525454fdafb955a5",
       "files": [
         "spec/22-git-logs-v2/99-consistency-report.md"
       ],
-      "bytes_used": 57099
+      "bytes_used": 33055
     }
   ],
   "chunked_path": true,
-  "total_v6": 76,
+  "total_v6": 75,
   "axis": "normative-contract",
   "axis_multipliers": {
     "d1": 1.0,
@@ -49,9 +49,9 @@
     "d5": 0.5
   },
   "axis_cap": 100,
-  "weighted_total": 75.8,
-  "total_v7": 76,
-  "total": 76,
-  "band": "GOOD",
+  "weighted_total": 73.1,
+  "total_v7": 73,
+  "total": 73,
+  "band": "NEEDS_WORK",
   "rubric": "v7"
 }
