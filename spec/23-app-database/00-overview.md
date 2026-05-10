@@ -386,8 +386,8 @@ PascalCase keys to avoid a translation layer. Booleans serialise as JSON
 | R-03  | GET    | `/api/v1/apps`                    | user  | SELECT App    | Yes        | 200 `{items:[App]}`    |
 | R-04  | POST   | `/api/v1/apps/{AppId}/links`      | admin | INSERT AppLink| No         | 201 `{AppLink}`        |
 | R-05  | GET    | `/api/v1/apps/{AppId}/links`      | user  | Q4            | Yes        | 200 `{items:[AppLink]}`|
-| R-06  | POST   | `/api/v1/applinks/resolve`        | svc   | Q1            | Yes        | 200 `{AppId,LinkId,State}` / 404 |
-| R-07  | POST   | `/api/v1/applinks/{LinkId}/disconnect` | admin | Q2       | Yes (no-op on 2nd call) | 200 `{LinkId,DisconnectedAt}` |
+| R-06  | POST   | `/api/v1/applinks/resolve`        | svc   | Q1            | Yes        | 200 `{AppId,AppLinkId,ResolutionState}` / 404 |
+| R-07  | POST   | `/api/v1/applinks/{AppLinkId}/disconnect` | admin | Q2       | Yes (no-op on 2nd call) | 200 `{AppLinkId,DisconnectedAt}` |
 | R-08  | POST   | `/api/v1/apps/{AppId}/links/reconnect` | admin | Q3       | No (always inserts new row per Q3) | 201 `{AppLink}` |
 
 ### R-2 — Request / response schemas (JSON)
@@ -396,22 +396,24 @@ PascalCase keys to avoid a translation layer. Booleans serialise as JSON
 // App (response)
 {
   "AppId": 42,                       // INTEGER
-  "Name": "demo-app",                // TEXT, unique
-  "RepoUrlCanonical": "github.com/acme/demo",  // TEXT
-  "IsActive": true,                  // boolean (DB: INTEGER 0/1)
+  "AppName": "demo-app",             // TEXT
+  "AppSlug": "demo-app",             // TEXT, unique
+  "Description": "demo description", // TEXT, NULL allowed
+  "ProfileId": 7,                    // FK → Profile(ProfileId)
+  "AppStatusId": 1,                  // FK → AppStatus(AppStatusId)
   "CreatedAt": "2026-05-10T12:34:56Z",
   "UpdatedAt": "2026-05-10T12:34:56Z"
 }
 
 // AppLink (response)
 {
-  "LinkId": 17,
+  "AppLinkId": 17,
   "AppId": 42,
-  "DiscriminatorId": 3,              // FK to LookupDiscriminator
-  "TargetKey": "github.com/acme/demo",
-  "ResolutionState": "active",       // enum: active|disconnected|orphaned
-  "IsActive": true,
-  "CreatedAt": "...",
+  "AppLinkTypeId": 2,                // FK → AppLinkType (1=GitProfile, 2=Repo)
+  "TargetGitProfileId": null,        // populated iff AppLinkTypeId = GitProfile
+  "TargetRepoId": 5,                 // populated iff AppLinkTypeId = Repo
+  "IsActive": true,                  // boolean (DB: INTEGER 0/1)
+  "CreatedAt": "2026-05-10T12:34:56Z",
   "DisconnectedAt": null
 }
 
@@ -419,7 +421,7 @@ PascalCase keys to avoid a translation layer. Booleans serialise as JSON
 { "RepoUrl": "https://github.com/acme/demo.git" }
 
 // R-06 success (Q1 single-row hit, ResolutionState="active")
-{ "AppId": 42, "LinkId": 17, "ResolutionState": "active" }
+{ "AppId": 42, "AppLinkId": 17, "ResolutionState": "active" }
 ```
 
 ### R-3 — Error envelope (uniform across all 8 endpoints)
@@ -428,8 +430,8 @@ PascalCase keys to avoid a translation layer. Booleans serialise as JSON
 {
   "Error": {
     "Code": "applink.disconnected",   // dotted, lowercase, stable
-    "Message": "Link 17 is disconnected; reconnect via R-08.",
-    "Field": "LinkId",                // optional, for 422
+    "Message": "AppLink 17 is disconnected; reconnect via R-08.",
+    "Field": "AppLinkId",             // optional, for 422
     "TraceId": "01HXYZ..."            // ULID, required
   }
 }
@@ -461,7 +463,7 @@ PascalCase keys to avoid a translation layer. Booleans serialise as JSON
 - UI representation of these payloads — owned by §24.
 - CI gate for parity enforcement — owned by §27 (`rest-pascalcase-parity-check`, `rest-boolean-parity-check` — both NEW backlog from T-06).
 
-### AC-ADB-REST-01 — REST/RPC contract present and parity-pinned
+### AC-ADB-REST-01 — REST/RPC contract present and parity-pinned [active]
 
 The 8-row R-1 endpoint matrix, R-2 schemas, R-3 error envelope, and R-4
 invariants 1–7 MUST be present in `00-overview.md`. Removing any row of R-1,
