@@ -376,12 +376,12 @@ This section is the **canonical, single-in-scope source-of-truth** for every CI 
 | 1 | `tree-health-min-80` | Active | §27 | `node linter-scripts/check-tree-health.cjs --min=80` | 0 = pass; 1 = score < 80; 2 = invocation error | `.github/workflows/spec-health.yml` detect stage |
 | 2 | `lockstep-strict` | Active | §27 | `node linter-scripts/check-lockstep.cjs --strict` | 0 = pass; 1 = §98 newest-date ≠ §99 newest-date | detect stage |
 | 3 | `cross-links-resolve` | Active | §27 | `python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .` | 0 = pass; 1 = any broken `[label](path.md)` link | validate stage |
-| 4 | `folder-refs-resolve` | Active | §27 | `python3 linter-scripts/check-folder-refs.py` | 0 = pass; 1 = any folder-link 404 | validate stage |
+| 4 | `folder-refs-resolve` | Active | §27 | `python3 linter-scripts/check-spec-folder-refs.py` | 0 = pass; 1 = any folder-link 404 | validate stage |
 | 5 | `forbidden-strings-absent` | Active | §27 | `python3 linter-scripts/check-forbidden-strings.py` | 0 = pass; 1 = any forbidden token (e.g., bare `$isNot`/`$isNo`/`$isNon` per coding-guidelines boolean fix) | validate stage |
-| 6 | `version-parity` | Active | §27 | `node linter-scripts/check-version-parity.cjs` | 0 = pass; 1 = §00 banner ≠ §97/§98/§99 banner | validate stage |
-| 7 | `audit-walker-tier-1` | Active | §27 | `python3 linter-scripts/audit-walker.py --tier 1` | 0 = pass; 1 = any §97 AC chunk exceeds paginated walker budget | audit stage |
-| 8 | `summary-freshness` | Active | §27 | `node linter-scripts/check-summary-freshness.cjs` | 0 = pass; 1 = stale roll-up | audit stage |
-| 9 | `stamp-bump` | Active | §27 | `node linter-scripts/check-stamp-bump.cjs` | 0 = pass; 1 = banner stamp not bumped on contract change | audit stage |
+| 6 | `version-parity` | Active | §27 | `python3 linter-scripts/check-version-parity.py` | 0 = pass; 1 = §00 banner ≠ §97/§98/§99 banner | validate stage |
+| 7 | `audit-walker-tier-1` | Active | §27 | `python3 linter-scripts/audit-spec-vs-code-v2.py --tier 1` | 0 = pass; 1 = any §97 AC chunk exceeds paginated walker budget | audit stage |
+| 8 | `summary-freshness` | Active | §27 | `python3 linter-scripts/check-99-summary-freshness.py` | 0 = pass; 1 = stale roll-up | audit stage |
+| 9 | `stamp-bump` | Active | §27 | `python3 linter-scripts/check-99-stamp-bump.py` | 0 = pass; 1 = banner stamp not bumped on contract change | audit stage |
 | 10 | `consumes-frontmatter-resolves` | Active | §27 | `python3 linter-scripts/check-consumes-frontmatter.py --root spec --in-scope 22,23,24,25,26,27,28` | 0 = pass; 1 = any `consumes:` / `produced_for:` entry references a missing file/section | validate stage |
 | 11 | `cohort-naming-check` | Active | §27 | `python3 linter-scripts/check-cohort-naming.py --root spec --in-scope 22,23,24,25,26,27,28` | 0 = pass; 1 = any in-scope folder/file violates AC-COHORT-06 filename regex or slot-reservation rules; 2 = invocation error | validate stage |
 | 12 | `finding-status-enum-check` | Active | §27 | `python3 linter-scripts/check-finding-status-enum.py --root spec/25-app-issues` | 0 = pass; 1 = any `## F-NN` Status ∉ {Open, In progress, Resolved, De-scoped}; 2 = invocation error | validate stage |
