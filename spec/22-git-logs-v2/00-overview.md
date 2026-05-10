@@ -61,6 +61,21 @@ axis_rationale: "Git Logs WordPress plugin enforceable spec"
 
 ---
 
+## AI Implementer Quickstart
+
+**§22 is the largest module in scope (60 files, ~1 MB). Use the Quick-Nav Map above to locate files; use this block to land a change in ≤30 min without loading the bundle.**
+
+1. **Contracts first** — [`97-acceptance-criteria.md`](./97-acceptance-criteria.md) is canonical; AC detail files (`49–56`) are promoted bodies, not new contracts.
+2. **Schema change?** Edit `02-database-schema.md` + `18-schema.sql` + `51-ac-enum-catalog-detail.md` together; re-render §26 `01-er-diagram.mmd` in the same commit.
+3. **Endpoint change?** Edit `04-rest-api-endpoints.md` + `17-openapi.yaml` + `15-error-codes.md` together; touch `57-ac-section-d-endpoints-detail.md` if AC body shifts.
+4. **CLI change?** `40-cli-overview.md` is the index; protocol files are `41-44`; ACs live in `54-ac-j-series-cli-detail.md`.
+5. **SQLite locking / atomic writes?** See `## Appendix A` (line 217) — mirror of spec/13 AC-22, bound here via AC-26.
+6. **Walker / audit finding?** Read `## Walker-Cap Finding Disposition` (just below) and AC-22-LV1 before touching slots `09–13`.
+
+**Hard rules:** locked-vacant slots `09–13` MUST stay empty (AC-22-LV1) · §97 is the only place ACs live (detail files are promoted bodies, never new ACs) · schema/endpoint/CLI edits MUST update all sibling files in the same commit · no JWT/RS256 anywhere · split-DB boundary (`ShaRegistry` separate) is non-negotiable.
+
+---
+
 ## Walker-Cap Finding Disposition (Normative)
 
 > Mirrors AC-78's full body into §00 so any context-bounded auditor that exhausts its byte budget on tier-1 files reads the contract before flagging duplicate findings. **Internal mirror only** — Lesson #36 forbids cross-module restatement; same-module §00↔§97 mirroring is permitted and required for harness-saturated modules (Lesson #65 + #71-#74; precedent: spec/13 P3 §10/§18 mirror, spec/27 AC-T-34, spec/05 AC-SD-21 walker fix).
