@@ -1,9 +1,20 @@
 # Changelog
 
-**Updated:** 2026-05-10 (Session 49 audit-task A-29 — `produced_for:` producer-side front-matter added; binds 17/06/07 to §22 AC-40/AC-11/AC-30)
+**Updated:** 2026-05-10 (Session 55 audit-task A-38 — first native Rubric-v2 re-score; carried v1×1.20 retired)
 
 
 All notable changes to `spec/28-universal-ci-cli/`.
+
+## [2.9.0] — 2026-05-10 — Session 55 audit-task A-38: first native Rubric-v2 re-score (carried v1×1.20 retired)
+
+- **Action**: Hand-scored §28 against Rubric v2 (6 criteria × 0-20 = /120) per persona. Result: **L 112 / C 111 / R 107** (was carried 113/111/108 under post-A-29 estimate). Delta −1 / 0 / −1 — the carry slightly inflated L and R; native v2 read corrects honestly.
+- **Per-criterion breakdown**: C1 Clarity 19/19/18 (12 Locked Decisions, GLCI-* error codes, Phase/Runtime/ExitCode enums, idempotency tuple `(repo, sha, phase)` pinned, 5xx exp-backoff w/ jitter explicit; minor Raw-LLM friction from Locked Decision 11 enumerating 5 deprecated providers despite v2-banner supersedure). C2 Completeness 19/19/18 (48 ACs, AC-28-47 v2-scope walker-pin, `consumes:` 6 entries + `produced_for:` 3 rows, WE-01 walks AC-28-12/13 retry envelope; Raw-LLM still has only 1 worked example for 48 ACs). C3 Testability 18/18/17 (AC-28-12/13 cross-verified by §27 gates #17 + #18; majority of ACs prose-asserted only; no per-AC fixture corpus). C4 Consistency 19/19/19 (full bidirectional binding: `consumes:` ↔ `produced_for:` resolved by §27 gate #10 dual-key contract; Lesson #36 link-don't-restate explicit; AC-28-47 self-pins to v2 scope). C5 Implementability 19/18/18 (OpenAPI client mirror + JSON Schema config + TS enum block + 9 top-level commands enumerated; 10-slot read surface widens Cursor/Raw-LLM friction). C6 Friction 18/18/17 (tier-1 sum **117 KB right at 120 KB walker cap**; no Quick-Nav-Map header; 5 deprecated provider classes still occupy real bytes in §03/§08 reference space).
+- **No criterion reaches 20** — AC-28-47 v2-scope pin is mechanically detectable (any non-GitHub provider runtime branch is auto-fail) but is enforced by reviewer discipline + `consumes:` chain, not by a §27 CI gate dedicated to v2-scope enforcement. A future §27 gate `v2-scope-violation-check` (greps for forbidden provider strings under `glci/`) would lift §28 C2 to 20 across personas.
+- **Cohort impact**: §28 remains **sole Raw-LLM cohort floor** (R107, was R108 carried). Lovable floor moves to §23 alone at L111 (was tied with §28 L113). Cursor floor: §23 = §28 at C111. Cohort means: L 114.4 (unchanged), C 113.4 (unchanged), R 110.6 (was 110.9; −0.3 — the §28 honest correction).
+- **Invalidation triggers post-A-38**: (a) Adding any non-GitHub provider runtime branch → AC-28-47 violation, drops C2 by 2 across personas. (b) Restating §22 ErrorEnvelope shape inline in §28 §07 → C4 19→17. (c) Adding Quick-Nav-Map header to §00 → R C6 17→18 (+1 Raw-LLM). (d) Archiving deprecated provider tables from §03/§08 to `_archive/` → C6 +1 across personas (tier-1 drops below 110 KB). (e) Adding per-AC GWT for any 5 ACs → C3 +1 across personas. (f) Shipping §27 gate `v2-scope-violation-check` → C2 to 20 across personas (first §28 ceiling-criterion).
+- **Lockstep**: §00 v2.8.0 → **v2.9.0** (banner-only — no contract change); this file [2.8.0] → **[2.9.0]** (this row). **No** §97 bump (no AC change), **no** §99 inventory change, **no** CI workflow change, **no** §22 / §27 edits, **no** scope-lock breach.
+
+---
 
 ## [2.8.0] — 2026-05-10 — Session 49 audit-task A-29: producer-side `produced_for:` front-matter (mirror of §26 A-27 + §24 A-12)
 
