@@ -153,12 +153,14 @@ def check_all(ads_dir: Path, adb_overview: Path) -> tuple[int, list[str]]:
                 f"clause-2: §23 R-1 row {r['id']} (role={r['role']}) is unbound — no U-1 row references it"
             )
 
-    # Clause 3: U-2 four-state literal presence + prose literals
+    # Clause 3: U-2 four-state literal presence (in table rows) + prose literals
+    u2_table_lines = "\n".join(ln for ln in u2.splitlines() if ln.lstrip().startswith("|"))
+    u2_prose_lines = "\n".join(ln for ln in u2.splitlines() if not ln.lstrip().startswith("|"))
     for lit in U2_TABLE_LITERALS:
-        if lit not in u2:
-            errors.append(f"clause-3: U-2 missing slot literal `{lit}`")
+        if lit not in u2_table_lines:
+            errors.append(f"clause-3: U-2 table missing slot literal `{lit}`")
     for lit in U2_PROSE_LITERALS:
-        if lit not in u2:
+        if lit not in u2_prose_lines:
             errors.append(f"clause-3: U-2 prose missing literal `{lit}`")
 
     # Clause 4: role-gate enum discipline
