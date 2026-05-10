@@ -349,10 +349,79 @@ either surfacing invalidates this AC.
 
 ---
 
+## Settings Surface (Normative — Phase-5 T-08)
+
+This section pins the `/settings` shell — what routes exist, what each
+panel renders, and how each setting persists. Binds to `AppShellVariant.Settings`
+(file-line 445) and to the seedable-config foundational concept (config
+values ship with seed defaults, mutate via R-09/R-10 below, never via
+ad-hoc DB edits).
+
+### S-1 — Settings route matrix
+
+| ID    | Route                          | Component         | Panel              | Endpoint(s)   | Role gate |
+|-------|--------------------------------|-------------------|--------------------|---------------|-----------|
+| S-01  | `/settings`                    | `SettingsLayout`  | (Outlet only)      | none          | user      |
+| S-02  | `/settings/profile`            | `ProfilePanel`    | user identity      | R-11, R-12    | user      |
+| S-03  | `/settings/appearance`         | `AppearancePanel` | theme + density    | R-13, R-14    | user      |
+| S-04  | `/settings/links`              | `LinksPanel`      | App's AppLinks     | R-05, R-07,R-08| admin    |
+| S-05  | `/settings/danger`             | `DangerPanel`     | destructive ops    | R-15          | admin     |
+
+### S-2 — Settings persistence contract (extends §23 REST)
+
+| ID    | Method | Path                                | Maps to       | Idempotent | Notes                                  |
+|-------|--------|-------------------------------------|---------------|------------|----------------------------------------|
+| R-09  | GET    | `/api/v1/settings`                  | seed read     | Yes        | returns merged seed + per-user override|
+| R-10  | PATCH  | `/api/v1/settings`                  | upsert override | Yes      | partial body; never overwrites seed row|
+| R-11  | GET    | `/api/v1/settings/profile`          | SELECT        | Yes        | user-scoped                            |
+| R-12  | PATCH  | `/api/v1/settings/profile`          | UPDATE        | Yes        | partial body                           |
+| R-13  | GET    | `/api/v1/settings/appearance`       | SELECT        | Yes        | theme + density                        |
+| R-14  | PATCH  | `/api/v1/settings/appearance`       | UPDATE        | Yes        | enum-validated values                  |
+| R-15  | POST   | `/api/v1/settings/danger/{Action}`  | varies        | No         | requires `{Confirm: "{AppName}"}` body |
+
+R-09..R-15 follow the same R-3 error envelope, R-4 invariants, and
+PascalCase parity rules established by §23. They are listed here (not in §23)
+because they are **settings-surface-scoped** and have no meaning outside
+the §24 UI shell.
+
+### S-3 — Seedable-config binding (binding)
+
+1. Every setting MUST have a seed-default row in the `Setting` table
+   (per §23 conventions). The seed row is created by the migration that
+   introduces the setting; never inserted at runtime.
+2. R-10 / R-12 / R-14 MUST `INSERT … ON CONFLICT(UserId,Key) DO UPDATE`
+   into a separate `UserSettingOverride` table — they MUST NOT mutate
+   the seed row. This preserves the seed row as the rollback target and
+   the documentation of the canonical default.
+3. R-09 returns the merged view: `COALESCE(override.Value, seed.Value)`.
+4. Removing a setting requires removing both the seed row AND any user
+   overrides in the same forward-only migration (§23 Rule 12).
+
+### S-4 — Async-state + a11y inheritance
+
+Every panel S-02..S-05 MUST reuse the U-2 four-state contract
+(`<AppSkeleton/>` / `<AppEmptyState/>` / `<AppErrorState/>` / ready) and
+the U-4 a11y invariants from the UI Contract section. No settings-specific
+slot components are introduced.
+
+### S-5 — Out-of-scope for §24
+
+- DDL for `Setting` and `UserSettingOverride` tables — owned by §23 (must materialise as T-08 follow-up).
+- Auth role definitions — out of locked-7 scope; cited only as `user`/`admin`/`svc` literals.
+- Settings export/import format — deferred (not in T-08).
+- CI gate enforcing seed-row presence per setting — owned by §27 (`seedable-config-row-present-check`, NEW backlog from T-08).
+
+### AC-ADS-UI-03 — Settings surface present and seedable-config-bound
+
+The 5-row S-1 route matrix, 7-row S-2 persistence matrix, S-3 4-invariant
+seedable-config binding, and S-4 inheritance clause MUST be present in
+`00-overview.md`. Removing any S-1 or S-2 row, weakening S-3 invariants
+1 or 2, or breaking S-4 inheritance invalidates this AC.
+
+---
 ## Cross-References
 
 
-- [§07 Theme Variable Architecture](../07-design-system/02-theme-variable-architecture.md) — Token registry consumed by this overlay
 - [§07 Spacing & Layout](../07-design-system/04-spacing-layout.md) — Spacing scale this overlay reuses
 - [§07 Sidebar System](../07-design-system/10-sidebar-system.md) — Primitive consumed by AppSidebar
 - [Consolidated Design System](../17-consolidated-guidelines/07-design-system.md) — Consolidated summary
