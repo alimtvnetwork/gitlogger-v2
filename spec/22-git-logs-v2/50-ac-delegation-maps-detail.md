@@ -86,3 +86,36 @@ axis_rationale: "Detailed normative bodies for audit-boundary meta ACs (AC-79/AC
 
 - [§97 — Acceptance Criteria](./97-acceptance-criteria.md) (binding parent — AC-80 stub)
 - [§49 — Section A AC detail](./49-ac-section-a-detail.md) (sibling pattern reference)
+
+---
+
+## AC-79 — Cross-Module Externalized Citation Map (DETAIL)  `[critical]`
+
+### AC-79 — Cross-Module Externalized Citation Map (Lesson #36 + Lesson #37 — link-don't-restate anchor table)  `[critical]`
+
+**Given** spec/22-git-logs-v2 is an **integration-axis module** (per Lesson #37: d2≤0.83 + d5≥1.10) whose normative content references contract surfaces owned by other top-level spec modules — concretely (a) `02-database-schema.md` line 368 cites "spec/04-database-conventions" as the engine of its DDL conventions, (b) `05-auth-and-validation.md` line 114 routes Lane B CI authentication callers to "spec/12-cicd-pipeline-workflows/00-overview.md", (c) `39-split-db-log-storage.md` lines 184–186 anchor the split-boundary diagrams + pattern to "spec/26-gitlogs-diagrams/01-er-diagram.mmd" + "spec/26-gitlogs-diagrams/02-domain-design.mmd" + "spec/05-split-db-architecture/00-overview.md", (d) AC-26's persisted rate-limit floor depends on "spec/13 §97 AC-22" (SQLite WAL + busy_timeout + retry+jitter — already cited inline in AC-78), and (e) AC-22-LV1's locked-vacant enforcement is mechanically caught by "linter-scripts/check-spec-folder-refs.py" (a spec/27 slot-02-bound script);
+
+**When** an AI auditor walks spec/22 §97 (the tier-1 contract surface per AC-34-09) and encounters any of these externalized citations OR a downstream contributor needs to follow the dependency chain to verify a normative claim,
+
+**Then** the auditor MUST find the canonical anchor for each external citation in the table below — every row is a Lesson-#36 link-don't-restate boundary (the citation lives ONCE in its owning module's §97; spec/22 cites it but never restates it):
+
+| External cite | Owning module + AC | Cited from spec/22 file | Citation purpose | Restate-in-22 forbidden? |
+|---|---|---|---|---|
+| spec/04-database-conventions | spec/04 §00 + §02-schema-design.md AC-09 | `02-database-schema.md` L368 (DDL header comment) | Engine selection (SQLite 3.35+) + cross-language boolean storage convention (P48-2) | **YES** — boolean storage table + per-engine DDL conventions live in spec/04 §02 v3.4.1; spec/22 DDL inherits, never restates |
+| spec/12-cicd-pipeline-workflows | spec/12 §97 AC-09 (slot-collision pin) + AC-10 (technical-interface) | `05-auth-and-validation.md` L114 (Lane B CI runner guidance) | Runner matrix + secrets schema + permissions for CI callers using Lane B SSH-key auth | **YES** — runner/secrets/env/permissions matrix lives in spec/12 `11-technical-interface.md` (bound by AC-10 per A24-fu4); spec/22 routes callers, never restates |
+| spec/13-generic-cli §97 AC-22 | spec/13 §97 AC-22 (concurrency contract) + spec/13/10-database.md (implementer mirror) + spec/13/18-batch-execution.md (concurrency-discipline subsection) | AC-26 (persisted floor) + AC-78 line 505 (already inline) | SQLite locking strategy for persisted rate-limit floor — `journal_mode=WAL`, `busy_timeout=5000`, `BEGIN IMMEDIATE`, retry 3×100ms±25% jitter | **YES** — full PRAGMA + retry contract lives in spec/13 §97 AC-22 + mirrored to spec/13/10-database.md per Phase 153 P3; spec/22 cites the AC, never restates the PRAGMA table |
+| spec/26-gitlogs-diagrams (`01-er-diagram.mmd` + `02-domain-design.mmd`) | spec/26 §97 (Mermaid diagram contract) + spec/26 §00 inventory | `39-split-db-log-storage.md` L184–185 (split-boundary visual anchor) + line 265 above (Mermaid companion folder ref) | Visual anchor for the §39 split-DB boundary — diagrams are normative diagrams owned by spec/26, brought to v2.1.0 by Phase 10 | **YES** — Mermaid source-of-truth lives in spec/26; spec/22 references the file paths, never inlines the diagram code |
+| spec/05-split-db-architecture | spec/05 §00 + §97 AC-SD-21..23 (Phase 153 A6) | `39-split-db-log-storage.md` L186 (Split-DB pattern reference) | The split-DB *pattern* (separation of operational DB vs log-storage DB) is defined in spec/05; spec/22 §39 *applies* the pattern to the git-logs domain | **YES** — pattern definition + SQL identifier double-quoting + Go struct tags + busy_timeout retry contract live in spec/05 §97 AC-SD-21/22/23; spec/22 §39 cites the pattern, never re-derives it |
+| linter-scripts/check-spec-folder-refs.py | spec/27 slot 02 §00 + §97 AC-62-01..04 (allowlist parser contract) | AC-22-LV1 line 477 (locked-vacant enforcement) | Mechanical PR-time gate that catches new slot-09..13 stub creations against the locked-vacant invariant | **YES** — script + allowlist parser contract live in spec/27 slot 02; spec/22 cites the script, never replicates the allowlist parser logic |
+
+**AND** any future contributor authoring new normative content in spec/22 that references a contract surface owned by another top-level module MUST add a row to the table above (citation + owning module/AC + spec/22 file + purpose + restate-forbidden flag) before the new content ships — the table IS the audit-followable dependency chain;
+
+**AND** any auditor finding citing "external dependency unresolved" or "dangling cross-module reference" against any of the 6 rows above MUST be classified as a stale-cache artifact (the anchor exists in the cited owning module's §97 — verify with `rg -n "AC-XX" spec/NN-*/97-acceptance-criteria.md` before flagging);
+
+**AND** the table is **append-only** within a phase (rows MAY be added, never reworded; a row's "Owning module + AC" cell may be updated when the owning AC's number changes via §97-WINS evolution but the citation purpose is immutable per Lesson #25);
+
+**AND** restating any of the linked contracts inline within spec/22 is **FORBIDDEN** (Lesson #36 dual-source drift class) — every row's "Restate-in-22 forbidden?" cell is `YES` by construction; future amendments that drop the FORBIDDEN flag require a new locked-decision in spec/22 §07 + a §99 audit row.
+
+- **Verifies:** the cross-module externalized citation contract for spec/22 — every external dependency (spec/04 + spec/12 + spec/13 + spec/26 + spec/05 + linter-scripts/check-spec-folder-refs.py) has an explicit normative anchor in the table above with owning-AC + cite-from-file + purpose + restate-forbidden columns; closes the audit-followability gap surfaced when an AI walker finds an external cite in spec/22 prose but cannot determine whether the cited contract exists in the owning module without leaving the §97 tier-1 bundle. Codifies **Lesson #36** (link-don't-restate cross-module boundary) + **Lesson #37** (integration-axis modules co-need both Lesson #19 audit-boundary pin AND Lesson #36 cross-module anchor map). Mirror of spec/02 AC-CG-21 (Subfolder Delegation Map — same pattern applied to intra-module sub-folder axis) + spec/12 AC-11 (linter-script anchor pattern from A24-fu4). Until A8 LLM-gateway re-score runs cleanly, this AC declares any cross-module-dangling finding against the 6 listed citations a stale-cache artifact per Lesson #34.
+
+---
