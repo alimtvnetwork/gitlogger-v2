@@ -280,7 +280,7 @@ adding a row here in the same commit; CI gate `appshell-route-matrix-check`
 | ID    | Route prefix          | AppShellVariant         | Auth-gated? | Notes                                           |
 |-------|-----------------------|-------------------------|-------------|-------------------------------------------------|
 | AS-01 | `/`                   | `Marketing`             | No          | Marketing landing; MUST NOT import `AppShell` (AC-ADS-06). |
-| AS-02 | `/login`              | `Marketing`             | No          | Auth surface; lives outside AppShell.           |
+| AS-02 | `/login`              | `Marketing`             | No          | Auth surface; lives outside AppShell; MUST NOT import `AppShell` (AC-ADS-06). |
 | AS-03 | `/apps`               | `Console`               | Yes (user)  | U-01 AppList; full AppShell with sidebar.       |
 | AS-04 | `/apps/$AppId`        | `Console`               | Yes (user)  | U-02 AppDetail; AppShell with sidebar.          |
 | AS-05 | `/resolve`            | `Console`               | Yes (svc/admin) | U-05 AppLinkResolveWidget; AppShell.        |
