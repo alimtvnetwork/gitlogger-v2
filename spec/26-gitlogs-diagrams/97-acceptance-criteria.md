@@ -1,7 +1,7 @@
 # Acceptance Criteria — Gitlogs Diagrams
 
-**Version:** 3.7.0
-**Updated:** 2026-05-07 (Phase B2 — added **AC-26** `[critical]` Sibling Artifact Delegation Map per Lesson #21 (intra-module sibling-file axis, mirror of spec/22 AC-80); 18-row delegation table covering all sibling artifacts in spec/26: 6 active `.mmd` + 6 paired `.svg` + `puppeteer.json` render config + `lifecycle-26-gitlogs-diagrams-lifecycle.mmd` + `01-diagram-conventions/` sub-folder + 3 informative-exempt files (`98-changelog.md`, `99-consistency-report.md`, `00-overview.md`). Each row pins content-kind + governing-§97-AC-family + tier-visibility + restate-forbidden. Mirror-pair with AC-25 (cross-module externalized citation map) — together AC-25 + AC-26 + AC-22 (derivative-context module pin) form the **complete tier-1 audit-followability triplet** for spec/26 per Lesson #37. AC count 25 → 26.)
+**Version:** 3.8.0
+**Updated:** 2026-05-10 (Session 13 — added **AC-DG-23** `[active]` Every `.mmd` source MUST begin with a 4-line narrative header block (`%% Diagram type:` / `%% What this answers:` / `%% Authoritative source:` / `%% Audience:`), promoting the §00 Quickstart rule #2 to an enforceable GWT contract. Self-application pass corrected the AC key spelling to match shipped v2.0.0 convention (`%% Authoritative source:`, not `%% Source spec:`) per Lesson #36, and patched 6 `.mmd` files missing `%% Audience:`. AC count 26 → 27.)
 **Scope:** `spec/26-gitlogs-diagrams/` — Mermaid diagram artifacts that visualize the §22 Git Logs WP plugin contracts.
 
 ---
