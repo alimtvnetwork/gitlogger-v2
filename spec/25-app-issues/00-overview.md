@@ -3,13 +3,25 @@ kind: index
 description: Top-level routing index for app issue analysis (parent of two child trackers). Exempt from missing-contract / untestable rubric findings — child trackers carry their own kind:tracker exemption.
 content_axis: audit-corpus
 axis_rationale: "Routing parent of kind:tracker post-mortems (Lesson #29)"
+produced_for:
+  # Producer-side inverse-binding (A-29, Sess-49) — mirror of §26→§22 `produced_for:` (A-27, Sess-47)
+  # and §28 producer-side (A-29 same-session twin). §25 OWNS post-mortems whose findings drive
+  # §22 evolution; rows below bind each tracker child to the §22 AC whose closure it backs.
+  # Resolved by gate #10 dual-key contract (§27 A-28, Sess-48). Lesson #29 tracker exemption
+  # preserved (kind:tracker children remain exempt from missing-contract findings).
+  - file: 02-consolidated-audit-findings/00-overview.md
+    fulfills: spec/22-git-logs-v2 §97 AC-78 "Module asset inventory pin (37-entry inventory + DDL/REST/PHP fixtures)" — 24 line-anchored findings drive §22 inventory closure
+  - file: 02-consolidated-audit-findings/00-overview.md
+    fulfills: spec/22-git-logs-v2 §97 AC-79 "Cross-Module Externalized Citation Map (Lesson #36/#37 link-don't-restate anchor table)" — findings cite §22 file:line, never restated
+  - file: 01-phase-2-git-logs-audit/00-overview.md
+    fulfills: spec/22-git-logs-v2 §97 AC-22-CE1 "Co-edit cohorts: schema/endpoint/CLI changes MUST move sibling files in the same commit" — superseded first-pass tracker preserved for traceability of cohort drift class
 ---
 
 # App Issues
 
-**Version:** 3.5.2  
+**Version:** 3.6.0  
 <!-- h10-verified-phase: 153 -->
-**Updated:** 2026-05-03 (Phase 153 Task S25-02 — added `## Process Terminology` glossary section + AC-AI-17 link-don't-restate pin)
+**Updated:** 2026-05-10 (Session 49 audit-task A-29 — added `produced_for:` producer-side front-matter binding child trackers (02-consolidated, 01-phase-2) to §22 AC-78/AC-79/AC-22-CE1. Mirrors §26→§22 producer-side (A-27 Sess-47) and §28 producer-side (A-29 same-session twin). Resolved by §27 gate #10 dual-key contract (A-28 Sess-48). Lesson #29 tracker exemption preserved. Prior: Phase 153 Task S25-02.)
 **AI Confidence:** Production-Ready  
 **Ambiguity:** None
 

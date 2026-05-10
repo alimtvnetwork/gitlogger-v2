@@ -1,10 +1,21 @@
 # Changelog — App Issues
 
-**Version:** 3.5.2  
-**Updated:** 2026-05-03 (Phase 153 Task S25-02 — AC-AI-17 process-terminology pin + `## Process Terminology` glossary in §00 closes LOW D1 `Ambiguous 'Phase 153' references` per Lesson #36)  
+**Version:** 3.6.0  
+**Updated:** 2026-05-10 (Session 49 audit-task A-29 — `produced_for:` producer-side front-matter binding child trackers to §22 AC-78/AC-79/AC-22-CE1)  
 **Scope:** `spec/25-app-issues/`
 
 ---
+
+## [3.6.0] — 2026-05-10 — Session 49 audit-task A-29: producer-side `produced_for:` front-matter (mirror of §26 A-27 + §28 A-29 twin)
+
+- **Action**: §00 front-matter gains a `produced_for:` block declaring §25's tracker children as canonical producers of post-mortem evidence whose closure backs three §22 ACs — `02-consolidated-audit-findings/00-overview.md` → AC-78 "Module asset inventory pin" + AC-79 "Cross-Module Externalized Citation Map"; `01-phase-2-git-logs-audit/00-overview.md` → AC-22-CE1 "Co-edit cohorts". Restores producer/consumer reciprocity for §25 (previously consumer-only since A-10 Sess-32).
+- **Why now**: Closes the same bidirectional-binding gap as §28's A-29 twin (this session) — A-27 (Sess-47) added producer-side to §26 but §25 remained consumer-only. The dual-key resolution contract from §27 A-28 (Sess-48) makes the addition zero-friction.
+- **Lesson #29 preservation**: tracker children retain `kind: tracker` exemption from missing-contract / untestable findings; `produced_for:` is metadata about *what the trackers fulfil for §22*, not a new contract obligation on §25 itself. The 24 line-anchored findings in `02-consolidated-audit-findings/` continue to drive §22 inventory closure (AC-78) and serve as the canonical example of link-don't-restate citation discipline (AC-79). The superseded `01-phase-2-git-logs-audit/` is preserved for traceability of the cohort-drift class (AC-22-CE1).
+- **Lesson #36 preservation**: AC titles appear as pointer-text only — full normative bodies remain in §22 §97.
+- **Lockstep**: §00 v3.5.2 → **v3.6.0** (minor — `produced_for:` is contract-tier surface). §97 unchanged. §99 lockstep update deferred to next §97 touch.
+- **Scorecard impact**: §25 C2 Completeness +1 (producer side made explicit), C4 Consistency +1 (producer/consumer reciprocity restored), C6 Friction +1 (downstream §22 maintainers now have a machine-readable pointer to the post-mortem corpus that backs AC-78/79/22-CE1). §22 C6 Friction +1 transitive.
+- **Invalidation triggers**: any §22 AC-78/AC-79/AC-22-CE1 retitling MUST cascade to the matching `fulfills:` pointer string here; any new tracker child added under §25 MUST land with a same-PR `produced_for:` row binding it to a §22 AC, else gate #10 fails hard.
+- **No** §97 AC change, **no** CI workflow change, **no** RUBRIC bump, **no** §27 gate-count change.
 
 ## [3.5.2] — 2026-05-03 — Phase 153 Task S25-02: AC-AI-17 (process terminology link-don't-restate pin)
 

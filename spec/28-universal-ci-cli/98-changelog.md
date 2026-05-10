@@ -1,9 +1,20 @@
 # Changelog
 
-**Updated:** 2026-05-10 (Session 46 audit-task A-26 — `consumes:` resync with §27 §00; 9→18 Active gates enumerated; closes latent gate-#10 drift)
+**Updated:** 2026-05-10 (Session 49 audit-task A-29 — `produced_for:` producer-side front-matter added; binds 17/06/07 to §22 AC-40/AC-11/AC-30)
 
 
 All notable changes to `spec/28-universal-ci-cli/`.
+
+## [2.8.0] — 2026-05-10 — Session 49 audit-task A-29: producer-side `produced_for:` front-matter (mirror of §26 A-27 + §24 A-12)
+
+- **Action**: §00 front-matter gains a `produced_for:` block declaring §28 as the canonical producer of three client-side artifacts and binding each to the §22 AC it fulfils — `17-openapi-client.yaml` → AC-40 "OpenAPI parity"; `06-log-shipping-contract.md` → AC-11 "Endpoint inventory"; `07-error-catalog.md` → AC-30 "Error envelope shape + RequestId mirroring". Restores producer/consumer reciprocity for §28 (previously consumer-only since A-09/A-26).
+- **Why now**: Closes the bidirectional-binding gap identified by A-27 (Sess-47) which added the same producer-side block to §26 but left §28/§25 consumer-only. The dual-key resolution contract shipped by A-28 (Sess-48) makes `produced_for:` symmetric with `consumes:` under §27 gate #10, so §28 can now declare producer-side bindings without requiring a parallel §27 edit.
+- **Lesson #36 preservation**: AC titles appear as pointer-text only ("OpenAPI parity", "Endpoint inventory", "Error envelope shape + RequestId mirroring") — full normative bodies remain in §22 §97. No AC semantics, exit codes, or schema fragments restated.
+- **Cross-verification surface**: AC-30 binding is double-anchored — §27 gates #17 (`error-envelope-shape-check`, A-22 Sess-42) and #18 (`request-id-roundtrip-check`, A-23 Sess-43) execute the integration-test contract; the new `produced_for:` row makes §28's ownership of the client side machine-readable for gate #10.
+- **Lockstep**: §00 v2.7.0 → **v2.8.0** (minor — `produced_for:` is contract-tier surface). §97 unchanged (no AC text change). §99 lockstep update deferred to next §97 touch.
+- **Scorecard impact**: §28 C2 Completeness +1 (producer side made explicit), C4 Consistency +1 (producer/consumer reciprocity restored), C6 Friction +1 (Raw-LLM no longer infers AC ownership from prose). §22 C6 Friction +1 transitive (AC-40/AC-11/AC-30 now have named upstream producer).
+- **Invalidation triggers**: any §22 AC-40/AC-11/AC-30 retitling MUST cascade to the matching `fulfills:` pointer string in this file's `produced_for:` block; any new §28 root-level `*.yaml`/`*.md` artifact that fulfils a §22 AC MUST land with a same-PR `produced_for:` row, else gate #10 fails hard.
+- **No** §97 AC change, **no** CI workflow change, **no** RUBRIC bump, **no** §27 gate-count change.
 
 ## [2.7.0] — 2026-05-10 — Session 46 audit-task A-26: `consumes:` front-matter resync with §27 §00 (9 → 18 Active gates)
 
