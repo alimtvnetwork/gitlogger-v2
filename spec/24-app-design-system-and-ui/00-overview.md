@@ -913,6 +913,8 @@ jobs:
 
 > **Scope correction (Sess-64 / Phase-5 T-03):** This section previously inlined a `module_run_audit_p78` Postgres DDL block (BIGSERIAL PK, contract_hash, implementability score, partial index on non-zero exit_code). That DDL is **execution-telemetry persistence**, NOT design-system / UI overlay content — it does not belong in §24 under the `derives_from: spec/07-design-system` boundary. Per Lesson #36 (link-don't-restate) AND the §24 separation-of-concerns contract (additive overlay on §07 only — no backend persistence schemas), the inlined DDL has been removed.
 >
+> **Canonical owner:** §27 (per-module gate-run telemetry) + §28 (universal CI/CLI run audit) + §23 (App-database persistence patterns). The `module_run_audit_p78` schema lives in §27/§28; §23 owns the dialect-precedence DDL surface. Restated below as a routing table per AC-ADS-17 T-03.
+>
 > **Canonical owners (single source of truth for module-run telemetry):**
 >
 > | Concern | Canonical surface |
