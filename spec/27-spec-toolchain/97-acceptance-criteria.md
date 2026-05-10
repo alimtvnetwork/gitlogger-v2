@@ -68,6 +68,7 @@
 - **When** `python3 linter-scripts/check-spec-cross-links.py --github` is run as a CI gate (see `.github/workflows/spec-health.yml` step "Spec cross-link gate"),
 - **Then** the script MUST exit 0 with `OK All internal spec cross-references resolve` and ANY broken target MUST fail the build (zero-broken-link contract). Allowlist exceptions live in `linter-scripts/spec-cross-links.allowlist`; entries there bypass the gate intentionally and MUST carry an inline comment justifying the exemption.
 - **Verifies:** `linter-scripts/check-spec-cross-links.py` (binds the AC to its implementation per `linter-scripts/trace-map.toml:115-118`).
+- **Worked example:** `python3 linter-scripts/check-spec-cross-links.py --github; echo "exit=$?"` MUST print `OK All internal spec cross-references resolve` then `exit=0`. Inserting `[broken](./does-not-exist.md)` into any spec file MUST flip the run to `exit=1` with a stderr `<file>:<line>: broken-link: ...` line consumable by the GitHub problem matcher.
 
 ### AC-T-11 — Validator output goes to the correct stream
 - **Given** any validator script in slots 01–09 or 50–59 (extensions `.py`, `.cjs`, `.sh`, `.ps1`, `.go`),
