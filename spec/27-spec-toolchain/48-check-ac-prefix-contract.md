@@ -19,20 +19,33 @@ machine-detectable.
 
 ### Ownership map (canonical, T-22 baseline)
 
-| Folder | Owned AC-prefix(es) | Notes |
+| Folder | Owned prefix-root(s) | Notes |
 |---|---|---|
-| §22 `git-logs-v2` | `AC-NN`, `AC-22-CE-NN`, `AC-22-LV-NN`, `AC-COHORT-NN` | Bare-numeric `AC-NN` is the legacy v2 namespace; new ACs MUST use a sub-prefix. |
-| §23 `app-database` | `AC-ADB-NN` | Single-prefix folder. |
-| §24 `app-design-system-and-ui` | `AC-ADS-NN`, `AC-CAF-NN` | `AC-CAF-NN` is the cross-cutting App-framework namespace owned by §24 (CAF-01..05 land here per T-12). |
-| §25 `app-issues` | `AC-AI-NN`, `AC-NN` | Bare-numeric `AC-NN` is the legacy phase-2 namespace; new ACs MUST use `AC-AI-NN`. |
-| §26 `gitlogs-diagrams` | `AC-DG-NN`, `AC-NN` | Bare-numeric `AC-NN` is the legacy diagram-inventory namespace; new ACs MUST use `AC-DG-NN`. |
-| §27 `spec-toolchain` | `AC-T-NN` | Single-prefix folder. |
-| §28 `universal-ci-cli` | `AC-28-NN` | Single-prefix folder. |
+| §22 `git-logs-v2` | `AC-NN` (bare-numeric), `AC-22-CE\d+`, `AC-22-LV\d+`, `AC-COHORT-\d+` | Bare-numeric is the legacy v2 namespace; new ACs SHOULD use a sub-prefix. |
+| §23 `app-database` | `AC-ADB-*` | Single-root folder. Sub-namespaces `AC-ADB-REST-NN` + `AC-ADB-SETTING-NN` (declared in §23 §00) are owned by the `AC-ADB-` root and pass clause-1. |
+| §24 `app-design-system-and-ui` | `AC-ADS-*`, `AC-CAF-NN` | `AC-CAF-NN` is the cross-cutting App-framework namespace owned by §24 (CAF-01..05 land here per T-12). Sub-namespace `AC-ADS-UI-NN` (declared in §24 §00) owned by `AC-ADS-` root. |
+| §25 `app-issues` | `AC-AI-*`, `AC-NN` (bare-numeric, legacy phase-2) | `AC-AI-*` covers `AC-AI-NN`, `AC-AI-NNN` (e.g. `AC-AI-000`), and any future `AC-AI-XYZ-NN` sub-namespace. |
+| §26 `gitlogs-diagrams` | `AC-DG-*`, `AC-NN` (bare-numeric, legacy diagram-inventory) | `AC-DG-*` covers `AC-DG-NN` and any future sub-namespace. |
+| §27 `spec-toolchain` | `AC-T-*` | Single-root folder. Sub-namespaces (e.g. `AC-T-PROMOTE-NN`) reserved for future PRs. |
+| §28 `universal-ci-cli` | `AC-28-*` | Single-root folder. |
+
+**Owned-root semantics (T-22 clarification):** a root listed with `*` (e.g. `AC-ADB-*`) owns the whole sub-tree — any AC-ID whose prefix path starts with that root is in-scope. `AC-CAF-NN` (no `*`) is a flat namespace; `AC-22-CE\d+` / `AC-22-LV\d+` are flat with a regex tail. Ownership-map round-trip (clause-5) flags any new root not listed above.
 
 The ownership map is the single source of truth; the gate hard-codes
 this table. Any change requires a §27 PR amending this slot doc AND
 the affected folder's §97 in lockstep (the gate IS the lockstep
 enforcer).
+
+**Bare-numeric collision baseline (T-22 grandfathered):** real-disk
+inspection at T-22 found §22 owns bare integers `1..41,49..85,87..90`
+(81 IDs); §25 owns bare integers `1..8` (8 IDs); §26 owns bare integers
+`22..26` (5 IDs). The shared-namespace overlap `{1,2,3,4,5,6,7,8,
+22,23,24,25,26}` (13 collisions) is GRANDFATHERED at T-22 baseline.
+Clause-3 rejects any NEW bare-numeric collision outside this 13-element
+whitelist; existing collisions accumulated before T-22 are tolerated
+because retro-renumbering 21 ACs across 3 folders would invalidate
+every external citation in the corpus. Going-forward, §25 and §26
+SHOULD mint new ACs under their sub-prefix (`AC-AI-` / `AC-DG-`).
 
 ### Invariants
 
