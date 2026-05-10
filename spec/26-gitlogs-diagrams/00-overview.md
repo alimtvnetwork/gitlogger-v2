@@ -26,11 +26,32 @@ consumes:
     source: spec/22-git-logs-v2/04-rest-api.md "all 8 endpoints — verb/path/body/response/perms/audit/errors"
   - file: 10-ssh-auth-validation.mmd
     source: spec/22-git-logs-v2/60-app-cohort-integration.md "Lane B SSH-key 10-step validation + GL-SSH-*/GL-AUTH-*/GL-APP-* rejects"
+produced_for:
+  # Producer-side index — mirror of §24 producer-side (A-12, Sess-33). Each row
+  # declares which §22 AC the diagram is the canonical depiction for. Closes the
+  # bidirectional link begun by A-11 (consumes:) — readers of §22 ACs can now
+  # resolve forward to the depicting diagram via this block.
+  # See A-27 (Session 47) — pairs with A-11 to satisfy gate #10
+  # (consumes-frontmatter-resolves) producer/consumer reciprocity.
+  - file: 01-er-diagram.mmd
+    fulfills: spec/22-git-logs-v2 §97 AC-23 "PascalCase + AUTOINCREMENT PK + CHECK-constraint catalog (schema canonical depiction)"
+  - file: 05-auth-validation.mmd
+    fulfills: spec/22-git-logs-v2 §97 AC-08 "TempToken Lane A 10-step validation order (canonical flowchart)"
+  - file: 06-permission-flow.mmd
+    fulfills: spec/22-git-logs-v2 §97 AC-11 "Profile→Role→Permission union resolution (RBAC canonical flowchart)"
+  - file: 07-rate-limit-flow.mmd
+    fulfills: spec/22-git-logs-v2 §97 AC-13 "per-Profile token-bucket + 429/Retry-After (canonical sequence diagram)"
+  - file: 08-encryption-v3-flow.mmd
+    fulfills: spec/22-git-logs-v2 §97 AC-15 "MasterKey→DataKey→LookupKey + MigrationState v3 (deferred — canonical depiction tracks the deferred state)"
+  - file: 09-endpoints-mindmap.mmd
+    fulfills: spec/22-git-logs-v2 §97 AC-04 "all 8 REST endpoints — verb/path/body/response/perms/audit/errors (canonical mindmap)"
+  - file: 10-ssh-auth-validation.mmd
+    fulfills: spec/22-git-logs-v2 §97 AC-09 "Lane B SSH-key 10-step server validation order + reject codes (canonical flowchart)"
 ---
 # Gitlogs Diagrams
 
-**Version:** 3.8.0
-**Updated:** 2026-05-10 (Session 32 A-11 — §00 3.7.1 → 3.8.0 minor bump adds `consumes:` front-matter mapping each `.mmd` source to the exact §22 AC/file it depicts. Mirrors §28→§27 (A-09, Sess 31) and §25→§27 (A-10, Sess 31) binding pattern: spec/26 is a *consumer* of §22's normative architecture; the listed `source` field is the canonical authority for what each diagram MUST stay synchronised with. Drift between any `.mmd` and its cited source = AC-DG-01 (table-coverage) or AC-DG-02 (cardinality-alignment) breach. Unblocks deferred lint rule §27 D9 `consumes-frontmatter-resolves` for spec/26.)
+**Version:** 3.9.0
+**Updated:** 2026-05-10 (Session 47 audit-task A-27 — `produced_for:` front-matter block added: 7 diagrams declare canonical-depiction binding to specific §22 ACs (AC-04, AC-08, AC-09, AC-11, AC-13, AC-15, AC-23). Mirrors §24 producer-side from A-12, Sess-33. Closes the bidirectional link begun by A-11 — readers of §22 ACs can now resolve forward to the depicting diagram via this block; gate #10 (`consumes-frontmatter-resolves`) producer/consumer reciprocity satisfied. First v2-native uplift for §26; lifts cohort-floor folder out of last place. Prior: Sess-32 A-11 consumes: binding.)
 <!-- h10-verified-phase: 153 -->
 
 Authoritative source: [`../22-git-logs-v2/00-overview.md`](../22-git-logs-v2/00-overview.md).
