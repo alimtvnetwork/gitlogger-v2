@@ -41,6 +41,8 @@ produced_for:
 
 App-specific issue analysis, root cause analysis, bug documentation, and solution guidance at the root spec level. This folder tracks problems encountered during application development, their diagnosis, and their resolution.
 
+> **No-CI-YAML boundary (Normative — Phase-5 T-30):** **CI-workflow YAML is owned exclusively by §27** (`linter-scripts/` + `.github/workflows/`) and §28 (universal CI CLI). The §25 folder MUST NOT carry executable CI workflow YAML fences (` ```yaml ` / ` ```yml ` whose body contains `runs-on:`, `uses: actions/`, top-level `jobs:`, or `on: push`/`on: pull_request`/`on: schedule`) nor unfenced bare CI keywords. Plain config-shape YAML (e.g. enum contracts) and backticked single-token mentions remain permitted. **Self-enforcing via §27 backlog gate `no-ci-yaml-in-issues-folder-check`** (slot 59 / gate #37 / Lesson #15 reflexivity pin) — stripping either literal from this block fails clause-5 of the gate itself.
+
 ---
 
 ## Placement Rule
