@@ -401,7 +401,7 @@ _Verification section last updated: 2026-04-27_
 > `timestamptz` as ISO-8601 strings or as local-tz timestamps is
 > FORBIDDEN.
 
-### Canonical app-database schema (SQL DDL, PostgreSQL 15+ — REFERENCE ONLY)
+### 🚫 REFERENCE-ONLY — Canonical app-database schema (SQL DDL, PostgreSQL 15+) — DO NOT MATERIALISE (see § "Implementation Target Precedence")
 
 ```sql
 -- =========================================================================
