@@ -59,8 +59,13 @@ EVIDENCE_CLOSE_RE = re.compile(r"<!--\s*/audit-quoted-evidence\s*-->", re.MULTIL
 
 
 def strip_fenced_code(text: str) -> str:
-    """Remove fenced code blocks (any language) for prose-only T-02 scan."""
-    return re.sub(r"```.*?```", "", text, flags=re.DOTALL)
+    """Remove fenced code blocks AND inline backtick spans for prose-only scan.
+
+    Inline `code` spans are documentation references, not executable DDL.
+    """
+    text = re.sub(r"```.*?```", "", text, flags=re.DOTALL)
+    text = re.sub(r"`[^`\n]+`", "", text)
+    return text
 
 
 def strip_evidence_blocks(text: str) -> str:
