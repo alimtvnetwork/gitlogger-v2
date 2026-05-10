@@ -802,6 +802,19 @@ jobs:
         run: |
           python3 linter-scripts/check-no-out-of-scope-spec-folder-link.py --self-test
           python3 linter-scripts/check-no-out-of-scope-spec-folder-link.py
+
+      - name: validate-guidelines.py load-proven gate (#41 / G-6r / slot 50)
+        # Sess-66 G-6r — phantom-clearing for slot 50. The cross-language
+        # coding-guidelines validator (Go/PHP/TS/Rust) had a §27 §00 entry +
+        # 99-ledger row but no CI invocation, leaving the script unwired.
+        # This gate exercises a synthetic in-memory fixture via --self-test:
+        # writes a 2-line TS probe with guaranteed CODE-RED-002 (boolean
+        # naming) violations, asserts ≥1 CODE-RED is reported, and exits 0.
+        # Locks AC-50-01 parity anchor + AC-50-03 version-banner indirectly
+        # (script must import-load cleanly to run). Does NOT scan src/ —
+        # src-tree backlog is owned by the §02 coding-guidelines workflow.
+        # Spec: spec/27-spec-toolchain/50-validate-guidelines-py.md
+        run: python3 linter-scripts/validate-guidelines.py --self-test
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
