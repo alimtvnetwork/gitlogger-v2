@@ -82,6 +82,7 @@
 - **When** the script is executed N times consecutively against the same `spec/` tree,
 - **Then** the second through Nth runs MUST produce **byte-identical** output to the disk state at the end of the first run — no new files created, no existing files mutated, no banner timestamps bumped, no AC bodies regenerated. Idempotency is verified by the `git diff --exit-code` invariant in `linter-scripts/run.sh` after the self-heal pipeline. Re-running a filler against an already-complete tree MUST exit `0` with a stdout summary like `0 files created` and zero stderr output.
 - **Verifies:** AC-T-04 idempotency declaration; SELF-HEAL pipeline contract in `mem://index.md` Core; `linter-scripts/run.sh` post-fill `git diff` gate.
+- **Worked example:** `for i in 1 2 3; do node linter-scripts/fill-missing-acceptance-criteria.cjs; done; git diff --exit-code spec/` MUST exit `0` after run 2 and run 3 (run 1 may legitimately create files). Any non-zero exit means a filler is non-idempotent and MUST be patched before merge.
 
 ### AC-T-13 — Generators are deterministic given identical disk truth
 - **Given** any generator in slots 10–19 (e.g. `generate-spec-index.cjs`, `generate-dashboard-data.cjs`, `generate-trace-map.py`),
