@@ -8,8 +8,8 @@ axis_rationale: "Cross-folder integration contract for the App cohort (§23+§24
 # App Cohort Integration Overview
 
 **Document ID:** `GL2-COHORT-2026-05-10`
-**Version:** 1.0.0
-**Updated:** 2026-05-10
+**Version:** 1.1.0
+**Updated:** 2026-05-10 (Session 28 audit-task A-06 — added AC-COHORT-06 + normative `## Cohort Naming Convention` section)
 **AI Confidence:** Production-Ready
 **Ambiguity:** Low
 
