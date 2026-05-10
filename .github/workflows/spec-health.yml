@@ -510,19 +510,15 @@ jobs:
         # cross-cuts pin literals (incl. AC-ADB-11/16/13 + EXTRACT +
         # locked-ID INSERT), AI-walker contract literals, per-fence lane
         # marker discipline (4-form whitelist), §22 single-dialect row.
-        # Disk run wired warn-only initially: §23 §00 carries 13 + §97 1
-        # SQL fences inside lane-marker-bearing sections that the
-        # 30-line lookback regex doesn't span (long DDL bodies push the
-        # marker outside the window). Reconciliation backlog ticket
-        # G-6c-followup will reflow §23 to either tighten section
-        # boundaries or restate the lane marker per-fence — same pattern
-        # as G-6a → G-6a-followup. Disk run flips warn-only → hard-fail
-        # when G-6c-followup ships. `--self-test` IS hard from day one.
-        # Spec: spec/27-spec-toolchain/55-check-dialect-precedence-banner-present.md
+        # Disk run flipped warn-only → HARD-FAIL by G-6c-followup
+        # (Sess-46): all 14 unlabelled-fence violations resolved by adding
+        # per-fence `**PRIMARY lane (SQLite — MATERIALISE):**` markers
+        # (§23 §00 13 fences) and the equivalent inside AC-ADB-12 (§97 1
+        # fence); the §23 PG appendix RLS block re-banner'd as REFERENCE.
+        # `--self-test` is also hard. Spec: spec/27-spec-toolchain/55-check-dialect-precedence-banner-present.md
         run: |
           python3 linter-scripts/check-dialect-precedence-banner-present.py --self-test
-          python3 linter-scripts/check-dialect-precedence-banner-present.py || \
-            echo "::warning::§22+§23 dialect-precedence banner gate disk-run violations — G-6c-followup pending"
+          python3 linter-scripts/check-dialect-precedence-banner-present.py
 
       - name: §22+§23+§24 boolean uniformity (PRIMARY-lane) gate
         # Slot 43 / Gate #24 — closes the 3-surface boolean parity triple
