@@ -1,6 +1,6 @@
 # Slot 39 — `check-applink-xor-clause.py`
 
-**Status:** Active gate #21 (Phase-5 T-15)
+**Status:** Active gate #22 (Phase-5 T-15)
 **Implements:** spec/23 §00 `## Polymorphic AppLink Resolution (Normative)` (line 244) + AC-ADB-05 (XOR target invariant) + AC-ADB-13 (locked-ID seed parity)
 **Self-test:** built-in (`--self-test`) against 4 synthetic in-memory fixtures
 **Workflow step:** `.github/workflows/spec-health.yml` "§23 AppLink XOR clause gate"
