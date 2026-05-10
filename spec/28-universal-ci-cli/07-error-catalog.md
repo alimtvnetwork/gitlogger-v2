@@ -105,3 +105,20 @@ In `--json` mode:
   "Action": "Check server logs / network"
 }
 ```
+
+---
+
+## Self-test exit codes (gate #40 / `--self-test`)
+
+The `glci --self-test` harness (§04) inherits the §27 cohort
+self-test exit-code contract verbatim per Lesson #36
+(link-don't-restate). vacuously-passing scanner is auto-fail
+per R5.
+
+| Exit | Meaning |
+|-----:|---------|
+| `0` → pass | All clauses passed; ≥1 fixture exercised per `--check` mode |
+| `1` → violation | One or more clauses failed; stderr lists each violation |
+| `2` → invocation error | Bad CLI usage (unknown `--check` mode, missing files) |
+| `3` → fixture-rot | Built-in fixture suite is broken (F-1 unique-passing fixture failed, or a failure-fixture passed). Distinguishes "self-test broken" from "implementation broken" |
+
