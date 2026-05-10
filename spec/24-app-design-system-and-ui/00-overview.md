@@ -21,7 +21,7 @@ produced_for:
 
 # App Design System & UI
 
-**Version:** 4.10.0
+**Version:** 4.11.0
 **Updated:** 2026-05-10 (Phase-5 T-39 — P18 §24 floor-lift; routing-pin loop opened by Sess-64 A-55 / Phase-5 T-03 (no-DDL surface) is now AC-bound via newly-minted AC-ADS-17 in §97 (literal-cited via §27 gate #36 / slot 58 `check-no-sql-ddl-in-ui-folder.py`). §24 advances Lovable 118→120, Cursor 116→120; Raw-LLM holds 118.)
 
 > 🤖 **Raw-LLM Auditor Pin (Lesson #36 link-don't-restate, applied to memory resolution — P16 friction sweep, T-37)**
@@ -912,6 +912,8 @@ jobs:
 ### Module Run Audit Schema — telemetry persistence (link-only, owner = §27/§28)
 
 > **Scope correction (Sess-64 / Phase-5 T-03):** This section previously inlined a `module_run_audit_p78` Postgres DDL block (BIGSERIAL PK, contract_hash, implementability score, partial index on non-zero exit_code). That DDL is **execution-telemetry persistence**, NOT design-system / UI overlay content — it does not belong in §24 under the `derives_from: spec/07-design-system` boundary. Per Lesson #36 (link-don't-restate) AND the §24 separation-of-concerns contract (additive overlay on §07 only — no backend persistence schemas), the inlined DDL has been removed.
+>
+> **Canonical owner:** §27 (per-module gate-run telemetry) + §28 (universal CI/CLI run audit) + §23 (App-database persistence patterns). The `module_run_audit_p78` schema lives in §27/§28; §23 owns the dialect-precedence DDL surface. Restated below as a routing table per AC-ADS-17 T-03.
 >
 > **Canonical owners (single source of truth for module-run telemetry):**
 >
