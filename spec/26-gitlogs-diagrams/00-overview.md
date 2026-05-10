@@ -50,8 +50,8 @@ produced_for:
 ---
 # Gitlogs Diagrams
 
-**Version:** 3.9.0
-**Updated:** 2026-05-10 (Session 47 audit-task A-27 — `produced_for:` front-matter block added: 7 diagrams declare canonical-depiction binding to specific §22 ACs (AC-04, AC-08, AC-09, AC-11, AC-13, AC-15, AC-23). Mirrors §24 producer-side from A-12, Sess-33. Closes the bidirectional link begun by A-11 — readers of §22 ACs can now resolve forward to the depicting diagram via this block; gate #10 (`consumes-frontmatter-resolves`) producer/consumer reciprocity satisfied. First v2-native uplift for §26; lifts cohort-floor folder out of last place. Prior: Sess-32 A-11 consumes: binding.)
+**Version:** 3.10.0
+**Updated:** 2026-05-10 (Session 58 audit-task A-47 — `## §22 Enum Catalog Mirror — 12 enum types (Lesson #36 inline pin)` section added between Inventory and Diagram metadata contract. Inlines the 12 enum-type **names** (11 active + 1 forbidden-deprecated) pinned by §22 §97 AC-81, with cardinality, diagram-relevance, and authority columns. Codes remain single-source in §22 AC-81 + `18-schema.sql` per Lesson #36. Adds AC-DG-23 binding — diagram authors MUST cite enum values by PascalCase codes from this table; free-text synonyms = breach. Establishes §26 as the fifth landing surface for new enum types (mirror of AC-81's four-surface rule). Drift-check command pinned for future §27 gate `enum-mirror-26-vs-22-aligned`. Closes Raw-LLM Implementability gap: diagram authors without §22 in context window can now cite by enum-type name + cardinality without traversing 14 KB glossary. Prior: Sess-47 A-27 produced_for: bidirectional binding.)
 <!-- h10-verified-phase: 153 -->
 
 Authoritative source: [`../22-git-logs-v2/00-overview.md`](../22-git-logs-v2/00-overview.md).
