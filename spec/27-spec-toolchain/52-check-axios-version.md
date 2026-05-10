@@ -1,9 +1,10 @@
 # 52 — check-axios-version.sh
 
-**Version:** 1.0.0  
-**Updated:** 2026-04-25  
+**Version:** 1.1.0  
+**Updated:** 2026-05-10 (Sess-66 G-6t — added `--self-test` mode + `--pkg <path>` flag; wired into spec-health.yml as **gate #46** with both --self-test and live disk run; six fixtures lock AC-52-01/02/03 + vacuous-pass anchor; phantom 7 → 6)  
 **Source:** [`linter-scripts/check-axios-version.sh`](../../linter-scripts/check-axios-version.sh)  
-**Category:** Source validator
+**Category:** Source validator  
+**Status:** Active gate #46 (load-proven via `--self-test` 6/6 fixtures + live disk run on repo `package.json`)
 
 ---
 
