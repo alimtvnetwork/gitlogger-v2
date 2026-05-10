@@ -450,7 +450,7 @@ PascalCase keys to avoid a translation layer. Booleans serialise as JSON
 ### R-4 — Contract invariants (binding)
 
 1. **PascalCase parity** — every JSON key matches its PRIMARY-lane DDL column 1:1. No camelCase, no snake_case on the wire. Self-enforcing via §27 backlog gate `rest-pascalcase-parity-check`.
-2. **Boolean parity** — wire `true`/`false` ↔ DB `1`/`0`. Never accept `0`/`1` integers in request bodies; reject with 422 `field.invalid`.
+2. **Boolean parity** — wire `true`/`false` ↔ DB `1`/`0`. Never accept `0`/`1` integers in request bodies; reject with 422 `field.invalid`. Self-enforcing via §27 backlog gate `rest-boolean-parity-check`.
 3. **Timestamp parity** — every datetime is ISO-8601 UTC with `Z` suffix, matching AC-ADB-16.
 4. **Soft-delete parity** — R-07 sets `IsActive=0` + `DisconnectedAt=now()`; never DELETEs. R-08 always INSERTs a new row (per Q3); never UPDATEs the disconnected row.
 5. **Resolve-state parity** — R-06 response `ResolutionState` value MUST be one of the closed enumeration in § "Resolution states (closed enumeration)". Any other string is a contract violation.

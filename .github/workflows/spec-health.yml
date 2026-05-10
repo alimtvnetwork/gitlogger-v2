@@ -494,6 +494,16 @@ jobs:
           python3 linter-scripts/check-rest-pascalcase-parity.py --self-test
           python3 linter-scripts/check-rest-pascalcase-parity.py
 
+      - name: §23 REST boolean parity gate
+        # Slot 57 / Gate #35 — final REST-side §27 backlog ticket.
+        # Mechanises §23 §00 R-2 + R-4 invariant 2 (wire boolean lane)
+        # against §22 17-openapi.yaml + §24 §00 U-3 (UI render parity).
+        # 6 clauses + R5 vacuous-pass + 6/6 self-test. Disk run hard-fail.
+        # Spec: spec/27-spec-toolchain/57-check-rest-boolean-parity.md
+        run: |
+          python3 linter-scripts/check-rest-boolean-parity.py --self-test
+          python3 linter-scripts/check-rest-boolean-parity.py
+
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
