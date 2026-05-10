@@ -68,8 +68,7 @@ python3 linter-scripts/check-audit-quoted-evidence-marker.py --check no-restate-
 python3 linter-scripts/check-audit-quoted-evidence-marker.py --self-test
 ```
 
-Exit codes: `0` pass · `1` violation · `2` invocation error · `3`
-fixture-rot.
+Exit codes: `0` pass · `1` violation · `2` invocation error · `3` fixture-rot.
 
 ## R5 — vacuously-passing scanner is auto-fail
 
