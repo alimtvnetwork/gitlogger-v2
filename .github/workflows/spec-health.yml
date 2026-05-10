@@ -532,6 +532,20 @@ jobs:
           python3 linter-scripts/check-boolean-uniformity-primary-lane.py --self-test
           python3 linter-scripts/check-boolean-uniformity-primary-lane.py
 
+      - name: §22+§23+§24 ErrorEnvelope uniformity gate
+        # Slot 42 / Gate #23 — five clauses: schema-pin (§22 17-openapi.yaml
+        # declares EXACTLY ONE ErrorEnvelope: block), db-mirror (§23 R-3
+        # heading + WE-* non-2xx response embeds Error.{Code,Message,TraceId}),
+        # ui-mirror (§24 AC-ADS-15 row + <AppErrorState/> matrix row cites
+        # Error.Message + TraceId), code-prefix (§22 GL-* enum / §24 ADS-*
+        # literal / §23 dotted-lowercase, no foreign cross-lane bleed),
+        # no-restate (§23/§24 MUST NOT inline a YAML ErrorEnvelope: block).
+        # Promotes AC-CAF-02 (T-12) from conditional to load-proven.
+        # Spec: spec/27-spec-toolchain/42-check-error-envelope-uniformity.md
+        run: |
+          python3 linter-scripts/check-error-envelope-uniformity.py --self-test
+          python3 linter-scripts/check-error-envelope-uniformity.py
+
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
