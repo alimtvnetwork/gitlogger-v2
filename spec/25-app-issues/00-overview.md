@@ -43,6 +43,8 @@ App-specific issue analysis, root cause analysis, bug documentation, and solutio
 
 > **No-CI-YAML boundary (Normative — Phase-5 T-30):** **CI-workflow YAML is owned exclusively by §27** (`linter-scripts/` + `.github/workflows/`) and §28 (universal CI CLI). The §25 folder MUST NOT carry executable CI workflow YAML fences (` ```yaml ` / ` ```yml ` whose body contains `runs-on:`, `uses: actions/`, top-level `jobs:`, or `on: push`/`on: pull_request`/`on: schedule`) nor unfenced bare CI keywords. Plain config-shape YAML (e.g. enum contracts) and backticked single-token mentions remain permitted. **Self-enforcing via §27 backlog gate `no-ci-yaml-in-issues-folder-check`** (slot 59 / gate #37 / Lesson #15 reflexivity pin) — stripping either literal from this block fails clause-5 of the gate itself.
 
+> **No-toolchain-enum boundary (Normative — Phase-5 T-31):** **Toolchain enumeration is owned exclusively by §27** — the single source of truth for the gate roster, slot-number range table, and `linter-scripts/` directory listing is §27 §00 (Inventory + Slot Delegation Map) and §27 §97. The §25 folder MAY cite individual gate names or single slot numbers in prose, table cells, or backtick spans (finding-evidence cross-refs), but MUST NOT carry **parallel enumerations** — no gate-enumeration tables (`Gate`/`Slot`/`Workflow step` header shape), no `linter-scripts/` directory listings (≥4 consecutive script paths in a fence or bullet list), and no slot-number range tables (`Range`/`Purpose` header shape mirroring §27 Inventory). **Self-enforcing via §27 backlog gate `no-toolchain-enum-in-issues-folder-check`** (slot 60 / gate #38 / Lesson #15 reflexivity pin) — stripping either literal from this block fails clause-5 of the gate itself.
+
 ---
 
 ## Placement Rule

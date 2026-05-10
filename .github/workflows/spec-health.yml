@@ -761,6 +761,26 @@ jobs:
         run: |
           python3 linter-scripts/check-no-ci-yaml-in-issues-folder.py --self-test
           python3 linter-scripts/check-no-ci-yaml-in-issues-folder.py
+
+      - name: §25 no-toolchain-enum boundary gate (#38 / T-31)
+        # Boundary-quartet 3/4. Asserts §25 owns ZERO toolchain-
+        # enumeration surface — single source of truth for the
+        # gate roster, slot-range table, and `linter-scripts/`
+        # directory listing is §27. Five clauses: clause-1 no
+        # gate-enumeration tables (Gate/Slot/Workflow-step shape);
+        # clause-2 no `linter-scripts/` rosters (≥4 paths in fence
+        # or bullet list); clause-3 no slot-range tables
+        # (Range/Purpose shape mirroring §27 Inventory); clause-4
+        # AC-finding cross-refs to single gate names exempt
+        # (positive R5 anchor — must exercise via ≥1 ### AC-AI-*
+        # citing a §27 gate name or `slot N` in a backtick span);
+        # clause-5 §25 §00 boundary literal `Toolchain enumeration
+        # is owned exclusively by §27` + gate self-citation
+        # (Lesson #15 reflexivity).
+        # Spec: spec/27-spec-toolchain/60-check-no-toolchain-enum-in-issues-folder.md
+        run: |
+          python3 linter-scripts/check-no-toolchain-enum-in-issues-folder.py --self-test
+          python3 linter-scripts/check-no-toolchain-enum-in-issues-folder.py
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
