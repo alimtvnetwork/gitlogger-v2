@@ -133,6 +133,8 @@ Defines the App, AppLink, AppStatus, and AppLinkType tables — the polymorphic-
 - **When** any context-window-bounded auditor or fresh implementer reads `spec/23-app-database/00-overview.md` alone,
 - **Then** the **minimal DDL summary block** below MUST be present in §00's "Convention recap" or a "Prerequisites" section (the implementer cannot author App/AppLink without knowing the parent PK types) — this is summary, not authoritative; the authoritative DDL stays in spec/22:
 
+  **PRIMARY lane (SQLite — MATERIALISE):**
+
   ```sql
   -- PREREQUISITE TABLES (authoritative DDL: spec/22-git-logs-v2/)
   -- Materialised by the git-logs-v2 module BEFORE app-database migrations run.
