@@ -25,7 +25,7 @@ SPEC27 = REPO_ROOT / "spec" / "27-spec-toolchain"
 SLOT_DOC_RE = re.compile(r"^(\d{2})-(check|audit|meta)-.*\.md$")
 ACTIVE_STATUS_RE = re.compile(r"\*\*Status:\*\*\s+Active\s+gate\s+#(\d+)", re.IGNORECASE)
 FIXTURE_RE = re.compile(r"\*\*F-(\d+)\*\*", re.IGNORECASE)
-SELF_TEST_RE = re.compile(r"`--(?:self-test|harness|selftest)`|`selftest`\s+sub")
+SELF_TEST_RE = re.compile(r"--(?:self-test|harness)\b|\bselftest\b")
 EXIT_ROWS = (
     re.compile(r"`0`[^\n]{0,40}pass", re.IGNORECASE),
     re.compile(r"`1`[^\n]{0,40}violation", re.IGNORECASE),
