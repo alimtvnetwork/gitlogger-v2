@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.0.0  
-**Updated:** 2026-05-10 (Session 43 audit-task A-23 — D3 `request-id-roundtrip-check` promoted Deferred → Active as gate #18. **Ninth and final deferred→Active conversion (9/9) — entire deferred backlog now retired.** Active gate count 17 → 18; deferred backlog 1 → **0**. Composition: **18/18 Active, 0 Deferred (100/0)**, started Sess-30 at 50/50 (9 Active / 9 Deferred). Gate reuses A-22 fixture HTTP harness, adds observability-header assertions (`x-request-id` echo: §23 emit → §22 HTTP header → §24 render → §22 AuditTrail Critical-only). Declaring AC §22 AC-COHORT-03 (J-3) qualifier removed in same PR — machine-enforced by gate #15 (third consecutive session of self-enforcement). **Major-version bump (3.x → 4.0.0)** marks the deferred-backlog closure milestone. Prior: Sess-42 A-22 D1 promotion.)
+**Version:** 4.3.0  
+**Updated:** 2026-05-10 (Session 51 audit-task A-31 — added **Shared harness library contract**: `linter-scripts/_lib/fixture_replay/` is the sole canonical home for the gate #17 + #18 HTTP fixture-replay engine (`load_fixtures` / `replay` / `EXIT_HARNESS_SETUP=3`); duplication outside `_lib/` is a gate #15 violation at meta-level (gate #15 extended to scan `check-*.py` for the three named symbols). Also extended A-28 dual-key contract row to enumerate A-29 (§28/§25) producer-side bindings now resolved by gate #10. Friction (C6) uplift task: removes the last harness-divergence drift risk in the integration-test family. No gate-count change (still 18/18 Active, 0 Deferred). Prior: Sess-48 A-28 dual-key contract.)
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
