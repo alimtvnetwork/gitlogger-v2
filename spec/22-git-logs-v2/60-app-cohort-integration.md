@@ -8,8 +8,8 @@ axis_rationale: "Cross-folder integration contract for the App cohort (§23+§24
 # App Cohort Integration Overview
 
 **Document ID:** `GL2-COHORT-2026-05-10`
-**Version:** 1.0.0
-**Updated:** 2026-05-10
+**Version:** 1.1.0
+**Updated:** 2026-05-10 (Session 28 audit-task A-06 — added AC-COHORT-06 + normative `## Cohort Naming Convention` section)
 **AI Confidence:** Production-Ready
 **Ambiguity:** Low
 
@@ -155,6 +155,50 @@ Cohort ACs live alongside per-folder ACs and are enforced by the §27 toolchain.
 | **AC-COHORT-03** | A `requestId` minted at the §23 writer-path is echoed in the §22 HTTP response header AND surfaced in the §24 error component AND (if `severity: Critical`) persisted in the §22 `AuditTrail` row — same value across all four. | §22 `20-observability.md` round-trip integration test |
 | **AC-COHORT-04** | No App-cohort component (under §24's component registry) inline-styles any error surface; every error color resolves via `--app-error-*` tokens with light + dark values present. | §24 `## Phase 61 Reference: App UI Component Registry API` · §27 `no-raw-color-in-app-component` lint rule |
 | **AC-COHORT-05** | Every `Carried-open` row in §25's v1→v2 disposition map has a matching §22 backlog ticket within 1 spec-improvement session of being added; otherwise the §27 dashboard slot 11 raises a `cohort-orphaned-finding` warning. | §25 `## v1→v2 Finding Disposition Map` rollup · §27 dashboard slot 11 |
+| **AC-COHORT-06** | Every in-scope folder + file MUST satisfy the canonical naming convention declared in `## Cohort Naming Convention (A-06)` below: folders match `^spec/2[2-8]-[a-z0-9-]+/$`; files match `^[0-9]{2}-[a-z0-9-]+\.md$` (or recognised special files: `97-acceptance-criteria.md`, `98-changelog.md`, `99-consistency-report.md`, `lifecycle-*.mmd`, `error-codes.json`, `_archive/`); and slot reservations (00 overview · 49–59 detail-AC family · 60+ cohort/integration · 97/98/99 governance trio) MUST hold. Any violation is a `cohort-naming-violation` lint failure (blocks merge). | §27 `cohort-naming-check` lint rule (deferred) · `linter-scripts/check-spec-cross-links.py` filename pattern subset |
+
+---
+
+## Cohort Naming Convention (A-06, Session 28 — normative)
+
+The naming convention below is the single in-scope source-of-truth for all 7 cohort folders. A blind-AI implementer creating a new file MUST consult this section before choosing a slot or filename — without it, the most common failure mode is collision with a reserved slot or governance file.
+
+**Folder pattern.** `^spec/2[2-8]-[a-z0-9-]+/$` — exactly 7 folders, immutable under the active scope-lock. Adding an 8th folder requires a memory-level scope-lock change, NOT a spec change.
+
+**File pattern.** `^[0-9]{2}-[a-z0-9-]+\.md$` for normative content; the following special files are allowed and required where listed:
+
+| Slot | Filename pattern | Required? | Owner | Purpose |
+|---|---|---:|---|---|
+| `00` | `00-overview.md` | **Required** in every folder | folder owner | H1 + Version + Updated banner + AI Implementer Quickstart + content router |
+| `01..48` | `^(0[1-9]\|[1-3][0-9]\|4[0-8])-[a-z0-9-]+\.md$` | Optional | folder owner | Per-topic normative content (DDL, endpoints, flows, etc.) |
+| `49..59` | `^(49\|5[0-9])-ac-[a-z0-9-]+-detail\.md$` | Optional, reserved | folder owner | AC-detail family (deep-dive per-AC contracts; §22 uses 49–59 today) |
+| `60..96` | `^(6[0-9]\|[7-9][0-9])-[a-z0-9-]+\.md$` | Optional | folder owner | Cohort/integration files, cross-cutting overlays (e.g., `60-app-cohort-integration.md`) |
+| `97` | `97-acceptance-criteria.md` | **Required** in every folder | folder owner | Per-folder AC roll-up |
+| `98` | `98-changelog.md` | **Required** in every folder | folder owner | Reverse-chronological release log |
+| `99` | `99-consistency-report.md` | **Required** in every folder | folder owner | Health/inventory + open items + drift acknowledgment |
+| n/a | `lifecycle-*.mmd` | Optional | folder owner | Mermaid lifecycle diagrams (rendered by §26) |
+| n/a | `error-codes.json` | Optional, reserved | §22 | Machine-readable error catalog (currently §22-only) |
+| n/a | `_archive/` | Optional | folder owner | Frozen historical content; invisible to active gates |
+| n/a | `README.md` | Allowed | folder owner | Human-facing landing page (non-normative) |
+
+**Reserved slots (binding):**
+- Slot `00` is **always** the module overview — never a per-topic file.
+- Slots `49..59` are **reserved** for the `*-detail.md` AC family. A non-AC-detail file in this range is a violation.
+- Slots `60..96` are **reserved** for cohort/integration files. A per-topic content file SHOULD land in `01..48`.
+- Slots `97`, `98`, `99` are **always** the governance trio.
+
+**Forbidden patterns:**
+- `^[A-Z]` anywhere in a filename (kebab-case is the only allowed casing for content files).
+- `_` (underscore) in slot-numbered files (only `_archive/` and `_*` non-content directories may use underscores).
+- Two files claiming the same slot number in the same folder.
+- A folder under `spec/` that does not match the in-scope folder pattern (enforced by scope-lock memory rule, not by this AC).
+
+**Cohort linkage.** This section is the normative anchor for naming. The following consumers cite it:
+- §25 `02-consolidated-audit-findings/97-acceptance-criteria.md` AC-03 (filename pattern check) — narrows here for the cohort-level invariant.
+- §27 toolchain rule `cohort-naming-check` (to be implemented) — programmatic enforcement.
+- A-22 (Wave-4 cross-folder glossary) will cite this section when defining "module slot" terminology.
+
+A-06 closes the blind-AI naming-guess failure mode: previously a new-file author had to read the §25 prose-AC + scan filenames in a sample folder to infer the convention; now a single normative section answers "which slot, which filename, which folder" in one place.
 
 ---
 
