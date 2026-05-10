@@ -159,6 +159,7 @@
 - **When** `linter-scripts/test/test-overview-inventory-parity.sh` and `node linter-scripts/check-tree-health.cjs --strict` run,
 - **Then** both MUST exit 0 with the script counted as specced (NOT ledger-tracked); AND the §00 inventory row in the Generators table MUST point at the slot-19 spec; AND the slot-range exception (validator inside the 10-19 band) MUST be documented in §19 alongside the Phase 100 cadence-retirement rationale this script enforces.
 - **Verifies:** INV-01, INV-02, INV-08, Phase 100 cadence retirement, Phase 107 ledger row O2 (now marked migrated), Phase 108-full retrospective.
+- **Worked example:** `test -f spec/27-spec-toolchain/19-check-memo-retrospective-headings.md && grep -Fq 'linter-scripts/check-memo-retrospective-headings.py' spec/27-spec-toolchain/19-check-memo-retrospective-headings.md && grep -Fq '19-check-memo-retrospective-headings.md' spec/27-spec-toolchain/00-overview.md && grep -Eq 'Phase 100|cadence retirement' spec/27-spec-toolchain/19-check-memo-retrospective-headings.md` MUST exit `0`.
 
 ### AC-T-24 — Slot 25 (`deepen-consistency-reports.py`) is bijection-satisfying (Phase 108-full)
 - **Given** [`spec/27-spec-toolchain/25-deepen-consistency-reports.md`](./25-deepen-consistency-reports.md) exists and references `linter-scripts/deepen-consistency-reports.py`,
