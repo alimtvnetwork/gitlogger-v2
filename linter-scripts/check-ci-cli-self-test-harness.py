@@ -55,7 +55,7 @@ SEMANTIC_MARKERS = (
 )
 
 HARNESS_DECL_LITERALS = (
-    "glci ships a built-in `--self-test` harness",
+    "ships a built-in `--self-test` harness",
     "built-in self-test harness is load-bearing for shippability",
 )
 
