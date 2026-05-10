@@ -21,7 +21,8 @@ from typing import Iterable
 ROOT = Path(__file__).resolve().parent.parent
 
 # Canonical sets (declared in AC-CAF-03 line 247 + 249).
-YES_SET = {"R-02", "R-03", "R-05", "R-06", "R-07", "R-09", "R-11", "R-13"}
+YES_SET = {"R-02", "R-03", "R-05", "R-06", "R-07",
+           "R-09", "R-10", "R-11", "R-12", "R-13", "R-14"}
 NO_SET = {"R-01", "R-04", "R-08", "R-15"}
 
 # Markers that AC-CAF-03 prose MUST carry (clause-2).
