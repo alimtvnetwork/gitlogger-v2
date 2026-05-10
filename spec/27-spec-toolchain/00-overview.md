@@ -360,6 +360,7 @@ This section is the **canonical, single-in-scope source-of-truth** for every CI 
 | 19 | `ads-boundaries-check` | Active | §27 | `python3 linter-scripts/check-ads-boundaries.py --check all --self-test` | 0 = pass; 1 = §24 §97 AC-ADS-06/09/10 boundary violation (marketing AppShell leak / ui-app name collision / `--app-status-*` leak into ui); 2 = invocation error | audit stage |
 | 20 | `spec22-inventory-check` | Active | §27 | `python3 linter-scripts/check-spec22-inventory.py --check all --self-test` | 0 = pass; 1 = §22 AC-78 inventory miss or AC-22-LV1 locked-vacant slot occupied; 2 = invocation error | validate stage |
 | 22 | `applink-xor-clause-check` | Active | §27 | `python3 linter-scripts/check-applink-xor-clause.py --check all --self-test` | 0 = pass; 1 = §23 AppLink DDL XOR-CHECK clause / disconnect-CHECK / locked-ID seed / partial-index parity violation (AC-ADB-05 + AC-ADB-13 + AC-ADB-R-4 invariant 6); 2 = invocation error; 3 = fixture-rot (synthetic source missing) | validate stage |
+| 23 | `error-envelope-uniformity-check` | Active | §27 | `python3 linter-scripts/check-error-envelope-uniformity.py --check all --self-test` | 0 = pass; 1 = §22 `ErrorEnvelope` schema-pin / §23 R-3 DB-mirror / §24 AC-ADS-15 UI-mirror / code-prefix `^(GL\|ADB\|ADS\|CAF)-…$` discipline / no-restate violation (AC-CAF-02 cross-cutting); 2 = invocation error; 3 = fixture-rot | validate stage |
 
 **Deferred lint rules (declared by Wave-1/Wave-2 ACs; implementation pending).**
 
