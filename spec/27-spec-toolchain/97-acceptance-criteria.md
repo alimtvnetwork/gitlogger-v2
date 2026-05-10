@@ -152,6 +152,7 @@
 - **When** `linter-scripts/test/test-overview-inventory-parity.sh` and `node linter-scripts/check-tree-health.cjs --strict` run,
 - **Then** both MUST exit 0 with the script counted as specced (NOT ledger-tracked); AND the §00 inventory row in the Generators table MUST point at the slot-18 spec; AND the script's slot-range exception (validator inside the 10-19 generator band) MUST be documented in §18 and acknowledged in this AC as a Phase 108-full deliberate choice (not a violation of INV-03 — the slot is new, not relabelled).
 - **Verifies:** INV-01, INV-02, INV-08 (this AC moves O1 OUT of the ledger), Phase 107 ledger row O1 (now marked migrated), Phase 108-full retrospective.
+- **Worked example:** `test -f spec/27-spec-toolchain/18-check-mermaid-syntax.md && grep -Fq 'linter-scripts/check-mermaid-syntax.mjs' spec/27-spec-toolchain/18-check-mermaid-syntax.md && grep -Fq '18-check-mermaid-syntax.md' spec/27-spec-toolchain/00-overview.md && grep -A1 '^## Slot-range exception' spec/27-spec-toolchain/18-check-mermaid-syntax.md | grep -Eq 'Phase 108-full|validator in 10-19'` MUST exit `0`.
 
 ### AC-T-23 — Slot 19 (`check-memo-retrospective-headings.py`) is bijection-satisfying (Phase 108-full)
 - **Given** [`spec/27-spec-toolchain/19-check-memo-retrospective-headings.md`](./19-check-memo-retrospective-headings.md) exists and references `linter-scripts/check-memo-retrospective-headings.py`,
