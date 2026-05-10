@@ -1,7 +1,7 @@
 # Acceptance Criteria — App Issues
 
-**Version:** 1.6.0  
-**Updated:** 2026-05-03 (Phase 153 Task S25-02 — added **AC-AI-17** Process terminology pin (`Phase NN` / `Lesson #NN` / `Task XNN`) anchored to canonical contributor-process memos per Lesson #36 link-don't-restate. Closes recurring v? LOW D1 `Ambiguous 'Phase 153' references` finding by adding a `## Process Terminology` glossary to `00-overview.md` (one-hop disambiguation pointer to `mem://index.md` + `mem://process/phase-153-lessons` + `.lovable/memory/audit/v2-deterministic/`). AC count 16 → 17.)  
+**Version:** 1.7.0  
+**Updated:** 2026-05-10 (Phase-5 T-14 — added **AC-AI-18** Parent/child AC-prefix contract for `kind: index` + `kind: tracker` modules. Codifies 4-clause discipline (AC-01..AC-08 generic floor across all 3 §97 files; `AC-AI-NN` parent-only; bare `AC-NN >= AC-09` child-extension folder-scoped; cross-child collisions EXPECTED and NOT a defect). Self-enforcing via in-spec catalogue + §27 backlog gate `ac-prefix-contract-check` (3-turn decay). Closes recurring audit-v? MEDIUM D2 `Inconsistent AC-ID prefixes across §25 tree` finding class. AC count 17 → 18. Prior: 1.6.0 — AC-AI-17 process-terminology pin.)  
 **Scope:** `spec/25-app-issues/`
 
 ---
@@ -232,6 +232,26 @@ The following files in this module also constitute acceptance surface — each m
   - Promoting this finding above LOW severity in future audits (process-terminology references are intentional bidirectional links between spec content and contributor memory; they are NOT spec-internal terminology).
 - **Verifies:** the `## Process Terminology` glossary in `00-overview.md` (one-hop disambiguation pointer); AC-AI-09/10/11 (audit-corpus module-kind invariants that justify referencing contributor process from spec content); Lesson #36 (link-don't-restate cross-module discipline applied to the spec↔memory axis); closes the recurring **audit-v? LOW D1** `Ambiguous 'Phase 153' references` finding as link-don't-restate compliance.
 - **Source:** audit cache `.lovable/cache/audit-ai/25-app-issues.json` finding `[D1] LOW Ambiguous 'Phase 153' references`; `mem://index.md` (Phase ordinal authority); `mem://process/phase-153-lessons` (Lesson catalogue authority); `.lovable/memory/audit/v2-deterministic/phase-153-task-*.md` (Task ID authority).
+
+---
+
+### AC-AI-18: Parent/child AC-prefix contract for `kind: index` + `kind: tracker` modules  `[critical]`
+
+- **Given** `spec/25-app-issues/` is a `kind: index` parent with two `kind: tracker` children (`01-phase-2-git-logs-audit/`, `02-consolidated-audit-findings/`), and each level owns its own `97-acceptance-criteria.md`,
+- **When** any AI auditor, implementer, or §27 gate walks the §25 AC namespace,
+- **Then** the following **prefix contract** is binding and exhaustive:
+  1. **Generic-floor band `AC-01..AC-08`** — reserved for the structural minimum surface (entry-point, sibling-files, naming, consistency, tree-health, version-banner, cross-spec-links, §98↔§99 lockstep). MUST appear in **every** §25-tree §97 (parent + both children) with byte-identical wording derived from the spec-authoring-guide template. Justified as intentional minimum surface by AC-AI-12 — NOT circular boilerplate.
+  2. **Parent-only band `AC-AI-09..AC-AI-NN`** — reserved EXCLUSIVELY for the parent `spec/25-app-issues/97-acceptance-criteria.md`. Prefix `AC-AI-` (App Issues, parent-scope) covers cross-cutting tracker-module-kind invariants binding both children at once (module-kind classification, evidence-quoting contract, missing-file-target rule, generic-floor justification, concurrency-out-of-scope, R/C/F/P body schema, walker-cap structural rule, process-terminology pin, and this prefix contract). Children MUST NOT mint `AC-AI-NN` IDs.
+  3. **Child-extension band `AC-09..AC-NN`** — each child §97 MAY extend its own AC namespace starting at `AC-09` (immediately after the generic floor) using the bare `AC-NN` prefix scoped to that child folder. `AC-09` in `01-phase-2-git-logs-audit/97-acceptance-criteria.md` (frozen dual-severity-enum) and `AC-09` in `02-consolidated-audit-findings/97-acceptance-criteria.md` (closed `Status` enum) are the canonical examples — the bare `AC-NN` prefix is folder-scoped, NOT globally unique. Cross-child collisions on `AC-NN` are EXPECTED and NOT a defect.
+  4. **Forbidden ID patterns** — children MUST NOT use `AC-AI-NN` (parent-reserved); parent MUST NOT use bare `AC-NN` ABOVE `AC-08` (child-reserved); no level may reuse a `CAF`/`ADB`/`ADS-UI`/`ALW`/`ERR`/`JWT` prefix (those belong to other modules per §22/§23/§24); audit-finding bodies that quote foreign AC-IDs (e.g. `AC-ALW-12` from `spec/_archive/21-git-logs-v1/`) are evidence-under-analysis per AC-AI-10 and do NOT count as minted IDs in §25.
+- **Self-enforcing mechanism:** this AC + the byte-identical AC-01..AC-08 floor across all three §97 files (verifiable by `diff` on the floor block) + the §27 backlog gate `ac-prefix-contract-check` (NEW T-14 — walks every `97-acceptance-criteria.md` under `spec/25-app-issues/`, asserts: parent has only `AC-01..AC-08` + `AC-AI-NN`; each child has only `AC-01..AC-08` + bare `AC-NN >= AC-09`; no `AC-AI-NN` appears in children). Until that gate ships within 3 turns, this AC's verifier is the explicit catalogue in clauses (1)–(4) above (un-conditional, in-spec).
+- **Why:** without a written prefix contract, audit-v8+ walkers misclassify the parent/child AC namespace overlap (bare `AC-09` appearing in both children with different bodies) as a duplicate-ID defect, AND mistake the parent-only `AC-AI-NN` band for a child contract gap ("why doesn't `01-phase-2-git-logs-audit/` define `AC-AI-09`?"). Closes the recurring **audit-v? MEDIUM D2** `Inconsistent AC-ID prefixes across §25 tree` finding class permanently. Codifies the prefix discipline already practised since Phase 153 Task A11c into a single tier-1 contract clause readable by walkers without scanning all three §97 files.
+- **Forbidden remediation patterns:**
+  - Renaming child `AC-09..AC-NN` to globally-unique IDs like `AC-PH2-09` / `AC-CAF-09` (breaks the folder-scoped convention; creates churn across §98/§99 changelogs).
+  - Promoting child-extension IDs into the parent (violates `kind: tracker` autonomy per AC-AI-09).
+  - Inlining children's AC bodies into parent §97 (violates link-don't-restate per AC-AI-17 / Lesson #36).
+- **Verifies:** AC-AI-09 (parent-router module-kind), AC-AI-12 (generic-floor justification), `00-overview.md` front-matter `kind: index` (parent) + `kind: tracker` (children); §98 changelog v1.6.0 → v1.7.0 entry for AC-AI-18; §99 consistency report v?.?.? AC-count parity (17 → 18 in parent; child counts unchanged — IDs are folder-scoped per clause 3).
+- **Source:** parent §97 (this file) lines 17–75 (AC-01..AC-08 floor) + lines 85–234 (`AC-AI-09..AC-AI-17`); child §97s `AC-09` extensions cited above; spec-authoring-guide AC template (`spec/01-spec-authoring-guide/03-required-files.md`); §27 backlog gate `ac-prefix-contract-check` (NEW T-14).
 
 ---
 
