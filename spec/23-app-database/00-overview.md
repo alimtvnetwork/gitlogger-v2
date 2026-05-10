@@ -421,12 +421,9 @@ The 8-row R-1 endpoint matrix, R-2 schemas, R-3 error envelope, and R-4
 invariants 1–7 MUST be present in `00-overview.md`. Removing any row of R-1,
 removing R-3, or removing R-4 invariants 1, 2, or 4 invalidates this AC.
 
----
+## Migration Template (Rule 12 — forward-only)
 
 
-
-```sql
--- migrations/2026XXXXNN-add-{column}-to-App.sql
 BEGIN TRANSACTION;
 
 -- ✅ Allowed: nullable, no DEFAULT.
