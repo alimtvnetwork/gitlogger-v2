@@ -86,6 +86,7 @@ GL_REJECT_CODE_FORMAT:     GL-{CATEGORY}-{NAME} (e.g. GL-AUTH-INVALID-TOKEN)
 - **When** rendered via `mmdc -i <file>.mmd -o <file>.svg -p puppeteer.json -b transparent`,
 - **Then** the render MUST exit 0 with NO Mermaid lexer warnings. Emoji codepoints (U+1F300..U+1FAFF, U+2600..U+27BF, U+1F000..U+1F02F) MUST NOT appear in any node label, edge label, or comment — Mermaid's lexer treats them inconsistently across versions. ASCII-only labels are mandatory.
 - **Verifies:** AC-DG-LEGACY-07 (rendering smoke test).
+- **Mechanically enforced by:** `spec/27-spec-toolchain/63-check-diagram-parity.py` (gate #41, clause 4 — emoji-free Mermaid lexer compliance, codepoint ranges U+1F300..U+1FAFF / U+2600..U+27BF / U+1F000..U+1F02F). Promoted from conditional to literal-cited at slot-63 ship; closes `AC-DG-emoji-free` placeholder.
 
 ### AC-DG-07 — No diagram references JWT, RS256, or JWKS
 
