@@ -653,6 +653,32 @@ jobs:
         run: |
           python3 linter-scripts/check-ac-prefix-contract.py --self-test
           python3 linter-scripts/check-ac-prefix-contract.py
+
+      - name: §24 U-1 component binding gate (#30 / T-23)
+        # Phase-5 T-23 / Slot 49 — closes §27 backlog ticket
+        # `ui-component-binding-matrix-check`. Walks §24 §00 U-1
+        # / U-2 / U-3 vs §23 §00 R-1 endpoint matrix and asserts
+        # six clauses: clause-1 every U-1 R-NN token resolves in
+        # §23 R-1; clause-2 every UI-consumable §23 R-NN
+        # (role user|admin) referenced by ≥1 U-1 row (reverse
+        # coverage of clause-1); clause-3 U-2 four-state slot
+        # literals (`<AppSkeleton/>`, `<AppEmptyState/>`,
+        # `<AppErrorState/>`, `(the component body)`) + prose
+        # literals (`data-error-code`, `Error.TraceId`,
+        # `copy-to-clipboard`); clause-4 U-1 role-gate enum
+        # discipline (closed set {user, admin, svc, svc/admin,
+        # admin/svc}); clause-5 U-3 boolean parity literal
+        # presence (mirrors §23 R-4 inv-2; sibling to gate #24
+        # clause-3 on the §23 side); clause-6 no §24 file may
+        # restate the §23 R-1 column shape `| ID | Endpoint |
+        # Method | Path |` (Lesson #36 link-don't-restate).
+        # Same exit-code contract as gates #22..#35: 0/1/2/3.
+        # R5 vacuous-pass: zero U-1 / R-1 rows or zero U-2 / U-3
+        # literals → exit 1.
+        # Spec: spec/27-spec-toolchain/49-check-ui-component-binding-matrix.md
+        run: |
+          python3 linter-scripts/check-ui-component-binding-matrix.py --self-test
+          python3 linter-scripts/check-ui-component-binding-matrix.py
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
