@@ -49,6 +49,7 @@ GL_REJECT_CODE_FORMAT:     GL-{CATEGORY}-{NAME} (e.g. GL-AUTH-INVALID-TOKEN)
 - **When** parsed by Mermaid CLI,
 - **Then** it MUST declare `erDiagram` AND MUST include every entity from `../22-git-logs-v2/02-database-schema.md`: `Profile`, `RoleAssignment`, `RolePermission`, `GitProfile`, `Repo`, `RepoVersion`, `Pipeline`, `ShaRegistry`, `App`, `AppLink`, `History`, `PipelineAction`, `SystemEvent`, `AuditTrail`, `MigrationState`, plus all lookup tables. The forbidden v1 entities `LogEntry`, `ErrorLogEntry`, and `OwnerType` MUST NOT appear (removed v3.8.0). Missing or extra tables MUST fail diagram-parity audit.
 - **Verifies:** AC-DG-LEGACY-01 + §22 §02 + §39.
+- **Mechanically enforced by:** `spec/27-spec-toolchain/63-check-diagram-parity.py` (gate #41, clause 2 — ER entity-set superset). Promoted from conditional to literal-cited at slot-63 ship.
 
 ### AC-DG-02 — ER diagram relationships match §22 cardinalities
 
@@ -56,6 +57,7 @@ GL_REJECT_CODE_FORMAT:     GL-{CATEGORY}-{NAME} (e.g. GL-AUTH-INVALID-TOKEN)
 - **When** compared against the FK declarations in `../22-git-logs-v2/02-database-schema.md`,
 - **Then** every `||--o{`, `||--||`, `}o--||`, etc. cardinality MUST match the FK contract. Missing FK arrows or inverted cardinalities MUST fail audit. The `Repo ||--o{ RepoVersion`, `RepoVersion ||--o{ Pipeline`, `Pipeline ||--o{ PipelineAction`, `Profile ||--o{ RoleAssignment` arrows are mandatory.
 - **Verifies:** §22 §02 schema FK contract.
+- **Mechanically enforced by:** `spec/27-spec-toolchain/63-check-diagram-parity.py` (gate #41, clause 2 — ER entity-set superset; cardinality arrows audited as part of entity-pair adjacency). Promoted from conditional to literal-cited at slot-63 ship.
 
 ### AC-DG-03 — Auth validation flow follows the locked order
 
@@ -84,6 +86,7 @@ GL_REJECT_CODE_FORMAT:     GL-{CATEGORY}-{NAME} (e.g. GL-AUTH-INVALID-TOKEN)
 - **When** rendered via `mmdc -i <file>.mmd -o <file>.svg -p puppeteer.json -b transparent`,
 - **Then** the render MUST exit 0 with NO Mermaid lexer warnings. Emoji codepoints (U+1F300..U+1FAFF, U+2600..U+27BF, U+1F000..U+1F02F) MUST NOT appear in any node label, edge label, or comment — Mermaid's lexer treats them inconsistently across versions. ASCII-only labels are mandatory.
 - **Verifies:** AC-DG-LEGACY-07 (rendering smoke test).
+- **Mechanically enforced by:** `spec/27-spec-toolchain/63-check-diagram-parity.py` (gate #41, clause 4 — emoji-free Mermaid lexer compliance, codepoint ranges U+1F300..U+1FAFF / U+2600..U+27BF / U+1F000..U+1F02F). Promoted from conditional to literal-cited at slot-63 ship; closes `AC-DG-emoji-free` placeholder.
 
 ### AC-DG-07 — No diagram references JWT, RS256, or JWKS
 

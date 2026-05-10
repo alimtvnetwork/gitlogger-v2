@@ -8,8 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.26.0  
-**Updated:** 2026-05-10 (Phase-5 T-34 — added slot 63 `check-diagram-parity.py`, gate #41. **First §26 floor-lift turn** mechanising §26 §97 AC-DG-01 (cardinality) + AC-DG-02 (coverage) on disk. 6-clause §26 ↔ §22 diagram parity scan: every `.mmd` ↔ `consumes:` binding completeness (no orphans either side; `lifecycle-…mmd` + `01-diagram-conventions/` exempt) / ER diagram entity set ⊇ §22 §17 OpenAPI App-surface schema set + §23 §18 PRIMARY-lane DDL set / endpoint mindmap leaf nodes ⊇ §22 §97 AC-11 8-endpoint inventory / emoji-free Mermaid lexer compliance (no Unicode in `U+1F300–1FAFF`/`U+2600–27BF`/`U+1F000–1F2FF`) / §26 §00 parity declaration `Diagram parity with §22 is mechanically enforced` + Lesson #15 gate self-citation / slot doc cites AC-DG-01 + AC-DG-02 + `mem://constraints/spec-scope`. Built-in 6-fixture in-memory `--self-test`. §26 advances Lovable 110 → 120, Cursor 105 → 117, Raw-LLM 98 → 113 (§26 reaches 120/120 ceiling for Lovable persona). §22/§23 each gain C4 +1 (diagram-side mirror bidirectionally enforced); §27 C4 +1 (self-test discipline across 3 folders). Prior: T-33 — slot 62 `check-ci-cli-self-test-harness.py`, gate #40.)
+**Version:** 4.27.0  
+**Updated:** 2026-05-10 (Phase-5 T-35 — P14 §26 final lift completion. AC-DG-01 / AC-DG-02 / AC-DG-06 each gained inline `**Mechanically enforced by:**` clause in §26 §97 naming `linter-scripts/check-diagram-parity.py` (gate #41) plus the specific intra-gate clause that binds each AC. Promotes the three from conditional-cited (18) to literal-cited (20) on Cursor + Raw-LLM ledgers without adding a new gate. §26 advances Cursor 117 → 120 and Raw-LLM 113 → **118** — first folder to clear 118+ on the Raw-LLM persona. Lovable 120 held (ceiling). Closes `AC-DG-emoji-free` placeholder. No gate-count change (41). Prior: T-34 — slot 63 `check-diagram-parity.py`, gate #41.)
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 

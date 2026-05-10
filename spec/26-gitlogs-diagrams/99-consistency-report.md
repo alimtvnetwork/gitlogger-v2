@@ -1,7 +1,9 @@
 # Consistency Report — Gitlogs Diagrams
 
-**Version:** 3.5.3
-**Updated:** 2026-05-10 (Session 13 — banner cascade for AC-DG-23 introduction)
+**Version:** 3.5.4
+**Updated:** 2026-05-10 (Session 60 P14 — §26 final lift; AC-DG-01/02/06 literal-cited via gate #41)
+
+> **v3.5.4 update (Session 60 P14 — §26 final lift to 120/120/118 = first folder to clear 118+ on Raw-LLM):** AC-DG-01 (ER entity-set), AC-DG-02 (ER cardinality), AC-DG-06 (emoji-free Mermaid lexer) each gained an inline `**Mechanically enforced by:**` clause naming `spec/27-spec-toolchain/63-check-diagram-parity.py` (gate #41) plus the specific clause within the gate. Promotes the three from conditional-cited (18) to literal-cited (20) on the Cursor + Raw-LLM ledgers. Score evolution carried forward: Lovable 120 → 120 (held); Cursor 117 → **120** (+3); Raw-LLM 113 → **118** (+5). Closes `AC-DG-emoji-free` placeholder. No CI workflow change, no gate-count change.
 
 > **v3.5.3 update (Session 13 — AC-DG-23 narrative-header contract + self-application pass):** Added **AC-DG-23** `[active]` to §97 promoting the §00 Quickstart 4-line `.mmd` narrative-header rule (`%% Diagram type:` / `%% What this answers:` / `%% Authoritative source:` / `%% Audience:`) to an enforceable GWT contract. Self-application pass: (a) corrected AC key spelling to match shipped v2.0.0 convention (`%% Authoritative source:`, not `%% Source spec:`) per Lesson #36 — fix the AC, not 9 artefacts; (b) patched 6 `.mmd` files missing `%% Audience:` (`05-auth-validation`, `06-permission-flow`, `07-rate-limit-flow`, `08-encryption-v3-flow`, `09-endpoints-mindmap`, `10-ssh-auth-validation`); (c) verified empty miss-list across all 9 active sources. Banners: §97 v3.7.0 → **v3.8.0** (AC count 26 → 27, minor — new contract surface); §00 v3.7.0 → **v3.7.1** (patch — Quickstart rule now AC-pinned); §98 v3.7.0 → **v3.8.0** (minor — this entry); §99 v3.5.2 → **v3.5.3** (this entry). **No CI workflow change, no RUBRIC bump, no gate-count change, no AC-31-31 cascade.** Mirror of spec/22 AC-22-CE1 (Session 12) and spec/27 AC-T-36 (Session 14) advisory→enforceable lift pattern.
 
