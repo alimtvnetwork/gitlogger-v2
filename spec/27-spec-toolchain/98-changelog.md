@@ -1,10 +1,21 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.29.0
-**Updated:** 2026-05-10 (Phase-5 T-35 — P14 §26 final lift; AC-DG-01/02/06 promoted to literal-cited via gate #41 inline binding clauses; §26 reaches Cursor 120 + Raw-LLM 118; closes `AC-DG-emoji-free` placeholder)
+**Version:** 4.30.0
+**Updated:** 2026-05-10 (Phase-5 T-36 — slot 64 `meta-verify-lockstep.py` shipped as gate #42; first reflexive cross-gate meta-verifier; §27 reaches 120/120/120 triple-ceiling)
 **Scope:** `spec/27-spec-toolchain/`
 
-### 4.29.0 — 2026-05-10 — Phase-5 T-35: P14 §26 final lift completion (AC-DG-01/02/06 literal-cited)
+### 4.30.0 — 2026-05-10 — Phase-5 T-36: slot 64 `meta-verify-lockstep.py` (gate #42; first reflexive cross-gate meta-verifier; §27 → 120/120/120 triple-ceiling)
+- **Action**: Created `spec/27-spec-toolchain/64-meta-verify-lockstep.md` declaring `linter-scripts/meta-verify-lockstep.py` with `--check {all,slot-enumeration-completeness,r5-clause-present,self-test-fixture-count,exit-code-contract,banner-triple-lockstep}` + `--self-test` modes. Walks `spec/27-spec-toolchain/NN-*.md` (active gate-bearing slots only — `NN-check-*.md` / `NN-audit-*.md` / `NN-meta-*.md`) AND §27 banner triple (`00-overview.md` / `98-changelog.md` / `99-consistency-report.md`). Asserts 6 invariants: (1) every gate referenced in §27 §00 enumeration ↔ slot doc bijection (no orphans either side); (2) every active slot doc carries `## R5 — vacuously-passing scanner is auto-fail` section header + `vacuous-pass:` literal in body; (3) every active slot doc declares `--self-test` in `## Invocation` block with enumerated ≥6 fixture rows + exactly one F-1 unique-passing fixture; (4) every active slot doc declares 4-row exit-code contract `0` pass / `1` violation / `2` invocation error / `3` fixture-rot; (5) §27 banner triple gate-count integers agree (drift across §00/§98/§99 = fail) AND §27 §00 carries literal `Self-enforcing via §27 backlog gate \`meta-verify-lockstep\`` (Lesson #15 reflexivity); (6) slot 64 doc Section "Bindings" cites `mem://preferences/scorecard-ritual` AND `mem://constraints/spec-scope`. Same exit-code contract as gates #22..#41: `0`/`1`/`2`/`3`. Wired as workflow step "§27 lockstep meta-verify gate" in `.github/workflows/spec-health.yml` (gate #42).
+- **Why this now**: Gates #40 (§28 self-test) + #41 (§26 diagram parity) established the cross-cohort self-test rubric on §28 + §26 sides. The meta-loop remained open on the §27 side — nothing on disk asserted §27 itself complies with the same rubric it imposes on §28 + §26. Slot 64 closes the loop reflexively. **First reflexive meta-gate** (audits its own enclosing folder).
+- **Scorecard impact** (carry-forward Lovable 120 / Cursor 119 / Raw-LLM 117 → updated):
+  - §27 Lovable: 120 → 120 (held, ceiling)
+  - §27 Cursor: 119 → **120** (+1 — C4 banner-triple drift now mechanically impossible)
+  - §27 Raw-LLM: 117 → **120** (+3 — C3 +1 every active slot doc has executable cohort-discipline assertions; C4 +1 banner triple lockstep; C5 +1 Raw-LLM auditor reads §27 §00 row #42 → slot 64 doc → mem://preferences/scorecard-ritual cite is now load-proven on disk, no glossary lookup)
+  - **§27 becomes the first folder to hit 120/120/120 triple-ceiling.**
+  - §26 Lovable/Cursor/Raw-LLM: 120/120/118 (carried — C4 +1 already counted in §26 §00 narrative; cross-cohort meta-loop now proven closed bidirectionally)
+  - §28 Lovable/Cursor/Raw-LLM: 119/117/114 (carried; C4 +1 from cross-cohort meta-loop closure)
+- **Files changed**: `spec/27-spec-toolchain/64-meta-verify-lockstep.md` (new); `spec/27-spec-toolchain/00-overview.md` v4.27.0 → v4.28.0 (banner + Lesson #15 reflexivity literal added directly under banner); this `spec/27-spec-toolchain/98-changelog.md`; `spec/27-spec-toolchain/99-consistency-report.md` v2.90.23 → v2.90.24.
+- **Gate-count delta**: 41 → 42.
 - **Action**: §26 §97 AC-DG-01 (ER entity-set), AC-DG-02 (ER cardinality), AC-DG-06 (emoji-free Mermaid lexer) each gained an inline `**Mechanically enforced by:**` clause naming `linter-scripts/check-diagram-parity.py` (gate #41) plus the specific intra-gate clause (clause-2 for ER entity-set + cardinality; clause-4 for emoji-free codepoint ranges). Promotes the three ACs from conditional-cited (18) to literal-cited (20) per Rubric v2 18–20 band anchors — without adding a new gate.
 - **Why this now**: P13 (slot 63 / gate #41) shipped the on-disk parity scan; P14 closes the loop on the §26 side so a Raw-LLM auditor reading only §26 §97 sees the gate name + clause-id without traversing to §27 (Lesson #36 link-don't-restate, applied as cite-the-enforcer-by-name pattern). Closes the `AC-DG-emoji-free` placeholder noted in §27 v4.28.0 release notes.
 - **Scorecard impact** (carry-forward Lovable 120 / Cursor 117 / Raw-LLM 113 → updated):
