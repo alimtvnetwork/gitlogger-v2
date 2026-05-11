@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Git Logs admin (E2E harness)</title>
+    <!-- styles.css is imported by main.tsx in dev (HMR). -->
+  </head>
+  <body>
+    <!--
+      Mirrors the markup that includes/class-admin-page.php injects into
+      wp-admin. The boot blob and a window.fetch interceptor are installed
+      BEFORE the bundle runs so React sees a deterministic API surface
+      without a real WordPress.
+    -->
+    <div id="git-logs-admin-root"></div>
+
+    <script>
+      window.GitLogsBoot = {
+        restRoot: "/api/git-logs/v1",
+        nonce: "test-nonce",
+        version: "0.1.0-e2e"
+      };
+
+      // Each spec preloads window.__GL_FIXTURES__ with route → response map
+      // via page.addInitScript() before navigation. Anything not matched
+      // returns 404 with a recognisable JSON envelope.
+      const _origFetch = window.fetch.bind(window);
+      window.fetch = async (input, init) => {
+        const url = typeof input === "string" ? input : input.url;
+        const path = url.replace(/^https?:\/\/[^/]+/, "").replace(/^\/api\/git-logs\/v1/, "");
+        const fixtures = window.__GL_FIXTURES__ || {};
+        const match = fixtures[path] ?? fixtures[path.split("?")[0]];
+        if (match !== undefined) {
+          const body = typeof match === "function" ? match(url, init) : match;
+          return new Response(JSON.stringify(body), {
+            status: 200, headers: { "Content-Type": "application/json" }
+          });
+        }
+        if (window.__GL_PASSTHROUGH__) return _origFetch(input, init);
+        return new Response(JSON.stringify({ code: "test_not_mocked", message: "no fixture for " + path }), {
+          status: 404, headers: { "Content-Type": "application/json" }
+        });
+      };
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
