@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Read the docs first
+    url: https://github.com/example/git-logs#readme
+    about: Quickstart, install, exit-code reference.

@@ -1,0 +1,23 @@
+name: Spec question
+description: Clarify intent or surface a contradiction in spec/22..28/.
+labels: ["spec", "question"]
+body:
+  - type: input
+    id: spec
+    attributes:
+      label: Spec section
+      placeholder: spec/28 §06 R2
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: Quote the relevant lines and describe the ambiguity.
+    validations:
+      required: true
+  - type: textarea
+    id: implication
+    attributes:
+      label: Implementation impact
+      description: Which package(s) or controller(s) depend on the answer?

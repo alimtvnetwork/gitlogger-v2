@@ -1,0 +1,54 @@
+name: Bug report
+description: Report a defect in the CLI, plugin, or admin UI.
+labels: ["bug", "triage"]
+body:
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - glci (Go CLI)
+        - WordPress plugin
+        - Admin UI (React)
+        - Specs / docs
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Output of `glci version`, plugin "Git Logs" version in WP Admin, or commit SHA.
+      placeholder: glci 0.5.0 / plugin 0.4.0 / 1a2b3c4
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction steps
+      description: Minimum sequence to trigger the bug. Include relevant flags, configs, env vars (redact secrets).
+      placeholder: |
+        1. `glci ping --base https://example.com`
+        2. Observe…
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: Include exit code, stderr, server-returned ErrorCode if any.
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      placeholder: |
+        OS: ubuntu 22.04
+        PHP: 8.2.10
+        WordPress: 6.5.2
