@@ -126,6 +126,11 @@ correctly REJECTS five synthetic fixtures:
   DDL landing (separation of concerns: §24 owns the surface, §23
   owns the storage).
 
+## Red-green test pairs (AC-T-39)
+
+- **RED:** introduce a fixture violation against any clause of this gate's `## Contract` closed-set (use the negative example documented in this slot's `**Self-test:**` synthetic-fixture roster, e.g. an `F-N` failing fixture, OR a corresponding fixture path under `linter-scripts/_fixtures/slot-44/`) and run `python3 linter-scripts/check-seedable-config-row-present.py --self-test` — MUST exit non-zero with a clause-numbered failure citing the violated invariant (gate #25 clause-N). Restore fixture / state to revert.
+- **GREEN:** with no violation present (every `F-N` synthetic fixture in clean state per this slot's frontmatter `**Self-test:**` declaration), `python3 linter-scripts/check-seedable-config-row-present.py --self-test` MUST exit 0 with the gate's standard pass banner (e.g. `OK: gate #25 clean`); the GREEN baseline is the union of all clean-pass fixtures cited in this slot's frontmatter.
+
 ## Out of scope
 
 - Actual `Setting` + `UserSettingOverride` DDL — owned by §23 (S-5
