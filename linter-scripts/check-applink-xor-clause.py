@@ -243,23 +243,30 @@ def main() -> int:
     ap.add_argument("--self-test", action="store_true")
     ap.add_argument("--source", default=str(SPEC23_OVERVIEW),
                     help="Spec source to scan (default: spec/23-app-database/00-overview.md)")
+    ap.add_argument("--all-sources", action="store_true",
+                    help="Walk every entry in MIRROR_SOURCES (§23 contract + §22 mirror); "
+                         "fail on the first divergence. Lockstep enforcement of G-6w-mirror.")
     args = ap.parse_args()
 
     if args.self_test:
         return self_test()
 
-    src = Path(args.source)
-    if not src.exists():
-        print(f"FAIL: source not found: {src}", file=sys.stderr)
-        return 2
-    text = src.read_text(encoding="utf-8")
-    errs = run_against(text, args.check)
-    if errs:
-        for e in errs:
-            print(f"FAIL: {e}")
-        return 1
-    print(f"OK: AppLink XOR clause gate clean on {src.name} (--check={args.check})")
-    return 0
+    sources = list(MIRROR_SOURCES) if args.all_sources else [Path(args.source)]
+    total_errs = 0
+    for src in sources:
+        if not src.exists():
+            print(f"FAIL: source not found: {src}", file=sys.stderr)
+            total_errs += 1
+            continue
+        text = src.read_text(encoding="utf-8")
+        errs = run_against(text, args.check)
+        if errs:
+            for e in errs:
+                print(f"FAIL [{src.relative_to(REPO)}]: {e}")
+            total_errs += len(errs)
+        else:
+            print(f"OK: AppLink XOR clause gate clean on {src.relative_to(REPO)} (--check={args.check})")
+    return 1 if total_errs else 0
 
 
 if __name__ == "__main__":
