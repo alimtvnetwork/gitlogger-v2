@@ -76,6 +76,7 @@ func RunCmd(args []string, only string) error {
 	runtimeFilter := fs.String("runtime", "", "Restrict to one runtime")
 	phasesCSV := fs.String("phases", "", "CSV subset (default lint,build,test)")
 	jsonOut := fs.Bool("json", false, "Machine-readable output")
+	stream := fs.Bool("stream", false, "Stream events live (POST /events + /finalize) instead of batched POST /append-log")
 	if err := fs.Parse(args); err != nil {
 		return exitErr(64, err)
 	}
@@ -136,26 +137,38 @@ func RunCmd(args []string, only string) error {
 			}
 			emitResult(res, *jsonOut)
 
-			// §06 shipping (batched mode, Lane A).
+			// §06 shipping: batched (default) or streaming (--stream).
 			if !*noPush {
 				body := buildBody(cfg, rt.ID, p.Phase, res)
-				sres := ship.Ship(context.Background(), ship.Options{
-					ServerURL:  cfg.ServerURL,
-					MaxRetries: cfg.MaxRetries,
-				}, body)
-				if sres.ExitCode != 0 {
-					if *jsonOut {
-						fmt.Printf(`{"Push":"failed","Runtime":%q,"Phase":%q,"ExitCode":%d,"OurCode":%q,"ServerCode":%q,"Attempts":%d}`+"\n",
-							rt.ID, p.Phase, sres.ExitCode, sres.OurCode, sres.ServerCode, sres.Attempts)
-					} else {
-						fmt.Fprintf(os.Stderr, "[ship] %s/%s exit=%d code=%s%s attempts=%d\n",
-							rt.ID, p.Phase, sres.ExitCode, sres.OurCode, sres.ServerCode, sres.Attempts)
+				if *stream {
+					if err := shipStream(cfg, body, res); err != nil {
+						fmt.Fprintf(os.Stderr, "[stream] %s/%s: %v\n", rt.ID, p.Phase, err)
+						if exit < 4 {
+							exit = 4
+						}
+						if !*keepGoing {
+							return exitCode(exit)
+						}
 					}
-					if exit < sres.ExitCode {
-						exit = sres.ExitCode
-					}
-					if !*keepGoing {
-						return exitCode(exit)
+				} else {
+					sres := ship.Ship(context.Background(), ship.Options{
+						ServerURL:  cfg.ServerURL,
+						MaxRetries: cfg.MaxRetries,
+					}, body)
+					if sres.ExitCode != 0 {
+						if *jsonOut {
+							fmt.Printf(`{"Push":"failed","Runtime":%q,"Phase":%q,"ExitCode":%d,"OurCode":%q,"ServerCode":%q,"Attempts":%d}`+"\n",
+								rt.ID, p.Phase, sres.ExitCode, sres.OurCode, sres.ServerCode, sres.Attempts)
+						} else {
+							fmt.Fprintf(os.Stderr, "[ship] %s/%s exit=%d code=%s%s attempts=%d\n",
+								rt.ID, p.Phase, sres.ExitCode, sres.OurCode, sres.ServerCode, sres.Attempts)
+						}
+						if exit < sres.ExitCode {
+							exit = sres.ExitCode
+						}
+						if !*keepGoing {
+							return exitCode(exit)
+						}
 					}
 				}
 			}
