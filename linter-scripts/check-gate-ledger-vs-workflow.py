@@ -207,6 +207,17 @@ def self_test() -> int:
               "linter-scripts/a.py linter-scripts/b.py",
               0)
 
+    # F-7: Go companion (G-6y) — .go Source line resolves; workflow references
+    # the .go path inside a comment/name, so I-2 wiring substring-matches
+    make_case("F-7 go-companion",
+              {"51-validate-guidelines-go.md":
+               "**Status:** Active gate #45\n"
+               "**Source:** [`linter-scripts/validate-guidelines.go`](../../linter-scripts/validate-guidelines.go)\n"},
+              {"validate-guidelines.go"},
+              "- name: validate-guidelines.go static-surface gate\n"
+              "  run: bash linter-scripts/test/test-validate-guidelines-go-surface.sh\n",
+              0)
+
     failed = 0
     for name, slot_docs, scripts, workflow_text, expected in fixtures:
         with tempfile.TemporaryDirectory() as td:
