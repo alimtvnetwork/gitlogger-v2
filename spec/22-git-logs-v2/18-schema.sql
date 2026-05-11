@@ -168,21 +168,41 @@ CREATE TABLE IF NOT EXISTS App (
     UpdatedAt    INTEGER NOT NULL
 );
 
+-- AppLink — polymorphic binding between an App and either a GitProfile OR a Repo.
+-- Mirrors §23-app-database/00-overview.md "DDL — AppLink (polymorphic)" (lines 173-212).
+-- Sess-67 G-6w-mirror — column-rename rebase to TargetGitProfileId/TargetRepoId
+-- + IsActive/DisconnectedAt disconnect-invariant + partial Target indexes.
+-- This shape is mechanically enforced by linter-scripts/check-applink-xor-clause.py
+-- (gate #22, slot 39) which now scans BOTH §23 §00 AND this file in lockstep.
 CREATE TABLE IF NOT EXISTS AppLink (
-    AppLinkId       INTEGER PRIMARY KEY AUTOINCREMENT,
-    AppId           INTEGER NOT NULL REFERENCES App(AppId) ON DELETE CASCADE,
-    AppLinkTypeId   INTEGER NOT NULL REFERENCES AppLinkType(AppLinkTypeId),
-    GitProfileId    INTEGER REFERENCES GitProfile(GitProfileId) ON DELETE CASCADE,
-    RepoId          INTEGER REFERENCES Repo(RepoId)             ON DELETE CASCADE,
-    CreatedAt       INTEGER NOT NULL,
-    -- Exactly-one-target check
+    AppLinkId            INTEGER PRIMARY KEY AUTOINCREMENT,
+    AppId                INTEGER NOT NULL REFERENCES App(AppId) ON DELETE CASCADE,
+    AppLinkTypeId        INTEGER NOT NULL REFERENCES AppLinkType(AppLinkTypeId),
+    TargetGitProfileId   INTEGER NULL REFERENCES GitProfile(GitProfileId) ON DELETE CASCADE,
+    TargetRepoId         INTEGER NULL REFERENCES Repo(RepoId)             ON DELETE CASCADE,
+    CreatedAt            INTEGER NOT NULL,
+    IsActive             INTEGER NOT NULL,           -- 0/1
+    DisconnectedAt       INTEGER NULL,
+    -- XOR target binding driven by the AppLinkType discriminator (AC-ADB-05 / WE-2).
     CHECK (
-        (GitProfileId IS NOT NULL AND RepoId IS NULL)
-     OR (GitProfileId IS NULL     AND RepoId IS NOT NULL)
+      (AppLinkTypeId = (SELECT AppLinkTypeId FROM AppLinkType WHERE Name = 'GitProfile')
+         AND TargetGitProfileId IS NOT NULL AND TargetRepoId IS NULL)
+      OR
+      (AppLinkTypeId = (SELECT AppLinkTypeId FROM AppLinkType WHERE Name = 'Repo')
+         AND TargetRepoId IS NOT NULL AND TargetGitProfileId IS NULL)
+    ),
+    -- Disconnect invariant: IsActive=0 ⇒ DisconnectedAt populated; IsActive=1 ⇒ DisconnectedAt NULL (AC-ADB-13 / WE-3).
+    CHECK (
+      (IsActive = 1 AND DisconnectedAt IS NULL)
+      OR
+      (IsActive = 0 AND DisconnectedAt IS NOT NULL)
     )
 );
 
-CREATE INDEX IF NOT EXISTS IxAppLinkApp ON AppLink(AppId);
+CREATE INDEX IF NOT EXISTS IX_AppLink_AppId              ON AppLink(AppId);
+CREATE INDEX IF NOT EXISTS IX_AppLink_TargetRepoId       ON AppLink(TargetRepoId)       WHERE TargetRepoId IS NOT NULL;
+CREATE INDEX IF NOT EXISTS IX_AppLink_TargetGitProfileId ON AppLink(TargetGitProfileId) WHERE TargetGitProfileId IS NOT NULL;
+CREATE INDEX IF NOT EXISTS IX_AppLink_Active             ON AppLink(AppId, IsActive);
 
 -- ---------------------------------------------------------------------------
 -- Pipeline + log entries

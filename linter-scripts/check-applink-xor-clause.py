@@ -3,13 +3,19 @@
 
 Promotes spec/23 AC-ADB-05 + AC-ADB-13 from contract-proven to load-proven.
 
-Walks `spec/23-app-database/00-overview.md` (canonical contract source) and
-asserts the AppLink XOR + disconnect-invariant + locked-ID seed + partial-index
-invariants byte-for-byte. §22 `18-schema.sql` mirror coverage is **deferred**
-(tracked as G-6w-mirror): §22's current AppLink shape predates the
-TargetGitProfileId/TargetRepoId column rename and would fail clauses 1/2/4 on
-disk; the §23 §00 contract is the binding text per the dialect-precedence
-banner (PRIMARY lane), and §22 mirror-rebase is a separate work item.
+Walks the canonical §23 contract (`spec/23-app-database/00-overview.md`) AND
+the §22 DDL mirror (`spec/22-git-logs-v2/18-schema.sql`) in lockstep —
+asserts the AppLink XOR + disconnect-invariant + locked-ID seed +
+partial-index invariants byte-for-byte against EVERY known source so
+the §22 mirror cannot drift from the §23 contract (Sess-67 G-6w-mirror —
+mirror coverage promoted from deferred to load-proven; the §22 schema was
+rebased to TargetGitProfileId/TargetRepoId + IsActive/DisconnectedAt in
+the same PR that lit up `--all-sources`).
+
+Use `--source <path>` to scan a single file (default: §23 §00) or
+`--all-sources` to walk every entry in `MIRROR_SOURCES` and fail on the
+first divergence. CI wires both: a single-source `--self-test` plus a
+live `--all-sources` run; either failing hard-fails the gate.
 
 Self-test: 6 in-memory fixtures (F-1..F-6) cover all four clauses + R5
 vacuous-pass anchor.
@@ -23,6 +29,12 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 SPEC23_OVERVIEW = REPO / "spec" / "23-app-database" / "00-overview.md"
+SPEC22_SCHEMA   = REPO / "spec" / "22-git-logs-v2" / "18-schema.sql"
+
+# Lockstep mirror set. Both files MUST satisfy the same 4-clause contract.
+# Adding a new mirror requires (a) appending here, (b) §27 §98 changelog row,
+# (c) re-running --self-test (must stay 6/6) AND --all-sources clean.
+MIRROR_SOURCES: tuple[Path, ...] = (SPEC23_OVERVIEW, SPEC22_SCHEMA)
 
 # AppLink CREATE TABLE block detector
 APPLINK_BLOCK_RE = re.compile(
@@ -231,23 +243,30 @@ def main() -> int:
     ap.add_argument("--self-test", action="store_true")
     ap.add_argument("--source", default=str(SPEC23_OVERVIEW),
                     help="Spec source to scan (default: spec/23-app-database/00-overview.md)")
+    ap.add_argument("--all-sources", action="store_true",
+                    help="Walk every entry in MIRROR_SOURCES (§23 contract + §22 mirror); "
+                         "fail on the first divergence. Lockstep enforcement of G-6w-mirror.")
     args = ap.parse_args()
 
     if args.self_test:
         return self_test()
 
-    src = Path(args.source)
-    if not src.exists():
-        print(f"FAIL: source not found: {src}", file=sys.stderr)
-        return 2
-    text = src.read_text(encoding="utf-8")
-    errs = run_against(text, args.check)
-    if errs:
-        for e in errs:
-            print(f"FAIL: {e}")
-        return 1
-    print(f"OK: AppLink XOR clause gate clean on {src.name} (--check={args.check})")
-    return 0
+    sources = list(MIRROR_SOURCES) if args.all_sources else [Path(args.source)]
+    total_errs = 0
+    for src in sources:
+        if not src.exists():
+            print(f"FAIL: source not found: {src}", file=sys.stderr)
+            total_errs += 1
+            continue
+        text = src.read_text(encoding="utf-8")
+        errs = run_against(text, args.check)
+        if errs:
+            for e in errs:
+                print(f"FAIL [{src.relative_to(REPO)}]: {e}")
+            total_errs += len(errs)
+        else:
+            print(f"OK: AppLink XOR clause gate clean on {src.relative_to(REPO)} (--check={args.check})")
+    return 1 if total_errs else 0
 
 
 if __name__ == "__main__":
