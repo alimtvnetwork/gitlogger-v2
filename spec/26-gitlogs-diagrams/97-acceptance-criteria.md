@@ -214,6 +214,7 @@ GL_REJECT_CODE_FORMAT:     GL-{CATEGORY}-{NAME} (e.g. GL-AUTH-INVALID-TOKEN)
 - Optional 5th line `%% Re-render: mmdc -i <self> -o <self.svg> -p puppeteer.json -b transparent` MAY be present (recommended for ER + mindmap diagrams).
 - Blank lines between the header block and the directive are permitted. Comment lines that violate the order, omit any of the 4 keys, or use non-canonical key spelling (e.g. `%% Type:` instead of `%% Diagram type:`) MUST fail this AC.
 - **Verifies:** §26 `00-overview.md` "AI Implementer Quickstart" rule #2 (lifts the advisory rule to an enforceable contract); pins the canonical 4-key schema previously implicit across AC-DG-05 (type+intent) and AC-DG-19 (changelog binding); closes the F-07 advisory-vs-enforceable gap surfaced in the Session 9 scorecard.
+- **Mechanically enforced by:** `linter-scripts/check-diagram-parity.py` clause-6 (`narrative-header-schema` mode, gate #41 / Slot 63). Constants `NARRATIVE_HEADER_KEYS` + `MERMAID_DIRECTIVES` mirror this AC's 4-key schema and bounding directive list verbatim; any change to the keys or their canonical order MUST update both the script and this AC in the same commit (reflexivity rule per Lesson #36). Self-test fixture F-7 (missing `Audience`) + F-8 (keys out of order) lock the failure modes; production gate green requires 8/8 self-test green AND `--check=narrative-header-schema` clean against all active `.mmd` files.
 
 ---
 
