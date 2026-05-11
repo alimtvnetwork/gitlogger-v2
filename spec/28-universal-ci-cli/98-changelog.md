@@ -1,9 +1,17 @@
 # Changelog
 
-**Updated:** 2026-05-11 (Sess-69 B-14 — §06 retry-policy table added (5 retry classes R1..R5 with per-class pins; R2 + R4 new canonical rows; reverse-coverage invariant + worked-example bash verifier; new exit code `GLCI-PUSH-RATE-LIMIT-EXHAUSTED` for R2). Lockstep: §06 v1.1.1 → v1.2.0; §00 v2.15.0 → v2.16.0; §99 v2.5.5 → v2.5.6. §28 R-band C2 +2 to band-anchor 18; cumulative Raw-LLM 117 → 119/120. Prior: Sess-68 B-7 — tier-1 bundle manifest.)
+**Updated:** 2026-05-11 (Sess-77 B-27-§28 — mirror-quintet step 5/7 walker-cost reflexivity lever applied to `00-tier1-bundle.md` (v1.0.0 → v1.1.0); see [2.17.0] entry below. Prior: Sess-69 B-14 — §06 retry-policy table.)
 
 
 All notable changes to `spec/28-universal-ci-cli/`.
+
+## [2.17.0] — 2026-05-11 — Sess-77 B-27-§28: walker-cost reflexivity mirror (mirror-quintet step 5/7)
+
+- **Action**: Edited `00-tier1-bundle.md` (v1.0.0 → **v1.1.0**) — added per-file **Walker-cost (KB)** column to Tier-1 table (Σ ~136 KB across 7 normative files: §00 ~20 / §01 ~4 / §04 ~6 / §06 ~15 / §07 ~7 / §97 ~63 / §99 ~21; computed via `wc -c` 2026-05-11 / 1024 rounded). Inserted new `## Walker-cost reflexivity (load-budget pin)` section between Tier-3 and the per-persona pre-flight checklist, with closed-set per-tier byte-cost table (4 tier-1 sub-budget rows) + 4 pre-budget recipes (verify-a-subcommand ~30 KB ≈ exactly cap-sized; decode-an-error-envelope ~32 KB / 2-pass; audit-an-AC ~88 KB / 3-pass; full-tier-1 read ~136 KB / 5-pass) + reflexive drift contract (≥10 KB `wc -c` change triggers same-PR refresh; reviewer-attestation today, future drift-gate candidate).
+- **Mirror-quintet anchor closed**: §22 + §24 + §25 + §27 + §28 = 5 of 7 cohorts cite walker-cost reflexivity. §23 + §26 are remaining mirror candidates but both lack a tier-1 manifest file (deferred to a separate B-27-§23 / B-27-§26 tier-1-bundle authoring task).
+- **Why now**: Sess-71 B-27 (§27) introduced the lever; Sess-74/75/76 mirrored it into §25/§24/§22. §28 is the fifth cohort with an existing tier-1 manifest, so the mirror is a pure-additive defensibility refresh (no AC body edit, no new gate, no new tier promotion).
+- **Banners**: §00 v2.16.0 → **v2.17.0**; §97 unchanged (no AC added — pure navigation-aid); §98 [2.16.0] → **[2.17.0]** (this entry); §99 v2.5.6 → **v2.5.7** (lockstep audit-row tail). AC count 49/49 unchanged. No new gate.
+- **Scorecard impact (Sess-77 B-27-§28)**: §28 R-band C6 (Friction) **carried at 20** — band-anchor mechanism strengthened (walker-cost reflexivity column is now a fourth-leg cited self-enforcing mechanism for C6's existing 20-band score, alongside the mirror-quintet anchor + auditor-pin + tier-1 read-order DAG). No point-lift available; defensibility hardened. C1/C2/C3/C4/C5/C6 carried at 20/18/19/20/20/20 (sole below-ceiling criteria: C2 at 18 and C3 at 19). §28 Raw-LLM /120 **carried at 119**. Aggregate Raw-LLM Σ **carried at 818/840** (97.4/100). **Lovable + Cursor unchanged at 120 ceiling**.
 
 ## [2.16.0] — 2026-05-11 — Sess-68 B-7: tier-1 essential bundle manifest added
 
