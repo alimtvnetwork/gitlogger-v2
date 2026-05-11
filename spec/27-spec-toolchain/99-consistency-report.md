@@ -1,8 +1,10 @@
 # Consistency Report — Spec Toolchain
 
-**Version:** 3.06.0
-**Updated:** 2026-05-11 (Sess-67 G-6w — slot 39 `check-applink-xor-clause.py` shipped as load-proven gate #22; ledger I-1 2 → 1, I-2 3 → 2; banner-triple still 26)
+**Version:** 3.08.0
+**Updated:** 2026-05-11 (Sess-67 G-6x — slot 63 `check-diagram-parity.py` load-proven gate #41; ledger I-1 1 -> 0 zero-phantom milestone; I-2 2 -> 1; banner-triple still 26)
 **Total active gates: 26**
+
+> **v3.08.0 update (Sess-67 G-6x — slot 63 load-proven; first I-1 EXISTS = 0 milestone):** Shipped 280-LOC scanner walking spec/26-gitlogs-diagrams/ with 5 clauses + R5 anchor. `--self-test` 6/6; live disk clean after §26 §00 line 57 gained parity-declaration blockquote. Wired in spec-health.yml step "§26 diagram parity gate (#41 / G-6x / slot 63)". Ledger I-1 EXISTS 1 -> 0 (zero-phantom-script milestone); I-2 WIRED 2 -> 1 (only gate #45 Go static-surface remains, companion-resolver patch G-6y). Lockstep: §27 §00 4.67.0 -> 4.69.0; §27 §98 4.67.0 -> 4.69.0; §99 3.06.0 -> 3.08.0. Scorecard: §26 C2+2 C3+3 C5+3 C6+2; §22/§23 C4+1; §27 C4+1.
 
 > **v3.06.0 update (Sess-67 G-6w — slot 39 load-proven):** Shipped 230-LOC scanner walking spec/23-app-database/00-overview.md with 4 clauses + R5 anchor: XOR CHECK with two SELECT-discriminator disjuncts joined by OR, disconnect-invariant CHECK both disjuncts, locked-ID seed `(1,'GitProfile'),(2,'Repo')`, partial indexes on both `Target…Id` columns. `--self-test` 6/6 fixtures green; live disk clean on first run. Wired in `.github/workflows/spec-health.yml` step "§23 AppLink XOR clause gate (#22 / G-6w / slot 39)" with `--self-test` + live disk hard-fail. Gate #22 transitions phantom-citation → real-script; ledger I-1 EXISTS 2 → 1, I-2 WIRED 3 → 2. §22 mirror coverage deferred (G-6w-mirror — column-rename rebase). Lockstep: §27 §00 4.65.0 → 4.67.0; §27 §98 4.65.0 → 4.67.0; §99 3.04.0 → 3.06.0. Scorecard: §23 C3 +1 + C5 +1; §27 C4 +1.
 
