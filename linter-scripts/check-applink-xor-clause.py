@@ -175,7 +175,10 @@ def self_test() -> int:
     cases = []
     cases.append(("F-1 complete", True, None, F1_COMPLETE))
 
-    f2 = F1_COMPLETE.replace(") OR\n    (", ") AND\n    (", 1)
+    # Replace the OR between the two XOR disjuncts with AND (first OR only).
+    f2 = re.sub(r"IS NULL\)\s*\n\s*OR\s*\n\s*\(AppLinkTypeId = \(SELECT AppLinkTypeId FROM AppLinkType WHERE Name = 'Repo'",
+                "IS NULL)\n    AND\n    (AppLinkTypeId = (SELECT AppLinkTypeId FROM AppLinkType WHERE Name = 'Repo'",
+                F1_COMPLETE, count=1)
     cases.append(("F-2 XOR weakened to AND", False, "clause-1", f2))
 
     f3 = F1_COMPLETE.replace(
