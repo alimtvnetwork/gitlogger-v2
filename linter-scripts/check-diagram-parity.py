@@ -260,7 +260,6 @@ def run_against(diagrams_dir: Path, which: str = "all") -> list[str]:
             errs.append("clause-2: 01-er-diagram.mmd absent")
 
 
-    errs: list[str] = []
     if which in ("all", "consumes-binding-completeness"):
         errs.extend(check_consumes_binding(overview_text, mmd_files))
     if which in ("all", "er-entity-superset"):
@@ -279,7 +278,10 @@ def run_against(diagrams_dir: Path, which: str = "all") -> list[str]:
         errs.extend(check_emoji_free(mmd_files))
     if which in ("all", "parity-declaration"):
         errs.extend(check_parity_declaration(overview_text))
+    if which in ("all", "narrative-header-schema"):
+        errs.extend(check_narrative_header(mmd_files))
     return errs
+
 
 
 # ------------------ Self-test ------------------
