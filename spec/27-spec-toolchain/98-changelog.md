@@ -1,7 +1,8 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.88.0
-**Updated:** 2026-05-11 (Sess-69 B-16 — Navigation-quintet inline cross-reference convention authored into `00-tier1-bundle.md` v1.2.0; lifts §27 R C4 +1)
+**Version:** 4.89.0
+**Updated:** 2026-05-11 (Sess-69 B-22 — `_carriers/` sub-namespace migration spec authored (`00-carriers-namespace-migration.md` v1.0.0); AC-T-37 amended with carriers-exclusion clause (anchored numeric-prefix glob); §27 R C6 14 → 15 (partial), C4 14 → 15 (partial); Raw-LLM /120 104 → 106; total active gates 26 unchanged.)
+**Prior banner — Version:** 4.88.0 (Sess-69 B-16 — Navigation-quintet inline cross-reference convention authored into `00-tier1-bundle.md` v1.2.0; lifts §27 R C4 +1.)
 **Total active gates: 26**
 
 ### 4.88.0 — 2026-05-11 — Sess-69 B-16: Navigation-quintet inline cross-reference convention authored into bundle
