@@ -1,6 +1,6 @@
 # Slot 47 — `check-ac-section-orphan-header.py`
 
-**Status:** Active gate #28 (Phase-5 T-21)
+**Status:** Active gate #28 (Phase-5 T-21; T-22 clauses 4+5 shipped Sess-67 G-T-22)
 **Implements:** §22 + §23 + §24 + §25 + §26 + §27 + §28 §97
 structural hygiene (closes §27 backlog `ac-section-orphan-header-check`
 minted T-13)
