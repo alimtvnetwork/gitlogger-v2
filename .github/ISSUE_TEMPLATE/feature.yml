@@ -1,0 +1,40 @@
+name: Feature request
+description: Suggest a new capability that does not yet exist.
+labels: ["enhancement", "triage"]
+body:
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - glci (Go CLI)
+        - WordPress plugin
+        - Admin UI (React)
+        - Cross-cutting
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user-visible pain are you solving? Who is the user?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Sketch the API / UI / config surface. Reference the relevant spec section if extending the contract.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: spec
+    attributes:
+      label: Spec impact
+      options:
+        - label: This change requires a spec amendment under spec/22..28/
+        - label: This change is purely additive and stays inside the current contract

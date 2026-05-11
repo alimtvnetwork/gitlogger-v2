@@ -25,3 +25,4 @@ type: feature
 - #14 Cover the `cmd` dispatcher (`CodeOf`, `Run`, `filterOut`, `contains`, `exitCode`) — ✅ done (cmd_test.go, gate floor 15%)
 - #15 Quickstart docs (`glci/README.md` + `git-logs-plugin/README.md`) — ✅ done
 - #16 Top-level `README.md` + `CONTRIBUTING.md` — ✅ done
+- #17 Repo hygiene: `LICENSE` (GPL-2.0) + GitHub issue/PR templates — ✅ done
