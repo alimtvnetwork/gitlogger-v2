@@ -35,12 +35,12 @@ SLOT_DIR = REPO / "spec" / "27-spec-toolchain"
 WORKFLOW = REPO / ".github" / "workflows" / "spec-health.yml"
 SCRIPTS_DIR = REPO / "linter-scripts"
 
-SCRIPT_RE = re.compile(r"linter-scripts/([a-z0-9_.-]+\.(?:py|sh|cjs|mjs|js))")
+SCRIPT_RE = re.compile(r"linter-scripts/([a-z0-9_.-]+\.(?:py|sh|cjs|mjs|js|go))")
 ACTIVE_GATE_RE = re.compile(
     r"^\*\*Status:\*\*\s+Active gate #(\d+)", re.MULTILINE
 )
 SOURCE_LINE_RE = re.compile(
-    r"^\*\*Source:\*\*\s*\[`linter-scripts/([a-z0-9_.-]+\.(?:py|sh|cjs|mjs|js))`",
+    r"^\*\*Source:\*\*\s*\[`linter-scripts/([a-z0-9_.-]+\.(?:py|sh|cjs|mjs|js|go))`",
     re.MULTILINE,
 )
 
