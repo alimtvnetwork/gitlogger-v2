@@ -275,6 +275,21 @@ FAIL-05: lockstep break (§00 vs §98 vs §99 mismatch)  -> exit 1 (via §24 che
 
 ---
 
+## Retired Gate Numbers (frozen list — INV-03 anchor)
+
+Per **INV-03** (slot-immutability) above, gate numbers are assigned monotonically and never reused. The current Active-gate ledger spans **#20 → #46** (26 active gates). Numbers **#1..#19 and #21** are the **frozen historical-retired set** — they were assigned in pre-Phase-5 cycles to scripts that have since been retired, merged, or renumbered, and MUST NOT be reused.
+
+This list is the on-disk anchor for `RETIRED_GATE_NUMBERS` in [`linter-scripts/check-gate-ledger-vs-workflow.py`](../../linter-scripts/check-gate-ledger-vs-workflow.py) (gate #43, slot 65). The I-3 NUMBERED check excludes the retired set from the missing-gap computation, so legitimate historical holes do not trigger a CI failure while genuinely new gaps still do.
+
+| Range / number | Status | Disposition |
+|---|---|---|
+| `#1` .. `#19` | retired | Pre-Phase-5 numbering; superseded scripts merged into the current contract surface or removed entirely. |
+| `#21` | retired | Single-number hole between #20 (`check-spec22-inventory`, slot 37) and #22 (`check-applink-xor-clause`, slot 39); reserved for future renumbering audit. |
+
+**Extension protocol:** to retire an additional gate number (e.g. when a current gate is decommissioned), in the same PR (a) add a row to the table above, (b) extend `RETIRED_GATE_NUMBERS` in `check-gate-ledger-vs-workflow.py`, (c) add a §98 changelog row, (d) re-run `python3 linter-scripts/check-gate-ledger-vs-workflow.py --self-test` (must stay 9/9). Any divergence between the table and the constant fails this gate's I-3 NUMBERED clause on next run. **Self-enforcing via §27 backlog gate `gate-ledger-vs-workflow-check`** (Lesson #15 reflexivity anchor).
+
+---
+
 ## Resilience — CI Edge Cases (cross-reference to AC-T-28)
 
 > **Source of truth:** [`97-acceptance-criteria.md` AC-T-28](./97-acceptance-criteria.md) defines the full Resilience contract (R1 atomic writes / R2 locked-file reads / R3 LLM timeouts + retry-on-busy / R4 SIGTERM cleanup / R5 ENOSPC + EROFS detection) for every slot in this toolchain.
