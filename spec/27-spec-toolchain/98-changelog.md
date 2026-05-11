@@ -1,8 +1,18 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.75.0
-**Updated:** 2026-05-11 (Sess-67 G-6w-mirror — §22 `18-schema.sql` AppLink rebased to §23 contract shape; gate #22 extended with `--all-sources` lockstep; mirror coverage promoted from deferred to load-proven on both surfaces)
+**Version:** 4.76.0
+**Updated:** 2026-05-11 (Sess-67 G-6z — perimeter cleanup sweep; `STRUCTURAL_EXEMPT_FILES` shrunk 8 → 7 with audit-protocol comment block)
 **Total active gates: 26**
+
+### 4.76.0 — 2026-05-11 — Sess-67 G-6z: perimeter cleanup sweep on `STRUCTURAL_EXEMPT_FILES`
+- **Action — audit**: Per-entry test of all 8 exempt files via remove-and-rerun. 7 entries retained — each has ≥2 intentional Markdown links to canonical upstream contract surfaces (e.g. §22 §00 → spec/04 + spec/02; §22 §05 → spec/12; §22 §39 → spec/05; §22 §50 → spec/12 + spec/05 + spec/26; §23 §00 → spec/13; §24 §00 → spec/07 + spec/17; §28 §00 → spec/12 + spec/02). Conversion to backticked cites would lose semantic navigability for the link-text-bearing references.
+- **Action — content edit**: `spec/28-universal-ci-cli/05-config-resolution.md` line 130 had a single isolated `[spec/13-generic-cli §97 AC-22](../13-generic-cli/97-acceptance-criteria.md)` Markdown link. Converted to backticked path token + adjacency-marked prose: "**out-of-scope** per the locked-7 perimeter (referenced as a legacy upstream contract surface, not as a navigable link)" + "audited via §27 perimeter gate #39". Mirror anchor in `spec/22-git-logs-v2/00-overview.md` Appendix A still resolves the canonical contract for in-context auditors.
+- **Action — exempt list**: Removed `spec/28-universal-ci-cli/05-config-resolution.md` from `STRUCTURAL_EXEMPT_FILES`. Added 8-line audit-protocol comment block above the constant requiring Sess-46-style per-link disposition for any future addition.
+- **Live disk**: `check-no-out-of-scope-spec-folder-link: OK (mode=all, files=175, exemptions=169)` (was 168 — count rose because the §28 file's surrounding adjacency-marker prose now exempts the still-present `spec/13/18 batch-execution rule` mention via the elif branch, validating that the elif-marker pathway is load-bearing). `--self-test` 6/6 unchanged.
+- **Lockstep**: §27 §00 4.75.0 → 4.76.0; §27 §98 4.75.0 → 4.76.0; §99 3.14.0 → 3.15.0.
+- **Scorecard**: §27 R-band C3 +1 (perimeter-exempt surface area shrunk 8 → 7 = -12.5% with measurable on-disk evidence), C5 +1 (audit-protocol comment block self-cites Sess-46 sweep methodology and binds future additions to the same per-link disposition discipline).
+- **Carry-forward**: §22/§23/§24/§25/§26/§28 R-bands unchanged.
+
 
 ### 4.75.0 — 2026-05-11 — Sess-67 G-6w-mirror: §22 AppLink mirror rebased + gate #22 lockstep coverage
 - **Action — schema rebase**: `spec/22-git-logs-v2/18-schema.sql` AppLink table rebuilt to mirror §23 §00 byte-for-byte: `TargetGitProfileId`/`TargetRepoId` NULL columns (was `GitProfileId`/`RepoId`); added `IsActive INTEGER NOT NULL` + `DisconnectedAt INTEGER NULL`; replaced bare-OR CHECK with the SELECT-discriminator XOR pair joined by `OR`; added the disconnect-invariant CHECK; replaced flat `IxAppLinkApp` with the four-index pack `IX_AppLink_AppId` + partial `IX_AppLink_TargetRepoId`/`IX_AppLink_TargetGitProfileId` (with `WHERE Target… IS NOT NULL`) + `IX_AppLink_Active(AppId,IsActive)`. Inline DDL comment cites the gate-#22 enforcement mechanism (Lesson #15 reflexivity).
