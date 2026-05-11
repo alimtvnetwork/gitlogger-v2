@@ -1,6 +1,6 @@
 # Changelog
 
-**Updated:** 2026-05-11 (Sess-77 B-27-§28 — mirror-quintet step 5/7 walker-cost reflexivity lever applied to `00-tier1-bundle.md` (v1.0.0 → v1.1.0); see [2.17.0] entry below. Prior: Sess-69 B-14 — §06 retry-policy table.)
+**Updated:** 2026-05-11 (Sess-78 B-2-§28 — closes mirror-quintet for citation-matrix pattern: §97 v2.10.0 adds gate-citation matrix binding all 49 ACs to ≥1 §27 gate slot. See [2.18.0] entry below. Prior: Sess-77 B-27-§28 — walker-cost reflexivity lever.)
 
 
 All notable changes to `spec/28-universal-ci-cli/`.
