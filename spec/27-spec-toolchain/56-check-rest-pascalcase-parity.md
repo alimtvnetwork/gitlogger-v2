@@ -152,8 +152,12 @@ absent / R-4 block absent / AC-ADB-REST-01 surface absent`.
   remains in R-4 invariant 1's self-citation; if the §23 §00 text
   is rewritten without re-citing the gate, the gate fails itself.
 
-## Scorecard impact (Rubric v2 /120)
+## Red-green test pairs (AC-T-39)
 
+- **RED:** introduce a fixture violation against any clause of this gate's `## Contract` closed-set (use the negative example documented in this slot's `**Self-test:**` synthetic-fixture roster, e.g. an `F-N` failing fixture, OR a corresponding fixture path under `linter-scripts/_fixtures/slot-56/`) and run `python3 linter-scripts/check-rest-pascalcase-parity.py --self-test` — MUST exit non-zero with a clause-numbered failure citing the violated invariant (gate #34 clause-N). Restore fixture / state to revert.
+- **GREEN:** with no violation present (every `F-N` synthetic fixture in clean state per this slot's frontmatter `**Self-test:**` declaration), `python3 linter-scripts/check-rest-pascalcase-parity.py --self-test` MUST exit 0 with the gate's standard pass banner (e.g. `OK: gate #34 clean`); the GREEN baseline is the union of all clean-pass fixtures cited in this slot's frontmatter.
+
+## Scorecard impact (Rubric v2 /120)
 - **§23** — C3 (Testability) +1 (REST contract now load-proven —
   no silent wire-key drift); C4 (Consistency) +1 (wire ↔ DDL
   bijection mechanised); C5 (Implementability) +1 (R-4 invariant 1

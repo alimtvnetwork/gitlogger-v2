@@ -182,8 +182,12 @@ scanner correctly REJECTS six synthetic fixtures:
   Lesson #36 rule against retained restate. Foreign-AC declaration
   IS restate; the gate enforces by-construction non-restate.
 
-## Scorecard impact (Rubric v2 /120)
+## Red-green test pairs (AC-T-39)
 
+- **RED:** introduce a fixture violation against any clause of this gate's `## Contract` closed-set (use the negative example documented in this slot's `**Self-test:**` synthetic-fixture roster, e.g. an `F-N` failing fixture, OR a corresponding fixture path under `linter-scripts/_fixtures/slot-48/`) and run `python3 linter-scripts/check-ac-prefix-contract.py --self-test` — MUST exit non-zero with a clause-numbered failure citing the violated invariant (gate #29 clause-N). Restore fixture / state to revert.
+- **GREEN:** with no violation present (every `F-N` synthetic fixture in clean state per this slot's frontmatter `**Self-test:**` declaration), `python3 linter-scripts/check-ac-prefix-contract.py --self-test` MUST exit 0 with the gate's standard pass banner (e.g. `OK: gate #29 clean`); the GREEN baseline is the union of all clean-pass fixtures cited in this slot's frontmatter.
+
+## Scorecard impact (Rubric v2 /120)
 - **§22 / §23 / §24 / §25 / §26 / §27 / §28** — C4 (Consistency)
   +1 each (cross-folder AC-ID collision detection converts paper-only
   → load-proven; foreign-prefix declaration leak vector closed).
