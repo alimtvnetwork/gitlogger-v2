@@ -1,8 +1,21 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.76.0
-**Updated:** 2026-05-11 (Sess-67 G-6z — perimeter cleanup sweep; `STRUCTURAL_EXEMPT_FILES` shrunk 8 → 7 with audit-protocol comment block)
+**Version:** 4.77.0
+**Updated:** 2026-05-11 (Sess-67 G-T-22 — `ac-status-tag-and-parent-taxonomy-check` clauses 4+5 shipped; T-22 backlog ticket retired)
 **Total active gates: 26**
+
+### 4.77.0 — 2026-05-11 — Sess-67 G-T-22: closed `ac-status-tag-and-parent-taxonomy-check` (slot 47 deferred clauses 4+5)
+- **Action — clause-4**: `linter-scripts/check-ac-section-orphan-header.py` (slot 47, gate #28) gained `STATUS_TAG_VOCABULARY = ('active','critical','high','medium','low','deferred','deprecated','draft')` constant + per-AC `STATUS_TAG_RE` validation. When an `### AC-…` header carries a trailing `` `[xxx]` `` tag, `xxx` MUST be in the vocabulary (untagged ACs remain permitted — heterogeneity is real per T-21 disk survey). Vocabulary derived from full real-disk survey of all 7 §97 files (`grep -rohE '\`\[[a-z]+\]\`' spec/2[2-8]*/97-acceptance-criteria.md | sort -u`).
+- **Action — clause-5**: Added `EMPTY_PARENT_ALLOWLIST` constant (13 titles) + `_is_empty_parent_allowed()` helper supporting prefix-match for parenthetical-suffix variants ("Slot Delegation Map (Phase 153 Task A24-fu6)" matches "Slot Delegation Map" prefix). Allowlist: Format, Module Summary, Inlined Contracts, Worked Examples, Cross-References, Purpose, Notes, Legacy Index, Slot Delegation Map, AC Family Prefix Index, Per-artifact criteria, Validation, Test Invariant Index. Any `## ` parent with zero `### AC-…` children NOT on the allowlist fails clause-5 (regression candidate — section added but no AC moved under it).
+- **Action — CHECKS surface**: `CHECKS` tuple extended with `'status-tag-vocabulary'` + `'empty-parent-taxonomy'`. Per-clause invocation now possible via `--check status-tag-vocabulary` / `--check empty-parent-taxonomy`.
+- **Self-test**: 5/5 → 8/8. F-6 unknown tag `[wip]` → fails clause-4; F-7 non-allowlist `## Mutations` parent with zero AC children → fails clause-5; F-8 allowlist parent (`## Module Summary`, `## Cross-References`) + canonical tags (`[critical]`, `[active]`) → passes.
+- **Live disk**: `OK — 7 §97 file(s), 255 ACs, check=all`. Both new clauses pass on real spec corpus on first run, validating the vocabularies are complete (no real-disk noise, no spurious failures).
+- **Spec doc**: §47 deferred-to-T-22 caveat block replaced with the new clause-4/5 contract + spec-doc ↔ constant binding rule (Lesson #15 reflexivity: any new vocabulary entry without a §47 spec-doc row fails the gate next CI cycle). Banner status promoted from "Active gate #28 (Phase-5 T-21)" to "Active gate #28 (Phase-5 T-21; T-22 clauses 4+5 shipped Sess-67 G-T-22)". Invocation block + R5 fixture roster expanded to reflect 8 fixtures.
+- **Workflow wire**: No change — `.github/workflows/spec-health.yml` step "§97 AC structural hygiene gate" already runs `--self-test` + live; both now exercise 5 clauses.
+- **Backlog**: T-22 ticket `ac-status-tag-and-parent-taxonomy-check` (open since T-21) RETIRED. Last toolchain-side carry-over from T-21 closed.
+- **Lockstep**: §27 §00 4.76.0 → 4.77.0; §27 §98 4.76.0 → 4.77.0; §99 3.15.0 → 3.16.0.
+- **Scorecard**: §22/§23/§24/§25/§26/§28 R-band C2 +1 each (machine-checked status-tag + parent-taxonomy floor across all 7 §97 surfaces); §27 R-band C5 +1 (frozen-vocabulary constant binds spec-doc ↔ script ↔ disk in 3-way reflexive loop), C6 +1 (T-22 retired).
+
 
 ### 4.76.0 — 2026-05-11 — Sess-67 G-6z: perimeter cleanup sweep on `STRUCTURAL_EXEMPT_FILES`
 - **Action — audit**: Per-entry test of all 8 exempt files via remove-and-rerun. 7 entries retained — each has ≥2 intentional Markdown links to canonical upstream contract surfaces (e.g. §22 §00 → spec/04 + spec/02; §22 §05 → spec/12; §22 §39 → spec/05; §22 §50 → spec/12 + spec/05 + spec/26; §23 §00 → spec/13; §24 §00 → spec/07 + spec/17; §28 §00 → spec/12 + spec/02). Conversion to backticked cites would lose semantic navigability for the link-text-bearing references.
