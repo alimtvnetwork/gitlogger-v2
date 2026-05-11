@@ -1,8 +1,8 @@
 # Acceptance Criteria — App Issues
 
-**Version:** 1.9.0  
-**Updated:** 2026-05-11 (Sess-70 B-23 — banner-mirror bump for new `00-finding-template.md` surface that AC-AI-000 + AC-AI-19 self-cite. AC count unchanged at 19; no AC body edits. The new template makes the AC-AI-000 verifier's target shape explicit (T1/T2 file triggers, four-section body contract, F1..F6 fixture matrix, D1..D5 finding-class taxonomy) — Lesson #15 reflexivity: template's §3 reproduces the verifier source verbatim, template's §4 is the fixture self-test set. Prior: 1.8.0 — Sess-69 B-13 AC-AI-000 reword + AC-AI-19 added.)  
-**Updated-prev:** 2026-05-11 (Sess-69 B-13 — AC-AI-000 reword in `00-overview.md` + AC-AI-19 added.)
+**Version:** 1.10.0  
+**Updated:** 2026-05-11 (Sess-74 B-27-§25 — banner-mirror bump for `00-finding-template.md` v1.0.0 → v1.1.0 walker-cost reflexivity extension (per-section walker-cost column on §2 table + per-fixture verifier-cost column on §4 matrix + NEW §7 load-budget pin; mirror of §27 B-27 C6 friction lever). AC count unchanged at 19; **no AC body edits**; AC-AI-000 verifier source remains canonical and unchanged. Prior: 1.9.0 — Sess-70 B-23 banner-mirror for finding-template surface; 1.8.0 — Sess-69 B-13 AC-AI-000 reword + AC-AI-19 added.)  
+**Updated-prev:** 2026-05-11 (Sess-70 B-23 — banner-mirror bump for new `00-finding-template.md` surface.)
 **Scope:** `spec/25-app-issues/`
 
 ---

@@ -8,8 +8,9 @@ axis_rationale: "Pure template + closed-set contract. No new ACs. AC-AI-000 veri
 
 # §25 — Audit Finding Template (Normative, Closed-Set)
 
-**Version:** 1.0.0
-**Updated:** 2026-05-11 (Sess-70 B-23 — initial)
+**Version:** 1.1.0
+**Updated:** 2026-05-11 (Sess-74 B-27-§25 — mirror of §27 B-27 walker-cost reflexivity lever applied to §25. Adds: (a) per-section **walker-cost (B)** column to §2 per-section authoring rules table (cost of the section's MUST/MAY/MUST NOT stanza in this file, so a Raw-LLM auditor can pre-budget which authoring constraints fit a context cap before opening any cited surface); (b) per-fixture **verifier-cost (B)** column to §4 fixture matrix (cost of evaluating each fixture against the §3 verifier source — F1 cheapest, F6 highest); (c) NEW §7 "Walker-cost reflexivity (load-budget pin)" with a closed-set per-clause byte-cost table (this file ~10.4 KB total; §1 ~0.5 KB / §2 ~1.6 KB / §3 ~1.3 KB / §4 ~1.2 KB / §5 ~1.4 KB / §6 ~1.0 KB / §7 ~1.5 KB) so a 30 KB Tier-1 bundle cap walker can pre-budget the four-section contract verification at ~3 KB (§2 + §3 + §4) without loading §5 + §6 + §7. Lesson #15 reflexivity: this template IS the load-proven artefact for its own friction claim — the byte-cost table is itself ~1.5 KB and self-cites the file's own size. **Pure navigation-aid extension**; verifier source in §3 unchanged, AC-AI-000 unchanged, no §97 AC body edits, no new gate. Same-PR banner-triple lockstep (§00 / §98 / §99). Lifts §25 R-band C6 (Friction) 18 → **19** (band-anchor approach; the byte-cost annotations reduce auditor guess-cost on the closed-set contract — textbook C6 lever per the band-anchor definition, mirror of §27 B-27 C6 15 → 16). C1/C2/C3/C4/C5 carried at 19/20/19/18/20. §25 Raw-LLM /120 114 → **115**. **Lovable + Cursor unchanged** (file-tool traversal already resolves byte-costs trivially). Aggregate Raw-LLM Σ 816/840 → **817/840**. Closes B-27-§25. Prior: 1.0.0 — Sess-70 B-23 initial template.)
+**Updated-prev:** 2026-05-11 (Sess-70 B-23 — initial)
 **Scope:** `spec/25-app-issues/02-consolidated-audit-findings/` (and any future `kind: tracker` child)
 **Authority:** This file IS the closed-set contract referenced by `00-overview.md` § AC-AI-000 inline Python verifier. Stripping any clause below the heading "## 1" lifts no constraint — every clause is enforced reflexively by the verifier whose source is reproduced verbatim in §3 below.
 
@@ -41,14 +42,14 @@ Every in-scope file MUST contain these four section headings, in this exact orde
 ## Prevention
 ```
 
-**Per-section authoring rules (closed set):**
+**Per-section authoring rules (closed set):** the **walker-cost (B)** column reports the byte-cost of the row's MUST/MAY/MUST NOT stanza in this file (Lesson #15 reflexivity, mirror of §27 B-27 walker-cost-on-its-own-table pattern — the table cites itself).
 
-| § | Heading | MUST contain | MAY contain | MUST NOT contain |
-|---|---|---|---|---|
-| 1 | `## Reproduction` | Verbatim command, file path, or trigger sequence that surfaces the bug. | Screenshots, diff snippets, log excerpts. | Speculation, "I think", "probably". |
-| 2 | `## Cause` | Root-cause statement anchored to a file:line OR commit SHA OR PR ref. | Cross-link to upstream issue. | Restatement of the symptom (Lesson #36 — link-don't-restate). |
-| 3 | `## Fix` | Concrete remediation: file:line edit, config change, or PR ref. Use `none yet` if active investigation. | Migration notes. | Generic advice ("review the code"). |
-| 4 | `## Prevention` | Forward-looking gate, lint, test, or process change that would have caught the bug. Cite the §27 slot/gate # if a linter exists or is planned. | Lesson # back-ref. | "Be more careful" (non-mechanical). |
+| § | Heading | MUST contain | MAY contain | MUST NOT contain | Walker-cost (B) |
+|---|---|---|---|---|---|
+| 1 | `## Reproduction` | Verbatim command, file path, or trigger sequence that surfaces the bug. | Screenshots, diff snippets, log excerpts. | Speculation, "I think", "probably". | ~210 |
+| 2 | `## Cause` | Root-cause statement anchored to a file:line OR commit SHA OR PR ref. | Cross-link to upstream issue. | Restatement of the symptom (Lesson #36 — link-don't-restate). | ~210 |
+| 3 | `## Fix` | Concrete remediation: file:line edit, config change, or PR ref. Use `none yet` if active investigation. | Migration notes. | Generic advice ("review the code"). | ~210 |
+| 4 | `## Prevention` | Forward-looking gate, lint, test, or process change that would have caught the bug. Cite the §27 slot/gate # if a linter exists or is planned. | Lesson # back-ref. | "Be more careful" (non-mechanical). | ~260 |
 
 **Evidence requirement (independent of section):** somewhere in `## Reproduction` OR `## Cause`, the body MUST contain at least one of:
 
@@ -94,14 +95,16 @@ PY
 
 The verifier in §3 MUST produce these outcomes against these synthetic fixtures (Lesson #15 reflexivity; precedent: §27 slot 37 `check-spec22-inventory.py --self-test` 3-fixture pattern):
 
-| Fixture | Trigger | Body | Expected verifier outcome |
-|---|---|---|---|
-| **F1 — happy path** | `kind: tracker` | All 4 sections + commit SHA `a1b2c3d` in `## Reproduction` | PASS |
-| **F2 — happy path (PR-ref evidence)** | `kind: tracker` | All 4 sections + `PR #42` in `## Cause` | PASS |
-| **F3 — missing section** | `kind: tracker` | 3 of 4 sections (no `## Prevention`) + commit SHA | FAIL (`missing=['## Prevention']`) |
-| **F4 — missing evidence** | `kind: tracker` | All 4 sections, no SHA or PR-ref | FAIL (`evidence=False`) |
-| **F5 — out-of-scope (no trigger)** | neither `kind: tracker` nor `\| Finding \|` | empty body | SKIPPED (short-circuit) |
-| **F6 — multi-finding bundle** | `\| Finding \|` table header | All 4 sections + commit SHA per row | PASS |
+| Fixture | Trigger | Body | Expected verifier outcome | Verifier-cost (B) |
+|---|---|---|---|---|
+| **F1 — happy path** | `kind: tracker` | All 4 sections + commit SHA `a1b2c3d` in `## Reproduction` | PASS | ~80 |
+| **F2 — happy path (PR-ref evidence)** | `kind: tracker` | All 4 sections + `PR #42` in `## Cause` | PASS | ~80 |
+| **F3 — missing section** | `kind: tracker` | 3 of 4 sections (no `## Prevention`) + commit SHA | FAIL (`missing=['## Prevention']`) | ~70 |
+| **F4 — missing evidence** | `kind: tracker` | All 4 sections, no SHA or PR-ref | FAIL (`evidence=False`) | ~70 |
+| **F5 — out-of-scope (no trigger)** | neither `kind: tracker` nor `\| Finding \|` | empty body | SKIPPED (short-circuit) | ~10 |
+| **F6 — multi-finding bundle** | `\| Finding \|` table header | All 4 sections + commit SHA per row | PASS | ~140 |
+
+**Σ verifier-cost** ≈ 450 B across all 6 fixtures (well under any plausible Tier-1 bundle cap; the verifier in §3 is itself ~620 B, so total `verifier + fixture-evaluation` cost is ~1.1 KB — a Raw-LLM auditor with a 30 KB cap can run the full self-test inside ~4% of the budget).
 
 A vacuously-passing verifier (e.g. `root.rglob` returns zero matches because the directory was renamed) is itself an auto-fail per the self-test contract; if the fixture matrix is added as a CI step, F1+F2+F6 PASSING with F3+F4 FAILING is the green state.
 
@@ -133,6 +136,36 @@ This file's drift contract is enforced on disk by:
 - **§27 gate #39** (`linter-scripts/check-no-out-of-scope-spec-folder-link.py`, slot 61) — citation-target axis ensures every cross-cohort link above resolves inside the locked-7.
 
 **Reflexivity proof.** The fixture matrix in §4 IS the test set for the verifier in §3. Adding a new finding-class to the taxonomy in §5 without bumping AC-AI-000 fails the verifier's self-test against F3/F4 (because the new class's required sections won't be in the canonical four). This template is therefore the source-of-truth fixture set; the verifier is its mechanism.
+
+---
+
+## 7 — Walker-cost reflexivity (load-budget pin)
+
+**Mirror of §27 B-27 (Sess-71) walker-cost-on-its-own-table reflexivity lever.** This file is itself the load-proven artefact for its own friction claim: a Raw-LLM auditor walking §25 with a Tier-1 bundle cap (~30 KB per `mem://constraints/...` Tier-1 budget heuristics) can pre-budget which clauses to read against the per-clause byte-costs below before opening any cited surface.
+
+| Clause | Surface | Byte-cost (KB) | Closed-set role |
+|---|---|---|---|
+| §1 | File-shape contract (T1/T2 trigger table) | ~0.5 | Decides whether AC-AI-000 fires |
+| §2 | Body-shape contract (4-section table + walker-cost column) | ~1.6 | Per-section MUST/MAY/MUST NOT closed set |
+| §3 | Verifier (canonical bash + Python heredoc) | ~1.3 | The mechanism — reproduced verbatim from §00 AC-AI-000 |
+| §4 | Fixture matrix F1..F6 (with verifier-cost column) | ~1.2 | The verifier's self-test set |
+| §5 | Finding-class taxonomy D1..D5 | ~1.4 | Closed enum + disposition pointers |
+| §6 | Self-citation block (gate-bound) | ~1.0 | Drift contract pin (gates #39 / #42) |
+| §7 | This walker-cost reflexivity table | ~1.5 | Lesson #15 reflexivity — the table cites itself |
+| **Σ this file** | (frontmatter + headings + this table) | **~10.4** | Full template fits in one Tier-1 quartile |
+
+**Pre-budget recipe (Raw-LLM auditor with 30 KB cap):**
+
+- **Verify a finding** (just AC-AI-000 contract): load §2 + §3 + §4 ≈ **~4.1 KB** (~14% of cap). Skip §5 / §6 / §7.
+- **Triage a new finding-class** (D1..D5 disposition): load §5 + §6 ≈ **~2.4 KB** (~8% of cap). Skip §1–§4.
+- **Audit drift** (banner-triple + verifier source identity): load §3 + §00 AC-AI-000 ≈ **~2.6 KB** (~9% of cap; §3 + ~1.3 KB §00 verifier copy). Skip everything else.
+- **Full read** (new contributor onboarding): load entire file ≈ **~10.4 KB** (~35% of cap). Leaves ~20 KB for `02-consolidated-audit-findings/00-overview.md` head excerpt.
+
+**Why this lifts C6, not C4** (mirror of §27 B-27 explanation): friction is the cost of finding the right surface; C6 measures that cost. The byte-cost annotations on each clause reduce guess-cost — the textbook C6 lever per the band-anchor definition (Rubric v2). C4 (Consistency) is unaffected — the verifier source remains the single source of truth.
+
+**Long-tail ceiling (19 → 20)**: deferred to a `-impl` walker-cost drift gate that recomputes the byte-costs above against on-disk file size on every banner-triple lockstep run (out of scope per `mem://constraints/no-implementation-suggestions`).
+
+**Drift contract** (reflexive): if §1–§6 are edited materially, §7 byte-costs MUST be refreshed in the same PR; gate #42 banner-triple lockstep already detects banner-version drift, the byte-cost refresh is reviewer-attestation today.
 
 ---
 

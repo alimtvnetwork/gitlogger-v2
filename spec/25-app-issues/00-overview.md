@@ -19,10 +19,10 @@ produced_for:
 
 # App Issues
 
-**Version:** 3.11.0  
+**Version:** 3.12.0  
 <!-- h10-verified-phase: 153 -->
-**Updated:** 2026-05-11 (Sess-70 B-23 — added `00-finding-template.md` (~165 lines) — closed-set normative template defining (1) file-shape contract (T1 `kind: tracker` / T2 `\| Finding \|` table triggers); (2) body-shape contract (canonical four-section order with per-section MUST/MAY/MUST NOT rules); (3) verifier source reproduced verbatim from AC-AI-000 (Lesson #15 reflexivity — contract row IS fixture row); (4) closed-set fixture matrix F1..F6 (verifier self-test targets); (5) closed taxonomy of finding-classes D1..D5 with disposition rules. AC-AI-000 verifier unchanged; this file makes the implicit target shape explicit and closes the per-finding completeness gap. Pure navigation-aid + closed-set contract; zero AC additions. Lifts §25 R-band C2 18 → 20 (closed-set template now exists), C5 18 → 20 (verifier targets explicit, fixture matrix self-cited); cumulative §25 Raw-LLM 110 → 114/120. Prior: Sess-69 B-13 — AC-AI-000 reword.)  
-**Updated-prev:** 2026-05-10 (Session 49 audit-task A-29 — `produced_for:` producer-side front-matter binding child trackers to §22 AC-78/AC-79/AC-22-CE1.)
+**Updated:** 2026-05-11 (Sess-74 B-27-§25 — banner-mirror bump for `00-finding-template.md` v1.0.0 → v1.1.0 (mirror of §27 B-27 walker-cost reflexivity lever): per-section walker-cost (B) column added to §2 authoring rules table, per-fixture verifier-cost (B) column added to §4 fixture matrix, NEW §7 "Walker-cost reflexivity (load-budget pin)" with closed-set per-clause byte-cost table + 4 pre-budget recipes (verify-a-finding ~14% of 30 KB cap; triage-a-new-finding-class ~8%; audit-drift ~9%; full read ~35%). AC-AI-000 verifier source unchanged; pure navigation-aid extension; no §97 AC body edits. Lifts §25 R-band C6 (Friction) 18 → **19** (band-anchor approach); §25 Raw-LLM /120 114 → **115**. Aggregate Raw-LLM Σ 816/840 → **817/840**. Prior: Sess-70 B-23 — closed-set finding-template surface lands.)  
+**Updated-prev:** 2026-05-11 (Sess-70 B-23 — added `00-finding-template.md` ~165 lines closed-set normative template; Sess-69 B-13 — AC-AI-000 reword.)
 
 > 🤖 **Raw-LLM Auditor Pin (Lesson #36 link-don't-restate, applied to memory resolution — P16 friction sweep, T-37)**
 >

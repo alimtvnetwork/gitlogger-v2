@@ -1,11 +1,21 @@
 # Changelog — App Issues
 
-**Version:** 3.9.0  
-**Updated:** 2026-05-11 (Sess-70 B-23 — closed-set finding-template surface lands)  
-**Updated-prev:** 2026-05-11 (Sess-69 B-13 — AC-AI-000 reword + AC-AI-19 added)  
+**Version:** 3.10.0  
+**Updated:** 2026-05-11 (Sess-74 B-27-§25 — walker-cost reflexivity lever applied to finding template)  
+**Updated-prev:** 2026-05-11 (Sess-70 B-23 — closed-set finding-template surface lands)  
 **Scope:** `spec/25-app-issues/`
 
 ---
+
+## [3.10.0] — 2026-05-11 — Sess-74 B-27-§25: walker-cost reflexivity lever (mirror of §27 B-27)
+
+- **Action**: Extended `00-finding-template.md` v1.0.0 → **v1.1.0** with three additions mirroring the §27 B-27 (Sess-71) walker-cost-on-its-own-table reflexivity lever: (a) per-section **walker-cost (B)** column on §2 per-section authoring rules table; (b) per-fixture **verifier-cost (B)** column on §4 fixture matrix (Σ ~450 B / ~4% of a 30 KB Tier-1 cap); (c) NEW **§7 "Walker-cost reflexivity (load-budget pin)"** with a closed-set per-clause byte-cost table (~10.4 KB total: §1 ~0.5 / §2 ~1.6 / §3 ~1.3 / §4 ~1.2 / §5 ~1.4 / §6 ~1.0 / §7 ~1.5) plus 4 pre-budget recipes for the common auditor workflows (verify-a-finding ~14% of cap; triage-a-new-finding-class ~8%; audit-drift ~9%; full read ~35%).
+- **Self-citation**: §7 cites the file's own size — Lesson #15 reflexivity (mirror of §27 B-27 — the scoreboard cited its own walker-cost column). Drift contract: if §1–§6 are edited materially, §7 byte-costs MUST be refreshed same-PR; reviewer-attestation today, long-tail `-impl` deferred per `mem://constraints/no-implementation-suggestions`.
+- **Why this lifts C6, not C4**: friction is the cost of finding the right surface; C6 measures that cost. Byte-cost annotations reduce guess-cost (textbook C6 lever per Rubric v2 band-anchor definition). C4 is unaffected — the verifier source remains the single source of truth.
+- **AC-AI-000 verifier**: source UNCHANGED. No §97 AC body edits. AC count unchanged at 19/19.
+- **Lockstep**: §00 v3.11.0 → **v3.12.0**; §97 v1.9.0 → **v1.10.0** (banner-mirror only); this file v3.9.0 → **v3.10.0**; §99 v1.6.0 → **v1.7.0**.
+- **Scorecard impact**: §25 R-band C6 (Friction) 18 → **19** (band-anchor approach; ceiling 20 deferred to long-tail `-impl` walker-cost drift gate). C1/C2/C3/C4/C5 carried at 19/20/19/18/20. §25 Raw-LLM /120 114 → **115**; normalised ~95 → ~96. **Lovable + Cursor unchanged** (file-tool traversal already resolves byte-costs trivially). Aggregate Raw-LLM Σ 816/840 → **817/840**. §25 leads §27 by 6 (115 vs 109); §27 remains sole Raw-LLM cohort floor.
+- Closes **B-27-§25** from Sess-73 remaining-tasks list.
 
 ## [3.9.0] — 2026-05-11 — Sess-70 B-23: closed-set finding-template surface
 

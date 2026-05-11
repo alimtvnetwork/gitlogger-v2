@@ -1,6 +1,8 @@
 # Consistency Report — 25-app-issues
 
-**Version:** 1.6.0  
+**Version:** 1.7.0  
+
+> **v1.7.0 update (Sess-74 B-27-§25 — walker-cost reflexivity lever applied to finding template; mirror of §27 B-27 Sess-71):** Extended `00-finding-template.md` v1.0.0 → **v1.1.0** with three additions: (a) per-section **walker-cost (B)** column on §2 per-section authoring rules table; (b) per-fixture **verifier-cost (B)** column on §4 fixture matrix (Σ ~450 B / ~4% of 30 KB Tier-1 cap); (c) NEW **§7 "Walker-cost reflexivity (load-budget pin)"** with a closed-set per-clause byte-cost table (this file ~10.4 KB total: §1 ~0.5 / §2 ~1.6 / §3 ~1.3 / §4 ~1.2 / §5 ~1.4 / §6 ~1.0 / §7 ~1.5) plus 4 pre-budget recipes (verify-a-finding ~14% of cap; triage-a-new-finding-class ~8%; audit-drift ~9%; full read ~35%). Lesson #15 reflexivity: the §7 table cites the file's own size — same self-reference pattern as §27's per-criterion scoreboard walker-cost column from B-27. **AC-AI-000 verifier source UNCHANGED**; pure navigation-aid extension; no §97 AC body edits; AC count unchanged at 19/19. Drift contract: if §1–§6 are edited materially, §7 byte-costs MUST be refreshed same-PR; reviewer-attestation today, long-tail `-impl` walker-cost drift gate deferred per `mem://constraints/no-implementation-suggestions`. Banners: §00 v3.11.0 → **v3.12.0**; §97 v1.9.0 → **v1.10.0** (banner-mirror only); §98 v3.9.0 → **v3.10.0**; this file v1.6.0 → **v1.7.0**. **Scorecard impact (Sess-74 B-27-§25):** §25 R-band C6 (Friction) 18 → **19** (band-anchor approach via byte-cost guess-cost reduction — textbook C6 lever per Rubric v2; ceiling 20 deferred to long-tail `-impl`). C1/C2/C3/C4/C5 carried at 19/20/19/18/20. §25 Raw-LLM /120 114 → **115**; normalised ~95 → ~96. **Lovable + Cursor unchanged** (file-tool traversal already resolves byte-costs). Aggregate Raw-LLM Σ 816/840 → **817/840**. §25 leads §27 by 6 (115 vs 109); §27 remains sole Raw-LLM cohort floor (R 109). Closes B-27-§25 from Sess-73 remaining-tasks list. Prior: Sess-70 B-23 — closed-set finding-template surface lands.
 
 > **v1.6.0 update (Sess-70 B-23 — closed-set finding-template surface lands):** Added new file `00-finding-template.md` (~165 lines) at the top of §25 alongside `00-overview.md`. Six normative sections: §1 file-shape contract (T1 `kind: tracker` / T2 `\| Finding \|` table triggers — closed set); §2 body-shape contract (canonical four-section order `## Reproduction` → `## Cause` → `## Fix` → `## Prevention` with per-section MUST / MAY / MUST NOT rules + evidence regex requirement pinned); §3 verifier source reproduced **verbatim** from `00-overview.md` § AC-AI-000 (Lesson #15 reflexivity — the contract row IS the fixture row; any drift between §00 and §3 fails gate #42 clause-5 banner-triple lockstep); §4 closed-set fixture matrix F1..F6 (verifier self-test targets — F1 happy-path SHA, F2 happy-path PR-ref, F3 missing-section, F4 missing-evidence, F5 out-of-scope short-circuit, F6 multi-finding bundle); §5 closed taxonomy of finding-classes D1..D5 with per-class disposition rules (D1 ambiguous-ref → AC-AI-17; D2 internal-contradiction → precedence rule; D3 externalised-strategy → §22 AC-26 / AC-78; D4 truncated-body → §22 AC-78 walker-cap; D5 missing-core-file → §22 AC-78 walker-cap); §6 self-citation gate-bound block (AC-AI-000 + AC-AI-19 + §27 gates #39 / #42). **AC-AI-000 verifier unchanged**; this file makes the implicit target shape explicit and closes the per-finding completeness gap. **Pure navigation-aid + closed-set contract**; zero AC additions, zero edits to §97 body or detail files. New §99 inventory row added. Banners: §00 v3.10.0 → **v3.11.0** (new Contents row + banner update); §97 v1.8.0 → **v1.9.0** (no AC count change but banner mirrors the new template surface that AC-AI-000 / AC-AI-19 now self-cite); §98 v3.8.0 → **v3.9.0** (changelog entry); this file v1.5.0 → **v1.6.0**. **Scorecard impact (Sess-70 B-23):** §25 R-band C2 (Completeness) 18 → **20** (closed-set template now covers all finding shapes via T1/T2 triggers + four-section contract + D1..D5 taxonomy — 20-band anchor satisfied: template self-cites AC-AI-000 verifier as enforcement mechanism per Sess-45 A-25 rule). C5 (Implementability) 18 → **20** (verifier targets now explicit via F1..F6 fixture matrix; per-section MUST/MAY/MUST NOT rules removed authoring-time ambiguity — 20-band anchor satisfied: fixture matrix IS the verifier self-test set per Lesson #15). C1 / C3 / C4 / C6 carried at 19 / 19 / 18 / 18. §25 Raw-LLM /120 110 → **114**; normalised /100 ~92 → ~95. **Lovable + Cursor unchanged** (file-tool traversal already resolved AC-AI-000 verifier source). Aggregate Raw-LLM Σ 801/840 → **805/840**. Closes B-23 from Sess-69 remaining-tasks list. Prior: Sess-69 B-13 — AC-AI-000 reword.
 
@@ -30,8 +32,8 @@
 |-----------|--------|
 | `00-overview.md` present | ✅ |
 | `99-consistency-report.md` present | ✅ (this file) |
-| `97-acceptance-criteria.md` present | ✅ (v1.8.0; sync'd Sess-69 B-13) |
-| `98-changelog.md` present | ✅ (v3.8.0; sync'd Sess-69 B-13) |
+| `97-acceptance-criteria.md` present | ✅ (v1.10.0; sync'd Sess-74 B-27-§25) |
+| `98-changelog.md` present | ✅ (v3.10.0; sync'd Sess-74 B-27-§25) |
 | Lowercase kebab-case naming | ✅ |
 | Numeric prefix sequence | ✅ |
 | AC-AI-000 verifier inlined (Lesson #15 reflexivity) | ✅ (sync'd Sess-69 B-13) |
@@ -45,8 +47,8 @@
 
 | File | Status |
 |------|--------|
-| `00-overview.md` | ✅ Present (v3.11.0; sync'd Sess-70 B-23) |
-| `00-finding-template.md` | ✅ Present (v1.0.0; NEW Sess-70 B-23 — closed-set finding template + verifier mirror + F1..F6 fixture matrix + D1..D5 taxonomy) |
+| `00-overview.md` | ✅ Present (v3.12.0; sync'd Sess-74 B-27-§25) |
+| `00-finding-template.md` | ✅ Present (v1.1.0; sync'd Sess-74 B-27-§25 — walker-cost reflexivity lever; per-section walker-cost + per-fixture verifier-cost columns + NEW §7 load-budget pin) |
 
 ### Subfolders
 
