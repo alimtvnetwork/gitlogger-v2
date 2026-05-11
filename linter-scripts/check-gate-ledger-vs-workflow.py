@@ -35,6 +35,15 @@ SLOT_DIR = REPO / "spec" / "27-spec-toolchain"
 WORKFLOW = REPO / ".github" / "workflows" / "spec-health.yml"
 SCRIPTS_DIR = REPO / "linter-scripts"
 
+# Per INV-03 (`spec/27-spec-toolchain/00-overview.md` line 239):
+#   "number_slot once_assigned -> immutable (retired slots may not be re-used)"
+# Gate numbers #1..#19 and #21 were assigned in pre-Phase-5 cycles to scripts
+# that have since been retired or merged. The current Active-gate ledger is
+# contiguous from #20..#46 with one tolerated hole at #21. The set below is
+# the FROZEN historical-retired list — extending it requires a §27 §00
+# "Retired Gate Numbers" subsection update + §98 changelog row in the same PR.
+RETIRED_GATE_NUMBERS: frozenset[int] = frozenset({*range(1, 20), 21})
+
 SCRIPT_RE = re.compile(r"linter-scripts/([a-z0-9_.-]+\.(?:py|sh|cjs|mjs|js|go))")
 ACTIVE_GATE_RE = re.compile(
     r"^\*\*Status:\*\*\s+Active gate #(\d+)", re.MULTILINE
