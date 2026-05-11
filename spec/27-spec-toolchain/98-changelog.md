@@ -1,8 +1,19 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.78.0
-**Updated:** 2026-05-11 (Sess-67 G-8 — `check-diagram-parity.py` clause-6 `narrative-header-schema` shipped; §26 R-band lift +2)
+**Version:** 4.79.0
+**Updated:** 2026-05-11 (Sess-67 B-6 — added `00-tier1-bundle.md` Raw-LLM navigation manifest)
 **Total active gates: 26**
+
+### 4.79.0 — 2026-05-11 — Sess-67 B-6: §27 tier-1 essential bundle manifest added (mirror of §22 B-1)
+- **Action**: Created new file `00-tier1-bundle.md` (~150 lines) at the top of §27 alongside `00-overview.md`. Partitions all 76 §27 source files into three tiers: **tier-1** (4 files, ~1,573 lines — navigable minimum for the Raw-LLM persona), **tier-2** (per-gate slot docs grouped into 11 categories, ~50-200 lines each, read on demand), **tier-3** (changelog, allowlists, runner stubs, workflow specs, shared fixture-replay helper).
+- **Tier-1 set + read order**: `00-overview.md` (vocabulary + invariants + 26-gate inventory) → `trace-map.md` (gate dependency DAG) → `97-acceptance-criteria.md` (36 toolchain ACs) → `99-consistency-report.md` (newest banner / current state).
+- **Tier-2 categorisation**: 11 categories pinned — cross-link/structural hygiene; generators; scaffolders; lockstep+version parity; §99 freshness+audit cadence; audit-AI implementability; cohort-specific surface gates; boundary/scope perimeter; §97 hygiene; sub-cohort boundary checks; §28/§26 self-test harness; meta-gates. Per-gate slot doc anatomy fixed at 8 canonical sections (status banner, purpose, clauses, R5 anchor, fixture roster, CI invocation, failure modes, cross-refs).
+- **Drift contract pinned**: tier-1 footprint MUST stay ≤ 1,800 lines (tighter than §22's 2,500 because §27 is a meta-module — tier-1 is navigation-only, not contract-bearing); adding/retiring a gate MUST update both the tier-2 category row in `00-tier1-bundle.md` AND the Active Gate Inventory in `00-overview.md` in the same commit.
+- **Per-persona pre-flight checklist**: Raw-LLM stops after file 4; Cursor/Claude-Code reads tier-1 in order then loads tier-2 slot doc on demand; Lovable uses tier-1 as primer and jumps to tier-2 per current sub-task.
+- **Why now**: Sess-67 hand-scoring scorecard surfaced §27 Raw-LLM persona at 65/100 — the spec-set bottleneck after the Sess-67 B-1 §22 lift moved §22 from 68 to 70. §27 has 76 files; without a tier-1 navigation file a Raw-LLM had no read order other than slot-numeric (uninformative for dependency ordering).
+- **Banners**: §00 v4.78.0 → **v4.79.0** (lockstep — banner records the new navigation surface); §97 unchanged (no AC added — tier partition is navigation-aid not contract); §98 v4.78.0 → **v4.79.0** (this entry); §99 to mirror this version on next §99 cadence. Total active gates 26 unchanged.
+- **Scorecard impact (Sess-67 B-6)**: §27 R-band C1 (Clarity) 16 → 18 (read-order DAG now explicit on disk for the meta-module surface). C2 (Completeness) 17 → 18 (per-gate slot doc anatomy pinned at 8 canonical sections, surfacing what the slot files MUST contain). §27 Raw-LLM /120 78 → 82; normalised /100 ~65 → ~68. **Lovable + Cursor unchanged** (those personas already had file-tool access — tier-1 manifest is for the Raw-LLM persona specifically). Closes B-6 from the Sess-67 remaining-tasks list.
+
 
 ### 4.78.0 — 2026-05-11 — Sess-67 G-8: §26 R-band lift via clause-6 narrative-header schema (gate #41 / slot 63)
 - **Action — clause-6**: `linter-scripts/check-diagram-parity.py` gained `NARRATIVE_HEADER_KEYS = ('Diagram type:','What this answers:','Authoritative source:','Audience:')` + 15-token `MERMAID_DIRECTIVES` enum + `check_narrative_header()` and a new `narrative-header-schema` `--check` mode. Scans every active `.mmd` (exemptions carried) for the 4 keys in canonical order before the first directive line; YAML frontmatter tolerated; intervening `%%` comments + blank lines permitted.
