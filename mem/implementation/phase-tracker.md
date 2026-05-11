@@ -19,6 +19,6 @@ type: feature
 - #8 REST controller PHP harness — ✅ done (48 tests, 106 assertions)
 - #9 DB-layer tests with real PDO/SQLite — ✅ done (41 tests, 115 assertions)
 - #10 Admin UI E2E (Playwright) — ✅ scaffolded; runs in CI via Playwright Docker image (sandbox lacks browser deps for local exec)
-- #11 Glci end-to-end harness: spawn `glci ship/selftest` against a stub WP server — ⏳ todo
+- #11 Glci end-to-end harness: spawn compiled `glci` against an httptest stub WP server — ✅ done (TestMain go-build + 7 exec tests covering version/help/ping/whoami/--self-test)
 - #12 Per-package Go coverage gates in `ci-glci.yml` — ⏳ todo
 - #13 Verify Playwright suite by triggering CI workflow once user pushes; fix any environmental issues that surface there — ⏳ followup
