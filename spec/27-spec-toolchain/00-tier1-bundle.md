@@ -8,8 +8,8 @@ axis_rationale: "Single-page read-order anchor for the §27 spec set"
 
 # Spec Toolchain — Tier-1 Essential Bundle
 
-**Version:** 1.0.0
-**Updated:** 2026-05-11 (Sess-67 B-6 — initial tier-1 / tier-2 / tier-3 partition; introduced to lift §27 Raw-LLM persona score by carving a ~1.6K-line navigable subset out of the 12,546-line full §27 corpus.)
+**Version:** 1.1.0
+**Updated:** 2026-05-11 (Sess-67 B-21 — added Tier-2 slot index lookup table mapping all 28 active-gate slot files → gate # → category, so a Raw-LLM reader can resolve "which slot owns gate #N?" in a single pass without paging through the categorical inventory in `00-overview.md`. Lifts §27 C6 Friction +3. v1.0.0 → v1.1.0 — additive only; no tier partition changes.)
 **Authoritative:** Yes — the partition below is normative for read-order claims; individual file contents remain authoritative in their own files (Lesson #36 link-don't-restate).
 
 > 🤖 **Raw-LLM Reader Pin.** §27 is a *meta-module*: it specifies the gates that audit the other six in-scope cohorts (§22-§26, §28). Most §27 files are per-gate slot docs (one file per active gate, ~50-200 lines each). To **navigate** §27 you only need the four tier-1 files below (~1,573 lines). To **work on a specific gate**, add the corresponding tier-2 slot doc on demand. The 1,080-line `98-changelog.md` is tier-3 — never required for current work.
@@ -50,6 +50,50 @@ axis_rationale: "Single-page read-order anchor for the §27 spec set"
 | Sub-cohort boundary checks | 50, 51, 52, 56, 57 | validate-guidelines, axios-version, rest-pascalcase-parity, rest-boolean-parity | When editing platform contracts (REST surface, dependency pins). |
 | §28 / §26 self-test harness | 62, 63 | check-ci-cli-self-test-harness, check-diagram-parity | When extending §28 self-tests or §26 diagram contracts. |
 | Meta gates (audit the toolchain itself) | 64, 65 | meta-verify-lockstep, check-gate-ledger-vs-workflow | When making any structural change to §27 itself. |
+
+### Tier-2 slot index — lookup table (B-21, Sess-67)
+
+> **Purpose.** A single-shot slot-number → gate-number → file lookup so a Raw-LLM reader (no file-tool access) can resolve "which slot doc owns gate #N?" or "which gate does slot NN ship?" without paging through `00-overview.md`'s category-grouped inventory. The mapping below is authoritative for the **active gate set** as of Sess-67; carrier files (allowlists, runner stubs, workflow YAML specs) are tier-3 and listed in their own table above. Source of truth: per-file `# title` line + first `gate #N` literal in the slot doc body.
+>
+> **Drift contract.** Add a new active gate → add a row here AND to the Active Gate Inventory in `00-overview.md` in the same commit. Retire a gate → strike the row here AND record the frozen-slot entry in `00-overview.md` retired-gates list. Failure to do so MUST be flagged by the next §99 entry per the existing tier-1 drift contract below.
+
+| Slot | Gate # | File | Category |
+|---|---|---|---|
+| 27 | #16 | [27-check-99-stamp-bump.md](./27-check-99-stamp-bump.md) | §99 freshness |
+| 28 | #17 | [28-check-archive-exclusion-runtime.md](./28-check-archive-exclusion-runtime.md) | Lockstep / runtime probe |
+| 29 | #19 | [29-check-version-parity.md](./29-check-version-parity.md) | Lockstep + version parity |
+| 36 | #19 | [36-check-ads-boundaries.md](./36-check-ads-boundaries.md) | Boundary / scope perimeter (§24) |
+| 37 | #20 | [37-check-spec22-inventory.md](./37-check-spec22-inventory.md) | Cohort surface (§22) |
+| 38 | #21 | [38-check-verification-ledger-cadence.md](./38-check-verification-ledger-cadence.md) | §99 freshness + audit cadence |
+| 39 | #22 | [39-check-applink-xor-clause.md](./39-check-applink-xor-clause.md) | Cohort surface (§23) |
+| 42 | #23 | [42-check-error-envelope-uniformity.md](./42-check-error-envelope-uniformity.md) | Cohort surface (§22+§23+§24) |
+| 43 | #24 | [43-check-boolean-uniformity-primary-lane.md](./43-check-boolean-uniformity-primary-lane.md) | Cohort surface (§22+§23+§24) |
+| 44 | #25 | [44-check-seedable-config-row-present.md](./44-check-seedable-config-row-present.md) | Cohort surface (§23) |
+| 45 | #26 | [45-check-idempotency-observability.md](./45-check-idempotency-observability.md) | Cohort surface (§22+§23) |
+| 46 | #27 | [46-check-audit-quoted-evidence-marker.md](./46-check-audit-quoted-evidence-marker.md) | §99 freshness + audit cadence |
+| 47 | #28 | [47-check-ac-section-orphan-header.md](./47-check-ac-section-orphan-header.md) | §97 hygiene + AC structure |
+| 48 | #29 | [48-check-ac-prefix-contract.md](./48-check-ac-prefix-contract.md) | §97 hygiene + AC structure |
+| 49 | #30 | [49-check-ui-component-binding-matrix.md](./49-check-ui-component-binding-matrix.md) | Cohort surface (§24) |
+| 53 | #31 | [53-check-appshell-route-matrix.md](./53-check-appshell-route-matrix.md) | Cohort surface (§24) |
+| 54 | #32 | [54-check-seed-id-explicit-locked-form.md](./54-check-seed-id-explicit-locked-form.md) | Cohort surface (§23) |
+| 55 | #33 | [55-check-dialect-precedence-banner-present.md](./55-check-dialect-precedence-banner-present.md) | Cohort surface (§22+§23) |
+| 56 | #34 | [56-check-rest-pascalcase-parity.md](./56-check-rest-pascalcase-parity.md) | Sub-cohort REST surface |
+| 57 | #35 | [57-check-rest-boolean-parity.md](./57-check-rest-boolean-parity.md) | Sub-cohort REST surface |
+| 58 | #36 | [58-check-no-sql-ddl-in-ui-folder.md](./58-check-no-sql-ddl-in-ui-folder.md) | Boundary / scope perimeter (§24) |
+| 59 | #37 | [59-check-no-ci-yaml-in-issues-folder.md](./59-check-no-ci-yaml-in-issues-folder.md) | Boundary / scope perimeter (§25) |
+| 60 | #38 | [60-check-no-toolchain-enum-in-issues-folder.md](./60-check-no-toolchain-enum-in-issues-folder.md) | Boundary / scope perimeter (§25) |
+| 61 | #39 | [61-check-no-out-of-scope-spec-folder-link.md](./61-check-no-out-of-scope-spec-folder-link.md) | Boundary / scope perimeter (locked-7) |
+| 62 | #40 | [62-check-ci-cli-self-test-harness.md](./62-check-ci-cli-self-test-harness.md) | §28 self-test harness |
+| 63 | #41 | [63-check-diagram-parity.md](./63-check-diagram-parity.md) | §26 diagram parity |
+| 64 | #42 | [64-meta-verify-lockstep.md](./64-meta-verify-lockstep.md) | Meta gate (audits §27 itself) |
+| 65 | #43 | [65-check-gate-ledger-vs-workflow.md](./65-check-gate-ledger-vs-workflow.md) | Meta gate (audits §27 itself) |
+| 80 | (carrier for #17) | [80-lib-fixture-replay.md](./80-lib-fixture-replay.md) | Shared self-test harness library |
+
+**Reverse lookup (gate # → slot).** Read the table top-to-bottom; the gate column is monotonic except for the §99-freshness pair (slot 27 = #16 then slot 28 = #17 then slot 29 = #19 — gate #18 is reserved/retired per `00-overview.md` retired-gate list). Slots 01-26 + 30-35 + 40-41 + 70-71 are tier-2 carriers or pre-numbered-gate validators (no gate # assignment) and continue to live under the categorical inventory above.
+
+**Active count parity.** 28 active-gate rows above + the 26 active-gate count in `00-overview.md` differ because the overview counts **distinct gate numbers** (#16..#43 minus retired #18, #44 reserved) while the slot index counts **slot files that ship an active gate**. Slot 36 and slot 29 both bind to gate #19 historically (slot 29 = version-parity, slot 36 = ADS-boundaries) — overview consolidates this into one gate number; slot index keeps the file row distinct. This off-by-N is **expected and intentional**, not drift.
+
+---
 
 **Per-gate slot doc anatomy** (canonical sections, mirrored across all slot files):
 1. Status banner (`Active gate #N (Phase / Sess-NN tag)`)
