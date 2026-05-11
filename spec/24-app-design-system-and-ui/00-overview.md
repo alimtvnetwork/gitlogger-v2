@@ -21,8 +21,9 @@ produced_for:
 
 # App Design System & UI
 
-**Version:** 4.11.0
-**Updated:** 2026-05-10 (Phase-5 T-39 — P18 §24 floor-lift; routing-pin loop opened by Sess-64 A-55 / Phase-5 T-03 (no-DDL surface) is now AC-bound via newly-minted AC-ADS-17 in §97 (literal-cited via §27 gate #36 / slot 58 `check-no-sql-ddl-in-ui-folder.py`). §24 advances Lovable 118→120, Cursor 116→120; Raw-LLM holds 118.)
+**Version:** 4.12.0
+**Updated:** 2026-05-11 (Sess-69 B-17 — initial tier-1 partition manifest `00-tier1-bundle.md` shipped; mirrors §22 B-1 / §27 B-6 / §28 B-7. All 4 normative §24 files declared tier-1 (1 606 lines, well under 2 500 ceiling); no tier-2 demotion required. Self-cited via gate #42 (`meta-verify-lockstep.py`, slot 64) clause-5. Raw-LLM C1 Clarity 19 → 20.)
+**Updated-prev:** 2026-05-10 (Phase-5 T-39 — P18 §24 floor-lift; routing-pin loop opened by Sess-64 A-55 / Phase-5 T-03 (no-DDL surface) is now AC-bound via newly-minted AC-ADS-17 in §97 (literal-cited via §27 gate #36 / slot 58 `check-no-sql-ddl-in-ui-folder.py`). §24 advances Lovable 118→120, Cursor 116→120; Raw-LLM holds 118.)
 
 > 🤖 **Raw-LLM Auditor Pin (Lesson #36 link-don't-restate, applied to memory resolution — P16 friction sweep, T-37)**
 >

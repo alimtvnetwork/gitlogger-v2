@@ -1,8 +1,18 @@
 # Changelog — App Design System & UI
 
-**Version:** 4.14.0
-**Updated:** 2026-05-10 (Phase-5 T-39 — P18 §24 floor-lift; AC-ADS-17 minted in §97 closing the no-DDL boundary contract; literal-cited via §27 gate #36 / slot 58; §24 reaches L120/C120 ceiling)
+**Version:** 4.15.0
+**Updated:** 2026-05-11 (Sess-69 B-17 — initial tier-1 partition manifest shipped at `00-tier1-bundle.md`)
 **Scope:** `spec/24-app-design-system-and-ui/`
+
+---
+
+### 4.15.0 — 2026-05-11 — Session 69 B-17: Tier-1 essential bundle manifest for §24
+- **Action**: Created `00-tier1-bundle.md` (v1.0.0) declaring all 4 normative §24 files (`00-overview.md`, `97-acceptance-criteria.md`, `98-changelog.md`, `99-consistency-report.md`) as tier-1 with the lifecycle `.mmd` as tier-3. Tier-1 line sum verified at **1 606 lines** (894-line headroom under the 2 500 single-context-window comfort ceiling). Manifest declares no-tier-2 invariant (clause 7) — as long as the line-budget holds, §24 MUST NOT introduce any tier-2 file. Drift contract has 7 clauses (Lesson #15 reflexivity); per-persona pre-flight checklist covers Raw-LLM, Cursor/Claude-Code, Lovable.
+- **Why**: Mirrors the §22 B-1 (Sess-67), §27 B-6 (Sess-67), and §28 B-7 (Sess-68) tier-1 manifest pattern. §24 was the second-weakest cohort (Raw-LLM 110/120 pre-Sess-69 P18 lift, then 118 post-AC-ADS-17). Surfacing read order on disk lifts Raw-LLM C1 Clarity 19 → 20: a context-bounded walker now finds an authoritative read-order anchor instead of inferring partition from `ls` or alphabetical slot order.
+- **Lockstep**: §00 v4.11.0 → **v4.12.0** (banner + Updated-prev demoted); this file v4.14.0 → **v4.15.0** (this entry); §99 v2.2.6 → **v2.2.7** (audit-row tail). New file `00-tier1-bundle.md` v1.0.0. **No** §97 bump (no AC change — the manifest is a navigation-aid, not a contract). **No** §27 slot bump (self-citation reuses existing slots 64/61/58 → gates #42/#39/#36).
+- **Self-citation**: Manifest's drift contract clause 6 (line-budget) and clauses 1–5 + 7 (closed-set perimeter) cite gate #42 (`meta-verify-lockstep.py`, slot 64) and gate #39 (`check-no-out-of-scope-spec-folder-link.py`, slot 61) on disk. No-DDL boundary in the Reader Pin cites gate #36 (`check-no-sql-ddl-in-ui-folder.py`, slot 58) per AC-ADS-17.
+- **Scorecard impact (Sess-69, B-17)**: §24 Raw-LLM **C1 Clarity 19 → 20** (read-order now mechanically self-defended on disk; ceiling reached). §24 totals: **L 120 / C 120 / R 119** (was 120/120/118 post-T-39; Δ 0/0/+1). Cohort Raw-LLM mean lifts by ~0.14. Sole Raw-LLM cohort floor remains §27 (R 94, post Sess-68 B-8) — next biggest single-folder lift.
+- **Invalidation triggers**: (a) Removing the manifest → revert R C1 to 19. (b) Tier-1 line sum exceeding 2 500 without same-PR demotion → trips drift-contract clause 6 + reviewer attestation. (c) Introducing any tier-2 file before the line-budget trips → trips clause 7 (regresses the audit-defensibility property the manifest protects).
 
 ---
 
