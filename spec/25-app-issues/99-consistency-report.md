@@ -45,7 +45,8 @@
 
 | File | Status |
 |------|--------|
-| `00-overview.md` | ✅ Present |
+| `00-overview.md` | ✅ Present (v3.11.0; sync'd Sess-70 B-23) |
+| `00-finding-template.md` | ✅ Present (v1.0.0; NEW Sess-70 B-23 — closed-set finding template + verifier mirror + F1..F6 fixture matrix + D1..D5 taxonomy) |
 
 ### Subfolders
 
