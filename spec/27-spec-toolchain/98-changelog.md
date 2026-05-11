@@ -1,8 +1,16 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.73.0
-**Updated:** 2026-05-11 (Sess-67 G-6aa — frozen RETIRED_GATE_NUMBERS set + §27 §00 anchor section; I-3 NUMBERED 20-gap → 0; gate #43 ledger fully green across all 3 invariants)
+**Version:** 4.75.0
+**Updated:** 2026-05-11 (Sess-67 G-6w-mirror — §22 `18-schema.sql` AppLink rebased to §23 contract shape; gate #22 extended with `--all-sources` lockstep; mirror coverage promoted from deferred to load-proven on both surfaces)
 **Total active gates: 26**
+
+### 4.75.0 — 2026-05-11 — Sess-67 G-6w-mirror: §22 AppLink mirror rebased + gate #22 lockstep coverage
+- **Action — schema rebase**: `spec/22-git-logs-v2/18-schema.sql` AppLink table rebuilt to mirror §23 §00 byte-for-byte: `TargetGitProfileId`/`TargetRepoId` NULL columns (was `GitProfileId`/`RepoId`); added `IsActive INTEGER NOT NULL` + `DisconnectedAt INTEGER NULL`; replaced bare-OR CHECK with the SELECT-discriminator XOR pair joined by `OR`; added the disconnect-invariant CHECK; replaced flat `IxAppLinkApp` with the four-index pack `IX_AppLink_AppId` + partial `IX_AppLink_TargetRepoId`/`IX_AppLink_TargetGitProfileId` (with `WHERE Target… IS NOT NULL`) + `IX_AppLink_Active(AppId,IsActive)`. Inline DDL comment cites the gate-#22 enforcement mechanism (Lesson #15 reflexivity).
+- **Action — gate extension**: `linter-scripts/check-applink-xor-clause.py` gained `MIRROR_SOURCES = (SPEC23_OVERVIEW, SPEC22_SCHEMA)` frozen tuple + `--all-sources` flag that walks every entry and fails on the first divergence. Docstring "deferred" language replaced with explicit lockstep wording.
+- **Workflow wire**: Gate-#22 step `§23 AppLink XOR clause gate` updated from `--self-test` + single-source live to `--self-test` + `--all-sources` (live disk now scans both spec sources in one invocation).
+- **Self-test**: 6/6 unchanged. `--all-sources` live disk: `OK on spec/23-app-database/00-overview.md` + `OK on spec/22-git-logs-v2/18-schema.sql`.
+- **Lockstep**: §27 §00 4.73.0 → 4.75.0; §27 §98 4.73.0 → 4.75.0; §99 3.12.0 → 3.14.0.
+- **Scorecard**: §22 R-band C3 +1 (mirror surface load-proven), C5 +1 (lockstep-with-§23 anchored on disk by `MIRROR_SOURCES`); §27 R-band C2 +1 (`--all-sources` + frozen-tuple pattern), C5 +1 (gate-script ↔ workflow ↔ §23 ↔ §22 4-way bind).
 
 ### 4.73.0 — 2026-05-11 — Sess-67 G-6aa: gate-number ledger fully green (I-3 NUMBERED 20-gap → 0)
 - **Action**: Patched `linter-scripts/check-gate-ledger-vs-workflow.py` with frozen `RETIRED_GATE_NUMBERS = frozenset({*range(1,20), 21})` constant (20 entries). I-3 NUMBERED missing-set computation now subtracts the retired set BEFORE applying the >5-gap failure threshold.
