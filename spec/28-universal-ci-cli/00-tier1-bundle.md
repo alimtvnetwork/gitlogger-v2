@@ -61,6 +61,35 @@ These files exist for completeness but are not required for any persona to under
 
 ---
 
+## Walker-cost reflexivity (load-budget pin)
+
+**Mirror of §27 B-27 (Sess-71), §25 B-27-§25 (Sess-74), §24 B-27-§24 (Sess-75), and §22 B-27-§22 (Sess-76) walker-cost reflexivity lever.** This manifest is itself the load-proven artefact for its own friction claim: a Raw-LLM auditor walking §28 with a Tier-1 bundle cap (~30 KB per `mem://constraints/...` Tier-1 budget heuristics) can pre-budget which files to open against the per-file byte-costs in the Tier-1 table (column 4) before opening any cited surface. The Σ ~136 KB total is **far above** any single-walker 30 KB cap — sub-task pre-budgeting is therefore mandatory, not optional, for the Raw-LLM persona.
+
+| Tier | Files | Σ KB | Role |
+|---|---|---|---|
+| Tier-1 #1-2 | `00-overview.md` + `01-glossary-and-enums.md` | ~24 | Vocabulary + scope prelude (must-load before any subcommand reasoning) |
+| Tier-1 #3-5 | `04-command-surface.md` + `06-log-shipping-contract.md` + `07-error-catalog.md` | ~28 | Behavioural core — fits a single 30 KB walker pass with 2 KB headroom |
+| Tier-1 #6 | `97-acceptance-criteria.md` | ~63 | AC aggregator — ~210% of cap → mandatory 3-pass walk on its own |
+| Tier-1 #7 | `99-consistency-report.md` | ~21 | Current-state tail — fits one walker pass alone |
+| **Σ tier-1** | **(7 normative files)** | **~136** | **~453% of cap → mandatory 5-pass walk, ordered per the read-order rationale above** |
+
+**Pre-budget recipes** (closed set, mirror of §27 + §25 + §24 + §22):
+
+- **Verify-a-subcommand** (auditor confirming a single `glci` subcommand contract): load Tier-1 #1 + #3 ≈ **~30 KB** (~100% of cap → 1-pass walk; vocabulary + command surface is exactly cap-sized).
+- **Decode-an-error-envelope** (auditor explaining a `GLCI-*` exit code): load Tier-1 #2 + #4 + #5 ≈ **~32 KB** (~107% of cap → 2-pass walk; enums + log-shipping context + error catalog).
+- **Audit-an-AC** (auditor verifying any `AC-28-*` clause): load Tier-1 #1 + #6 + #7 ≈ **~88 KB** (~293% of cap → mandatory 3-pass walk; AC aggregator alone needs 3 passes).
+- **Full tier-1 read** (new contributor onboarding): load entire tier-1 set ≈ **~136 KB** (~453% of cap → mandatory 5-pass walk, ordered §00 → §01 → §04 → §06 → §07 → §97 → §99 per Tier-1 read-order rationale).
+
+**Why this lifts C6, not C4** (mirror of §27 B-27, §25 B-27-§25, §24 B-27-§24, and §22 B-27-§22 explanations): friction is the cost of finding the right surface; C6 measures that cost. The byte-cost annotations on each tier-1 file reduce guess-cost — the textbook C6 lever per the Rubric v2 band-anchor definition. C4 (Consistency) is unaffected — the AC source remains the single source of truth.
+
+**§28-specific note:** §28 is the canonical CLI external-invoker cohort; the AC aggregator (§97 ~63 KB) dominates byte-cost. The "audit-an-AC" recipe is therefore the highest-frequency Raw-LLM walk and the recipe most worth pre-budgeting. The "verify-a-subcommand" recipe is exactly cap-sized — a sweet-spot showing the tier-1 partition is well-tuned for sub-task isolation.
+
+**Long-tail ceiling (20 → 20 reflexive defensibility)**: §28 C6 is already at 20 (mirror-quintet anchor + auditor-pin). This refresh adds a **fourth-leg** cited mechanism (walker-cost reflexivity) so the 20-band score remains defensible if any one of the three existing legs (mirror-quintet, auditor-pin, tier-1 read-order DAG) is later weakened by a structural change. Promotion to a hard `-impl` walker-cost drift gate (recomputes `wc -c` on every banner-triple lockstep run) is out of scope per `mem://constraints/no-implementation-suggestions`.
+
+**Drift contract** (reflexive): if any tier-1 file's `wc -c` changes by ≥10 KB, the per-file byte-cost column above MUST be refreshed in the same PR; gate #42 banner-triple lockstep already detects banner-version drift, the byte-cost refresh is reviewer-attestation today. The Σ row is governed by clause 6 of the existing drift contract below (line-budget invariant — KB-budget refresh is its byte-axis sibling).
+
+---
+
 ## Per-persona pre-flight checklist
 
 - **Raw-LLM persona** — Stops after file 7 (`99-consistency-report.md`). Tier-2 / tier-3 are out of context-window reach; do not attempt to load them. If a question demands tier-2 detail, the answer is "tier-2 file `NN-…md` would resolve this — please load it" and stop.
