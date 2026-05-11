@@ -9,10 +9,11 @@ declare( strict_types = 1 );
 
 defined( 'ABSPATH' ) || exit;
 
-// REST namespace constant the controllers reference.
-namespace GitLogs {
-	if ( ! defined( __NAMESPACE__ . '\\GIT_LOGS_REST_NS' ) ) {
-		const GIT_LOGS_REST_NS = 'git-logs/v1';
+// REST namespace constant the controllers reference. We must use define()
+// (not `const`) because `const` cannot live inside a conditional block.
+namespace {
+	if ( ! defined( 'GitLogs\\GIT_LOGS_REST_NS' ) ) {
+		define( 'GitLogs\\GIT_LOGS_REST_NS', 'git-logs/v1' );
 	}
 }
 
