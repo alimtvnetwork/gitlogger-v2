@@ -383,7 +383,8 @@ def main() -> int:
     ap.add_argument("--check", default="all",
                     choices=["all", "consumes-binding-completeness",
                              "er-entity-superset", "endpoint-mindmap-coverage",
-                             "emoji-free-lexer", "parity-declaration"])
+                             "emoji-free-lexer", "parity-declaration",
+                             "narrative-header-schema"])
     ap.add_argument("--self-test", action="store_true")
     args = ap.parse_args()
 
