@@ -73,3 +73,13 @@ func printUsage(version string) {
 	fmt.Println("  version         Print glci version")
 	fmt.Println("  help            Show this help")
 }
+
+func filterOut(xs []string, drop string) []string {
+	out := make([]string, 0, len(xs))
+	for _, x := range xs {
+		if x != drop {
+			out = append(out, x)
+		}
+	}
+	return out
+}
