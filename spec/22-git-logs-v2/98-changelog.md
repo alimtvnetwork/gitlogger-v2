@@ -1,7 +1,18 @@
 # Changelog (v2)
 
-**Updated:** 2026-05-10 (Session 59 audit-task A-49 — AC-78 §97 body restructured into A-44 GWT + 5-link self-enforcement template; complements A-48's mechanical executor (slot 37 + gate #20) by hardening the contract-side text into the bytewise-aligned mirror-quartet structure of AC-79/AC-80/AC-81)
-**Version:** 3.24.0
+**Updated:** 2026-05-11 (Sess-67 B-1 — added `00-tier1-bundle.md` Raw-LLM read-order manifest)
+**Version:** 3.25.0
+
+### 3.25.0 — 2026-05-11 — Sess-67 B-1: tier-1 essential bundle manifest added
+- **Action**: Created new file `00-tier1-bundle.md` (~210 lines) at the top of §22 alongside `00-overview.md`. Partitions all 57 §22 source files into three tiers: **tier-1** (9 files, ~2,384 lines — the implementable minimum for the Raw-LLM persona), **tier-2** (7 files, ~1,483 lines — recommended adjuncts when implementing named surfaces like SSH auth or split-DB log storage), **tier-3** (rest — operational, CI/tests, CLI surface, AC sub-detail, retrospective, ledgers).
+- **Tier-1 set + read order**: §00 overview → §01 glossary+enums → §19 permission matrix → §18 schema.sql → §16 seed data → §17 openapi.yaml → §05 auth+validation → §14 endpoint examples → §15 error codes. Rationale: vocabulary → access control → state shape → API surface → failure surface.
+- **Drift contract pinned**: tier-1 footprint MUST stay ≤ 2,500 lines (Raw-LLM single-context ceiling); any new normative contract introduced in tier-2/tier-3 MUST surface (by reference) in tier-1 first; promoting a file across tiers MUST cite the AC family that newly depends on it and re-tally the Σ row in the same commit.
+- **Per-persona pre-flight checklist**: Raw-LLM stops after file 9 (`15-error-codes.md`); Cursor/Claude-Code reads tier-1 in order then loads tier-2 on demand; Lovable uses tier-1 as primer and jumps to tier-2/3 per current sub-task.
+- **Cross-refs added**: §26 ER (visualises tier-1 file 4) + §26 endpoints mindmap (visualises tier-1 file 6) + §23 R-1 (downstream consumer of tier-1 file 6).
+- **Why now**: Sess-67 hand-scoring scorecard surfaced §22 Raw-LLM persona at 68/100 (gating bottleneck across the spec set) — driven entirely by 10K-line corpus exceeding single-context-window comfort. Tier-1 bundle is the spec-only mitigation: navigation-aid file, zero edits to existing §22 body files, zero new normative contracts.
+- **Banners**: §00 unchanged (no contract delta); §97 unchanged (no AC added — tier partition is navigation-aid not contract); §98 v3.24.0 → **v3.25.0** (this entry); §99 v3.22.5 → **v3.23.0** (lockstep — first entry in §99 ledger to record a navigation-aid surface). AC count 84/84 unchanged.
+- **Scorecard impact (Sess-67 B-1)**: §22 R-band C1 (Clarity) 18 → 19 — read-order DAG now explicit on disk. C6 (Friction) carried at 20 (mirror-quartet anchor self-enforcing). §22 Raw-LLM /120 115 → 117; normalised /100 ~96 → ~97. **Lovable + Cursor unchanged** (those personas already had file-tool access — tier-1 manifest is for the Raw-LLM persona specifically). Closes B-1 from the Sess-67 top-5 blockers list.
+
 
 ### 3.24.0 — 2026-05-10 — Session 59 audit-task A-49: AC-78 §97 body promoted to A-44 GWT + 5-link template (mirror-quartet structural alignment)
 - **Action**: §97 v3.22.0 → **v3.23.0**. AC-78 body rewritten from single dense `**Given** … **When** … **Then** …` paragraph into the canonical A-44 5-link template: bullet `Given` / `When` / `Then` + `Test invariant` + `Worked example` + `5-link self-enforcement chain` + `Invalidation triggers` + preserved `Verifies:` cell. Body is now bytewise-aligned with AC-79/AC-80/AC-81 (the mirror-quartet members) so a Raw-LLM auditor walking AC-78..AC-81 sees identical structural shape — no cognitive context-switch between siblings.
