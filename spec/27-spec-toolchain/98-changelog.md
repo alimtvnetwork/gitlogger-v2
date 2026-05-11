@@ -1,8 +1,19 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.67.0
-**Updated:** 2026-05-11 (Sess-67 G-6w — slot 39 `check-applink-xor-clause.py` shipped as load-proven gate #22; ledger I-1 2 → 1, I-2 3 → 2)
+**Version:** 4.69.0
+**Updated:** 2026-05-11 (Sess-67 G-6x — slot 63 `check-diagram-parity.py` shipped as load-proven gate #41; ledger I-1 1 → 0 zero-phantom milestone; I-2 2 → 1)
 **Total active gates: 26**
+
+### 4.69.0 — 2026-05-11 — Sess-67 G-6x: slot 63 `check-diagram-parity.py` shipped (gate #41 load-proven)
+- **Action**: Created `linter-scripts/check-diagram-parity.py` (~280 LOC, 5 clauses + R5 anchor + built-in `--self-test`). Walks `spec/26-gitlogs-diagrams/`. Clause-1 `.mmd` ↔ `consumes:` bidirectional binding; clause-2 ER core-entity superset `{Profile, GitProfile, Repo, App, AppLink, AppLinkType, ShaRegistry, Pipeline}`; clause-3 endpoint-mindmap App-write baseline `{append-log, fixed-log, clear-log}`; clause-4 emoji-free lexer compliance; clause-5 §26 §00 parity-declaration + Lesson #15 reflexivity literals.
+- **Self-test**: 6/6 fixtures pass.
+- **§26 source edit**: `spec/26-gitlogs-diagrams/00-overview.md` line 57 gained parity-declaration normative blockquote.
+- **Live disk**: clean after the §26 §00 edit.
+- **Workflow wire**: New step `§26 diagram parity gate (#41 / G-6x / slot 63)` after gate #22.
+- **Ledger**: I-1 EXISTS 1 → 0 (zero-phantom-script milestone); I-2 WIRED 2 → 1.
+- **Lockstep**: §27 §00 4.67.0 → 4.69.0; §27 §98 4.67.0 → 4.69.0; §99 3.06.0 → 3.08.0.
+- **Scorecard**: §26 C2 +2, C3 +3, C5 +3, C6 +2; §22/§23 C4 +1; §27 C4 +1.
+
 
 ### 4.67.0 — 2026-05-11 — Sess-67 G-6w: slot 39 `check-applink-xor-clause.py` shipped (gate #22 load-proven; AC-ADB-05/13 + WE-2/3/4 now machine-checked)
 - **Action**: Created `linter-scripts/check-applink-xor-clause.py` (~230 LOC, 4 clauses + R5 anchor + built-in `--self-test`). Walks `spec/23-app-database/00-overview.md`. Clause-1 byte-for-byte XOR CHECK with two SELECT-discriminator disjuncts joined by `OR` (rejects `AND`/3rd-disjunct via inter-disjunct bridge regex); clause-2 disconnect-invariant CHECK both disjuncts; clause-3 locked-ID seed `INSERT OR IGNORE INTO AppLinkType(AppLinkTypeId, Name) VALUES (1,'GitProfile'),(2,'Repo')` — bare-seed variant rejected; clause-4 partial indexes on both target columns with `WHERE Target… IS NOT NULL`.

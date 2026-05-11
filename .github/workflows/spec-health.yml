@@ -873,6 +873,25 @@ jobs:
         run: |
           python3 linter-scripts/check-applink-xor-clause.py --self-test
           python3 linter-scripts/check-applink-xor-clause.py
+
+      - name: §26 diagram parity gate (#41 / G-6x / slot 63)
+        # Sess-67 G-6x — phantom-clearing for slot 63 / gate #41. Promotes
+        # §26 §97 AC-DG-01 (cardinality) + AC-DG-02 (coverage) from
+        # contract-proven to load-proven. 5 clauses + R5 vacuous-pass:
+        # (1) every non-meta `.mmd` ↔ §26 §00 `consumes:` row binding;
+        # (2) ER diagram entity superset of §22 core {Profile, GitProfile,
+        #     Repo, App, AppLink, AppLinkType, ShaRegistry, Pipeline};
+        # (3) endpoint mindmap covers App-write baseline {append-log,
+        #     fixed-log, clear-log};
+        # (4) emoji-free lexer compliance across all `.mmd`;
+        # (5) §26 §00 parity-declaration + Lesson #15 self-citation literals.
+        # `--self-test` runs 6 in-memory fixtures (F-1 unique-pass + F-2 orphan
+        # + F-3 ER missing entity + F-4 mindmap missing endpoint + F-5 emoji
+        # codepoint + F-6 parity-self literal stripped).
+        # Spec: spec/27-spec-toolchain/63-check-diagram-parity.md
+        run: |
+          python3 linter-scripts/check-diagram-parity.py --self-test
+          python3 linter-scripts/check-diagram-parity.py
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
