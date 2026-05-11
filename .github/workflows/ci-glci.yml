@@ -1,0 +1,55 @@
+name: CI - glci
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'glci/**'
+      - '.github/workflows/ci-glci.yml'
+  pull_request:
+    paths:
+      - 'glci/**'
+      - '.github/workflows/ci-glci.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: golangci-lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache: true
+          cache-dependency-path: glci/go.sum
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.61
+          working-directory: glci
+          args: --timeout=5m
+
+  test:
+    name: test + coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache: true
+          cache-dependency-path: glci/go.sum
+      - name: Run tests with coverage
+        working-directory: glci
+        run: |
+          go test ./... -race -coverprofile=coverage.out -covermode=atomic
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: glci/coverage.out
+          flags: glci
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
