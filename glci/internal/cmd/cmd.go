@@ -44,8 +44,6 @@ func Run(args []string, version string) error {
 			return errors.New("usage: glci config print [--cwd <dir>] [--config <file>]")
 		}
 		return ConfigPrint(args[2:])
-	case "self-update":
-		return SelfUpdate(args[1:], version)
 	case "version", "--version", "-v":
 		fmt.Println("glci " + version)
 		return nil
@@ -69,7 +67,6 @@ func printUsage(version string) {
 	fmt.Println("  run             CI/CD entry point (lint, build, test in one process)")
 	fmt.Println("  doctor          Pre-flight environment checks")
 	fmt.Println("  config print    Print resolved config with provenance (secrets redacted)")
-	fmt.Println("  self-update     Update the glci binary from a manifest URL")
 	fmt.Println("  ping            Probe a Git Logs plugin /health endpoint")
 	fmt.Println("  whoami          Authenticated identity probe (App Password OR Ed25519)")
 	fmt.Println("  keys            Manage Ed25519 keys (generate)")
