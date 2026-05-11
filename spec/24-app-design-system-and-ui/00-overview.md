@@ -21,8 +21,9 @@ produced_for:
 
 # App Design System & UI
 
-**Version:** 4.12.0
-**Updated:** 2026-05-11 (Sess-69 B-17 — initial tier-1 partition manifest `00-tier1-bundle.md` shipped; mirrors §22 B-1 / §27 B-6 / §28 B-7. All 4 normative §24 files declared tier-1 (1 606 lines, well under 2 500 ceiling); no tier-2 demotion required. Self-cited via gate #42 (`meta-verify-lockstep.py`, slot 64) clause-5. Raw-LLM C1 Clarity 19 → 20.)
+**Version:** 4.13.0
+**Updated:** 2026-05-11 (Sess-75 B-27-§24 — banner-mirror bump for `00-tier1-bundle.md` v1.0.0 → v1.1.0 (mirror of §27 B-27 / §25 B-27-§25 walker-cost reflexivity lever): per-file walker-cost (KB) column added to Tier-1 table (Σ ~148 KB) + NEW "Walker-cost reflexivity (load-budget pin)" section with closed-set per-tier byte-cost table + 5 pre-budget recipes (verify-an-AC ~123% of 30 KB cap → 2-pass; audit-current-state ~47%; provenance-audit ~213% → 2-pass; full-tier-1 ~493% → 5-pass; audit-drift ~30% — cheapest). Pure navigation-aid extension; no §97 AC body edits, no new gate. Lifts §24 R-band C6 (Friction) **carried at 20** (band-anchor mechanism strengthened — walker-cost reflexivity column is now the cited self-enforcing mechanism for C6's existing 20-band score; no point-lift available, defensibility hardened); §24 Raw-LLM /120 **carried at 119** (Sess-69 B-17 baseline; this turn is a score-holding defensibility refresh, not a point-lift). Aggregate Raw-LLM Σ **carried at 817/840** (this turn is a score-holding defensibility refresh; no point-lift). Prior: Sess-69 B-17 — initial tier-1 partition manifest.)
+**Updated-prev:** 2026-05-11 (Sess-69 B-17 — initial tier-1 partition manifest `00-tier1-bundle.md` shipped; Raw-LLM C1 Clarity 19 → 20.)
 **Updated-prev:** 2026-05-10 (Phase-5 T-39 — P18 §24 floor-lift; routing-pin loop opened by Sess-64 A-55 / Phase-5 T-03 (no-DDL surface) is now AC-bound via newly-minted AC-ADS-17 in §97 (literal-cited via §27 gate #36 / slot 58 `check-no-sql-ddl-in-ui-folder.py`). §24 advances Lovable 118→120, Cursor 116→120; Raw-LLM holds 118.)
 
 > 🤖 **Raw-LLM Auditor Pin (Lesson #36 link-don't-restate, applied to memory resolution — P16 friction sweep, T-37)**

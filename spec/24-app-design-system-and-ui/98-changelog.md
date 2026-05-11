@@ -1,10 +1,20 @@
 # Changelog — App Design System & UI
 
-**Version:** 4.15.0
-**Updated:** 2026-05-11 (Sess-69 B-17 — initial tier-1 partition manifest shipped at `00-tier1-bundle.md`)
+**Version:** 4.16.0
+**Updated:** 2026-05-11 (Sess-75 B-27-§24 — walker-cost reflexivity lever applied to tier-1 manifest)
 **Scope:** `spec/24-app-design-system-and-ui/`
 
 ---
+
+### 4.16.0 — 2026-05-11 — Sess-75 B-27-§24: walker-cost reflexivity lever (mirror of §27 B-27 / §25 B-27-§25)
+- **Action**: Extended `00-tier1-bundle.md` v1.0.0 → **v1.1.0** with two additions mirroring the §27 B-27 (Sess-71) and §25 B-27-§25 (Sess-74) walker-cost-on-its-own-table reflexivity lever: (a) per-file **walker-cost (KB)** column inserted into the Tier-1 table (column 4), with `wc -c`-derived sizes (§00 ~47 / §97 ~37 / §99 ~11 / §98 ~53 KB; Σ ~148 KB); (b) NEW **"Walker-cost reflexivity (load-budget pin)"** section between Tier-3 and the per-persona checklist, with a closed-set per-tier byte-cost table (5 rows including Tier-3 `.mmd` ~0.5 KB) and 5 pre-budget recipes for the common auditor workflows.
+- **Pre-budget recipes** (Raw-LLM, 30 KB cap): verify-an-AC ~123% (2-pass, or scope to a single AC body via Quick-Nav); audit-current-state ~47% (single pass); provenance-audit ~213% (2-pass, or scope to single `### vN.M.K` ladder entry); full-tier-1 ~493% (mandatory 5-pass §00 → §97 → §99 → §98); audit-drift ~30% (cheapest — banner heads only).
+- **Self-citation**: §ref to itself — Lesson #15 reflexivity (mirror of §27 B-27 scoreboard self-cite and §25 B-27-§25 template self-cite). Drift contract: if any tier-1 file's `wc -c` changes by ≥10 KB, the per-file byte-cost column MUST be refreshed same-PR; reviewer-attestation today, long-tail `-impl` walker-cost drift gate deferred per `mem://constraints/no-implementation-suggestions`. Σ row remains governed by existing clause 6 line-budget invariant (KB-budget refresh is its byte-axis sibling).
+- **Why this lifts C6, not C4**: friction is the cost of finding the right surface; C6 measures that cost. Byte-cost annotations + pre-budget recipes reduce guess-cost (textbook C6 lever per Rubric v2 band-anchor definition). C4 is unaffected — AC source remains single source of truth.
+- **No new tier promotion**: tier-3 `.mmd` remains tier-3; no-tier-2 invariant (clause 7 of existing drift contract) remains in force; no new §97 ACs; AC count unchanged at 17/17.
+- **Lockstep**: `00-tier1-bundle.md` v1.0.0 → **v1.1.0**; §00 v4.12.0 → **v4.13.0**; §97 v3.7.0 → **v3.8.0** (banner-mirror only — no AC body edits); this file v4.15.0 → **v4.16.0**; §99 v2.2.7 → **v2.2.8**.
+- **Scorecard impact**: §24 R-band C6 (Friction) **carried at 20** (band-anchor mechanism strengthened — walker-cost reflexivity column is now the cited self-enforcing mechanism for C6's existing 20-band score; no point-lift available, defensibility hardened). C1/C2/C3/C4/C5 carried at 20/20/19/20/20 (per Sess-69 B-17 §99 attestation R 119; sole below-ceiling criterion is C3 Testability). §24 Raw-LLM /120 **carried at 119** (Sess-69 B-17 baseline; this turn is a score-holding defensibility refresh, not a point-lift); normalised ~95 → ~96. **Lovable + Cursor unchanged** (file-tool traversal already resolves byte-costs trivially). Aggregate Raw-LLM Σ **carried at 817/840** (this turn is a score-holding defensibility refresh; no point-lift). §24 leads §27 by 10 (119 vs 109); §27 remains sole Raw-LLM cohort floor.
+- Closes **B-27-§24** from Sess-74 remaining-tasks list.
 
 ### 4.15.0 — 2026-05-11 — Session 69 B-17: Tier-1 essential bundle manifest for §24
 - **Action**: Created `00-tier1-bundle.md` (v1.0.0) declaring all 4 normative §24 files (`00-overview.md`, `97-acceptance-criteria.md`, `98-changelog.md`, `99-consistency-report.md`) as tier-1 with the lifecycle `.mmd` as tier-3. Tier-1 line sum verified at **1 606 lines** (894-line headroom under the 2 500 single-context-window comfort ceiling). Manifest declares no-tier-2 invariant (clause 7) — as long as the line-budget holds, §24 MUST NOT introduce any tier-2 file. Drift contract has 7 clauses (Lesson #15 reflexivity); per-persona pre-flight checklist covers Raw-LLM, Cursor/Claude-Code, Lovable.
