@@ -1,7 +1,8 @@
 # Acceptance Criteria — 24 App Design System & UI
 
-**Version:** 3.8.0
-**Updated:** 2026-05-11 (Sess-75 B-27-§24 — banner-mirror bump for `00-tier1-bundle.md` v1.0.0 → v1.1.0 walker-cost reflexivity extension (per-file walker-cost (KB) column on Tier-1 table + NEW load-budget pin section with 5 pre-budget recipes; mirror of §27 B-27 / §25 B-27-§25 C6 friction lever). AC count unchanged at 17; **no AC body edits**. Prior: 3.7.0 — Phase-5 T-39 P18 §24 floor-lift; 3.6.x — A-41 per-AC test invariants.)
+**Version:** 3.9.0
+**Updated:** 2026-05-11 (Sess-82 B-2-§24 — minted closed-set "Mechanically enforced by — gate-citation matrix" between Inlined Contracts and Acceptance Criteria. Maps all 17 AC-ADS-NN families to their §27 gate slot with 4-clause reflexive drift contract. Slot `36-check-ads-boundaries.md` cited 6× — primary §24 boundary auditor (35% reuse density) reflecting strict-additive-overlay relationship to §07. Coverage 17/17 (100%). Sister to §27 `00-cross-cohort-read-order-dag.md` edge **E-5**. Mirror of §23 §97 Sess-81 matrix. AC count unchanged; no AC body edits.)
+**Updated-prev:** 2026-05-11 (Sess-75 B-27-§24 — banner-mirror bump for `00-tier1-bundle.md` v1.0.0 → v1.1.0 walker-cost reflexivity extension. AC count unchanged at 17; **no AC body edits**.)
 **Updated-prev:** 2026-05-10 (Session 55 audit-task A-41 — added per-AC Test invariant blocks (T-ADS-NN-NN) to AC-ADS-06, AC-ADS-09, AC-ADS-10 mirroring AC-ADS-15/16 format. Each AC gains 2-3 mechanical test stubs incl. negative-fixture proofs. No AC semantics change; minor version bump because new normative test surface.)
 **Updated-prev:** 2026-05-06 (Phase 154 C-Sweep — added **AC-ADS-14** `[critical]` Cross-Module Externalized Citation Map per Lessons #36 + #37; explicit normative anchor table for 2 externalized citations: spec/07 (primitive token registry), spec/27 (script gates). Mirror of spec/22 AC-79 pattern. AC count 13 → 14. spec/24's small citation surface reflects the strict-additive-overlay relationship to spec/07 — almost all design-system contracts already live in spec/07 by construction.)
 **Scope:** `spec/24-app-design-system-and-ui/`
