@@ -8,11 +8,11 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.90.0  
-**Version-prev:** 4.89.0  
-**Updated:** 2026-05-11 (Sess-70 B-26 — decomposition refresh v1.5.0 → **v1.6.0** in `00-raw-llm-bottleneck-decomposition.md`. All 5 prior spec-only lift candidates (B-19/B-19b/B-20/B-21/B-22) now landed or fully spec-authored with only `-impl` turns deferred. Authored 3 NEW spec-only candidates **B-26** (cross-cohort `**Mechanically enforced by:**` reverse index — lifts C4 +1), **B-27** (per-criterion walker-cost (KB) column appended to the per-criterion scoreboard, Lesson #15 reflexivity extension — lifts C6 +1 to band-anchor 16), **B-28** (`AC-T-41` mint covering the 53 non-gate slots with a closed-set 5-class testability stub enum — lifts C3 +1 to 17). Spec-only aggregate projection if all three land: §27 R 106 → ~110 (~29 % residual-gap closure); residual ~10 R-points are structurally `-impl`-gated. **Score change this turn: 0** (navigation-aid refresh names new task slots; the new task slots themselves have not yet been authored). Total active gates **26 unchanged**.  
+**Version:** 4.91.0  
+**Version-prev:** 4.90.0  
+**Updated:** 2026-05-11 (Sess-71 B-27 — `00-raw-llm-bottleneck-decomposition.md` v1.6.0 → **v1.7.0**: appended **walker-cost (KB)** column to per-criterion Raw-LLM scoreboard table (Lesson #15 reflexivity extension — the decomposition file becomes the load-proven artefact for its own friction claim). Quantifies bundle-budget cost a Raw-LLM walker pays per cited mechanism (C1=2 KB, C2=6 KB, C3=28 KB, C4=18 KB, C5=12 KB, C6=9 KB; Σ ~75 KB). **Scorecard impact**: §27 R-band C6 (Friction) **15 → 16** (band-anchor reached); §27 R total **106 → 107**; cohort R-band sole floor still §27 but gap to second-floor §25 (R 108) closed 2 → 1. **No** §97 bump (column is navigation-aid extension per Lesson #36, not contract). **No** new active gate. **Total active gates: 26 unchanged.** B-27 status "open" → "closed"; remaining spec-only candidates B-26 + B-28 (projected 107 → ~109).  
+**Prior banner — Version:** 4.90.0; **Updated:** 2026-05-11 (Sess-70 B-26 — decomposition refresh; 3 NEW spec-only candidates B-26/B-27/B-28 named; score change 0.)
 **Prior banner — Version:** 4.88.0; **Updated:** 2026-05-11 (Sess-69 B-16 — Navigation-quintet inline cross-reference convention authored into `00-tier1-bundle.md` v1.2.0; §27 R C4 13 → 14.)
-**Prior banner — Version:** 4.87.0; **Updated:** 2026-05-11 (Sess-69 B-20 — `66-check-slot-frontmatter-uniformity.md` authored as Proposed gate #44 slot doc; lifts §27 R C4 +2.)
 
 > **Total active gates: 26** (Phase-5 G-4 banner-triple normalization — canonical phrasing required by `meta-verify-lockstep.py` clause-5 `GATE_COUNT_RE`. Recount via `grep -lE '^\*\*Status:\*\*\s+Active\s+gate\s+#' spec/27-spec-toolchain/*.md | wc -l`. Three banner blocks (§00 / §98 / §99) MUST agree on this integer.)
 >
