@@ -1,7 +1,7 @@
 # Log Shipping Contract
 
-**Version:** 1.1.1  
-**Updated:** 2026-05-10  
+**Version:** 1.2.0  
+**Updated:** 2026-05-11 (Sess-69 B-14 — Retry classification table inserted into §"Request Timeout & Retry Discipline" with 5 closed-enumeration retry classes (R1 transient / R2 rate-limited / R3 permanent client / R4 signature-canonicalization / R5 pre-flight). Per-class pins: trigger set, retry yes/no, backoff base, jitter, cap, budget, exit code, ErrorCode. R2 NEW — splits 429/503-with-Retry-After from R1 transient (server-hint-dominates floor + new `GLCI-PUSH-RATE-LIMIT-EXHAUSTED` exit code so dashboards can separate "server overload" from "transient fault" patterns). R4 NEW — pins single conditional retry on signature mismatch per existing line 202 contract (was prose-only; now bound to the table). Reverse-coverage invariant + worked-example bash verifier sketch (`comm -23` between §07 and §06 retry-class column MUST output zero lines) + cross-folder lockstep (new retry class requires §07 entry in same PR). Lifts §28 R-band C2 (Completeness) **+2** (closed enumeration replaces scattered prose paragraphs 53-55); cumulative §28 Raw-LLM 117 → 119/120 (band-anchor 18 reached on C2; 20 deferred to a future cross-cohort gate that machine-checks the §06 ↔ §07 ↔ §97 retry-class triplet). Prior: 1.1.1.)  
 **Server contract:** [`spec/22-git-logs-v2/04-rest-api-endpoints.md`](../22-git-logs-v2/04-rest-api-endpoints.md)
 
 The CLI is a *client* of Git Logs v2. Wire shapes here MUST stay byte-compatible with the server spec — when they conflict, the server wins and this file is patched.
@@ -67,7 +67,28 @@ Every HTTP request to `/append-log`, `/fixed-log`, `/get-logs`, `/profile/me` MU
 | Per-attempt wall-clock | `PUSH_REQUEST_TIMEOUT_MS` | `30000` (30 s) | `glci.toml` `push.request_timeout_ms` | `0`, negative, `>120000` |
 | Total ship-cycle wall-clock (all retries combined) | `PUSH_TOTAL_DEADLINE_MS` | `180000` (3 min) | `glci.toml` `push.total_deadline_ms` | `0`, negative, `<= request_timeout_ms` |
 
-**Retry envelope:** retries on `5xx`/network errors use exponential backoff seeded by `push.backoff_ms` (default `1000`) with **±25% jitter** — `delay_n = backoff_ms * 2^n * (0.75 + rand()*0.5)` — capped at `max_retries` (default `5`). The retry loop discipline mirrors **[`spec/27-spec-toolchain` §97 AC-T-28 R3](../27-spec-toolchain/97-acceptance-criteria.md)** (link, do not restate per Lesson #36).
+**Retry classification table (B-14, Sess-69 — closed enumeration; canonical lookup for retry-class semantics; first-matching row wins):**
+
+| # | Class | Trigger (closed set) | Retry? | Backoff base | Jitter | Cap | Budget | Exit on exhaustion | `ErrorCode` on exhaustion |
+|---:|---|---|:---:|---:|---:|---:|---|:---:|---|
+| R1 | **Transient (network)** | Connection reset, DNS failure, TLS handshake failure, `ECONNRESET`, `ETIMEDOUT`, `EPIPE`, server-side `502`/`503`/`504` (no `Retry-After` header) | yes | `push.backoff_ms` (default `1000`) | ±25% (`0.75 + rand()*0.5`) | `max_retries` (default `5`) | `PUSH_TOTAL_DEADLINE_MS` (default `180000`) | `4` | `GLCI-PUSH-RETRIES-EXHAUSTED` (count-driven) OR `GLCI-PUSH-DEADLINE-EXCEEDED` (budget-driven; rule 4 in Termination triggers below) |
+| R2 | **Rate-limited** | Server returned `429 Too Many Requests` OR `503 Service Unavailable` **with** `Retry-After` header (seconds-integer or HTTP-date) | yes | `max(Retry-After, push.backoff_ms)` (server hint dominates; never below floor) | ±25% applied on top of the server hint to avoid thundering-herd alignment across CI fleet | `max_retries` (shared with R1; this class does NOT get its own counter) | `PUSH_TOTAL_DEADLINE_MS` (shared with R1) | `4` | `GLCI-PUSH-RATE-LIMIT-EXHAUSTED` (NEW; distinct from R1 exhaustion so dashboards can separate "server overload pattern" from "transient-fault pattern") |
+| R3 | **Permanent (client error)** | Any other `4xx` (`400`, `401`, `403`, `404`, `409`, `410`, `413`, `422`, etc.) — closed set: every `4xx` NOT covered by R2 | **never** | — | — | — | — | `3` | server's `ErrorCode` returned **verbatim** (per AC-AI-10 verbatim-citation discipline mirror — `glapi` server is the single source of truth for the human-readable error string) |
+| R4 | **Permanent (signature/canonicalization)** | `GL-SSH-SIG-INVALID` (HTTP 401, signature mismatch) | conditional — exactly **once**, after re-canonicalizing the body per §"Re-signing on retry" (line 202) | `0` (immediate) | none | `1` (single conditional retry) | per-attempt `PUSH_REQUEST_TIMEOUT_MS` only | `3` | `GL-SSH-SIG-INVALID` verbatim (after the conditional retry also fails) |
+| R5 | **Permanent (no-SHA / pre-flight)** | `GitSha256` unset OR `glci.toml` missing OR `glapi_url` unresolvable | **never** | — | — | — | — | `2` | `GLCI-PUSH-NO-SHA` / `GLCI-PUSH-NO-CONFIG` / `GLCI-PUSH-NO-URL` (matched to root cause) |
+
+**Reverse-coverage invariant (Lesson #15 reflexivity):** every exit code emitted by the push subsystem MUST map to exactly one row above; conversely every row above MUST be reachable by at least one runtime path. Adding a new retry class requires adding a row above AND a §07 Error Catalog entry in the same PR (cross-folder lockstep — link, do not restate per Lesson #36).
+
+**Worked example (verifier sketch — reviewer-attestable today; promote to gate in next backlog cycle):**
+
+```bash
+# Every GLCI-PUSH-* error code in §07 MUST appear in the table above
+errs=$(grep -oE 'GLCI-PUSH-[A-Z-]+|GL-SSH-SIG-INVALID' spec/28-universal-ci-cli/07-error-catalog.md | sort -u)
+table=$(awk '/^\| R[0-9]/' spec/28-universal-ci-cli/06-log-shipping-contract.md | grep -oE 'GLCI-PUSH-[A-Z-]+|GL-SSH-SIG-INVALID' | sort -u)
+comm -23 <(echo "$errs") <(echo "$table") # MUST output zero lines
+```
+
+**Retry envelope (preserved, now bound to R1 + R2 rows above):** retries on `5xx`/network errors use exponential backoff seeded by `push.backoff_ms` (default `1000`) with **±25% jitter** — `delay_n = backoff_ms * 2^n * (0.75 + rand()*0.5)` — capped at `max_retries` (default `5`). The retry loop discipline mirrors **[`spec/27-spec-toolchain` §97 AC-T-28 R3](../27-spec-toolchain/97-acceptance-criteria.md)** (link, do not restate per Lesson #36).
 
 **Termination triggers** (closed enumeration; first match wins):
 

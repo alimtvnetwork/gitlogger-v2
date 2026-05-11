@@ -1,6 +1,6 @@
 # Changelog
 
-**Updated:** 2026-05-11 (Sess-68 B-7 — added `00-tier1-bundle.md` Raw-LLM tier-1 partition manifest)
+**Updated:** 2026-05-11 (Sess-69 B-14 — §06 retry-policy table added (5 retry classes R1..R5 with per-class pins; R2 + R4 new canonical rows; reverse-coverage invariant + worked-example bash verifier; new exit code `GLCI-PUSH-RATE-LIMIT-EXHAUSTED` for R2). Lockstep: §06 v1.1.1 → v1.2.0; §00 v2.15.0 → v2.16.0; §99 v2.5.5 → v2.5.6. §28 R-band C2 +2 to band-anchor 18; cumulative Raw-LLM 117 → 119/120. Prior: Sess-68 B-7 — tier-1 bundle manifest.)
 
 
 All notable changes to `spec/28-universal-ci-cli/`.

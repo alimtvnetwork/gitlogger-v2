@@ -19,9 +19,10 @@ produced_for:
 
 # Universal CI CLI — Spec Overview
 
-**Version:** 2.15.0  
+**Version:** 2.16.0  
 <!-- h10-verified-phase: 157 -->
-**Updated:** 2026-05-11 (Sess-68 B-7 — added `00-tier1-bundle.md` Raw-LLM tier-1 partition manifest carving 7 tier-1 files (~1 627 lines) out of the 13-file §28 corpus. Mirrors the §22 B-1 / §27 B-6 tier-1 manifest pattern. Drift contract (6 clauses, Lesson #15 reflexivity) self-cited via `meta-verify-lockstep.py` (slot 64, gate #42) clause-5; line-budget invariant ≤ 2 500 lines reviewer-attested today + slot 35 gate #34 extension in next backlog cycle. Pure navigation-aid; zero edits to §28 body files; AC count 49/49 unchanged. Lifts §28 Raw-LLM C1 (Clarity) audit-defensibility from 19 → 20 by surfacing read order on disk with self-cited gate enforcement. Prior: Phase-5 T-38 / P19c — gate #40 SHIPPED real-disk pass.)
+**Updated:** 2026-05-11 (Sess-69 B-14 — §06 Log Shipping Contract retry-policy table added (`06-log-shipping-contract.md` v1.1.1 → v1.2.0): 5 closed-enumeration retry classes R1..R5 with per-class trigger / backoff / jitter / cap / budget / exit / ErrorCode pins. R2 (rate-limited) and R4 (signature-canonicalization conditional retry) are NEW canonical rows; R5 (pre-flight permanent) bound to the existing `GLCI-PUSH-NO-SHA` exit-2 path. Reverse-coverage invariant + cross-folder lockstep (any new class requires §07 entry in same PR). Lifts §28 R-band C2 (Completeness) **+2** to band-anchor 18. Cumulative §28 Raw-LLM 117 → 119/120. No new AC, no new gate, no banner-triple gate-count change. Prior: Sess-68 B-7 — `00-tier1-bundle.md` Raw-LLM tier-1 partition manifest.)  
+**Updated-prev:** 2026-05-11 (Sess-68 B-7 — `00-tier1-bundle.md` tier-1 partition manifest carving 7 tier-1 files out of the 13-file §28 corpus.)
 
 > **`glci` ships a built-in `--self-test` harness** — load-bearing for shippability per AC-28-49. R5 vacuously-passing scanner is auto-fail (inherited verbatim from §27 cohort discipline per Lesson #36 link-don't-restate). **Self-enforcing via §27 backlog gate `ci-cli-self-test-harness-check`** (Lesson #15 reflexivity pin for gate #40, slot 62).
 
