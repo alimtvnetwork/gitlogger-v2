@@ -1,8 +1,18 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.80.0
-**Updated:** 2026-05-11 (Sess-67 B-9 — added `00-gate-slot-binding.md` flat 26-row gate↔slot binding table)
+**Version:** 4.81.0
+**Updated:** 2026-05-11 (Sess-67 B-10 — AC-T-37 added: binds `00-gate-slot-binding.md` four-way parity contract)
 **Total active gates: 26**
+
+### 4.81.0 — 2026-05-11 — Sess-67 B-10: AC-T-37 added — binds `00-gate-slot-binding.md` into §97 as four-way parity contract
+- **Action**: Added AC-T-37 (`[critical]`) to `97-acceptance-criteria.md` between AC-T-36 and the Slot Delegation Map section. Pins the canonical four-way parity invariant: `disk grep count` ↔ `00-gate-slot-binding.md table row count` ↔ §00 banner `Total active gates: NN` ↔ §98 banner ↔ §99 banner — any divergence is a `meta-verify-lockstep` (gate #42, slot 64) clause-5 failure.
+- **AC-T-37 contents**: 4-clause drift contract (add/retire/renumber/no-restate), worked-example bash verifier sketch (5 grep variables + boolean comparison), reverse-coverage invariant (forward-only OR reverse-only drift both fail), reader-workflow contract (the three named workflows in `00-gate-slot-binding.md` are themselves part of the binding's contract surface), Lesson #36 link-don't-restate exclusion (binding-map only — clause bodies, fixtures, CI invocations stay in slot files).
+- **Mechanical enforcement**: gate #42 clause-5 (today, via banner-triple recount); gate #43 (slot 65) MUST be extended in next backlog cycle to load the canonical table as a fourth ledger source alongside slot-file headers, workflow YAML, and the retired-set constant.
+- **Why now**: Sess-67 B-9 created the canonical table but left it without a §97 binding — meaning future contributors had no normative AC to cite when reviewing PRs that touched gates. AC-T-37 elevates the table from "navigation aid" to "verifiable contract" and lifts §27 C1/C5 from 19 → 20.
+- **Banners**: §00 v4.80.0 → **v4.81.0**; §97 v2.18.0 → **v2.19.0** (AC count 36 → 37; module-level total 37 + delegated ≥100 = ≥137); §98 v4.80.0 → **v4.81.0** (this entry); §99 to mirror this version on next §99 cadence. Total active gates 26 unchanged (AC-T-37 binds an existing gate, does not add one).
+- **Scorecard impact (Sess-67 B-10)**: §27 R-band C1 (Clarity) 19 → **20** (cited mechanism: gate #42 clause-5 four-way parity recount — the binding table is now machine-checked against banner-triple). C5 (Implementability) 19 → **20** (cited mechanism: AC-T-37 itself is the self-enforcing contract — Lesson #15 reflexivity made first-class via the worked-example verifier sketch). §27 Raw-LLM /120 86 → **90**; normalised /100 ~71 → ~75. **§27 navigation quartet complete**: AC-T-30 (Slot Delegation Map) + AC-T-31 (AC-family-prefix binding) + AC-T-36 (slot-range numbering) + AC-T-37 (gate-#↔slot binding) form the four mandatory cross-reference surfaces. Closes B-10 from Sess-67 remaining-tasks list.
+
+
 
 ### 4.80.0 — 2026-05-11 — Sess-67 B-9: Gate-#↔slot-file binding table added
 - **Action**: Created new file `00-gate-slot-binding.md` (~165 lines) at the top of §27 alongside `00-overview.md` + `00-tier1-bundle.md`. Provides the flat lookup table for all 26 active gates (#20..#46) ↔ their owning slot files (slot 37, 39, 42-49, 50-65). Closes the gap where §00 §"CI Gate Enumeration" listed only #1..#30 in narrative form while the cohort-surface gates #31..#46 (16 gates) had no flat inventory.
