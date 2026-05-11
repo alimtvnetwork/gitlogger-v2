@@ -97,7 +97,12 @@ STRUCTURAL_EXEMPT_SUFFIXES = (
 )
 STRUCTURAL_EXEMPT_FILES = (
     # Locked-7 in-scope folder overviews carry inherited Cross-References
-    # sections to broader spec corpus (predates Phase-5 perimeter lock)
+    # sections to broader spec corpus (predates Phase-5 perimeter lock).
+    # Each entry below has been individually audited (Sess-46 G-6z sweep)
+    # and retained because it carries ≥2 intentional Markdown links to
+    # canonical upstream contract surfaces whose link-text disambiguates
+    # the reference; conversion to backticked cites would lose semantic
+    # navigability. New entries REQUIRE Sess-46-style per-link disposition.
     "spec/22-git-logs-v2/00-overview.md",
     "spec/22-git-logs-v2/05-auth-and-validation.md",
     "spec/22-git-logs-v2/39-split-db-log-storage.md",
@@ -105,7 +110,8 @@ STRUCTURAL_EXEMPT_FILES = (
     "spec/23-app-database/00-overview.md",
     "spec/24-app-design-system-and-ui/00-overview.md",
     "spec/28-universal-ci-cli/00-overview.md",
-    "spec/28-universal-ci-cli/05-config-resolution.md",
+    # spec/28-universal-ci-cli/05-config-resolution.md REMOVED Sess-46 G-6z:
+    # sole spec/13 cite converted to backticked + adjacency-marked prose.
 )
 ENUM_LITERALS = (
     "Locked-7 in-scope folders: §22, §23, §24, §25, §26, §27, §28",
