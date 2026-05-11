@@ -19,9 +19,9 @@ produced_for:
 
 # App Issues
 
-**Version:** 3.10.0  
+**Version:** 3.11.0  
 <!-- h10-verified-phase: 153 -->
-**Updated:** 2026-05-11 (Sess-69 B-13 — AC-AI-000 reword: split overview-prose from structural-conformance contract; verifier replaced (`check-spec-cross-links.py` link-target runner → inline self-contained Python grep over `02-consolidated-audit-findings/` asserting four canonical body sections in canonical order + ≥1 commit-SHA OR PR-ref evidence regex). Lesson #15 reflexivity — AC body now carries its own machine-checkable assertion. Verifier-misroute closure pinned by AC-AI-19 (NEW, §97 v1.8.0). §99 `## Module Health` table sync'd in same PR (Health Score 85/100 → 96/100; §97/§98 rows ⚠️ → ✅). Lifts §25 R-band C3 +1, C1 +1; cumulative §25 Raw-LLM 108 → 110/120.)  
+**Updated:** 2026-05-11 (Sess-70 B-23 — added `00-finding-template.md` (~165 lines) — closed-set normative template defining (1) file-shape contract (T1 `kind: tracker` / T2 `\| Finding \|` table triggers); (2) body-shape contract (canonical four-section order with per-section MUST/MAY/MUST NOT rules); (3) verifier source reproduced verbatim from AC-AI-000 (Lesson #15 reflexivity — contract row IS fixture row); (4) closed-set fixture matrix F1..F6 (verifier self-test targets); (5) closed taxonomy of finding-classes D1..D5 with disposition rules. AC-AI-000 verifier unchanged; this file makes the implicit target shape explicit and closes the per-finding completeness gap. Pure navigation-aid + closed-set contract; zero AC additions. Lifts §25 R-band C2 +2, C5 +2; cumulative §25 Raw-LLM 108 → 112/120. Prior: Sess-69 B-13 — AC-AI-000 reword.)  
 **Updated-prev:** 2026-05-10 (Session 49 audit-task A-29 — `produced_for:` producer-side front-matter binding child trackers to §22 AC-78/AC-79/AC-22-CE1.)
 
 > 🤖 **Raw-LLM Auditor Pin (Lesson #36 link-don't-restate, applied to memory resolution — P16 friction sweep, T-37)**
