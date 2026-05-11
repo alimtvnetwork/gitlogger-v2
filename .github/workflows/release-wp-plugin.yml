@@ -1,0 +1,30 @@
+name: Deploy WP plugin to SVN
+on:
+  push:
+    tags: ["wp-v*"]
+  workflow_dispatch:
+jobs:
+  svn:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build admin UI
+        working-directory: git-logs-plugin/admin-ui
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          ~/.bun/bin/bun install --frozen-lockfile
+          ~/.bun/bin/bun run build
+      - name: Stage plugin tree
+        run: |
+          mkdir -p /tmp/plugin
+          rsync -a --exclude=admin-ui/node_modules --exclude=admin-ui/src \
+            --exclude=admin-ui/vite.config.ts --exclude=admin-ui/tsconfig.json \
+            --exclude=admin-ui/package.json --exclude=admin-ui/bun.lock \
+            git-logs-plugin/ /tmp/plugin/
+      - name: WordPress.org SVN deploy
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        env:
+          SVN_USERNAME: ${{ secrets.WP_SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.WP_SVN_PASSWORD }}
+          SLUG: git-logs
+          BUILD_DIR: /tmp/plugin
