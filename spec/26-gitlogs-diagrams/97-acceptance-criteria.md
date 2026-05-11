@@ -1,7 +1,8 @@
 # Acceptance Criteria — Gitlogs Diagrams
 
-**Version:** 3.9.0
-**Updated:** 2026-05-11 (Sess-70 B-25 — minted **AC-DG-24** `[critical]` ratifying the Sess-58 A-47 deferred enum-mirror parity binding. 6 invariants + 4 test invariants T-DG-24-01..04. Load-proven via §00 line 151 inline `diff` command (zero-install bash); §27 gate `enum-mirror-26-vs-22-aligned` promotion remains queued but no longer blocks load-proof status. AC count 23 → 24. Lifts §26 R-band C5 19 → 20.)
+**Version:** 3.10.0
+**Updated:** 2026-05-11 (Sess-84 B-2-§26 — minted closed-set "Mechanically enforced by — gate-citation matrix" between Inlined Contracts and Acceptance Criteria. Maps all 29 AC families (24 AC-DG-NN + 5 cross-ref AC-NN) to their auditing §27 gate slot. Coverage 29/29 (100%). Slot `63-check-diagram-parity.md` cited 17× (59% — primary §26 diagram-parity auditor). 4-clause reflexive drift contract. Sister to §27 cross-cohort DAG edge **E-7**. Mirror of §22/§23/§24 §97 closures — completes the B-2 mirror-quartet for the citation-matrix pattern. AC count unchanged at 24 AC-DG; no AC body edits.)
+**Updated-prev:** 2026-05-11 (Sess-70 B-25 — minted **AC-DG-24** `[critical]` ratifying the Sess-58 A-47 deferred enum-mirror parity binding. AC count 23 → 24. Lifts §26 R-band C5 19 → 20.)
 **Updated-prev:** 2026-05-10 (Session 13 — added AC-DG-23 narrative-header block contract; AC count 26 → 27.)
 **Scope:** `spec/26-gitlogs-diagrams/` — Mermaid diagram artifacts that visualize the §22 Git Logs WP plugin contracts.
 
