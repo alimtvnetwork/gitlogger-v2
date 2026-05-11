@@ -6,6 +6,8 @@
 **Source:** [`linter-scripts/check-spec-cross-links.py`](../../linter-scripts/check-spec-cross-links.py)  
 **Category:** Validator (read-only, with opt-in `--rewrite-allowlist` mutator)
 
+
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

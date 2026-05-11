@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/check-mermaid-syntax.mjs`](../../linter-scripts/check-mermaid-syntax.mjs)
 **Category:** Validator (Phase 97; migrated from Phase 107 orphan ledger by Phase 108-full)
 
+
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

@@ -5,6 +5,8 @@
 **Source:** [`.github/workflows/spec-monthly-audit.yml`](../../.github/workflows/spec-monthly-audit.yml)  
 **Category:** CI workflow (cadence)
 
+
+**Test pair:** N/A — scaffold  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

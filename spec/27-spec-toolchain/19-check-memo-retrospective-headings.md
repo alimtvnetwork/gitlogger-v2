@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/check-memo-retrospective-headings.py`](../../linter-scripts/check-memo-retrospective-headings.py)
 **Category:** Validator (Phase 104; migrated from Phase 107 orphan ledger by Phase 108-full)
 
+
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

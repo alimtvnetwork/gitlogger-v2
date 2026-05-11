@@ -6,6 +6,8 @@
 **Code artifact:** `linter-scripts/audit-bundle-budget.py`  
 **Self-test:** `linter-scripts/test/test-audit-bundle-budget.sh` (10 assertions)
 
+**Test pair:** N/A — audit-aid  <!-- AC-T-41 closed-set axis-class stub -->
+
 ## Purpose
 
 Deterministic, zero-network audit that enumerates which modules are at risk of being silently truncated by the LLM auditor in slot 34 (`audit-ai-implementability.py`). The slot-34 walker concatenates files until `MAX_BYTES` (currently 120 KB ≈ Cloudflare-1010 ceiling per AC-34-13) is hit; once exceeded, all remaining files are invisible to the LLM regardless of contract content. Slot 35 surfaces this physics deterministically so OVER-class regressions are caught the next CI run, not the next quarterly rebaseline.

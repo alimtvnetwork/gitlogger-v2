@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/run.sh`](../../linter-scripts/run.sh)  
 **Category:** Runner (bash entry point)
 
+
+**Test pair:** N/A — scaffold  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

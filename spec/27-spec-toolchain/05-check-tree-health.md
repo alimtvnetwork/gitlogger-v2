@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/check-tree-health.cjs`](../../linter-scripts/check-tree-health.cjs)
 **Category:** Validator (gate)
 
+
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

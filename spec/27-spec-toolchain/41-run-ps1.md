@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/run.ps1`](../../linter-scripts/run.ps1)  
 **Category:** Runner (PowerShell entry point — Windows mirror of §40)
 
+
+**Test pair:** N/A — scaffold  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

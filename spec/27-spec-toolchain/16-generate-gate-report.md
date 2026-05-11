@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/generate-gate-report.py`](../../linter-scripts/generate-gate-report.py)  
 **Category:** Generator (consumes deterministic audit results, explains hard-gate caps)
 
+
+**Test pair:** N/A — generator  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

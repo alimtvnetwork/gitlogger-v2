@@ -6,6 +6,8 @@
 **Self-test:** [`linter-scripts/test/test-audit-ai-implementability.sh`](../../linter-scripts/test/test-audit-ai-implementability.sh)  
 **Category:** Auditor (LLM-driven, deep-walk)
 
+
+**Test pair:** N/A — audit-aid  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Slot-range note

@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/fill-missing-changelogs.cjs`](../../linter-scripts/fill-missing-changelogs.cjs)  
 **Category:** Filler (idempotent scaffolder)
 
+
+**Test pair:** N/A — generator  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

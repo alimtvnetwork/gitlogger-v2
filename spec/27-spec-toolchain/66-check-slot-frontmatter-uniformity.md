@@ -16,6 +16,8 @@ axis_rationale: "Pin the 4-row slot-doc frontmatter schema across all 79 §27 sl
 **Workflow step:** `.github/workflows/spec-health.yml` "Slot frontmatter uniformity check (Sess-69 B-20 / proposed)" (proposed; would be added as `warn-only` for one phase, then promoted to hard fail in lockstep with the `00-overview.md` Active Gate Inventory bump 26 → 27).
 **Wired-mode (when promoted):** **warn-only** for one Sess- cycle, then hard fail (mirrors slot 65 / gate #43 promotion pattern from Phase-5 T-40 / P19a).
 
+
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Why this slot exists (Raw-LLM C4 floor diagnosis)

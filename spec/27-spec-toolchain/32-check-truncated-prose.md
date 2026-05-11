@@ -6,6 +6,8 @@
 **Self-test:** [`linter-scripts/test/test-check-truncated-prose.sh`](../../linter-scripts/test/test-check-truncated-prose.sh)  
 **Category:** Validator (read-only)
 
+
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Slot-range note

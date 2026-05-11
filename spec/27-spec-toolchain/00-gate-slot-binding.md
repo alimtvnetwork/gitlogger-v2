@@ -16,6 +16,8 @@ axis_rationale: "Single-page binding map: gate-# ↔ slot file ↔ AC family ↔
 
 > **Recount basis (frozen):** `grep -lE '^\*\*Status:\*\*\s+Active\s+gate\s+#' spec/27-spec-toolchain/*.md | wc -l` MUST equal **26**. Any divergence between this count, the §00/§98/§99 banner triple, and the row count in the table below is a `meta-verify-lockstep` (gate #42, slot 64) clause-5 failure.
 
+
+**Test pair:** N/A — audit-aid  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Active Gate Inventory (canonical ordering by gate number)

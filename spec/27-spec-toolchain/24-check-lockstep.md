@@ -10,6 +10,8 @@ kind: tooling-spec
 > **Status:** Active (CI strict gate — Phase 41 baseline cleared, `--strict` enforced in `spec-monthly-audit.yml`)
 > **Parent:** [00-overview.md](./00-overview.md)
 
+
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Phase 41 — Strict mode flipped

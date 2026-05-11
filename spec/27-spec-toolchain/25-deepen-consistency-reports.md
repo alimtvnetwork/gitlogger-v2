@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/deepen-consistency-reports.py`](../../linter-scripts/deepen-consistency-reports.py)
 **Category:** Filler / one-shot maintenance (Phase 21; migrated from Phase 107 orphan ledger by Phase 108-full)
 
+
+**Test pair:** N/A — generator  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

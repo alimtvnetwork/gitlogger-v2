@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/generate-fix-checklist.py`](../../linter-scripts/generate-fix-checklist.py)  
 **Category:** Generator (consumes deterministic audit results)
 
+
+**Test pair:** N/A — generator  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

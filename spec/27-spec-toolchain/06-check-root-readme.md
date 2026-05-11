@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/check-root-readme.py`](../../linter-scripts/check-root-readme.py)  
 **Category:** Validator (read-only)
 
+
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

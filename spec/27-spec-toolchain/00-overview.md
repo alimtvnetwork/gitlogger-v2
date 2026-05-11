@@ -8,9 +8,10 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.93.0  
-**Version-prev:** 4.92.0  
-**Updated:** 2026-05-11 (Sess-73 B-28 — minted **AC-T-41** in §97 (v2.24.0 → **v2.25.0**, AC count 39 → 40): Non-gate slot files MUST declare a closed-set testability axis-class stub `**Test pair:** N/A — <axis-class>` where `<axis-class>` ∈ frozen 5-token enum `{advisory, generator, scaffold, audit-aid, convention}`. Closes the testability silence on the 53 non-gate slots (79 total – 26 active gates), making absence-of-tests an axis-class declaration rather than ambiguous gap. 5-clause drift contract + worked-example bash verifier (`comm -23` ls minus active-gate grep) + R-4 reverse-coverage invariant (every enum token cited by ≥ 1 slot at ceiling). Phased rollout: per-slot stub insertion deferred to a future spec-only `next` turn (today lands the AC + enum + verifier only). **Scorecard impact**: §27 R-band C3 (Testability) **16 → 17** (band-anchor reached); §27 R total **108 → 109**; §27 cohort no longer ties §25 — §27 now leads §25 by 1 (R 109 vs R 108); **new joint Raw-LLM cohort floor: §24 + §25 at R 114 → corrected, §25 at R 108 / §24 at R 114 / §27 at R 109; §25 is now sole floor**. **No** new active gate. **Total active gates: 26 unchanged.** B-28 status "open" → "closed" (spec-only half); per-slot stub-insertion turn remains.  
+**Version:** 4.94.0  
+**Version-prev:** 4.93.0  
+**Updated:** 2026-05-11 (Sess-74 B-28-stub-sweep — AC-T-41 ceiling reached: per-slot `**Test pair:** N/A — <axis-class>` stubs inserted into all **53/53** non-gate slot files. Per-class distribution: `advisory` 22, `generator` 11, `audit-aid` 9, `scaffold` 7, `convention` 4 (Σ = 53; R-4 reverse-coverage satisfied — every enum token cited by ≥ 1 slot). §97 v2.25.0 → **v2.26.0** (AC count carried at 40; AC-T-41 body amended: "Phased rollout" clause replaced with "Coverage (full as of Sess-74 B-28-stub-sweep)" + on-disk `comm -23` verifier returning 0 missing slots). **Scorecard impact**: §27 R-band C3 (Testability) **17 → 18** (band-anchor reached; cited mechanism: AC-T-41 5-clause closed-set enum + R-4 satisfied at 5/5 + 53/53 on-disk coverage + worked-example verifier returning zero); §27 R total **109 → 110**; aggregate Raw-LLM Σ **817/840 → 818/840** (97.4/100). Cohort-floor recompute: §27 at R 110 remains the sole Raw-LLM cohort floor (§25 sits at R 115 post Sess-73 B-27-§25; §24 at R 114; §27 leads neither). **Total active gates: 26 unchanged.** B-28-stub-sweep status "open" → "closed".  
+**Prior banner — Version:** 4.93.0; **Updated:** 2026-05-11 (Sess-73 B-28 — minted AC-T-41 in §97 v2.24.0 → v2.25.0; §27 R C3 16 → 17 band-anchor.)
 **Prior banner — Version:** 4.92.0; **Updated:** 2026-05-11 (Sess-72 B-26 — `00-mechanism-citation-index.md` v1.0.0 created; AC-T-37 callers parity 5th-dimension; §27 R C4 15 → 16.)
 **Prior banner — Version:** 4.88.0; **Updated:** 2026-05-11 (Sess-69 B-16 — Navigation-quintet inline cross-reference convention authored into `00-tier1-bundle.md` v1.2.0; §27 R C4 13 → 14.)
 
@@ -22,6 +23,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
+
+**Test pair:** N/A — audit-aid  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 > 🤖 **Walker-Pin (Lesson #55 + Lesson #61 — surfaced for context-bounded auditors)**

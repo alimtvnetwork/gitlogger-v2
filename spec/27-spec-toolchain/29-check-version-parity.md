@@ -15,6 +15,8 @@ status: active
 
 ## Purpose
 
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
+
 Codify the **Phase 21 lesson** as a CI gate: when a spec module's
 `00-overview.md` carries a `**Version:** vX.Y.Z` banner AND a sibling
 `98-changelog.md` ships a parseable release line, the §00 banner version

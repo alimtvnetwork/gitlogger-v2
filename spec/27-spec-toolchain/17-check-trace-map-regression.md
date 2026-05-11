@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/check-trace-map-regression.py`](../../linter-scripts/check-trace-map-regression.py)  
 **Category:** Gate (CI-only — fails the build on regression)
 
+
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

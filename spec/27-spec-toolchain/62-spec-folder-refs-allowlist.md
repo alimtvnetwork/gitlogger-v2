@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/spec-folder-refs.allowlist`](../../linter-scripts/spec-folder-refs.allowlist)  
 **Category:** Configuration (consumed by §02)
 
+
+**Test pair:** N/A — convention  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

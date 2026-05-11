@@ -15,6 +15,8 @@ status: active
 
 ## Purpose
 
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
+
 Codify the **H6 lesson** "runtime > source verification" as a standing CI gate.
 
 Phase H3 audited 12 spec-traversing linters by **source-reading** (`grep`-ing for

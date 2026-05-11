@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/fill-missing-acceptance-criteria.cjs`](../../linter-scripts/fill-missing-acceptance-criteria.cjs)  
 **Category:** Filler (idempotent scaffolder)
 
+
+**Test pair:** N/A — generator  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/check-readme-canonicals.py`](../../linter-scripts/check-readme-canonicals.py)  
 **Category:** Validator (read-only)
 
+
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

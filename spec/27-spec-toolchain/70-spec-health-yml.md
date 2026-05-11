@@ -5,6 +5,8 @@
 **Source:** [`.github/workflows/spec-health.yml`](../../.github/workflows/spec-health.yml)  
 **Category:** CI workflow
 
+
+**Test pair:** N/A — scaffold  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose
