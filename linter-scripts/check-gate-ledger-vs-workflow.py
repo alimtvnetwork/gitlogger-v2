@@ -227,9 +227,28 @@ def self_test() -> int:
                "**Status:** Active gate #1\n"
                "**Source:** [`linter-scripts/validate-guidelines.go`](../../linter-scripts/validate-guidelines.go)\n"},
               {"validate-guidelines.go"},
-              "- name: validate-guidelines.go static-surface gate\n"
-              "  run: bash linter-scripts/test/test-validate-guidelines-go-surface.sh\n",
+               "- name: validate-guidelines.go static-surface gate\n"
+               "  run: bash linter-scripts/test/test-validate-guidelines-go-surface.sh\n",
+               0)
+
+    # F-8: retired-set tolerance (G-6aa) — only gate #20+ assigned; the 20
+    # historical retired holes (#1..#19, #21) are excluded from the
+    # missing-set computation, so the ledger passes I-3 NUMBERED.
+    make_case("F-8 retired-set-tolerated",
+              {"20-real.md": "**Status:** Active gate #20\n**Source:** [`linter-scripts/r.py`](../../linter-scripts/r.py)\n",
+               "22-next.md": "**Status:** Active gate #22\n**Source:** [`linter-scripts/n.py`](../../linter-scripts/n.py)\n"},
+              {"r.py", "n.py"},
+              "linter-scripts/r.py linter-scripts/n.py",
               0)
+
+    # F-9: NEW gap beyond the retired set still fails — guarantees the
+    # retired-set carve-out does not silently absorb fresh numbering errors.
+    # Gate #50 alone yields ≥29 NEW gaps (>5 ⇒ exit 3).
+    make_case("F-9 new-gap-still-fails",
+              {"50-far.md": "**Status:** Active gate #50\n**Source:** [`linter-scripts/f.py`](../../linter-scripts/f.py)\n"},
+              {"f.py"},
+              "linter-scripts/f.py",
+              3)
 
     failed = 0
     for name, slot_docs, scripts, workflow_text, expected in fixtures:
