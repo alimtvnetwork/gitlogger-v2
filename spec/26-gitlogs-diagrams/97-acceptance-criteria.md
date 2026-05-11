@@ -1,7 +1,8 @@
 # Acceptance Criteria — Gitlogs Diagrams
 
-**Version:** 3.9.0
-**Updated:** 2026-05-11 (Sess-70 B-25 — minted **AC-DG-24** `[critical]` ratifying the Sess-58 A-47 deferred enum-mirror parity binding. 6 invariants + 4 test invariants T-DG-24-01..04. Load-proven via §00 line 151 inline `diff` command (zero-install bash); §27 gate `enum-mirror-26-vs-22-aligned` promotion remains queued but no longer blocks load-proof status. AC count 23 → 24. Lifts §26 R-band C5 19 → 20.)
+**Version:** 3.10.0
+**Updated:** 2026-05-11 (Sess-84 B-2-§26 — minted closed-set "Mechanically enforced by — gate-citation matrix" between Inlined Contracts and Acceptance Criteria. Maps all 29 AC families (24 AC-DG-NN + 5 cross-ref AC-NN) to their auditing §27 gate slot. Coverage 29/29 (100%). Slot `63-check-diagram-parity.md` cited 17× (59% — primary §26 diagram-parity auditor). 4-clause reflexive drift contract. Sister to §27 cross-cohort DAG edge **E-7**. Mirror of §22/§23/§24 §97 closures — completes the B-2 mirror-quartet for the citation-matrix pattern. AC count unchanged at 24 AC-DG; no AC body edits.)
+**Updated-prev:** 2026-05-11 (Sess-70 B-25 — minted **AC-DG-24** `[critical]` ratifying the Sess-58 A-47 deferred enum-mirror parity binding. AC count 23 → 24. Lifts §26 R-band C5 19 → 20.)
 **Updated-prev:** 2026-05-10 (Session 13 — added AC-DG-23 narrative-header block contract; AC count 26 → 27.)
 **Scope:** `spec/26-gitlogs-diagrams/` — Mermaid diagram artifacts that visualize the §22 Git Logs WP plugin contracts.
 
@@ -39,6 +40,53 @@ GL_REJECT_CODE_FORMAT:     GL-{CATEGORY}-{NAME} (e.g. GL-AUTH-INVALID-TOKEN)
                            GET /v1/repo, GET /v1/repo/{id}/versions,
                            GET /v1/pipeline/{id}, GET /v1/system-event
 ```
+
+---
+
+## Mechanically enforced by — gate-citation matrix (Sess-84 B-2-§26)
+
+**Closed-set inventory** mapping each AC family in this file to the §27 active gate slot that audits it. Sister to §27 `00-cross-cohort-read-order-dag.md` edge **E-7** (§27 → §26 audit-surface coverage). Pinned closed-set: every AC-DG-NN and AC-NN (cross-ref) MUST appear in exactly one row below; new ACs require a same-PR row addition (reflexive drift contract clause-1). Mirror of §22/§23/§24 §97 closures (Sess-81/82/83) — completes the B-2 sweep across 4 cohorts (mirror-quartet anchor for the citation-matrix pattern). Many rows are summary roll-ups of per-AC literal `**Mechanically enforced by:**` lines already present below; the matrix is the closed-set surface that makes the roll-up auditable in one walker hop.
+
+| AC | Surface audited | **Mechanically enforced by** (§27 slot) | Status |
+|---|---|---|---|
+| AC-DG-01 | ER diagram contains every §22 table | `63-check-diagram-parity.md` (gate #41 clause 2 — ER entity-set superset) | active |
+| AC-DG-02 | ER relationships match §22 cardinalities | `63-check-diagram-parity.md` (sister-clause cardinality arrow audit) | active |
+| AC-DG-03 | Auth validation flow follows locked order | `63-check-diagram-parity.md` (sister-clause flow-order audit) | active |
+| AC-DG-04 | Permission flow resolves via RolePermission union | `63-check-diagram-parity.md` (sister-clause permission-resolution audit) | active |
+| AC-DG-05 | Header comments declare type + intent | `63-check-diagram-parity.md` (clause 6 narrative-header schema) | active |
+| AC-DG-06 | All diagrams emoji-free, render without lexer errors | `63-check-diagram-parity.md` (gate #41 clause 4 — emoji-free Mermaid lexer compliance) | active |
+| AC-DG-07 | No JWT / RS256 / JWKS references | `03-check-forbidden-strings.md` (forbidden-strings JWT/RS256/JWKS phrase sweep) | active |
+| AC-DG-08 | Endpoints mindmap covers all 8 REST endpoints | `63-check-diagram-parity.md` (sister-clause endpoint-coverage audit) | active |
+| AC-DG-09 | Encryption v3 flow covers MasterKey → DataKey → LookupKey | `63-check-diagram-parity.md` (sister-clause crypto-chain audit) | active |
+| AC-DG-10 | Slots 02, 03, 04 remain intentional locked gaps | `04-check-forbidden-spec-paths.md` (closed-set vacant-slot audit) | active |
+| AC-DG-11 | Every `.mmd` source has sibling `.svg` build artifact | `63-check-diagram-parity.md` (sister-clause SVG-companion audit) | active |
+| AC-DG-12 | `.svg` artifacts regenerated when `.mmd` source changes | `63-check-diagram-parity.md` (sister-clause SHA-deterministic SVG render audit per AC-23) | active |
+| AC-DG-13 | Header `Authoritative source` link points to live §22 overview | `01-check-spec-cross-links.md` (gate #01 active — link-presence audit) | active |
+| AC-DG-14 | Diagram count + per-diagram type match inventory table | `63-check-diagram-parity.md` (sister-clause inventory-parity audit) | active |
+| AC-DG-15 | Rate-limit diagram visualizes per-Profile token-bucket | `63-check-diagram-parity.md` (sister-clause rate-limit shape audit) | active |
+| AC-DG-16 | All node IDs are kebab-case ASCII | `63-check-diagram-parity.md` (sister-clause node-ID lexer audit) | active |
+| AC-DG-17 | `GL-*` reject codes used in diagrams are defined in §22 error registry | `42-check-error-envelope-uniformity.md` (cross-cohort GL-* enum parity) + `63-check-diagram-parity.md` (sister-clause code-reference audit) | active |
+| AC-DG-18 | `puppeteer.json` Mermaid render config committed | `02-check-spec-folder-refs.md` (gate #02 active — file-presence audit) | active |
+| AC-DG-19 | `98-changelog.md` records every `.mmd` content change | `64-meta-verify-lockstep.md` (clause-5 banner-triple lockstep + change-cadence audit) | active |
+| AC-DG-20 | Self-application: every active diagram passes AC-DG-01..19 | `63-check-diagram-parity.md` (gate #41 self-application clause — runs all sub-clauses) | active |
+| AC-DG-21 | SSH auth-lane diagram covers all 10 §31 validation steps + 11 reject codes | `63-check-diagram-parity.md` (sister-clause SSH-validation step coverage) | active |
+| AC-DG-22 | Derivative-artifact module relationship to spec/22 pinned auditor-authoritative | `64-meta-verify-lockstep.md` (clause-5 banner-triple lockstep) + `04-check-forbidden-spec-paths.md` (derivative-boundary audit) | active |
+| AC-DG-23 | Every `.mmd` source begins with 4-line narrative header block | `63-check-diagram-parity.md` (clause-6 `narrative-header-schema` mode) | active |
+| AC-DG-24 | §22 enum-catalog mirror parity is on-disk drift-checkable | load-proven inline `diff` command in §00 line 151 (load-proof on disk; §27 promotion `enum-mirror-26-vs-22-aligned` queued) + `64-meta-verify-lockstep.md` (clause-5 banner-triple lockstep) | active |
+| **— Cross-References (post-Legacy-Index Lesson-anchored ACs) —** | | | |
+| AC-22 | Derivative-context module pin (Lesson #29) | `37-check-spec22-inventory.md` (cross-cohort §22 derivative-pin audit) | active |
+| AC-23 | Deterministic SVG-render protocol (.mmd-source SHA primary) | `63-check-diagram-parity.md` (sister-clause SHA-deterministic render audit; load-proof binding for AC-DG-12) | active |
+| AC-24 | Tier 2 stdlib fallback — Python `xml.etree.ElementTree` canonicaliser | `63-check-diagram-parity.md` (sister-clause canonicalisation-fallback audit) | active |
+| AC-25 | Cross-Module Externalized Citation Map (Lesson #36/37) | `01-check-spec-cross-links.md` (gate #01 active) + `02-check-spec-folder-refs.md` (gate #02 active) | active |
+| AC-26 | Sibling Artifact Delegation Map (Lesson #21) | `04-check-forbidden-spec-paths.md` (sister-clause sibling-allowlist audit) | active |
+
+**Reflexive drift contract (this matrix):**
+1. Every new AC-DG-NN or AC-NN (cross-ref) MUST add a row here in the same PR (mechanically enforced by `47-check-ac-section-orphan-header.md` + `48-check-ac-prefix-contract.md` + reviewer-attestation).
+2. If a §27 gate slot in column 3 is renumbered or retired, this matrix MUST refresh in the same PR (mechanically enforced by `64-meta-verify-lockstep.md` clause-3 banner-triple lockstep).
+3. The "Status" column MUST stay as `active` for all rows; if any drops to `proposed` or `deferred`, the same-PR change MUST also bump §99 with a downgrade banner explaining why.
+4. Cross-cohort consistency: this matrix MUST cite gate slots from §27 only — never from §28 or other cohorts (mechanically enforced by edge **E-7** in `spec/27-spec-toolchain/00-cross-cohort-read-order-dag.md`).
+
+**Coverage**: 29/29 ACs cited (100%; 24 AC-DG-NN + 5 AC-NN cross-refs). Gate-slot reuse-count distribution: `63-check-diagram-parity.md` ×17 (primary §26 diagram-parity auditor — reflects that §26 IS the diagram cohort, so slot-63 reuse is the contract surface, not gate-bloat), `64-meta-verify-lockstep.md` ×3, `04-check-forbidden-spec-paths.md` ×3, `01-check-spec-cross-links.md` ×2, `02-check-spec-folder-refs.md` ×2, `42`/`03`/`37` ×1 each, plus 1 load-proven inline-diff (AC-DG-24). The 17/29 slot-63 dominance (59%) is the strongest single-gate concentration across the §22/§23/§24/§26 mirror-quartet — by-design, since §26's normative-contract surface is "diagram correctness" and slot-63 is the diagram-parity gate.
 
 ---
 
