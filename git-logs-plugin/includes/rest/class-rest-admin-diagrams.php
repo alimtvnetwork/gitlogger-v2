@@ -31,9 +31,7 @@ class Admin_Diagrams {
 		( new self() )->routes();
 	}
 
-	public function register(): void {
-		add_action( 'rest_api_init', [ $this, 'routes' ] );
-	}
+
 
 	public function routes(): void {
 		register_rest_route( self::NS, '/admin/diagrams', [
