@@ -50,8 +50,9 @@ function test_repos_upsert_with_signed_header_marks_ed25519_lane(): void {
 
 function test_repos_upsert_rejects_invalid_slug(): void {
 	_repos_logged_in();
+	// After sanitize_key, leading "_" survives but fails the [a-z0-9] anchor.
 	$req = new WP_REST_Request_Ext( 'POST', [
-		'slug'         => 'BAD SLUG!',
+		'slug'         => '___',
 		'display_name' => 'x',
 	] );
 	$res = Repos::upsert( $req );
