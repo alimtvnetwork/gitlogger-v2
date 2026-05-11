@@ -66,8 +66,8 @@
 
 ## Open Items
 
-- Author `97-acceptance-criteria.md` (tracked in root v3.7.x Phase 2b roadmap).
-- Optional: add `98-changelog.md` once first revision occurs.
+- ~~Author `97-acceptance-criteria.md`~~ — ✅ closed (file at v1.8.0; 19 ACs; sync'd Sess-69 B-13).
+- ~~Optional: add `98-changelog.md`~~ — ✅ closed (file at v3.8.0; sync'd Sess-69 B-13).
 
 ---
 
