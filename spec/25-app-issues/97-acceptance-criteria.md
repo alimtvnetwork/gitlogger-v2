@@ -1,7 +1,8 @@
 # Acceptance Criteria — App Issues
 
-**Version:** 1.7.0  
-**Updated:** 2026-05-10 (Phase-5 T-14 — added **AC-AI-18** Parent/child AC-prefix contract for `kind: index` + `kind: tracker` modules. Codifies 4-clause discipline (AC-01..AC-08 generic floor across all 3 §97 files; `AC-AI-NN` parent-only; bare `AC-NN >= AC-09` child-extension folder-scoped; cross-child collisions EXPECTED and NOT a defect). Self-enforcing via in-spec catalogue + §27 backlog gate `ac-prefix-contract-check` (3-turn decay). Closes recurring audit-v? MEDIUM D2 `Inconsistent AC-ID prefixes across §25 tree` finding class. AC count 17 → 18. Prior: 1.6.0 — AC-AI-17 process-terminology pin.)  
+**Version:** 1.8.0  
+**Updated:** 2026-05-11 (Sess-69 B-13 — AC-AI-000 reword in `00-overview.md` + AC-AI-19 added (verifier-misroute pin: declares that `check-spec-cross-links.py` is a link-target verifier, NOT a finding-structure verifier; the AC-AI-000 inline Python grep is the canonical structural check). §99 `## Module Health` table sync'd in same PR (Health Score 85/100 → 96/100; §97/§98 rows ⚠️ → ✅). AC count 18 → 19. Prior: 1.7.0 — AC-AI-18 parent/child AC-prefix contract.)  
+**Updated-prev:** 2026-05-10 (Phase-5 T-14 — added **AC-AI-18** Parent/child AC-prefix contract for `kind: index` + `kind: tracker` modules.)  
 **Scope:** `spec/25-app-issues/`
 
 ---
@@ -266,6 +267,21 @@ bash linter-scripts/run.sh
 ```
 
 This executes: validator → self-heal → regen index → tree-health gate. All steps must exit 0 for this module's acceptance to hold.
+
+---
+
+### AC-AI-19 — Verifier-misroute pin: AC-AI-000 uses inline structural grep, NOT cross-links runner  `[medium]`
+
+- **Given** AC-AI-000 in `00-overview.md` declares the structural-conformance contract for audit-finding bodies (Reproduction / Cause / Fix / Prevention sections + ≥1 commit-or-PR evidence reference),
+- **When** any reader (human or LLM) reads the AC body to determine the verifier,
+- **Then** the canonical verifier MUST be the inline Python grep block embedded in AC-AI-000 itself (Lesson #15 reflexivity — AC body carries its own machine-checkable assertion). Invoking `linter-scripts/check-spec-cross-links.py` MUST NOT be treated as a satisfaction of AC-AI-000: that runner verifies link-target reachability, NOT finding-body structure; the runner's exit-0 result has zero correlation with finding-structure conformance.
+- **Forbidden remediation patterns:**
+  1. Re-introducing the `check-spec-cross-links.py` invocation as the AC-AI-000 verifier — that misroute is precisely what this AC closes.
+  2. Splitting the inline Python grep into a separate `linter-scripts/check-app-issue-finding-bodies.py` script WITHOUT also retaining the inline reference under AC-AI-000 (would re-introduce the dual-source drift Lesson #36 forbids — the AC body is the single source of truth for what conformance means).
+  3. Stripping the regex literals (`\b[0-9a-f]{7,40}\b` for commit-SHA; `(?:#|PR[ -])\d+` for PR-ref) from AC-AI-000 in favour of prose ("references at least one commit or PR") without the pinned regex shape — prose-only restatement loses the machine-checkable assertion.
+- **Mechanically enforced by:** `meta-verify-lockstep.py` (§27 slot 64, gate #42) clause-5 banner-triple lockstep against §00 / §98 / §99 catches any AC-AI-000 reword that does not propagate; reviewer attestation that the inline Python grep block in §00 contains the four `## Reproduction|## Cause|## Fix|## Prevention` literals AND the two evidence regexes.
+- **Worked example:** `grep -c 'check-spec-cross-links.py' spec/25-app-issues/00-overview.md` MUST return 0 (the misrouted invocation is gone); `grep -c '\\\\b\[0-9a-f\]{7,40}\\\\b' spec/25-app-issues/00-overview.md` MUST return ≥1 (commit-SHA regex pinned).
+- **Verifies:** AC-AI-000's verifier shape is canonical and self-contained; closes B-13 from Sess-69 remaining-tasks list. Cohort-discipline sibling of AC-AI-10 (verbatim-citation contract) + AC-AI-16 (walker-cap structural pin) + AC-AI-18 (AC-prefix contract) — AC-AI-19 is the **verifier-routing axis** to AC-AI-10's **citation-shape axis**.
 
 ---
 

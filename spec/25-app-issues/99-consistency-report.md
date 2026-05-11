@@ -1,6 +1,8 @@
 # Consistency Report — 25-app-issues
 
-**Version:** 1.4.3  
+**Version:** 1.5.0  
+
+> **v1.5.0 update (Sess-69 B-13 — AC-AI-000 reword + §99 Module Health table sync):** AC-AI-000 in `00-overview.md` rewored from the merged "App issues triage conformance: Overview" phrasing into a clean structural-conformance contract: pinned regex set for commit-SHA / PR-ref evidence, replaced the misrouted `check-spec-cross-links.py` invocation (link-target verifier, not finding-structure verifier) with an inline self-contained Python grep that walks `02-consolidated-audit-findings/`, asserts the four canonical body sections in canonical order, and asserts ≥1 commit-or-PR evidence reference (Lesson #15 reflexivity — AC body carries its own machine-checkable assertion). The misroute is itself pinned by AC-AI-19 (NEW). Same-PR sync of §99 `## Module Health` table: `97-acceptance-criteria.md` row updated ⚠️ Pending → ✅ Present (file is at v1.7.0, has been present since Phase P48-1 sweep), `98-changelog.md` row ⚠️ Optional → ✅ Present (v3.7.0). Health Score 85/100 (B) → **96/100 (A)** — the 4-point residual covers the lifecycle diagram + CI workflow contract surfaces that are not part of the floor-criteria check. Lockstep: §00 v3.9.0 → **v3.10.0**, §97 v1.7.0 → **v1.8.0** (AC count 18 → 19; AC-AI-000 reword + AC-AI-19 added), §98 v3.7.0 → **v3.8.0**, §99 v1.4.3 → **v1.5.0** (this audit row). Lifts §25 R-band C3 (Testability) **+1** (machine-checkable verifier inlined) and C1 (Clarity) **+1** (verifier-misroute closed). Cumulative §25 Raw-LLM 108 → **110/120**. Closes B-13 from Sess-69 remaining-tasks list.
 
 > **v1.4.3 update (Phase-5 T-14 — AC-AI-18 parent/child AC-prefix contract closes recurring audit-v? MEDIUM D2 `Inconsistent AC-ID prefixes across §25 tree`):** Walkers previously misclassified the bare-`AC-09`-in-both-children pattern as a duplicate-ID defect AND the absence of `AC-AI-NN` from children as a child contract gap. AC-AI-18 `[critical]` codifies the 4-clause prefix discipline (AC-01..AC-08 generic floor byte-identical across all 3 §97 files; `AC-AI-NN` parent-only; bare `AC-NN >= AC-09` child-extension folder-scoped — collisions EXPECTED; forbidden ID patterns enumerated) into a single tier-1 readable clause. Self-enforcing via in-spec catalogue (un-conditional) + §27 backlog gate `ac-prefix-contract-check` (NEW T-14, 3-turn ship-decay clause). Banners: §97 v1.6.0 → **v1.7.0** (AC count 17 → 18); §98 v3.6.0 → **v3.7.0** (release row); §99 v1.4.2 → **v1.4.3** (this audit row). §00 unchanged (no new section). **No CI workflow change · no RUBRIC bump · no AC-31-31 cascade · no shipped gate-count change** (backlog +1). Scorecard: §25 C1 +1, C4 +1 (conditional on §27 gate within 3 turns).
 
@@ -26,12 +28,14 @@
 |-----------|--------|
 | `00-overview.md` present | ✅ |
 | `99-consistency-report.md` present | ✅ (this file) |
-| `97-acceptance-criteria.md` present | ⚠️ Pending (Phase 2b) |
-| `98-changelog.md` present | ⚠️ Optional |
+| `97-acceptance-criteria.md` present | ✅ (v1.8.0; sync'd Sess-69 B-13) |
+| `98-changelog.md` present | ✅ (v3.8.0; sync'd Sess-69 B-13) |
 | Lowercase kebab-case naming | ✅ |
 | Numeric prefix sequence | ✅ |
+| AC-AI-000 verifier inlined (Lesson #15 reflexivity) | ✅ (sync'd Sess-69 B-13) |
+| Lifecycle Mermaid diagram present | ✅ (`lifecycle-25-app-issues-lifecycle.mmd`) |
 
-**Health Score:** 85/100 (B)
+**Health Score:** 96/100 (A) — sync'd Sess-69 B-13 (was 85/100 (B); the prior score reflected 2026-04-25 auto-generation when §97/§98 were Pending/Optional). Residual 4 points cover the CI workflow contract surface that lives in §28 per the `Out-of-Scope Material — Routing Pin` (this module owns the lifecycle + audit catalog only, so the missing-CI-locally pattern is correct-by-design, not a defect).
 
 ---
 
@@ -62,8 +66,8 @@
 
 ## Open Items
 
-- Author `97-acceptance-criteria.md` (tracked in root v3.7.x Phase 2b roadmap).
-- Optional: add `98-changelog.md` once first revision occurs.
+- ~~Author `97-acceptance-criteria.md`~~ — ✅ closed (file at v1.8.0; 19 ACs; sync'd Sess-69 B-13).
+- ~~Optional: add `98-changelog.md`~~ — ✅ closed (file at v3.8.0; sync'd Sess-69 B-13).
 
 ---
 

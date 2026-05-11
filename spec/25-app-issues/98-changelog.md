@@ -1,7 +1,8 @@
 # Changelog — App Issues
 
-**Version:** 3.7.0  
-**Updated:** 2026-05-10 (Phase-5 T-14 — AC-AI-18 parent/child AC-prefix contract)  
+**Version:** 3.8.0  
+**Updated:** 2026-05-11 (Sess-69 B-13 — AC-AI-000 reword (verifier inlined as self-contained Python grep; misroute pinned by NEW AC-AI-19) + §99 Module Health table sync (Health Score 85/100 → 96/100). Lockstep: §00 v3.9.0 → v3.10.0, §97 v1.7.0 → v1.8.0 (AC count 18 → 19), §99 v1.4.3 → v1.5.0. §25 Raw-LLM C3 +1, C1 +1; cumulative 108 → 110/120.)  
+**Updated-prev:** 2026-05-10 (Phase-5 T-14 — AC-AI-18 parent/child AC-prefix contract)  
 **Scope:** `spec/25-app-issues/`
 
 ---
