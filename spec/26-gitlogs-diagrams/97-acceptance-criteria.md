@@ -218,6 +218,25 @@ GL_REJECT_CODE_FORMAT:     GL-{CATEGORY}-{NAME} (e.g. GL-AUTH-INVALID-TOKEN)
 
 ---
 
+### AC-DG-24 — §22 enum-catalog mirror parity is on-disk drift-checkable (ratifies the Sess-58 A-47 deferred binding)  `[critical]`
+
+- **Given** §00 § "§22 Enum Catalog Mirror — 12 enum types (Lesson #36 inline pin)" pins the 13-row table (12 active + 1 forbidden-deprecated `OwnerType_DEPRECATED_v380`) sourced from `spec/22-git-logs-v2/51-ac-enum-catalog-detail.md` (AC-81), AND §00 line 142 declares the binding "AC-DG-23 binding — see §97" but the matching §97 AC was deferred to "next §97 touch" in Sess-58 A-47 (now ratified here as **AC-DG-24** to avoid colliding with the shipped AC-DG-23 narrative-header contract),
+- **When** any PR adds, removes, renames, or reorders an enum-type row in either the §00 mirror table OR `spec/22-git-logs-v2/51-ac-enum-catalog-detail.md` AC-81,
+- **Then** the change MUST satisfy ALL six enum-mirror-parity invariants:
+  1. **Row-set parity** — the bash diff `diff <(grep -oE '\| \`[A-Z][A-Za-z_0-9]*\` \|' spec/26-gitlogs-diagrams/00-overview.md) <(grep -oE '\| \`[A-Z][A-Za-z_0-9]*\` \|' spec/22-git-logs-v2/51-ac-enum-catalog-detail.md)` MUST return empty (this is the **load-proven on-disk verifier**; the literal command lives in §00 line 151 — stripping or mutating it from §00 trips clause-6 below).
+  2. **Cardinality parity** — the integer in the §26 mirror's `Card.` column MUST equal the corresponding cardinality field in §22 AC-81 row-by-row; mismatch = `GL-SCHEMA-DRIFT`.
+  3. **Forbidden-deprecated retention** — the `OwnerType_DEPRECATED_v380` row MUST stay in the §26 mirror with `MUST NOT` language; silent removal = breach (auditor would lose the no-write contract anchor).
+  4. **Diagram-relevance integrity** — every diagram listed in column "Diagrams that may cite values" MUST exist on disk (`spec/26-gitlogs-diagrams/NN-*.mmd`); rename of a `.mmd` file MUST update this column in the same PR.
+  5. **No per-code restatement** — the §26 mirror MUST NOT inline any `EnumName::CodeValue` semantics (Lesson #36); only type-name + cardinality + diagram-relevance + authority are permitted columns. Adding a `Codes` or `Values` column = breach.
+  6. **Reflexivity (Lesson #15)** — this AC MUST cite the §00 line containing the diff command verbatim AND vice versa; if either citation drifts, the gate fails clause-5 of `meta-verify-lockstep.py` (slot 64 / gate #42) banner-triple lockstep.
+- **Verifies:** §00 § "§22 Enum Catalog Mirror" table (lines 113-154); §00 line 142 "AC-DG-23 binding — see §97" pointer (RATIFIED here as AC-DG-24, NOT AC-DG-23 — the latter shipped Sess-13 with unrelated narrative-header content; renaming AC-DG-23 to a new ID would violate immutability, so the original §00 reference text now resolves to the binding pair AC-DG-23 + AC-DG-24); §22 §97 AC-81 (`51-ac-enum-catalog-detail.md`) as canonical source of truth; §26 AC-25 (cross-module citation map) — extends with one new row (§22 51 → AC-DG-24).
+- **Test invariant (T-DG-24-01..T-DG-24-04):** (T-01) `diff` command above returns empty against current `main`. (T-02) Adding a fake `| \`FakeEnum\` |` row to §00 alone (without matching §22) MUST trip T-01. (T-03) Removing the `OwnerType_DEPRECATED_v380` row from §00 MUST trip clause 3. (T-04) Adding a `Codes` column header to the §00 mirror MUST trip clause 5 (regex `^\|\s*Codes?\s*\|` against §00 lines 126-140 returns 0).
+- **Mechanically enforced by:** load-proven inline drift command in `spec/26-gitlogs-diagrams/00-overview.md` line 151 (clause-1 above; runnable from repo root with zero install). Promotion to §27 active gate `enum-mirror-26-vs-22-aligned` is queued (Sess-58 A-47 deferred binding) but **not required** for this AC's load-proof status — the bash diff IS the verifier on disk today. Reflexivity binding via `meta-verify-lockstep.py` (slot 64 / gate #42) clause-5 banner-triple lockstep on §26 §00 / §97 / §98 / §99.
+
+**Externalized Citation Map row** (extends AC-25): `spec/22-git-logs-v2/51-ac-enum-catalog-detail.md` AC-81 | this AC line | "§26 enum-catalog mirror parity — load-proven via §00 line 151 diff; §22 AC-81 is canonical source" | **YES** restate-forbidden.
+
+---
+
 ## Legacy Index (preserved for traceability)
 
 The following table-row criteria from v2.0.0 are preserved verbatim. They are NO LONGER authoritative — the GWT ACs above supersede them.
