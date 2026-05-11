@@ -404,6 +404,42 @@ PascalCase keys to avoid a translation layer. Booleans serialise as JSON
 | R-07  | POST   | `/api/v1/applinks/{AppLinkId}/disconnect` | admin | Q2       | Yes (no-op on 2nd call) | 200 `{AppLinkId,DisconnectedAt}` |
 | R-08  | POST   | `/api/v1/apps/{AppId}/links/reconnect` | admin | Q3       | No (always inserts new row per Q3) | 201 `{AppLink}` |
 
+**Idempotent column — closed enumeration & self-citation.** The `Idempotent`
+cell of every R-1 row MUST be one of three literal strings: `Yes`,
+`Yes (no-op on 2nd call)`, or `No (` + free-text justification + `)`. No
+other token is admissible. The column is binding — R-4 invariant 6 reads
+back the cell value when validating retry-safety, and §27 backlog gate
+`rest-idempotency-parity-check` (slot-allocation pending; placeholder pin
+`pending-slot/§27 backlog roster`) MUST `comm -23` the R-1 `Idempotent`
+column against the migration-replay tester's expectation set per row id
+(R-01..R-08); any cell drift (a row appearing in one source but not the
+other, or differing literals) hard-fails CI. The matrix is therefore
+**self-enforcing on the Idempotent axis**: a reviewer changing an
+`Idempotent` literal without the matching tester update trips the gate
+within the same PR. (Lesson #15 reflexivity — the contract row IS the
+fixture row.)
+
+Worked-example verifier sketch (bash, copy-paste runnable against the
+rendered table):
+
+```bash
+# Extract column 6 (Idempotent) from the R-1 table, drop header + separator,
+# and assert every cell matches the closed enumeration.
+awk -F'|' '/^\| R-0[0-9]/ {gsub(/^ +| +$/, "", $7); print $7}' \
+  spec/23-app-database/00-overview.md \
+| while IFS= read -r cell; do
+    case "$cell" in
+      "Yes" | "Yes (no-op on 2nd call)" | "No ("*")" ) ;;
+      *) echo "R-1 idempotency-cell drift: '$cell'"; exit 1 ;;
+    esac
+  done
+```
+
+Reverse-coverage: the migration-replay tester MUST emit exactly 8 rows
+keyed R-01..R-08 with the same literal in column 2; `comm -23` of the two
+sorted streams MUST output zero lines. Adding a 9th endpoint to R-1 without
+a matching tester row (or vice versa) trips the gate.
+
 ### R-2 — Request / response schemas (JSON)
 
 ```jsonc
