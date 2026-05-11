@@ -28,12 +28,14 @@
 |-----------|--------|
 | `00-overview.md` present | ✅ |
 | `99-consistency-report.md` present | ✅ (this file) |
-| `97-acceptance-criteria.md` present | ⚠️ Pending (Phase 2b) |
-| `98-changelog.md` present | ⚠️ Optional |
+| `97-acceptance-criteria.md` present | ✅ (v1.8.0; sync'd Sess-69 B-13) |
+| `98-changelog.md` present | ✅ (v3.8.0; sync'd Sess-69 B-13) |
 | Lowercase kebab-case naming | ✅ |
 | Numeric prefix sequence | ✅ |
+| AC-AI-000 verifier inlined (Lesson #15 reflexivity) | ✅ (sync'd Sess-69 B-13) |
+| Lifecycle Mermaid diagram present | ✅ (`lifecycle-25-app-issues-lifecycle.mmd`) |
 
-**Health Score:** 85/100 (B)
+**Health Score:** 96/100 (A) — sync'd Sess-69 B-13 (was 85/100 (B); the prior score reflected 2026-04-25 auto-generation when §97/§98 were Pending/Optional). Residual 4 points cover the CI workflow contract surface that lives in §28 per the `Out-of-Scope Material — Routing Pin` (this module owns the lifecycle + audit catalog only, so the missing-CI-locally pattern is correct-by-design, not a defect).
 
 ---
 
