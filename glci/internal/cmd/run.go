@@ -80,6 +80,8 @@ func RunCmd(args []string, only string) error {
 	phasesCSV := fs.String("phases", "", "CSV subset (default lint,build,test)")
 	jsonOut := fs.Bool("json", false, "Machine-readable output")
 	streamMode := fs.Bool("stream", false, "Incrementally POST events (§06 streaming mode)")
+	keyID := fs.String("key-id", "", "Ed25519 key ID (Lane B)")
+	keyFile := fs.String("key-file", "", "Ed25519 private seed file (Lane B)")
 	if err := fs.Parse(args); err != nil {
 		return exitErr(64, err)
 	}
@@ -92,6 +94,13 @@ func RunCmd(args []string, only string) error {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return exitErr(2, err)
+	}
+
+	// Resolve auth lane: ssh ⇒ Ed25519 signed header; else App Password / temp-token.
+	authCfg, aerr := resolveAuth(cfg, *keyID, *keyFile)
+	if aerr != nil {
+		fmt.Fprintln(os.Stderr, aerr)
+		return exitErr(2, aerr)
 	}
 
 	// CI harvest is best-effort — flags/env may already supply the fields.
@@ -161,12 +170,13 @@ func RunCmd(args []string, only string) error {
 			}
 			emitResult(res, *jsonOut)
 
-			// §06 shipping (batched mode, Lane A).
+			// §06 shipping (batched mode); Lane B Ed25519 if authCfg set.
 			if !*noPush {
 				body := buildBody(cfg, rt.ID, p.Phase, res)
 				sres := ship.Ship(context.Background(), ship.Options{
 					ServerURL:  cfg.ServerURL,
 					MaxRetries: cfg.MaxRetries,
+					Auth:       authCfg,
 				}, body)
 				if sres.ExitCode != 0 {
 					if *jsonOut {
