@@ -105,21 +105,40 @@ These references are intentional bidirectional links between spec content and co
 
 _Auto-generated section — see `spec/25-app-issues/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-AI-000: App issues triage conformance: Overview
+### AC-AI-000: Audit-finding body structural conformance
 
-**Given** Audit issue write-ups for the required Reproduction / Cause / Fix / Prevention sections.  
-**When** Run the verification command shown below.  
-**Then** Every issue file contains all four sections and references at least one commit or PR.
+**Given** every markdown file under `spec/25-app-issues/02-consolidated-audit-findings/` whose `kind:` frontmatter is `tracker` (or whose body contains a finding entry table),
+**When** the file is read,
+**Then** every individual finding MUST carry the four canonical body sections in this order — `## Reproduction`, `## Cause`, `## Fix`, `## Prevention` — AND MUST cite at least one commit SHA (regex `\b[0-9a-f]{7,40}\b`) OR pull-request reference (regex `(?:#|PR[ -])\d+`) inside the Reproduction or Cause section.
 
-**Verification command:**
+**Verification command (structural grep — NOT the cross-links runner; that runner verifies link targets, not finding structure):**
 
 ```bash
-python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .
+python3 - <<'PY'
+import pathlib, re, sys
+root = pathlib.Path("spec/25-app-issues/02-consolidated-audit-findings")
+required = ["## Reproduction", "## Cause", "## Fix", "## Prevention"]
+sha_re = re.compile(r"\b[0-9a-f]{7,40}\b")
+pr_re  = re.compile(r"(?:#|PR[ -])\d+")
+fail = 0
+for p in root.rglob("*.md"):
+    body = p.read_text()
+    if "kind: tracker" not in body and "| Finding |" not in body:
+        continue
+    missing = [s for s in required if s not in body]
+    has_evidence = bool(sha_re.search(body) or pr_re.search(body))
+    if missing or not has_evidence:
+        print(f"FAIL {p}: missing={missing} evidence={has_evidence}")
+        fail += 1
+sys.exit(1 if fail else 0)
+PY
 ```
 
-**Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
+**Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge. The verifier above is the AC-AI-000 normative check; the prior `check-spec-cross-links.py` invocation was a misroute (it verifies link targets, NOT finding structure) — that misroute is now closed by AC-AI-19 (§97).
 
-_Verification section last updated: 2026-04-21_
+**AC reword history:** Sess-69 B-13 — original phrasing ("App issues triage conformance: Overview") merged module-overview prose with the structural contract; reword splits the contract from the prose and pins the verifier shape inline (Lesson #15 reflexivity: AC body carries its own machine-checkable assertion).
+
+_Verification section last updated: 2026-05-11 (Sess-69 B-13)_
 
 ---
 
