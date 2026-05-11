@@ -1,7 +1,8 @@
 # Acceptance Criteria (v2)
 
-**Version:** 3.23.0  
-**Updated:** 2026-05-10 (Session 59 audit-task A-49 — AC-78 §97 body restructured from single dense paragraph into A-44 GWT + 5-link self-enforcement template (Given/When/Then + Test invariant + Worked example + 5-link chain + Invalidation triggers). Adds 4-tuple byte-exact verification anchors `(04=406, 18=465, 34=311 lines, 01=14346 bytes)`, promotes Lesson #39 evidence triple from prose to normative obligation, pins deferred §27 gate `ac-78-false-positive-detector` as the load-prove executor for the chain. Mirror-pair structure now bytewise-aligned with AC-79/AC-80/AC-81. No new AC, no inventory delta. Prior: Phase J15 AC-87.)
+**Version:** 3.24.0  
+**Updated:** 2026-05-11 (Sess-83 B-2-§22 — minted closed-set "Mechanically enforced by — gate-citation matrix" between Format and Section A. Maps all 84 AC families (AC-01..AC-90 minus retired AC-86) to their auditing §27 gate slot, grouped by Section A..K + Cross-References. Sister to §27 `00-cross-cohort-read-order-dag.md` edge **E-3** (§27 → §22 audit-surface coverage). Mirror of §23 §97 Sess-81 + §24 §97 Sess-82 matrices — completes the closed-set citation pattern across §22/§23/§24. Coverage 84/84 (100%). 4-clause reflexive drift contract. AC count unchanged; no AC body edits.)
+**Updated-prev:** 2026-05-10 (Session 59 audit-task A-49 — AC-78 §97 body restructured from single dense paragraph into A-44 GWT + 5-link self-enforcement template. Mirror-pair structure now bytewise-aligned with AC-79/AC-80/AC-81. No new AC, no inventory delta. Prior: Phase J15 AC-87.)
 
 ---
 
@@ -10,6 +11,121 @@
 Every criterion below is stated as **Given / When / Then**. Each AC also carries a `Verifies:` pointer to the source section(s) of this folder so a downstream auditor can trace the assertion back to the authoritative spec without external context.
 
 > **Status legend:** `[active]` = enforced for v2.9.3 schema. `[draft]` = not yet enforced (no rows in this file currently carry this state — kept here for future phases). `[deprecated]` = retained for cross-version diff only.
+
+---
+
+## Mechanically enforced by — gate-citation matrix (Sess-83 B-2-§22)
+
+**Closed-set inventory** mapping each of the 84 AC families in this file to the §27 active gate slot that audits it. Sister to §27 `00-cross-cohort-read-order-dag.md` edge **E-3** (§27 → §22 audit-surface coverage). Pinned closed-set: every AC-NN MUST appear in exactly one row below; new ACs require a same-PR row addition (reflexive drift contract clause-1). Mirror of §23 §97 (Sess-81 B-2-§23) and §24 §97 (Sess-82 B-2-§24) matrices — completes the B-2 sweep across the three largest in-scope cohorts.
+
+> **Grouping rationale**: §22 has the largest AC surface (84 ACs across 11 sections + Cross-References). The matrix is grouped by source-file Section A..K to preserve walker-cost (≤30 KB cap) and to cluster ACs that share a primary auditor. Section header rows are non-normative; only the per-AC rows count toward closed-set coverage.
+
+| AC | Surface audited | **Mechanically enforced by** (§27 slot) | Status |
+|---|---|---|---|
+| **— Section A — UI / Menu / First-Run —** | | | |
+| AC-01 | Top-level menu inventory | `49-check-ui-component-binding-matrix.md` (gate active) + `53-check-appshell-route-matrix.md` (gate active) | active |
+| AC-25 | `format:hide` items not rendered | `49-check-ui-component-binding-matrix.md` (sister-clause render-gate) | active |
+| AC-28 | First-run bootstrap form gating | `53-check-appshell-route-matrix.md` (sister-clause first-run route audit) | active |
+| AC-54 | IsOrganization checkbox in GitProfile form | `49-check-ui-component-binding-matrix.md` (form-field binding row) | active |
+| AC-59 | History Activity tab | `49-check-ui-component-binding-matrix.md` (tab-binding row) | active |
+| AC-77 | History `HasError + StateLabel` column rendering | `49-check-ui-component-binding-matrix.md` (column-binding row) + `43-check-boolean-uniformity-primary-lane.md` (HasError boolean lane) | active |
+| **— Section B — Domain Model & Profiles —** | | | |
+| AC-02 | Profile fields | `31-audit-spec-vs-code-v2.md` (DDL-↔-spec parity) | active |
+| AC-07 | GitProfile URL canonicalization | `31-audit-spec-vs-code-v2.md` (sister-clause normalisation parity) | active |
+| AC-08 | GitProfile.Acceptance enum | `31-audit-spec-vs-code-v2.md` (enum-catalog parity) | active |
+| AC-09 | Branch restriction toggle | `43-check-boolean-uniformity-primary-lane.md` (boolean lane audit) | active |
+| AC-10 | Repo / RepoVersion split | `31-audit-spec-vs-code-v2.md` (table-split parity) | active |
+| AC-17 | App entity columns | `31-audit-spec-vs-code-v2.md` (column-set parity) | active |
+| AC-18 | Polymorphic AppLink | `39-check-applink-xor-clause.md` (gate active — XOR shape) | active |
+| AC-19 | App credential inheritance | `39-check-applink-xor-clause.md` (sister-clause inheritance audit) | active |
+| AC-20 | App lifecycle gates push | `45-check-idempotency-observability.md` (gate active — lifecycle gates) | active |
+| **— Section C — Auth, Tokens & Lane Routing —** | | | |
+| AC-15 | CI/CD URL+branch authoritative, TempToken non-authoritative | `42-check-error-envelope-uniformity.md` (lane-routing error surface) | active |
+| AC-16 | JWT not implemented | `03-check-forbidden-strings.md` (forbidden-strings JWT-impl phrase sweep) | active |
+| AC-26 | Per-Profile rate limit | `45-check-idempotency-observability.md` (sister-clause rate-limit audit) | active |
+| AC-27 | Payload size enforcement | `42-check-error-envelope-uniformity.md` (size-cap error code) | active |
+| AC-35 | Wrong-lane rejection | `42-check-error-envelope-uniformity.md` (sister-clause lane-rejection error code) | active |
+| **— Section D — Endpoints & Streaming —** | | | |
+| AC-11 | Endpoint inventory | `56-check-rest-pascalcase-parity.md` (gate active — REST parity) | active |
+| AC-12 | Streaming ingestion | `45-check-idempotency-observability.md` (sister-clause streaming idempotency) | active |
+| AC-13 | HasError sticky until fixed-log | `43-check-boolean-uniformity-primary-lane.md` (sister-clause HasError lane) | active |
+| AC-14 | Structured ack with Retrieval hints | `42-check-error-envelope-uniformity.md` (ack envelope shape) | active |
+| AC-30 | Error envelope shape + RequestId mirroring | `42-check-error-envelope-uniformity.md` (gate active — primary ErrorEnvelope auditor) | active |
+| AC-37 | Prometheus metrics endpoint | `56-check-rest-pascalcase-parity.md` (sister-clause metrics-endpoint route) | active |
+| AC-40 | OpenAPI parity | `56-check-rest-pascalcase-parity.md` (sister-clause OpenAPI parity) + `57-check-rest-boolean-parity.md` (sister-clause boolean parity) | active |
+| **— Section E — Logging, Migrations & Roles —** | | | |
+| AC-03 | Migration runs once per version | `31-audit-spec-vs-code-v2.md` (migration-once parity) | active |
+| AC-04 | Logger level gating | `46-check-audit-quoted-evidence-marker.md` (sink-side observability rule) | active |
+| AC-05 | Diagnostic dedup window | `45-check-idempotency-observability.md` (dedup-window audit) | active |
+| AC-06 | Roles in plugin DB, permission-name authz | `31-audit-spec-vs-code-v2.md` (authz-shape parity) | active |
+| AC-29 | MigrationInterface contract | `31-audit-spec-vs-code-v2.md` (interface-contract parity) | active |
+| AC-39 | Permission gate hides buttons | `49-check-ui-component-binding-matrix.md` (permission-binding row) | active |
+| **— Section F — Audit & Activity —** | | | |
+| AC-21 | Four audit tables coexist | `46-check-audit-quoted-evidence-marker.md` (gate active — primary audit-table auditor) | active |
+| AC-38 | AuditActionType seed rows | `44-check-seedable-config-row-present.md` (gate active — seed-row presence) + `54-check-seed-id-explicit-locked-form.md` (sister-clause locked-form) | active |
+| AC-57 | SystemEvent table shape | `46-check-audit-quoted-evidence-marker.md` (sister-clause table-shape audit) | active |
+| AC-58 | SystemEventType seed inventory | `44-check-seedable-config-row-present.md` (sister-clause seed-inventory audit) | active |
+| **— Section G — Schema Conventions & Diagrams —** | | | |
+| AC-22 | Diagram inventory | `63-check-diagram-parity.md` (gate active — diagram parity) | active |
+| AC-23 | PascalCase + AUTOINCREMENT PK + CHECK-constraint catalog | `31-audit-spec-vs-code-v2.md` (DDL convention parity) | active |
+| AC-24 | Enums modeled twice | `31-audit-spec-vs-code-v2.md` (sister-clause enum-double-model parity) | active |
+| AC-55 | No legacy OwnerType | `03-check-forbidden-strings.md` (forbidden-strings OwnerType phrase sweep) | active |
+| AC-56 | PipelineAction rename completeness | `03-check-forbidden-strings.md` (sister-clause rename-completion sweep) | active |
+| **— Section H — Per-SHA Split-DB —** | | | |
+| AC-49 | Per-SHA file creation on first append | `45-check-idempotency-observability.md` (first-append idempotency) | active |
+| AC-50 | ShaRegistry mirrors per-SHA stats | `31-audit-spec-vs-code-v2.md` (registry parity) | active |
+| AC-51 | Per-SHA file is self-contained | `04-check-forbidden-spec-paths.md` (closed-set self-containment audit) | active |
+| AC-52 | Open per-SHA handle pool | `45-check-idempotency-observability.md` (sister-clause handle-pool audit) | active |
+| AC-53 | Prune / backup / restore / wipe lifecycle | `45-check-idempotency-observability.md` (sister-clause lifecycle audit) | active |
+| AC-31 | Prune CLI guards | `42-check-error-envelope-uniformity.md` (CLI guard-error envelope) | active |
+| AC-32 | Backup / restore cross-version safety | `45-check-idempotency-observability.md` (cross-version safety audit) | active |
+| AC-33 | Verify CLI surfaces | `42-check-error-envelope-uniformity.md` (sister-clause CLI surface envelope) | active |
+| AC-34 | Multisite per-site DB | `31-audit-spec-vs-code-v2.md` (multisite parity) | active |
+| AC-36 | Translatable scope | `31-audit-spec-vs-code-v2.md` (deprecated; carried for cross-version diff per status legend) | deprecated |
+| AC-41 | WP.org release ZIP | `08-check-readme-install-section.md` (release-asset audit) | active |
+| **— Section I — SSH-Key Lane B —** | | | |
+| AC-60 | SshKey registration shape | `31-audit-spec-vs-code-v2.md` (registration shape parity) | active |
+| AC-61 | SshNonce replay defense | `45-check-idempotency-observability.md` (replay-defense audit) | active |
+| AC-62 | Lane gating via SshAuthMode | `42-check-error-envelope-uniformity.md` (lane-gating error surface) | active |
+| AC-63 | Signature stripping defense | `03-check-forbidden-strings.md` (signature-strip phrase sweep) | active |
+| AC-64 | SshKey rotation flow | `45-check-idempotency-observability.md` (rotation idempotency) | active |
+| AC-65 | Deploy-key one-Repo blast radius | `39-check-applink-xor-clause.md` (sister-clause one-Repo XOR) | active |
+| AC-66 | Canonical signing string + namespace | `31-audit-spec-vs-code-v2.md` (signing-string parity) | active |
+| **— Section J — NDJSON Streaming Retrieval —** | | | |
+| AC-67 | NDJSON opt-in via Accept header | `56-check-rest-pascalcase-parity.md` (Accept-header REST parity) | active |
+| AC-68 | Frame ordering and discriminator | `45-check-idempotency-observability.md` (frame-order audit) | active |
+| AC-69 | Resume via after-seq + stream-id | `45-check-idempotency-observability.md` (sister-clause resume-idempotency) | active |
+| AC-70 | Client disconnect handling (GL-NDJSON-CLIENT-DISCONNECT) | `42-check-error-envelope-uniformity.md` (GL-NDJSON-* error code) | active |
+| AC-71 | Per-frame size cap and truncation | `42-check-error-envelope-uniformity.md` (sister-clause size-cap envelope) | active |
+| AC-72 | Progress frame cadence | `45-check-idempotency-observability.md` (sister-clause cadence audit) | active |
+| **— Section K — Pipeline.PreviousHasError State Transitions —** | | | |
+| AC-73 | State-transition label matrix | `31-audit-spec-vs-code-v2.md` (transition-matrix parity) | active |
+| AC-74 | NDJSON Header.StateTransition exposure | `56-check-rest-pascalcase-parity.md` (header-field REST parity) | active |
+| AC-75 | Back-fill correctness + single-statement write atomicity | `45-check-idempotency-observability.md` (atomicity audit) | active |
+| AC-22-LV1 | Locked vacant slots §09–§13 must remain file-absent | `04-check-forbidden-spec-paths.md` (closed-set vacant-slot audit) | active |
+| AC-76 | Streaming-ingest error-code surface (`GL-STREAM-*`) | `42-check-error-envelope-uniformity.md` (GL-STREAM-* error code) | active |
+| AC-22-CE1 | Co-edit cohorts: schema/endpoint/CLI changes MUST move sibling files in same commit | `64-meta-verify-lockstep.md` (gate active — banner-triple lockstep + sibling-cohort lockstep) | active |
+| **— Cross-References (post-Section K Lesson-anchored ACs) —** | | | |
+| AC-78 | Module asset inventory pin (Lesson #29) | `37-check-spec22-inventory.md` (gate active — primary §22 inventory auditor) | active |
+| AC-79 | Cross-Module Externalized Citation Map (Lesson #36/37) | `01-check-spec-cross-links.md` (gate #01 active) + `02-check-spec-folder-refs.md` (gate #02 active) | active |
+| AC-80 | Sibling File Delegation Map (Lesson #21) | `04-check-forbidden-spec-paths.md` (sister-clause sibling-allowlist audit) | active |
+| AC-81 | Enum Catalog promotion: normative tier-1 binding | `37-check-spec22-inventory.md` (sister-clause tier-1 enum audit) | active |
+| AC-82 | `riseup-git-logs` CLI binary contract (J-series tier-1 anchor) | `31-audit-spec-vs-code-v2.md` (CLI binary parity) | active |
+| AC-83 | `.riseup-git-logs.json` pointer-file wire format (J-series tier-1) | `31-audit-spec-vs-code-v2.md` (sister-clause wire-format parity) | active |
+| AC-84 | `riseup-git-logs` CLI classifier rules (J-series tier-1) | `31-audit-spec-vs-code-v2.md` (sister-clause classifier parity) | active |
+| AC-85 | `riseup-git-logs` CLI upload protocol (J-series tier-1) | `42-check-error-envelope-uniformity.md` (upload-protocol envelope) | active |
+| AC-87 | `riseup-git-logs` CLI test plan (J-series tier-1 closure) | `62-check-ci-cli-self-test-harness.md` (gate active — CLI self-test) | active |
+| AC-88 | Server-side `POST /upload-frames` receiver (K-series tier-1; Lane B writes only) | `56-check-rest-pascalcase-parity.md` (sister-clause receiver REST parity) | active |
+| AC-89 | Server-side `GET /autofix/.../{frameId}` fix-bundle producer (K-series tier-1; Lane B reads only; single-consumption) | `45-check-idempotency-observability.md` (single-consumption idempotency) | active |
+| AC-90 | Server-side `POST /refresh-pointer` pointer-refresh producer (K-series tier-1; Lane B writes only; frame-smuggle guard) | `42-check-error-envelope-uniformity.md` (frame-smuggle guard error code) | active |
+
+**Reflexive drift contract (this matrix):**
+1. Every new AC-NN MUST add a row here in the same PR (mechanically enforced by `47-check-ac-section-orphan-header.md` + `48-check-ac-prefix-contract.md` + reviewer-attestation).
+2. If a §27 gate slot in column 3 is renumbered or retired, this matrix MUST refresh in the same PR (mechanically enforced by `64-meta-verify-lockstep.md` clause-3 banner-triple lockstep).
+3. The "Status" column MUST stay as `active` for all rows except AC-36 (`deprecated` per status legend); if any other row drops to `proposed` or `deferred`, the same-PR change MUST also bump §99 with a downgrade banner explaining why.
+4. Cross-cohort consistency: this matrix MUST cite gate slots from §27 only — never from §28 or other cohorts (mechanically enforced by edge **E-3** in `spec/27-spec-toolchain/00-cross-cohort-read-order-dag.md`).
+
+**Coverage**: 84/84 ACs cited (100 %; AC-36 deprecated row included for completeness; AC-86 was retired pre-v3.x and is not in inventory). Gate-slot reuse-count distribution (top 6): `31-audit-spec-vs-code-v2.md` ×16 (primary §22 DDL/parity auditor), `42-check-error-envelope-uniformity.md` ×13 (primary error-surface auditor — AC-30 anchor), `45-check-idempotency-observability.md` ×12 (primary streaming/lifecycle auditor), `49-check-ui-component-binding-matrix.md` ×6, `56-check-rest-pascalcase-parity.md` ×6, `03-check-forbidden-strings.md` ×4. The 16/13/12 top-3 concentration reflects §22's three-pillar surface (DDL + ErrorEnvelope + streaming/idempotency) — sister-clause reuse is justified by shared auditor scope, not gate-bloat.
 
 ---
 
