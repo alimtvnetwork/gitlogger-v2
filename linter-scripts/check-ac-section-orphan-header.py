@@ -3,9 +3,11 @@
 Slot 47 — check-ac-section-orphan-header.py (Gate #28)
 
 Mechanises §22+§23+§24+§25+§26+§27+§28 §97 structural-hygiene floor
-(closes §27 backlog `ac-section-orphan-header-check`, minted T-13).
+(closes §27 backlog `ac-section-orphan-header-check`, minted T-13;
+extends with `ac-status-tag-and-parent-taxonomy-check` clauses 4+5,
+T-22, Sess-67 G-T-22).
 
-Three load-bearing invariants enforced across every
+Five load-bearing invariants enforced across every
 `97-acceptance-criteria.md` file under the seven in-scope folders:
 
   clause-1 (no-orphan-ac)        — every `### AC-…` MUST be preceded
@@ -17,14 +19,31 @@ Three load-bearing invariants enforced across every
   clause-3 (section-name-uniqueness)
                                   — within a file, every `## ` heading
                                     title MUST be unique.
+  clause-4 (status-tag-vocabulary)
+                                  — when an `### AC-…` header carries a
+                                    trailing `` `[xxx]` `` status tag,
+                                    `xxx` MUST be drawn from the frozen
+                                    canonical vocabulary
+                                    `STATUS_TAG_VOCABULARY` (Sess-67
+                                    G-T-22 anchor). Untagged ACs are
+                                    permitted (heterogeneity is real per
+                                    T-21 disk survey); only the OPT-IN
+                                    tag is validated.
+  clause-5 (empty-parent-taxonomy)
+                                  — `## ` parents that contain ZERO
+                                    `### AC-…` children before the next
+                                    `## ` header MUST come from the
+                                    frozen `EMPTY_PARENT_ALLOWLIST` (or
+                                    one of its prefixes for
+                                    parenthetical-suffix variants).
+                                    Parents not on the allowlist that
+                                    have no AC children are regression
+                                    candidates (someone added a section
+                                    but never moved an AC under it).
 
 R5 vacuous-pass: if zero §97 files are discovered or zero `### AC-…`
 headers are parsed across the seven folders, exit `1` with
 `vacuous-pass: zero §97 files or zero AC headers parsed`.
-
-Status-tag presence and empty-parent-section detection are deferred
-to backlog ticket `ac-status-tag-and-parent-taxonomy-check` (T-22)
-per real-disk taxonomy heterogeneity surfaced at T-21.
 
 Exit codes: 0 pass · 1 violation · 2 invocation error · 3 fixture-rot.
 """
@@ -51,8 +70,62 @@ IN_SCOPE_FOLDERS = [
 
 AC_HEADER_RE = re.compile(r"^###\s+(AC-\S+)")
 SECTION_HEADER_RE = re.compile(r"^##\s+(?!#)(.+?)\s*$")
+STATUS_TAG_RE = re.compile(r"`\[([a-z]+)\]`")
 
-CHECKS = ("all", "no-orphan-ac", "ac-id-uniqueness", "section-name-uniqueness")
+# Frozen canonical status-tag vocabulary (Sess-67 G-T-22). Adding a new
+# tag REQUIRES (a) a row in this tuple, (b) a row in §47 spec doc, and
+# (c) a §98 changelog entry. Lesson #15 reflexivity: any new tag without
+# a §47 spec-doc row fails the gate the next CI cycle.
+STATUS_TAG_VOCABULARY = (
+    "active",
+    "critical",
+    "high",
+    "medium",
+    "low",
+    "deferred",
+    "deprecated",
+    "draft",
+)
+
+# Frozen empty-parent allowlist (Sess-67 G-T-22). Sections matching one
+# of these EXACT titles, or starting with one of these prefixes followed
+# by " (" (parenthetical-suffix variant — e.g. "Slot Delegation Map
+# (Phase 153 Task A24-fu6)"), are permitted to carry zero AC children.
+# All other `## ` parents MUST host ≥1 `### AC-…` before the next `## `.
+EMPTY_PARENT_ALLOWLIST = (
+    "Format",
+    "Module Summary",
+    "Inlined Contracts",
+    "Worked Examples",
+    "Cross-References",
+    "Purpose",
+    "Notes",
+    "Legacy Index",
+    "Slot Delegation Map",
+    "AC Family Prefix Index",
+    "Per-artifact criteria",
+    "Validation",
+    "Test Invariant Index",
+)
+
+CHECKS = (
+    "all",
+    "no-orphan-ac",
+    "ac-id-uniqueness",
+    "section-name-uniqueness",
+    "status-tag-vocabulary",
+    "empty-parent-taxonomy",
+)
+
+
+def _is_empty_parent_allowed(title: str) -> bool:
+    if title in EMPTY_PARENT_ALLOWLIST:
+        return True
+    for pfx in EMPTY_PARENT_ALLOWLIST:
+        if title.startswith(pfx + " ("):
+            return True
+    return False
+
 
 
 def discover_files(root: Path) -> List[Path]:
