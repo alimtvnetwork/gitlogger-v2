@@ -455,7 +455,7 @@ Per AC-T-31, this index lets a context-window-bounded auditor count the per-scri
 | AC-60-*, AC-SCLA-*, AC-RCL-* | [60-forbidden-strings-toml.md](./60-forbidden-strings-toml.md), [61-spec-cross-links-allowlist.md](./61-spec-cross-links-allowlist.md), [63-readme-cross-links-md.md](./63-readme-cross-links-md.md) | ≥3 |
 | AC-SH-*, AC-SMA-* | [70-spec-health-yml.md](./70-spec-health-yml.md) + [71-spec-monthly-audit-yml.md](./71-spec-monthly-audit-yml.md) | ≥2 |
 
-**Total minimum verification surface from delegated slots: ≥100 GWT criteria** across 36 occupied slots — orthogonal to and NOT double-counted with the 32 module-level AC-T-* + AC-29/31/33/34 criteria above.
+**Total minimum verification surface from delegated slots: ≥100 GWT criteria** across 36 occupied slots — orthogonal to and NOT double-counted with the 38 module-level AC-T-* + AC-29/31/33/34 criteria above.
 
 ---
 
