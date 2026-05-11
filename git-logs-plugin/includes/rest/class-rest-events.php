@@ -3,11 +3,6 @@
  * REST: POST /wp-json/git-logs/v1/events
  * Streaming-mode incremental event ingest (§06).
  *
- * Accepts batches of {Ts, Level, Line} events. Creates a Run row on
- * first call (RunId omitted), then upserts events keyed by (run_id, ts, line).
- * When Final=true, the run row's status transitions queued|running → passed
- * (or failed if any error events were seen).
- *
  * @package GitLogs\Rest
  */
 
@@ -41,10 +36,9 @@ final class Events {
 		if ( ! is_array( $body ) ) {
 			return new \WP_REST_Response( [ 'ErrorCode' => 'GL-EVENTS-BAD-JSON' ], 400 );
 		}
-
 		$repo_url = (string) ( $body['RepoUrl'] ?? '' );
-		$branch   = (string) ( $body['Branch'] ?? '' );
-		$sha      = (string) ( $body['GitSha256'] ?? '' );
+		$branch   = (string) ( $body['Branch'] ?? 'main' );
+		$sha      = strtolower( (string) ( $body['GitSha256'] ?? '' ) );
 		$run_id   = (string) ( $body['RunId'] ?? '' );
 		$events   = is_array( $body['Events'] ?? null ) ? $body['Events'] : [];
 		$final    = ! empty( $body['Final'] );
@@ -55,40 +49,62 @@ final class Events {
 
 		// Resolve / create the run row on first call.
 		if ( '' === $run_id ) {
-			$repo_id = \GitLogs\DB\RepoStore::ensure( $repo_url );
-			$run_id  = \GitLogs\DB\RunStore::create_streaming( [
-				'repo_id'   => $repo_id,
-				'branch'    => $branch,
-				'git_sha'   => $sha,
-				'pipeline'  => (string) ( $body['PipelineName'] ?? 'stream' ),
+			$slug    = self::slug_from_url( $repo_url );
+			$repo_id = \GitLogs\DB\RepoStore::upsert( $slug, $slug, $repo_url, $branch );
+			$run_id  = \GitLogs\DB\RunStore::create( [
+				'repo_id'      => $repo_id,
+				'branch'       => $branch,
+				'sha'          => $sha,
+				'ci_provider'  => 'glci-stream',
+				'triggered_by' => 'glci',
 			] );
+			\GitLogs\DB\RunStore::set_status( $run_id, 'running' );
 		}
 
-		$inserted = 0;
-		$has_err  = false;
+		// Translate streaming envelope → EventStore::append shape.
+		$batch   = [];
+		$seq     = 0;
+		$has_err = false;
 		foreach ( $events as $ev ) {
 			if ( ! is_array( $ev ) ) {
 				continue;
 			}
-			$level = (string) ( $ev['Level'] ?? 'info' );
-			$line  = (string) ( $ev['Line'] ?? '' );
-			$ts    = (string) ( $ev['Ts'] ?? gmdate( 'c' ) );
-			\GitLogs\DB\EventStore::append( $run_id, $ts, $level, $line );
-			$inserted++;
-			if ( 'error' === $level ) {
+			$lvl = (string) ( $ev['Level'] ?? 'info' );
+			if ( ! in_array( $lvl, \GitLogs\DB\EventStore::SEVERITIES, true ) ) {
+				$lvl = 'info';
+			}
+			$batch[] = [
+				'seq'      => ++$seq,
+				'ts_utc'   => (string) ( $ev['Ts'] ?? gmdate( 'c' ) ),
+				'stream'   => 'stdout',
+				'phase'    => (string) ( $body['PipelineName'] ?? 'stream' ),
+				'severity' => $lvl,
+				'message'  => (string) ( $ev['Line'] ?? '' ),
+			];
+			if ( 'error' === $lvl || 'fatal' === $lvl ) {
 				$has_err = true;
 			}
 		}
+		$result = $batch ? \GitLogs\DB\EventStore::append( $sha, $run_id, $batch )
+		                 : [ 'appended' => 0, 'errors' => 0, 'warns' => 0 ];
 
 		if ( $final ) {
-			\GitLogs\DB\RunStore::finalize( $run_id, $has_err ? 'failed' : 'passed' );
+			\GitLogs\DB\RunStore::set_status( $run_id, $has_err ? 'failed' : 'succeeded', $has_err ? 1 : 0 );
 		}
 
 		return new \WP_REST_Response( [
-			'Accepted'  => true,
-			'RunId'     => $run_id,
-			'Inserted'  => $inserted,
-			'Final'     => $final,
+			'Accepted' => true,
+			'RunId'    => $run_id,
+			'Inserted' => $result['appended'],
+			'Final'    => $final,
 		], 200 );
+	}
+
+	private static function slug_from_url( string $url ): string {
+		$path = parse_url( $url, PHP_URL_PATH ) ?: $url;
+		$slug = trim( (string) $path, '/' );
+		$slug = preg_replace( '/\.git$/', '', $slug );
+		$slug = preg_replace( '/[^A-Za-z0-9._\/-]/', '-', $slug );
+		return $slug ?: 'unknown';
 	}
 }
