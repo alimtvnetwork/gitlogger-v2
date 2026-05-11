@@ -139,6 +139,36 @@ This file's drift contract is enforced on disk by:
 
 ---
 
+## 7 — Walker-cost reflexivity (load-budget pin)
+
+**Mirror of §27 B-27 (Sess-71) walker-cost-on-its-own-table reflexivity lever.** This file is itself the load-proven artefact for its own friction claim: a Raw-LLM auditor walking §25 with a Tier-1 bundle cap (~30 KB per `mem://constraints/...` Tier-1 budget heuristics) can pre-budget which clauses to read against the per-clause byte-costs below before opening any cited surface.
+
+| Clause | Surface | Byte-cost (KB) | Closed-set role |
+|---|---|---|---|
+| §1 | File-shape contract (T1/T2 trigger table) | ~0.5 | Decides whether AC-AI-000 fires |
+| §2 | Body-shape contract (4-section table + walker-cost column) | ~1.6 | Per-section MUST/MAY/MUST NOT closed set |
+| §3 | Verifier (canonical bash + Python heredoc) | ~1.3 | The mechanism — reproduced verbatim from §00 AC-AI-000 |
+| §4 | Fixture matrix F1..F6 (with verifier-cost column) | ~1.2 | The verifier's self-test set |
+| §5 | Finding-class taxonomy D1..D5 | ~1.4 | Closed enum + disposition pointers |
+| §6 | Self-citation block (gate-bound) | ~1.0 | Drift contract pin (gates #39 / #42) |
+| §7 | This walker-cost reflexivity table | ~1.5 | Lesson #15 reflexivity — the table cites itself |
+| **Σ this file** | (frontmatter + headings + this table) | **~10.4** | Full template fits in one Tier-1 quartile |
+
+**Pre-budget recipe (Raw-LLM auditor with 30 KB cap):**
+
+- **Verify a finding** (just AC-AI-000 contract): load §2 + §3 + §4 ≈ **~4.1 KB** (~14% of cap). Skip §5 / §6 / §7.
+- **Triage a new finding-class** (D1..D5 disposition): load §5 + §6 ≈ **~2.4 KB** (~8% of cap). Skip §1–§4.
+- **Audit drift** (banner-triple + verifier source identity): load §3 + §00 AC-AI-000 ≈ **~2.6 KB** (~9% of cap; §3 + ~1.3 KB §00 verifier copy). Skip everything else.
+- **Full read** (new contributor onboarding): load entire file ≈ **~10.4 KB** (~35% of cap). Leaves ~20 KB for `02-consolidated-audit-findings/00-overview.md` head excerpt.
+
+**Why this lifts C6, not C4** (mirror of §27 B-27 explanation): friction is the cost of finding the right surface; C6 measures that cost. The byte-cost annotations on each clause reduce guess-cost — the textbook C6 lever per the band-anchor definition (Rubric v2). C4 (Consistency) is unaffected — the verifier source remains the single source of truth.
+
+**Long-tail ceiling (19 → 20)**: deferred to a `-impl` walker-cost drift gate that recomputes the byte-costs above against on-disk file size on every banner-triple lockstep run (out of scope per `mem://constraints/no-implementation-suggestions`).
+
+**Drift contract** (reflexive): if §1–§6 are edited materially, §7 byte-costs MUST be refreshed in the same PR; gate #42 banner-triple lockstep already detects banner-version drift, the byte-cost refresh is reviewer-attestation today.
+
+---
+
 ## Cross-References
 
 - [§00 Overview](./00-overview.md) — § Verification (AC-AI-000 inline grep, Lesson #15 reflexivity)
