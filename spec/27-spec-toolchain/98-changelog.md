@@ -1,8 +1,18 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.65.0
-**Updated:** 2026-05-11 (Sess-67 G-6u — §27 §97 row 52 citation corrected `.py` → `.sh`; gate #43 I-1 EXISTS failures 14 → 13; zero source/script changes; banner-triple still 26)
+**Version:** 4.67.0
+**Updated:** 2026-05-11 (Sess-67 G-6w — slot 39 `check-applink-xor-clause.py` shipped as load-proven gate #22; ledger I-1 2 → 1, I-2 3 → 2)
 **Total active gates: 26**
+
+### 4.67.0 — 2026-05-11 — Sess-67 G-6w: slot 39 `check-applink-xor-clause.py` shipped (gate #22 load-proven; AC-ADB-05/13 + WE-2/3/4 now machine-checked)
+- **Action**: Created `linter-scripts/check-applink-xor-clause.py` (~230 LOC, 4 clauses + R5 anchor + built-in `--self-test`). Walks `spec/23-app-database/00-overview.md`. Clause-1 byte-for-byte XOR CHECK with two SELECT-discriminator disjuncts joined by `OR` (rejects `AND`/3rd-disjunct via inter-disjunct bridge regex); clause-2 disconnect-invariant CHECK both disjuncts; clause-3 locked-ID seed `INSERT OR IGNORE INTO AppLinkType(AppLinkTypeId, Name) VALUES (1,'GitProfile'),(2,'Repo')` — bare-seed variant rejected; clause-4 partial indexes on both target columns with `WHERE Target… IS NOT NULL`.
+- **Self-test**: 6/6 fixtures pass (F-1 complete; F-2 XOR weakened to AND; F-3 bare seed; F-4 IX WHERE stripped; F-5 disconnect CHECK absent; F-6 R5 vacuous-pass empty corpus).
+- **Live disk**: clean on first run against §23 §00 — zero source edits required.
+- **§22 mirror deferred**: `spec/22-git-logs-v2/18-schema.sql` carries pre-rename `GitProfileId`/`RepoId` columns; rebase to `Target…Id` tracked as G-6w-mirror.
+- **Workflow wire**: New step `§23 AppLink XOR clause gate (#22 / G-6w / slot 39)` immediately after gate #46. Two-line: `--self-test` + live disk run; both hard-fail.
+- **Ledger**: I-1 EXISTS 2 → 1; I-2 WIRED 3 → 2. Active-gate count unchanged at 26.
+- **Lockstep**: §27 §00 4.65.0 → 4.67.0; §27 §98 4.65.0 → 4.67.0; §99 3.04.0 → 3.06.0.
+- **Scorecard**: §23 R-band C3 +1 + C5 +1; §27 R-band C4 +1.
 
 ### 4.65.0 — 2026-05-11 — Sess-67 G-6u: §27 §97 row 52 axios citation truthified (`.py` → `.sh`); gate #43 I-1 ledger 14 → 13
 - **Action**: Edited `spec/27-spec-toolchain/97-acceptance-criteria.md` row 52 to cite `linter-scripts/check-axios-version.sh` (the file actually shipped in Sess-66 G-6t). Prior citation the prior `.py`-suffixed axios path was a phantom — the script never existed under that path.

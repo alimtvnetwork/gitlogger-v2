@@ -1,8 +1,10 @@
 # Consistency Report — Spec Toolchain
 
-**Version:** 3.04.0
-**Updated:** 2026-05-11 (Sess-67 G-6u — §27 §97 row 52 axios citation corrected `.py` → `.sh`; gate #43 I-1 EXISTS failures **14 → 13**; banner-triple still 26)
+**Version:** 3.06.0
+**Updated:** 2026-05-11 (Sess-67 G-6w — slot 39 `check-applink-xor-clause.py` shipped as load-proven gate #22; ledger I-1 2 → 1, I-2 3 → 2; banner-triple still 26)
 **Total active gates: 26**
+
+> **v3.06.0 update (Sess-67 G-6w — slot 39 load-proven):** Shipped 230-LOC scanner walking spec/23-app-database/00-overview.md with 4 clauses + R5 anchor: XOR CHECK with two SELECT-discriminator disjuncts joined by OR, disconnect-invariant CHECK both disjuncts, locked-ID seed `(1,'GitProfile'),(2,'Repo')`, partial indexes on both `Target…Id` columns. `--self-test` 6/6 fixtures green; live disk clean on first run. Wired in `.github/workflows/spec-health.yml` step "§23 AppLink XOR clause gate (#22 / G-6w / slot 39)" with `--self-test` + live disk hard-fail. Gate #22 transitions phantom-citation → real-script; ledger I-1 EXISTS 2 → 1, I-2 WIRED 3 → 2. §22 mirror coverage deferred (G-6w-mirror — column-rename rebase). Lockstep: §27 §00 4.65.0 → 4.67.0; §27 §98 4.65.0 → 4.67.0; §99 3.04.0 → 3.06.0. Scorecard: §23 C3 +1 + C5 +1; §27 C4 +1.
 
 > **v3.04.0 update (Sess-67 G-6u — phantom-citation cleanup wave-1):** Edited `spec/27-spec-toolchain/97-acceptance-criteria.md` row 52 to cite `linter-scripts/check-axios-version.sh` rather than the non-existent `.py` variant. `python3 linter-scripts/check-gate-ledger-vs-workflow.py` confirms I-1 EXISTS failures dropped 14 → 13 in lockstep; total scanned-script-citations 76 → 75; active-gate count unchanged at 26. Zero source/script changes — pure ledger truthification. Lockstep: §27 §00 4.64.0 → 4.65.0; §27 §98 4.64.0 → 4.65.0; §99 3.03.0 → 3.04.0. Scorecard: §27 R-band C4 +1.
 
