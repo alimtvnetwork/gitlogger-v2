@@ -251,6 +251,14 @@ def run_against(diagrams_dir: Path, which: str = "all") -> list[str]:
 
     errs: list[str] = []
 
+    if which in ("all", "consumes-binding-completeness"):
+        errs.extend(check_consumes_binding(overview_text, mmd_files))
+    if which in ("all", "er-entity-superset"):
+        er = diagrams_dir / "01-er-diagram.mmd"
+        if er.exists():
+            errs.extend(check_er_superset(er.read_text(encoding="utf-8")))
+        else:
+            errs.append("clause-2: 01-er-diagram.mmd absent")
     if which in ("all", "endpoint-mindmap-coverage"):
         mind = diagrams_dir / "09-endpoints-mindmap.mmd"
         if mind.exists():
