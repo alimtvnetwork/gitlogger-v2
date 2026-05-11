@@ -1,10 +1,19 @@
 # Changelog — Gitlogs Diagrams
 
-**Version:** 3.14.0
-**Updated:** 2026-05-11 (Sess-79 B-27-§26 — created `00-tier1-bundle.md` v1.0.0 + walker-cost reflexivity lever in same turn (mirror-septet step 7/7 → mirror-septet anchor CLOSED); §00 v3.11.0 → v3.12.0; §99 v3.5.5 → v3.5.6; §26 R-band C6 19 → 20, cumulative 119 → **120/120**; aggregate Raw-LLM Σ 819 → 820/840.)
+**Version:** 3.15.0
+**Updated:** 2026-05-11 (Sess-84 B-2-§26 — minted §97 closed-set gate-citation matrix; banner-triple bump)
 **Scope:** `spec/26-gitlogs-diagrams/`
 
 ---
+
+## [3.15.0] — 2026-05-11 — Sess-84 B-2-§26: closed-set gate-citation matrix in §97 (mirror-quartet completion)
+- **Action**: Inserted "Mechanically enforced by — gate-citation matrix" between Inlined Contracts and Acceptance Criteria in `97-acceptance-criteria.md` (v3.9.0 → **v3.10.0**). Maps all 29 AC families (24 AC-DG-NN + 5 cross-ref AC-NN: AC-22..AC-26) to their auditing §27 gate slot. Coverage 29/29 (100%).
+- **Slot reuse distribution**: `63-check-diagram-parity.md` ×17 (59% — primary §26 diagram-parity auditor; §26 IS the diagram cohort, so slot-63 reuse is the contract surface, not gate-bloat — strongest single-gate concentration across the §22/§23/§24/§26 mirror-quartet) / `64-meta-verify-lockstep.md` ×3 / `04-check-forbidden-spec-paths.md` ×3 / `01` ×2 / `02` ×2 / `42`/`03`/`37` ×1 / 1 load-proven inline-diff (AC-DG-24).
+- **4-clause reflexive drift contract**: same-PR row addition (enforced by `47-check-ac-section-orphan-header.md` + `48-check-ac-prefix-contract.md`); §27 slot renumber refresh (enforced by `64-meta-verify-lockstep.md`); status-floor at `active`; cross-cohort consistency citing §27 only (enforced by edge **E-7**).
+- **Mirror-quartet completion**: §22 §97 (Sess-83 B-2-§22) + §23 §97 (Sess-81 B-2-§23) + §24 §97 (Sess-82 B-2-§24) + §26 §97 (this turn) — 4 of 7 in-scope cohorts now ship closed-set gate-citation matrices. Remaining: §25/§27/§28 (smaller AC surfaces; §27 is the gate cohort itself so its matrix would be self-referential).
+- **Sister to §27 cross-cohort DAG edge E-7**: this matrix is the §26-side terminus of the §27 → §26 audit-surface coverage edge declared in `spec/27-spec-toolchain/00-cross-cohort-read-order-dag.md`.
+- **Banners**: §97 v3.9.0 → **v3.10.0**; §00 v3.12.0 → **v3.13.0**; §99 v3.5.6 → **v3.5.7**; this file v3.14.0 → **v3.15.0**.
+- **Scorecard impact (Sess-84 B-2-§26)**: §26 R-band C4 (Consistency) carried at 20 — defensibility hardened by citation-closure mechanism now sister to §22/§23/§24 closures (mirror-quartet anchor). §26 is now cited in BOTH cross-cohort mirror-anchor closures (mirror-septet for walker-cost-reflexivity Sess-79 + mirror-quartet for citation-matrix this turn). C1/C2/C3/C4/C5/C6 carried at 20/20/20/20/20/20. §26 Raw-LLM /120 **carried at 120 (ceiling)**. Lovable + Cursor unchanged at 120. Aggregate Raw-LLM Σ **carried at 823/840** (this turn is a score-holding defensibility refresh). §27 remains sole Raw-LLM cohort floor at R 112.
 
 ## [3.14.0] — 2026-05-11 — Sess-79 B-27-§26: tier-1 manifest + walker-cost reflexivity (mirror-septet step 7/7 → anchor CLOSED)
 
