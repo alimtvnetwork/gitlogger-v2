@@ -142,8 +142,12 @@ AC-ADS-UI-04 surface absent`.
   inside the very prose it validates; stripping the citation
   breaks the gate, breaking the strip.
 
-## Scorecard impact (Rubric v2 /120)
+## Red-green test pairs (AC-T-39)
 
+- **RED:** introduce a fixture violation against any clause of this gate's `## Contract` closed-set (use the negative example documented in this slot's `**Self-test:**` synthetic-fixture roster, e.g. an `F-N` failing fixture, OR a corresponding fixture path under `linter-scripts/_fixtures/slot-53/`) and run `python3 linter-scripts/check-appshell-route-matrix.py --self-test` — MUST exit non-zero with a clause-numbered failure citing the violated invariant (gate #31 clause-N). Restore fixture / state to revert.
+- **GREEN:** with no violation present (every `F-N` synthetic fixture in clean state per this slot's frontmatter `**Self-test:**` declaration), `python3 linter-scripts/check-appshell-route-matrix.py --self-test` MUST exit 0 with the gate's standard pass banner (e.g. `OK: gate #31 clean`); the GREEN baseline is the union of all clean-pass fixtures cited in this slot's frontmatter.
+
+## Scorecard impact (Rubric v2 /120)
 - **§24** — C3 (Testability) +1 (AppShell matrix now mechanised);
   C5 (Implementability) +1 (AS-NN ↔ variant ↔ shell binding
   self-enforcing via this gate; cite mechanism is gate #31 itself);

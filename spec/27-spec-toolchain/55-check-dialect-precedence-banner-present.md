@@ -168,8 +168,12 @@ Database-engine row absent`.
   precedence pin IS the load-bearing context-recovery surface
   for bundle-bounded auditors.
 
-## Scorecard impact (Rubric v2 /120)
+## Red-green test pairs (AC-T-39)
 
+- **RED:** introduce a fixture violation against any clause of this gate's `## Contract` closed-set (use the negative example documented in this slot's `**Self-test:**` synthetic-fixture roster, e.g. an `F-N` failing fixture, OR a corresponding fixture path under `linter-scripts/_fixtures/slot-55/`) and run `python3 linter-scripts/check-dialect-precedence-banner-present.py --self-test` — MUST exit non-zero with a clause-numbered failure citing the violated invariant (gate #33 clause-N). Restore fixture / state to revert.
+- **GREEN:** with no violation present (every `F-N` synthetic fixture in clean state per this slot's frontmatter `**Self-test:**` declaration), `python3 linter-scripts/check-dialect-precedence-banner-present.py --self-test` MUST exit 0 with the gate's standard pass banner (e.g. `OK: gate #33 clean`); the GREEN baseline is the union of all clean-pass fixtures cited in this slot's frontmatter.
+
+## Scorecard impact (Rubric v2 /120)
 - **§23** — C1 (Clarity) +1 (precedence banner now load-proven —
   no silent reorder); C3 (Testability) +1 (lane markers and
   cross-cuts mechanised); C5 (Implementability) +1 (dialect

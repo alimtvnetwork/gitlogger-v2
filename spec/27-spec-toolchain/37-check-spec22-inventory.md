@@ -50,6 +50,11 @@ fails; **F-4** duplicate slot number fails; **F-5** wrong-extension fails;
 6. **§00 Walker-Pin row** — spec/22 `00-overview.md` Walker-Pin block carries
    a row citing this slot + gate #20 + workflow step name (Sess-56 A-49).
 
+## Red-green test pairs (AC-T-39)
+
+- **RED:** introduce a fixture violation against any clause of this gate's `## Contract` closed-set (use the negative example documented in this slot's `**Self-test:**` synthetic-fixture roster, e.g. an `F-N` failing fixture, OR a corresponding fixture path under `linter-scripts/_fixtures/slot-37/`) and run `python3 linter-scripts/check-spec22-inventory.py --self-test` — MUST exit non-zero with a clause-numbered failure citing the violated invariant (gate #20 clause-N). Restore fixture / state to revert.
+- **GREEN:** with no violation present (every `F-N` synthetic fixture in clean state per this slot's frontmatter `**Self-test:**` declaration), `python3 linter-scripts/check-spec22-inventory.py --self-test` MUST exit 0 with the gate's standard pass banner (e.g. `OK: gate #20 clean`); the GREEN baseline is the union of all clean-pass fixtures cited in this slot's frontmatter.
+
 ## History
 
 - **Sess-56 A-48** — slot created. Built-in self-test only (no on-disk

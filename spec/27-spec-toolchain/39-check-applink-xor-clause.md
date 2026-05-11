@@ -107,6 +107,11 @@ WE-1 (resolve unknown RepoUrl → 404) is out-of-scope for this gate
   separately, this gate provides partial coverage on the `IsActive`
   column specifically.
 
+## Red-green test pairs (AC-T-39)
+
+- **RED:** introduce a fixture violation against any clause of this gate's `## Contract` closed-set (use the negative example documented in this slot's `**Self-test:**` synthetic-fixture roster, e.g. an `F-N` failing fixture, OR a corresponding fixture path under `linter-scripts/_fixtures/slot-39/`) and run `python3 linter-scripts/check-applink-xor-clause.py --self-test` — MUST exit non-zero with a clause-numbered failure citing the violated invariant (gate #22 clause-N). Restore fixture / state to revert.
+- **GREEN:** with no violation present (every `F-N` synthetic fixture in clean state per this slot's frontmatter `**Self-test:**` declaration), `python3 linter-scripts/check-applink-xor-clause.py --self-test` MUST exit 0 with the gate's standard pass banner (e.g. `OK: gate #22 clean`); the GREEN baseline is the union of all clean-pass fixtures cited in this slot's frontmatter.
+
 ## History
 
 - **Phase-5 T-15** — slot created. Built-in self-test only (no on-disk

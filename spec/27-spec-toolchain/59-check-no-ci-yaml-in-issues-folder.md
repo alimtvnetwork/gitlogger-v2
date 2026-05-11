@@ -162,8 +162,12 @@ its exemption logic is wired)`.
   R5 exemption-exercised proof). Slot 59 reuses the pattern
   for §25 / CI-yaml.
 
-## Scorecard impact (Rubric v2 /120)
+## Red-green test pairs (AC-T-39)
 
+- **RED:** introduce a fixture violation against any clause of this gate's `## Contract` closed-set (use the negative example documented in this slot's `**Self-test:**` synthetic-fixture roster, e.g. an `F-N` failing fixture, OR a corresponding fixture path under `linter-scripts/_fixtures/slot-59/`) and run `python3 linter-scripts/check-no-ci-yaml-in-issues-folder.py --self-test` — MUST exit non-zero with a clause-numbered failure citing the violated invariant (gate #37 clause-N). Restore fixture / state to revert.
+- **GREEN:** with no violation present (every `F-N` synthetic fixture in clean state per this slot's frontmatter `**Self-test:**` declaration), `python3 linter-scripts/check-no-ci-yaml-in-issues-folder.py --self-test` MUST exit 0 with the gate's standard pass banner (e.g. `OK: gate #37 clean`); the GREEN baseline is the union of all clean-pass fixtures cited in this slot's frontmatter.
+
+## Scorecard impact (Rubric v2 /120)
 - **§25** — C4 (Consistency) +1 (boundary now load-proven —
   no smuggled CI workflow in issues folder); C5
   (Implementability) +1 (cite mechanism is gate #37 — issues

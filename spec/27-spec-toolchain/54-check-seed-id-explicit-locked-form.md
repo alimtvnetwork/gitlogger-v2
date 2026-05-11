@@ -179,8 +179,12 @@ rows / forbidden block < 3 items`.
   (the forbidden block is itself a normative anti-pattern list,
   not subjective prose).
 
-## Scorecard impact (Rubric v2 /120)
+## Red-green test pairs (AC-T-39)
 
+- **RED:** introduce a fixture violation against any clause of this gate's `## Contract` closed-set (use the negative example documented in this slot's `**Self-test:**` synthetic-fixture roster, e.g. an `F-N` failing fixture, OR a corresponding fixture path under `linter-scripts/_fixtures/slot-54/`) and run `python3 linter-scripts/check-seed-id-explicit-locked-form.py --self-test` — MUST exit non-zero with a clause-numbered failure citing the violated invariant (gate #32 clause-N). Restore fixture / state to revert.
+- **GREEN:** with no violation present (every `F-N` synthetic fixture in clean state per this slot's frontmatter `**Self-test:**` declaration), `python3 linter-scripts/check-seed-id-explicit-locked-form.py --self-test` MUST exit 0 with the gate's standard pass banner (e.g. `OK: gate #32 clean`); the GREEN baseline is the union of all clean-pass fixtures cited in this slot's frontmatter.
+
+## Scorecard impact (Rubric v2 /120)
 - **§23** — C3 (Testability) +2 (locked-ID seed shape now
   mechanised across both lanes; parity matrix and forbidden
   block load-proven); C5 (Implementability) +1 (seed-form

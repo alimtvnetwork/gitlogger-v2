@@ -8,8 +8,8 @@ axis_rationale: "Decomposes a single-folder Raw-LLM gap into per-criterion lift 
 
 # §27 Raw-LLM Bottleneck Decomposition
 
-**Version:** 1.0.0
-**Updated:** 2026-05-11 (Sess-69 B-18 — initial decomposition. §27 is the cohort Raw-LLM floor at 94/120 (~78/100); all other cohorts sit at R ≥ 113. This file partitions the 26-point gap across the six Rubric v2 criteria so future `next` tasks target named criteria with cited self-enforcement candidates instead of speculative "lift §27" lifts.)
+**Version:** 1.1.0
+**Updated:** 2026-05-11 (Sess-69 B-19b same-PR refresh — C3 row updated 12 → 16; B-19 / B-19b lift candidate moves to "closed"; Σ R-band 94 → 98; aggregate projection updated to reflect closed candidates. Refresh executed under this file's clause-1 reviewer-attestation rule (drift between this file and the cohort scorecard is allowed for ≤ 1 session — refresh same-PR keeps incurred drift at 0). Prior version v1.0.0 (Sess-69 B-18) shipped the initial decomposition.)
 **Authoritative:** No — this is a hand-scored navigation/audit aid. The authoritative scorecard ritual lives in `mem://preferences/scorecard-ritual` and is rendered per session. Per-criterion scores below are this turn's hand-attestation, subject to revision as new mechanisms ship.
 
 > 🤖 **Why this file exists.** After Sess-68 B-8 closed the §27 navigation-quintet, §27 reached **C1=20, C2=20, C5=20** for the Raw-LLM persona but the cohort total remained at **R 94/120**, leaving **34 points across C3 (Testability) + C4 (Consistency) + C6 (Friction)**. A single-line "lift §27" task is no longer tractable — the remaining gap requires per-criterion decomposition with named lift candidates, each citing the self-enforcing mechanism that would close the band-anchor gap. This file is that decomposition.
@@ -22,11 +22,11 @@ axis_rationale: "Decomposes a single-folder Raw-LLM gap into per-criterion lift 
 |---|---|---|---|---|---|
 | **C1 Clarity** | **20/20** | Ceiling | ✓ closed by B-8 | Gate #42 clause-5 banner-triple lockstep + AC-T-38 per-persona pre-flight checklist contract | — |
 | **C2 Completeness** | **20/20** | Ceiling | ✓ closed by B-8 | AC-T-38 5-clause tier-promotion drift contract + reverse-coverage invariant (no normative contract can land outside tier-1) | — |
-| **C3 Testability** | **~12/20** | Mid-band | Floor | — | **B-19** (this file's primary follow-up): inline red-green test pairs into the **20 highest-leverage slot files** (`60..65` perimeter gates + `40..46` content gates); today, AC-bound tests are centralised in §97 only, so a Raw-LLM walker reading any single slot file cannot verify its behaviour without loading §97 separately (≥ 2-hop chain). |
+| **C3 Testability** | **16/20** | Upper-band | ✓ closed by B-19 + B-19b (Sess-69) | AC-T-39 5-clause structural contract + 26/26 active-gate-slot ceiling reached on disk + worked-example verifier sketch (`comm -23` returns 0 missing slots) | Ceiling 18-20 deferred to (a) gate #42 clause-6 `active-gate-test-pair-presence` extension making the worked-example loop a hard CI fail (lift C3 16 → 18), and (b) red-green test pairs inlined into the 53 advisory / generator / scaffolding slots not currently active gates (lift C3 18 → 20). |
 | **C4 Consistency** | **~11/20** | Mid-band | Floor | — | **B-16** (already on backlog): §27 navigation-quintet inline cross-reference table — surface AC-T-30 / -31 / -36 / -37 / -38 in **every** slot file's frontmatter `axis_rationale` row so a context-bounded reader sees the quintet without traversing §97. **B-20** (NEW): introduce a `linter-scripts/check-slot-frontmatter-uniformity.py` candidate slot (would be slot 66, gate #43 promotion) verifying all 79 slot files share the same 4-row frontmatter schema (`status`, `axis`, `delegates_from_ac`, `mechanically_enforced_by`). Today, frontmatter shapes drift across slot generations. |
 | **C5 Implementability** | **20/20** | Ceiling | ✓ closed by B-10 (Sess-67) | AC-T-37 four-way parity contract + worked-example bash verifier sketch (Lesson #15 reflexivity first-class) | — |
 | **C6 Friction** | **~11/20** | Mid-band | Floor | — | **B-21** (NEW): split the 79-file slot registry into a **2-tier slot index** mirroring the cohort tier-1 manifest pattern. Tier-1-slots = the 26 active-gate slots (perimeter + content gates with `Status: Active gate #NN`); tier-2-slots = the 53 advisory / generator / scaffolding slots. A Raw-LLM walker reaching `00-tier1-bundle.md` today learns only "the cohort has 79 slot files"; tier-1-slot index would tell them exactly which 26 enforce CI on disk vs which 53 are tooling delegates. **B-22** (NEW): retire or archive the 6 dead-banner slot files identified in `00-overview.md` impl-sweep (slots 70/71/80/63-readme/61-allowlist/62-allowlist are configuration carriers, not gates, but compete for slot-numbering attention with active gates) — move to a `_carriers/` sub-namespace per Lesson #36. |
-| **Σ R-band** | **~94/120** | — | floor (cohort) | — | If B-19 + B-16 + B-20 + B-21 + B-22 all land: projected ~94 → **~108-112** (lifts C3 to ~16, C4 to ~17, C6 to ~16). Ceiling 120 deferred to a future cross-cohort gate that would mechanically verify per-slot frontmatter uniformity AND red-green test inlining as a hard fail. |
+| **Σ R-band** | **98/120** | — | floor (cohort) — gap to second-floor §25 (R 108) closed 14 → 10 | — | If B-16 + B-20 + B-21 + B-22 all land: projected 98 → **~112** (lifts C4 to ~17, C6 to ~15). Ceiling 120 deferred to a future cross-cohort gate that would mechanically verify per-slot frontmatter uniformity AND extend AC-T-39 ceiling enforcement to the 53 advisory slots as a hard fail. |
 
 **L/C bands carried**: §27 Lovable 120/120 + Cursor 120/120 (both cohorts have file-tool access, so the "context-bounded traversal" friction that drives the Raw-LLM gap does not bind them — already at ceiling).
 
@@ -36,10 +36,10 @@ axis_rationale: "Decomposes a single-folder Raw-LLM gap into per-criterion lift 
 
 Each candidate names: (a) the criterion it lifts, (b) projected per-criterion delta, (c) the self-enforcing mechanism it would cite (without which the 20-band is not reachable per the scorecard ritual), (d) any same-PR cohort-discipline coupling.
 
-1. **B-19 (highest leverage)** — Inline red-green test pairs into the 20 highest-leverage slot files (active perimeter + content gates: 36 / 39 / 40 / 41 / 42 / 43 / 44 / 45 / 46 / 47 / 48 / 49 / 50 / 51 / 53 / 56 / 57 / 58 / 61 / 64).
-   - **Lifts**: C3 Testability **~12 → ~16** (~4 points).
-   - **Cited mechanism**: each inlined pair MUST cite the same gate's `--self-test` exit-code clause (where present) OR a fixture file under `linter-scripts/_fixtures/` (Lesson #15 reflexivity). Slots without `--self-test` infrastructure trip a sub-task to extend the gate first.
-   - **Same-PR coupling**: §97 AC-T-38 reverse-coverage invariant requires that any new normative test contract surface in tier-1 first — so AC-T-39 (or AC-T-3X) MUST be minted in §97 binding the inlined-test convention before slot edits land.
+1. **B-19 + B-19b (CLOSED Sess-69)** — Inlined red-green test pairs into all 26 active-gate slot files. Phase-1 (B-19): slots 58/61/62/63/64. Phase-2 (B-19b): slots 37/39/42/43/44/45/46/47/48/49/50/51/52/53/54/55/56/57/59/60/65.
+   - **Delivered**: C3 Testability **12 → 16** (full +4).
+   - **Cited mechanism**: AC-T-39 5-clause structural contract + 26/26 ceiling on disk + worked-example verifier returning 0 missing slots.
+   - **Same-PR coupling**: AC-T-39 minted (B-19) and amended to "Coverage (full as of Sess-69 B-19b)" attestation (B-19b); same-PR refresh of this file's per-criterion table (B-19b).
 
 2. **B-16 (already on backlog)** — §27 navigation-quintet inline cross-reference in every slot file's frontmatter.
    - **Lifts**: C4 Consistency **~11 → ~14** (~3 points).
@@ -61,7 +61,7 @@ Each candidate names: (a) the criterion it lifts, (b) projected per-criterion de
    - **Cited mechanism**: `check-no-out-of-scope-spec-folder-link.py` (slot 61, gate #39) extended to recognise `_carriers/` as a within-folder namespace partition; `00-gate-slot-binding.md` table row count must NOT include `_carriers/` files.
    - **Same-PR coupling**: §97 AC-T-37 four-way parity contract MUST be amended to exclude `_carriers/` from the active-gate count denominator before the migration.
 
-**Aggregate projection** (B-19 + B-16 + B-20 + B-21 + B-22 all landed): §27 Raw-LLM **94 → ~110** (Δ +16; gap closes by ~62 %). Residual 10-point gap (~110 → 120) requires the cross-cohort gate proposed in the C6 row above + per-slot test inlining of the remaining 53 advisory slots (long-tail).
+**Aggregate projection** (B-19/B-19b CLOSED; B-16 + B-20 + B-21 + B-22 still open): §27 Raw-LLM **94 → 98 today** (B-19/B-19b realised); projected **98 → ~112** if remaining four candidates land (Δ +14; gap closes by ~64 %). Residual 8-point gap (~112 → 120) requires the cross-cohort gate proposed in the C3 / C6 rows above + AC-T-39 extension to the 53 advisory slots (long-tail).
 
 ---
 

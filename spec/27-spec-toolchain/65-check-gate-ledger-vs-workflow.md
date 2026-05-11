@@ -89,6 +89,11 @@ Once these four ship, phantom count drops from 38 → 34, and the four highest-p
 
 ---
 
+## Red-green test pairs (AC-T-39)
+
+- **RED:** introduce a fixture violation against any clause of this gate's `## Contract` closed-set (use the negative example documented in this slot's `**Self-test:**` synthetic-fixture roster, e.g. an `F-N` failing fixture, OR a corresponding fixture path under `linter-scripts/_fixtures/slot-65/`) and run `python3 linter-scripts/check-gate-ledger-vs-workflow.py --self-test` — MUST exit non-zero with a clause-numbered failure citing the violated invariant (gate #43 clause-N). Restore fixture / state to revert.
+- **GREEN:** with no violation present (every `F-N` synthetic fixture in clean state per this slot's frontmatter `**Self-test:**` declaration), `python3 linter-scripts/check-gate-ledger-vs-workflow.py --self-test` MUST exit 0 with the gate's standard pass banner (e.g. `OK: gate #43 clean`); the GREEN baseline is the union of all clean-pass fixtures cited in this slot's frontmatter.
+
 ## Self-enforcing mechanism (Rubric v2 18-20 band requirement)
 
 `linter-scripts/check-gate-ledger-vs-workflow.py` (this slot, gate #43, all 3 invariants I-1/I-2/I-3); built-in `--self-test` runs the 6-fixture corpus above. Workflow step: `.github/workflows/spec-health.yml` "Gate-ledger ↔ workflow drift check (Phase-5 T-40 / P19a)" (warn-only mode active until phantom backlog cleared).
