@@ -3,9 +3,11 @@
 Slot 47 — check-ac-section-orphan-header.py (Gate #28)
 
 Mechanises §22+§23+§24+§25+§26+§27+§28 §97 structural-hygiene floor
-(closes §27 backlog `ac-section-orphan-header-check`, minted T-13).
+(closes §27 backlog `ac-section-orphan-header-check`, minted T-13;
+extends with `ac-status-tag-and-parent-taxonomy-check` clauses 4+5,
+T-22, Sess-67 G-T-22).
 
-Three load-bearing invariants enforced across every
+Five load-bearing invariants enforced across every
 `97-acceptance-criteria.md` file under the seven in-scope folders:
 
   clause-1 (no-orphan-ac)        — every `### AC-…` MUST be preceded
@@ -17,14 +19,31 @@ Three load-bearing invariants enforced across every
   clause-3 (section-name-uniqueness)
                                   — within a file, every `## ` heading
                                     title MUST be unique.
+  clause-4 (status-tag-vocabulary)
+                                  — when an `### AC-…` header carries a
+                                    trailing `` `[xxx]` `` status tag,
+                                    `xxx` MUST be drawn from the frozen
+                                    canonical vocabulary
+                                    `STATUS_TAG_VOCABULARY` (Sess-67
+                                    G-T-22 anchor). Untagged ACs are
+                                    permitted (heterogeneity is real per
+                                    T-21 disk survey); only the OPT-IN
+                                    tag is validated.
+  clause-5 (empty-parent-taxonomy)
+                                  — `## ` parents that contain ZERO
+                                    `### AC-…` children before the next
+                                    `## ` header MUST come from the
+                                    frozen `EMPTY_PARENT_ALLOWLIST` (or
+                                    one of its prefixes for
+                                    parenthetical-suffix variants).
+                                    Parents not on the allowlist that
+                                    have no AC children are regression
+                                    candidates (someone added a section
+                                    but never moved an AC under it).
 
 R5 vacuous-pass: if zero §97 files are discovered or zero `### AC-…`
 headers are parsed across the seven folders, exit `1` with
 `vacuous-pass: zero §97 files or zero AC headers parsed`.
-
-Status-tag presence and empty-parent-section detection are deferred
-to backlog ticket `ac-status-tag-and-parent-taxonomy-check` (T-22)
-per real-disk taxonomy heterogeneity surfaced at T-21.
 
 Exit codes: 0 pass · 1 violation · 2 invocation error · 3 fixture-rot.
 """
@@ -51,8 +70,62 @@ IN_SCOPE_FOLDERS = [
 
 AC_HEADER_RE = re.compile(r"^###\s+(AC-\S+)")
 SECTION_HEADER_RE = re.compile(r"^##\s+(?!#)(.+?)\s*$")
+STATUS_TAG_RE = re.compile(r"`\[([a-z]+)\]`")
 
-CHECKS = ("all", "no-orphan-ac", "ac-id-uniqueness", "section-name-uniqueness")
+# Frozen canonical status-tag vocabulary (Sess-67 G-T-22). Adding a new
+# tag REQUIRES (a) a row in this tuple, (b) a row in §47 spec doc, and
+# (c) a §98 changelog entry. Lesson #15 reflexivity: any new tag without
+# a §47 spec-doc row fails the gate the next CI cycle.
+STATUS_TAG_VOCABULARY = (
+    "active",
+    "critical",
+    "high",
+    "medium",
+    "low",
+    "deferred",
+    "deprecated",
+    "draft",
+)
+
+# Frozen empty-parent allowlist (Sess-67 G-T-22). Sections matching one
+# of these EXACT titles, or starting with one of these prefixes followed
+# by " (" (parenthetical-suffix variant — e.g. "Slot Delegation Map
+# (Phase 153 Task A24-fu6)"), are permitted to carry zero AC children.
+# All other `## ` parents MUST host ≥1 `### AC-…` before the next `## `.
+EMPTY_PARENT_ALLOWLIST = (
+    "Format",
+    "Module Summary",
+    "Inlined Contracts",
+    "Worked Examples",
+    "Cross-References",
+    "Purpose",
+    "Notes",
+    "Legacy Index",
+    "Slot Delegation Map",
+    "AC Family Prefix Index",
+    "Per-artifact criteria",
+    "Validation",
+    "Test Invariant Index",
+)
+
+CHECKS = (
+    "all",
+    "no-orphan-ac",
+    "ac-id-uniqueness",
+    "section-name-uniqueness",
+    "status-tag-vocabulary",
+    "empty-parent-taxonomy",
+)
+
+
+def _is_empty_parent_allowed(title: str) -> bool:
+    if title in EMPTY_PARENT_ALLOWLIST:
+        return True
+    for pfx in EMPTY_PARENT_ALLOWLIST:
+        if title.startswith(pfx + " ("):
+            return True
+    return False
+
 
 
 def discover_files(root: Path) -> List[Path]:
@@ -71,6 +144,8 @@ def scan_file(path: Path) -> Tuple[List[str], int]:
     seen_section = False
     section_titles: dict[str, List[int]] = {}
     ac_ids: dict[str, List[int]] = {}
+    # parents: list of (title, lineno, ac_child_count)
+    parents: List[List] = []
 
     text = path.read_text(encoding="utf-8")
     for lineno, line in enumerate(text.splitlines(), start=1):
@@ -79,16 +154,28 @@ def scan_file(path: Path) -> Tuple[List[str], int]:
             seen_section = True
             title = sm.group(1).strip()
             section_titles.setdefault(title, []).append(lineno)
+            parents.append([title, lineno, 0])
             continue
         am = AC_HEADER_RE.match(line)
         if am:
             ac_count += 1
             ac_id = am.group(1).rstrip(":").rstrip(",")
             ac_ids.setdefault(ac_id, []).append(lineno)
+            if parents:
+                parents[-1][2] += 1
             if not seen_section:
                 violations.append(
                     f"{path}:{lineno}: clause-1 orphan-ac: `{ac_id}` "
                     f"declared before any `## ` parent section header"
+                )
+            # clause-4: validate any opt-in status tag
+            tm = STATUS_TAG_RE.search(line)
+            if tm and tm.group(1) not in STATUS_TAG_VOCABULARY:
+                violations.append(
+                    f"{path}:{lineno}: clause-4 status-tag-vocabulary: "
+                    f"`{ac_id}` carries unknown status tag "
+                    f"`[{tm.group(1)}]` (allowed: "
+                    f"{', '.join('[' + t + ']' for t in STATUS_TAG_VOCABULARY)})"
                 )
 
     for ac_id, lines in ac_ids.items():
@@ -103,6 +190,16 @@ def scan_file(path: Path) -> Tuple[List[str], int]:
                 f"{path}:{lines[1]}: clause-3 section-name-duplicate: "
                 f"`## {title}` appears at lines {lines}"
             )
+    # clause-5: empty-parent taxonomy
+    for title, lineno, ac_count_in in parents:
+        if ac_count_in == 0 and not _is_empty_parent_allowed(title):
+            violations.append(
+                f"{path}:{lineno}: clause-5 empty-parent-taxonomy: "
+                f"`## {title}` carries zero `### AC-…` children and is "
+                f"not on the EMPTY_PARENT_ALLOWLIST "
+                f"(regression candidate — either add an AC under it or "
+                f"add `{title}` to the frozen allowlist with rationale)"
+            )
     return violations, ac_count
 
 
@@ -113,9 +210,12 @@ def filter_violations(violations: List[str], check: str) -> List[str]:
         "no-orphan-ac": "clause-1",
         "ac-id-uniqueness": "clause-2",
         "section-name-uniqueness": "clause-3",
+        "status-tag-vocabulary": "clause-4",
+        "empty-parent-taxonomy": "clause-5",
     }
     needle = keymap[check]
     return [v for v in violations if needle in v]
+
 
 
 def run_disk(check: str, root: Path) -> int:
@@ -183,6 +283,29 @@ F4 = """# AC
 """
 F5 = """# Empty file with no ACs and no sections
 """
+# F-6: clause-4 status-tag-vocabulary failure (unknown `[wip]` tag)
+F6 = """# AC
+## Group A
+### AC-01 — Alpha  `[critical]`
+### AC-02 — Beta  `[wip]`
+"""
+# F-7: clause-5 empty-parent-taxonomy failure (`## Mutations` has no
+# AC children and is NOT on the EMPTY_PARENT_ALLOWLIST)
+F7 = """# AC
+## Group A
+### AC-01 — Alpha
+## Mutations
+## Group B
+### AC-02 — Beta
+"""
+# F-8: clause-4 + clause-5 happy path (allowlist parent + canonical tag)
+F8 = """# AC
+## Module Summary
+## Group A
+### AC-01 — Alpha  `[critical]`
+### AC-02 — Beta  `[active]`
+## Cross-References
+"""
 
 
 def self_test() -> int:
@@ -192,6 +315,9 @@ def self_test() -> int:
         ("F-3", F3, False),
         ("F-4", F4, False),
         ("F-5", F5, False),
+        ("F-6", F6, False),
+        ("F-7", F7, False),
+        ("F-8", F8, True),
     ]
     failures: List[str] = []
     with tempfile.TemporaryDirectory() as td:
@@ -223,8 +349,9 @@ def self_test() -> int:
         for f in failures:
             print(f"self-test FAIL: {f}", file=sys.stderr)
         return 3
-    print("check-ac-section-orphan-header: self-test OK (5 fixtures)")
+    print("check-ac-section-orphan-header: self-test OK (8 fixtures)")
     return 0
+
 
 
 def main() -> int:

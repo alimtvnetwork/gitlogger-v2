@@ -1,6 +1,6 @@
 # Slot 47 — `check-ac-section-orphan-header.py`
 
-**Status:** Active gate #28 (Phase-5 T-21)
+**Status:** Active gate #28 (Phase-5 T-21; T-22 clauses 4+5 shipped Sess-67 G-T-22)
 **Implements:** §22 + §23 + §24 + §25 + §26 + §27 + §28 §97
 structural hygiene (closes §27 backlog `ac-section-orphan-header-check`
 minted T-13)
@@ -39,19 +39,44 @@ fail:
    Fails clause-3 with the offending section title + both line
    numbers.
 
-> **Deferred-to-backlog (T-22 ticket):** status-tag presence and
-> empty-parent-section detection were originally drafted as
-> clauses 4 and 5 here. Real-disk inspection at T-21 found the
-> seven §97 files use heterogeneous status-tag vocabularies
-> (`[critical]`, `[high]`, `[medium]`, `[low]`, `[deferred]`,
-> `[deprecated]`, plus untagged ACs) and that several
-> intentionally-prose-only `## ` parents (e.g.
-> "Module Summary", "Worked Examples", "Cross-References")
-> carry no AC children by design. Tightening those two
-> invariants requires a §97 vocabulary unification + parent-kind
-> taxonomy turn (T-22 backlog ticket
-> `ac-status-tag-and-parent-taxonomy-check`, slot TBD). T-21
-> ships the three load-bearing structural invariants only.
+4. **Status-tag vocabulary (T-22 clause-4)** — when an `### AC-…`
+   header carries a trailing backticked status tag of the form
+   `` `[xxx]` ``, the token `xxx` MUST be drawn from the frozen
+   `STATUS_TAG_VOCABULARY` constant in the script:
+   `[active]`, `[critical]`, `[high]`, `[medium]`, `[low]`,
+   `[deferred]`, `[deprecated]`, `[draft]`. Untagged ACs are
+   permitted (heterogeneity is real per T-21 disk survey — §22
+   uses `[active]` everywhere, §23/§24 use severity tags, §25/§26
+   mix tagged and untagged). Only the OPT-IN tag is validated.
+   Unknown tag → fails clause-4. Adding a new vocabulary entry
+   REQUIRES (a) a row in `STATUS_TAG_VOCABULARY`, (b) an updated
+   bullet here, and (c) a §98 changelog entry.
+5. **Empty-parent taxonomy (T-22 clause-5)** — `## ` parents that
+   contain ZERO `### AC-…` children before the next `## ` header
+   MUST come from the frozen `EMPTY_PARENT_ALLOWLIST` constant
+   (or one of its prefixes followed by " (" for
+   parenthetical-suffix variants such as
+   "Slot Delegation Map (Phase 153 Task A24-fu6)"). Allowlist:
+   `Format`, `Module Summary`, `Inlined Contracts`,
+   `Worked Examples`, `Cross-References`, `Purpose`, `Notes`,
+   `Legacy Index`, `Slot Delegation Map`,
+   `AC Family Prefix Index`, `Per-artifact criteria`,
+   `Validation`, `Test Invariant Index`. All other `## ` parents
+   MUST host ≥1 `### AC-…` before the next `## ` header — this
+   catches the regression where someone adds a section but never
+   moves an AC under it. Adding a new allowlist entry REQUIRES
+   (a) a row in `EMPTY_PARENT_ALLOWLIST`, (b) an updated bullet
+   here with rationale, and (c) a §98 changelog entry.
+
+> **T-22 backlog ticket `ac-status-tag-and-parent-taxonomy-check`
+> closed Sess-67 G-T-22.** The two deferred clauses ship with
+> frozen vocabularies derived from a full real-disk survey of all
+> seven in-scope §97 files (8-tag status vocabulary observed; 13
+> distinct empty-parent titles observed across §22–§28). Both
+> constants live in `linter-scripts/check-ac-section-orphan-header.py`
+> and are bound to this spec doc by Lesson #15 reflexivity — any
+> on-disk addition without a matching spec-doc row fails the gate
+> the next CI cycle.
 
 ## Invocation
 
@@ -60,6 +85,8 @@ python3 linter-scripts/check-ac-section-orphan-header.py --check all
 python3 linter-scripts/check-ac-section-orphan-header.py --check no-orphan-ac
 python3 linter-scripts/check-ac-section-orphan-header.py --check ac-id-uniqueness
 python3 linter-scripts/check-ac-section-orphan-header.py --check section-name-uniqueness
+python3 linter-scripts/check-ac-section-orphan-header.py --check status-tag-vocabulary
+python3 linter-scripts/check-ac-section-orphan-header.py --check empty-parent-taxonomy
 python3 linter-scripts/check-ac-section-orphan-header.py --self-test
 ```
 
@@ -71,8 +98,7 @@ A scanner that returns 0 because zero §97 files were discovered, or
 because zero `### AC-…` headers were parsed in the seven in-scope
 folders, is **itself a violation** (exit `1`, message
 `vacuous-pass: zero §97 files or zero AC headers parsed`). The
-`--self-test` mode is mandatory in CI and asserts the scanner
-correctly REJECTS four synthetic fixtures and ACCEPTS one:
+`--self-test` mode is mandatory in CI and runs 8 synthetic fixtures:
 
 - **F-1** complete-uniform (every AC under a `## ` parent, all
   AC-IDs unique, all `## ` titles unique) → passes
@@ -84,8 +110,12 @@ correctly REJECTS four synthetic fixtures and ACCEPTS one:
   file → fails (clause-3)
 - **F-5** empty file (no `## ` and no `### AC-…`) → fails
   (R5 vacuous-pass)
-- **F-6** R5 vacuous-pass — empty-corpus (zero §97 files in
-  scope) → exit 1 (mirrors gate-template R5 surface)
+- **F-6** unknown status tag `[wip]` → fails (clause-4)
+- **F-7** non-allowlist parent `## Mutations` carrying zero AC
+  children → fails (clause-5)
+- **F-8** allowlist parent (`## Module Summary`, `## Cross-References`)
+  + canonical tags (`[critical]`, `[active]`) → passes
+
 
 ## 5-link self-enforcement chain
 
