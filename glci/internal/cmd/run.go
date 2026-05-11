@@ -13,9 +13,11 @@ import (
 	"github.com/example/glci/internal/classify"
 	"github.com/example/glci/internal/config"
 	"github.com/example/glci/internal/detect"
+	"github.com/example/glci/internal/redact"
 	"github.com/example/glci/internal/runner"
 	"github.com/example/glci/internal/selftest"
 	"github.com/example/glci/internal/ship"
+	"github.com/example/glci/internal/stream"
 )
 
 // Detect implements `glci detect`.
@@ -76,6 +78,7 @@ func RunCmd(args []string, only string) error {
 	runtimeFilter := fs.String("runtime", "", "Restrict to one runtime")
 	phasesCSV := fs.String("phases", "", "CSV subset (default lint,build,test)")
 	jsonOut := fs.Bool("json", false, "Machine-readable output")
+	streamMode := fs.Bool("stream", false, "Incrementally POST events (§06 streaming mode)")
 	if err := fs.Parse(args); err != nil {
 		return exitErr(64, err)
 	}
@@ -125,7 +128,28 @@ func RunCmd(args []string, only string) error {
 			if !contains(wantPhases, p.Phase) {
 				continue
 			}
+			var str *stream.Streamer
+			if *streamMode && !*noPush {
+				str = stream.New(stream.Options{
+					ServerURL: cfg.ServerURL, RepoUrl: cfg.RepoURL,
+					Branch: cfg.Branch, GitSha256: cfg.GitSha,
+					TempToken: cfg.TempToken, Token: cfg.Token,
+				})
+			}
 			res, runErr := runner.Run(context.Background(), *cwd, rt.ID, p.Phase, p.Runner, p.Args)
+			if str != nil {
+				for _, ln := range res.Lines {
+					level := "info"
+					switch classify.Classify(ln.Text, nil, nil) {
+					case classify.Error:
+						level = "error"
+					case classify.Warn:
+						level = "warn"
+					}
+					str.Append(level, redact.Line(ln.Text))
+				}
+				_ = str.Close(context.Background())
+			}
 			if runErr != nil {
 				fmt.Fprintf(os.Stderr, "spawn %s/%s: %v\n", rt.ID, p.Phase, runErr)
 				exit = 4
@@ -186,9 +210,10 @@ func buildBody(cfg *config.Config, runtimeID, phase string, r *runner.Result) sh
 	pathRe := regexp.MustCompile(`(?:[A-Za-z0-9_./\-]+\.(?:go|ts|tsx|js|jsx|php|py|md))(?::\d+)?`)
 
 	for _, ln := range r.Lines {
-		logs = append(logs, ln.Text)
+		safe := redact.Line(ln.Text)
+		logs = append(logs, safe)
 		if classify.Classify(ln.Text, nil, nil) == classify.Error {
-			errs = append(errs, ln.Text)
+			errs = append(errs, safe)
 			for _, m := range pathRe.FindAllString(ln.Text, -1) {
 				if i := strings.Index(m, ":"); i > 0 {
 					m = m[:i]
