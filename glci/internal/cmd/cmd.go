@@ -20,6 +20,23 @@ func Run(args []string, version string) error {
 		return Whoami(args[1:])
 	case "keys":
 		return Keys(args[1:])
+	case "detect":
+		return Detect(args[1:])
+	case "lint":
+		return RunCmd(args[1:], "lint")
+	case "build":
+		return RunCmd(args[1:], "build")
+	case "test":
+		return RunCmd(args[1:], "test")
+	case "run":
+		return RunCmd(args[1:], "")
+	case "doctor":
+		return Doctor(args[1:])
+	case "config":
+		if len(args) < 2 || args[1] != "print" {
+			return errors.New("usage: glci config print [--cwd <dir>] [--config <file>]")
+		}
+		return ConfigPrint(args[2:])
 	case "version", "--version", "-v":
 		fmt.Println("glci " + version)
 		return nil
@@ -38,9 +55,14 @@ func printUsage(version string) {
 	fmt.Println("  glci <command> [flags]")
 	fmt.Println()
 	fmt.Println("Commands:")
-	fmt.Println("  ping         Probe a Git Logs plugin /health endpoint")
-	fmt.Println("  whoami       Authenticated identity probe (App Password OR Ed25519)")
-	fmt.Println("  keys         Manage Ed25519 keys (generate)")
-	fmt.Println("  version      Print glci version")
-	fmt.Println("  help         Show this help")
+	fmt.Println("  detect          Print phase plan + detected runtimes")
+	fmt.Println("  lint|build|test Run a single phase across detected runtimes")
+	fmt.Println("  run             CI/CD entry point (lint, build, test in one process)")
+	fmt.Println("  doctor          Pre-flight environment checks")
+	fmt.Println("  config print    Print resolved config with provenance (secrets redacted)")
+	fmt.Println("  ping            Probe a Git Logs plugin /health endpoint")
+	fmt.Println("  whoami          Authenticated identity probe (App Password OR Ed25519)")
+	fmt.Println("  keys            Manage Ed25519 keys (generate)")
+	fmt.Println("  version         Print glci version")
+	fmt.Println("  help            Show this help")
 }

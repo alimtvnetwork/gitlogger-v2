@@ -1,0 +1,275 @@
+package cmd
+
+import (
+	"context"
+	"flag"
+	"fmt"
+	"os"
+	"strings"
+
+	"github.com/example/glci/internal/ci"
+	"github.com/example/glci/internal/classify"
+	"github.com/example/glci/internal/config"
+	"github.com/example/glci/internal/detect"
+	"github.com/example/glci/internal/runner"
+)
+
+// Detect implements `glci detect`.
+func Detect(args []string) error {
+	fs := flag.NewFlagSet("detect", flag.ContinueOnError)
+	cwd := fs.String("cwd", ".", "Project root for detection")
+	jsonOut := fs.Bool("json", false, "Emit deterministic JSON")
+	if err := fs.Parse(args); err != nil {
+		return exitErr(64, err)
+	}
+	r, derr := detect.Detect(*cwd)
+	if derr != nil {
+		// Still emit JSON so consumers can parse Skipped[].
+		if *jsonOut && r != nil {
+			b, _ := r.JSON()
+			fmt.Println(string(b))
+		} else {
+			fmt.Fprintln(os.Stderr, derr.Error())
+		}
+		return exitErr(2, derr)
+	}
+	if *jsonOut {
+		b, _ := r.JSON()
+		fmt.Println(string(b))
+		return nil
+	}
+	fmt.Printf("cwd: %s\n", r.Cwd)
+	for _, rt := range r.Runtimes {
+		fmt.Printf("runtime: %s", rt.ID)
+		if rt.Manager != "" {
+			fmt.Printf(" (%s)", rt.Manager)
+		}
+		fmt.Println()
+		for _, p := range rt.Phases {
+			fmt.Printf("  %-5s  %s %s\n", p.Phase, p.Runner, strings.Join(p.Args, " "))
+		}
+	}
+	for _, sk := range r.Skipped {
+		fmt.Printf("skipped: %s (%s)\n", sk.ID, sk.Reason)
+	}
+	return nil
+}
+
+// Run implements `glci run` (and lint/build/test single-phase variants).
+func RunCmd(args []string, only string) error {
+	fs := flag.NewFlagSet("run", flag.ContinueOnError)
+	cwd := fs.String("cwd", ".", "Project root")
+	cfgPath := fs.String("config", "", "Config file path")
+	server := fs.String("server", "", "Server URL override")
+	tempToken := fs.String("temp-token", "", "Lane B TempToken")
+	tok := fs.String("token", "", "Lane B Token")
+	authMode := fs.String("auth-mode", "", "temptoken | ssh")
+	repoURL := fs.String("repo-url", "", "Override RepoUrl")
+	branch := fs.String("branch", "", "Override Branch")
+	gitSha := fs.String("git-sha", "", "Override GitSha256")
+	noPush := fs.Bool("no-push", false, "Run locally; never POST")
+	keepGoing := fs.Bool("keep-going", false, "Run all phases even if one fails")
+	runtimeFilter := fs.String("runtime", "", "Restrict to one runtime")
+	phasesCSV := fs.String("phases", "", "CSV subset (default lint,build,test)")
+	jsonOut := fs.Bool("json", false, "Machine-readable output")
+	if err := fs.Parse(args); err != nil {
+		return exitErr(64, err)
+	}
+
+	cfg, err := config.Resolve(*cwd, config.Flags{
+		ConfigPath: *cfgPath, Server: *server, TempToken: *tempToken,
+		Token: *tok, AuthMode: *authMode,
+		RepoURL: *repoURL, Branch: *branch, GitSha: *gitSha,
+	}, os.Getenv)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return exitErr(2, err)
+	}
+
+	// CI harvest is best-effort — flags/env may already supply the fields.
+	if h, herr := ci.HarvestEnv(os.Getenv); herr == nil {
+		if cfg.RepoURL == "" {
+			cfg.RepoURL = h.RepoUrl
+		}
+		if cfg.Branch == "" {
+			cfg.Branch = h.Branch
+		}
+		if cfg.GitSha == "" {
+			cfg.GitSha = h.GitSha256
+		}
+	}
+
+	det, derr := detect.Detect(*cwd)
+	if derr != nil {
+		fmt.Fprintln(os.Stderr, derr)
+		return exitErr(2, derr)
+	}
+
+	wantPhases := []string{"lint", "build", "test"}
+	if only != "" {
+		wantPhases = []string{only}
+	} else if *phasesCSV != "" {
+		wantPhases = strings.Split(*phasesCSV, ",")
+	}
+
+	exit := 0
+	for _, rt := range det.Runtimes {
+		if *runtimeFilter != "" && rt.ID != *runtimeFilter {
+			continue
+		}
+		for _, p := range rt.Phases {
+			if !contains(wantPhases, p.Phase) {
+				continue
+			}
+			res, runErr := runner.Run(context.Background(), *cwd, rt.ID, p.Phase, p.Runner, p.Args)
+			if runErr != nil {
+				fmt.Fprintf(os.Stderr, "spawn %s/%s: %v\n", rt.ID, p.Phase, runErr)
+				exit = 4
+				if !*keepGoing {
+					return exitCode(exit)
+				}
+				continue
+			}
+			emitResult(res, *jsonOut)
+			if *noPush {
+				_ = cfg // suppress unused if no shipping yet
+			}
+			if res.ExitCode != 0 {
+				if exit == 0 {
+					exit = 1
+				}
+				if !*keepGoing {
+					return exitCode(exit)
+				}
+			}
+		}
+	}
+	return exitCode(exit)
+}
+
+func emitResult(r *runner.Result, jsonOut bool) {
+	errCount, warnCount := 0, 0
+	for _, ln := range r.Lines {
+		switch classify.Classify(ln.Text, nil, nil) {
+		case classify.Error:
+			errCount++
+		case classify.Warn:
+			warnCount++
+		}
+	}
+	if jsonOut {
+		fmt.Printf(`{"Runtime":%q,"Phase":%q,"ExitCode":%d,"Lines":%d,"Errors":%d,"Warnings":%d}`+"\n",
+			r.Runtime, r.Phase, r.ExitCode, len(r.Lines), errCount, warnCount)
+		return
+	}
+	dur := r.Ended.Sub(r.Started).Truncate(1e6)
+	fmt.Printf("[%s/%s] exit=%d lines=%d errors=%d warnings=%d (%s)\n",
+		r.Runtime, r.Phase, r.ExitCode, len(r.Lines), errCount, warnCount, dur)
+	for _, ln := range r.Lines {
+		fmt.Println(ln.Text)
+	}
+}
+
+// ConfigPrint implements `glci config print`.
+func ConfigPrint(args []string) error {
+	fs := flag.NewFlagSet("config print", flag.ContinueOnError)
+	cwd := fs.String("cwd", ".", "Project root")
+	cfgPath := fs.String("config", "", "Config file")
+	if err := fs.Parse(args); err != nil {
+		return exitErr(64, err)
+	}
+	cfg, err := config.Resolve(*cwd, config.Flags{ConfigPath: *cfgPath}, os.Getenv)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return exitErr(2, err)
+	}
+	red := cfg.Redacted()
+	fmt.Printf(`{
+  "ServerURL":   %q,   // %s
+  "AuthMode":    %q,   // %s
+  "TempToken":   %q,   // %s
+  "Token":       %q,   // %s
+  "PushMode":    %q,   // %s
+  "MaxRetries":  %d,   // %s
+  "VerifyTLS":   %t,   // %s
+  "RepoURL":     %q,   // %s
+  "Branch":      %q,   // %s
+  "GitSha":      %q,   // %s
+  "PipelineTpl": %q    // %s
+}`+"\n",
+		red.ServerURL, cfg.Provenance["ServerURL"],
+		red.AuthMode, cfg.Provenance["AuthMode"],
+		red.TempToken, cfg.Provenance["TempToken"],
+		red.Token, cfg.Provenance["Token"],
+		red.PushMode, cfg.Provenance["PushMode"],
+		red.MaxRetries, cfg.Provenance["MaxRetries"],
+		red.VerifyTLS, cfg.Provenance["VerifyTLS"],
+		red.RepoURL, cfg.Provenance["RepoURL"],
+		red.Branch, cfg.Provenance["Branch"],
+		red.GitSha, cfg.Provenance["GitSha"],
+		red.PipelineTpl, cfg.Provenance["PipelineTpl"],
+	)
+	return nil
+}
+
+// Doctor implements `glci doctor` pre-flight checks.
+func Doctor(args []string) error {
+	fs := flag.NewFlagSet("doctor", flag.ContinueOnError)
+	cwd := fs.String("cwd", ".", "Project root")
+	if err := fs.Parse(args); err != nil {
+		return exitErr(64, err)
+	}
+	// Check 1: detect runtime.
+	if _, err := detect.Detect(*cwd); err != nil {
+		fmt.Fprintln(os.Stderr, "doctor: "+err.Error())
+		return exitCode(5)
+	}
+	fmt.Println("doctor: detect      ok")
+	// Check 2: config resolves.
+	if _, err := config.Resolve(*cwd, config.Flags{}, os.Getenv); err != nil {
+		fmt.Fprintln(os.Stderr, "doctor: "+err.Error())
+		return exitCode(5)
+	}
+	fmt.Println("doctor: config      ok")
+	// Check 3 (server reach) requires shipping client — defer to P-shipping.
+	fmt.Println("doctor: server      skip (shipping client not yet wired)")
+	return nil
+}
+
+// --- helpers ---
+
+type cmdErr struct {
+	code int
+	err  error
+}
+
+func (e *cmdErr) Error() string { return e.err.Error() }
+func (e *cmdErr) Code() int     { return e.code }
+
+func exitErr(code int, err error) error { return &cmdErr{code: code, err: err} }
+func exitCode(code int) error {
+	if code == 0 {
+		return nil
+	}
+	return &cmdErr{code: code, err: fmt.Errorf("exit %d", code)}
+}
+
+// CodeOf returns the exit code stored on a cmdErr, or 1 for any other error.
+func CodeOf(err error) int {
+	if err == nil {
+		return 0
+	}
+	if ce, ok := err.(*cmdErr); ok {
+		return ce.code
+	}
+	return 1
+}
+
+func contains(xs []string, x string) bool {
+	for _, v := range xs {
+		if v == x {
+			return true
+		}
+	}
+	return false
+}
