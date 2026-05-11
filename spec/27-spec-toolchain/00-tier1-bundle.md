@@ -20,13 +20,13 @@ axis_rationale: "Single-page read-order anchor for the §27 spec set"
 
 ## Tier-1 — Navigable minimum (read in order)
 
-| # | File | Lines | Role | Why tier-1 |
-|---|---|---|---|---|
-| 1 | [`00-overview.md`](./00-overview.md) | 465 | Module pin + active-gate count (26) + invariants triple (I-1 EXISTS, I-2 WIRED, I-3 NUMBERED) + slot-numbering scheme + retired-gate frozen list (INV-03 anchor) | Establishes the toolchain's vocabulary, the gate-counting rule, and the perimeter for slot numbers. Read first. |
-| 2 | [`trace-map.md`](./trace-map.md) | 419 | Gate dependency DAG: which gates are prerequisites for which others; per-gate `consumes` / `produced_for` rows | The single source for "which gate to consult / extend first". Without this, an implementer cannot order changes correctly. |
-| 3 | [`97-acceptance-criteria.md`](./97-acceptance-criteria.md) | 429 | 36 ACs for the toolchain itself (AC-T-* family — gate hygiene, slot reflexivity, ledger lockstep) | Every gate-side contract is here. Read after the trace map so each AC's `Verifies:` cell already names a known gate slot. |
-| 4 | [`99-consistency-report.md`](./99-consistency-report.md) | 260 | Newest banner block + per-version scorecard delta + current Sess-NN tasks | Tells the reader where the toolchain is **right now** (versions, last-shipped gate, open tickets). Read last in tier-1. |
-| **Σ** | **4 files** | **~1,573** | **Tier-1 footprint** | Below the 8K-token "single context window" comfort threshold. |
+| # | File | Lines | Walker-cost (KB) | Role | Why tier-1 |
+|---|---|---|---|---|---|
+| 1 | [`00-overview.md`](./00-overview.md) | 465 | ~83 | Module pin + active-gate count (26) + invariants triple (I-1 EXISTS, I-2 WIRED, I-3 NUMBERED) + slot-numbering scheme + retired-gate frozen list (INV-03 anchor) | Establishes the toolchain's vocabulary, the gate-counting rule, and the perimeter for slot numbers. Read first. |
+| 2 | [`trace-map.md`](./trace-map.md) | 419 | ~50 | Gate dependency DAG: which gates are prerequisites for which others; per-gate `consumes` / `produced_for` rows | The single source for "which gate to consult / extend first". Without this, an implementer cannot order changes correctly. |
+| 3 | [`97-acceptance-criteria.md`](./97-acceptance-criteria.md) | 429 | ~101 | 36 ACs for the toolchain itself (AC-T-* family — gate hygiene, slot reflexivity, ledger lockstep) | Every gate-side contract is here. Read after the trace map so each AC's `Verifies:` cell already names a known gate slot. |
+| 4 | [`99-consistency-report.md`](./99-consistency-report.md) | 260 | ~185 | Newest banner block + per-version scorecard delta + current Sess-NN tasks | Tells the reader where the toolchain is **right now** (versions, last-shipped gate, open tickets). Read last in tier-1. |
+| **Σ** | **4 files** | **~1,573** | **~419** | **Tier-1 footprint** | Below the 8K-token "single context window" comfort threshold by line-count; **far above** any reasonable byte-budget by KB-count (see Walker-cost reflexivity section below). |
 
 **Read-order rationale:** vocabulary + invariants (1) → gate dependency graph (2) → contracts (3) → current state (4). After tier-1 the reader knows: how many active gates exist, which slot file owns each gate, what each gate guarantees, and which gate(s) are currently open work.
 
