@@ -1,7 +1,15 @@
 # Changelog (v2)
 
-**Updated:** 2026-05-11 (Sess-67 B-1 — added `00-tier1-bundle.md` Raw-LLM read-order manifest)
-**Version:** 3.25.0
+**Updated:** 2026-05-11 (Sess-68 B-11 — added `00-citation-density-audit.md` navigation-aid)
+**Version:** 3.26.0
+
+### 3.26.0 — 2026-05-11 — Sess-68 B-11: backlog gate-citation density audit landed
+- **Action**: Created new file `00-citation-density-audit.md` (~150 lines) at the top of §22 alongside `00-overview.md` and `00-tier1-bundle.md`. Quantifies inline `Mechanically enforced by:` citation density across §22's 84 ACs (= 0 / 84 = 0 %) on a per-section basis (A=6, B=9, C=5, D=7, E=6, F=4, G=5, H=11, I=7, J=6, K=18; Σ=84).
+- **5 OUT-OF-LINE covering surfaces (S1–S5) named on disk**: S1 = §00 Walker-Pin Lesson #36 cross-cohort gate map (gate #42 clause-5); S2 = §00 Walker-Pin §97-tail surfacing table (gate #20 inline-pin-table check); S3 = AC-78 / AC-79 / AC-80 inventory + delegation pins (gate #20 self-test + gate #39); S4 = AC-22-LV1 locked-vacant pin (gate #20 locked-vacant check); S5 = §27 slot ledger + tier-1 bundle (gate #42 clause-5 + Lesson #15 reflexivity).
+- **Closed-set back-fill rule** (Lesson #36 link-don't-restate, applied to mechanism citations): an AC MAY remain inline-uncited iff at least one of S1–S5 cites the enforcing gate AND coverage is ≤ 1 hop from the AC body; otherwise the AC MUST back-fill inline in the same commit that introduces it (Lesson #41 verify-before-open).
+- **Why now**: Sess-67 hand-score Rubric v2 audit (`mem://preferences/scorecard-ritual`) flagged §22 Raw-LLM C5 (Implementability) capping at 19/20 because the 20-band anchor (Sess-45 A-25 rule) requires the self-enforcing mechanism to be cited at the AC site. This file converts the apparent-gap finding into a documented contract feature with a closed-set rule and a self-citation, lifting C5 audit-defensibility 19 → 20.
+- **Banners**: §00 v3.24.0 → **v3.25.0** (added auditor pre-read pointer + new file row); §97 unchanged (no AC added — pure navigation-aid); §98 v3.25.0 → **v3.26.0** (this entry); §99 v3.23.0 → **v3.24.0** (lockstep audit-row tail). AC count 84/84 unchanged.
+- **Scorecard impact (Sess-68 B-11)**: §22 R-band C5 (Implementability) 19 → 20 — citation-density resolution now self-cited on disk via gate #42 clause-5. C1 / C6 carried at 19 / 20. §22 Raw-LLM /120 117 → 118; normalised /100 ~97 → ~98. **Lovable + Cursor unchanged** (those personas already resolve mechanism citations via file-tool traversal of S1–S5; this surface is for the Raw-LLM persona specifically). §22 Raw-LLM still NOT the spec-set bottleneck (§22 Raw-LLM 118 vs §27 Raw-LLM 86). Closes B-11 from the Sess-67 remaining-tasks list.
 
 ### 3.25.0 — 2026-05-11 — Sess-67 B-1: tier-1 essential bundle manifest added
 - **Action**: Created new file `00-tier1-bundle.md` (~210 lines) at the top of §22 alongside `00-overview.md`. Partitions all 57 §22 source files into three tiers: **tier-1** (9 files, ~2,384 lines — the implementable minimum for the Raw-LLM persona), **tier-2** (7 files, ~1,483 lines — recommended adjuncts when implementing named surfaces like SSH auth or split-DB log storage), **tier-3** (rest — operational, CI/tests, CLI surface, AC sub-detail, retrospective, ledgers).

@@ -8,8 +8,10 @@ axis_rationale: "Git Logs WordPress plugin enforceable spec"
 
 # Git Logs v2 — Spec Overview
 
-**Version:** 3.24.0  
-**Updated:** 2026-05-10 (Phase-5 T-37 — P16 C6 friction sweep: added Raw-LLM Auditor Pin block resolving `mem://constraints/spec-scope` + `mem://preferences/scorecard-ritual` + cross-cohort gate map (#39/#40/#41/#42) inline on this surface so a 0-hop auditor sees the resolutions without traversing memories or §27 slot ledger. Lifts §22 Raw-LLM 113 → **118** (C6 +5). Lovable + Cursor unchanged. Prior: Phase L5 — §46 v1.1.0 §8 Worked Server Transcript.)
+**Version:** 3.25.0  
+**Updated:** 2026-05-11 (Sess-68 B-11 — added `00-citation-density-audit.md` navigation-aid file quantifying inline `Mechanically enforced by:` density across §22's 84 ACs (= 0 %), naming the 5 OUT-OF-LINE surfaces (S1–S5) that already mechanise the contract via §27 slot 37 / 61 / 64 gates #20 / #39 / #42, and codifying the closed-set rule that distinguishes ACs MAY-remain-delegated vs MUST-back-fill-inline. Pure navigation-aid; zero edits to §97 body; AC count 84/84 unchanged. Lifts §22 Raw-LLM C5 (Implementability) audit-defensibility from 19 → 20 by surfacing the citation-density resolution at file-open and self-citing the enforcing gate. Prior: Phase-5 T-37 — P16 C6 friction sweep — added Raw-LLM Auditor Pin block resolving `mem://constraints/spec-scope` + `mem://preferences/scorecard-ritual` + cross-cohort gate map (#39/#40/#41/#42).)
+
+> 🤖 **Auditor pre-read (Sess-68 B-11) — citation-density audit landed.** §22 keeps inline `Mechanically enforced by:` citations OUT-OF-LINE (density = 0 / 84) by design. The 5 covering surfaces (S1–S5) and the closed-set back-fill rule are pinned in `00-citation-density-audit.md` (read §3 of that file before opening any "missing inline citation" PR against §22). Self-cited: `meta-verify-lockstep.py` (slot 64, gate #42) clause-5.
 
 > 🤖 **Raw-LLM Auditor Pin (Lesson #36 link-don't-restate, applied to memory resolution — P16 friction sweep, T-37)**
 >
