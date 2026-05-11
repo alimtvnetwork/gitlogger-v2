@@ -16,6 +16,10 @@ func Run(args []string, version string) error {
 	switch args[0] {
 	case "ping":
 		return Ping(args[1:])
+	case "whoami":
+		return Whoami(args[1:])
+	case "keys":
+		return Keys(args[1:])
 	case "version", "--version", "-v":
 		fmt.Println("glci " + version)
 		return nil
@@ -34,7 +38,9 @@ func printUsage(version string) {
 	fmt.Println("  glci <command> [flags]")
 	fmt.Println()
 	fmt.Println("Commands:")
-	fmt.Println("  ping       Probe a Git Logs plugin /health endpoint")
-	fmt.Println("  version    Print glci version")
-	fmt.Println("  help       Show this help")
+	fmt.Println("  ping         Probe a Git Logs plugin /health endpoint")
+	fmt.Println("  whoami       Authenticated identity probe (App Password OR Ed25519)")
+	fmt.Println("  keys         Manage Ed25519 keys (generate)")
+	fmt.Println("  version      Print glci version")
+	fmt.Println("  help         Show this help")
 }

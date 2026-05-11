@@ -14,7 +14,7 @@ import (
 )
 
 // Version is the glci CLI version. Overridden at link time via -ldflags.
-var Version = "0.1.0-dev"
+var Version = "0.2.0-dev"
 
 func main() {
 	if err := cmd.Run(os.Args[1:], Version); err != nil {
