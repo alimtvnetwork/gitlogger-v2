@@ -32,8 +32,8 @@
 |-----------|--------|
 | `00-overview.md` present | ✅ |
 | `99-consistency-report.md` present | ✅ (this file) |
-| `97-acceptance-criteria.md` present | ✅ (v1.8.0; sync'd Sess-69 B-13) |
-| `98-changelog.md` present | ✅ (v3.8.0; sync'd Sess-69 B-13) |
+| `97-acceptance-criteria.md` present | ✅ (v1.10.0; sync'd Sess-74 B-27-§25) |
+| `98-changelog.md` present | ✅ (v3.10.0; sync'd Sess-74 B-27-§25) |
 | Lowercase kebab-case naming | ✅ |
 | Numeric prefix sequence | ✅ |
 | AC-AI-000 verifier inlined (Lesson #15 reflexivity) | ✅ (sync'd Sess-69 B-13) |
@@ -47,8 +47,8 @@
 
 | File | Status |
 |------|--------|
-| `00-overview.md` | ✅ Present (v3.11.0; sync'd Sess-70 B-23) |
-| `00-finding-template.md` | ✅ Present (v1.0.0; NEW Sess-70 B-23 — closed-set finding template + verifier mirror + F1..F6 fixture matrix + D1..D5 taxonomy) |
+| `00-overview.md` | ✅ Present (v3.12.0; sync'd Sess-74 B-27-§25) |
+| `00-finding-template.md` | ✅ Present (v1.1.0; sync'd Sess-74 B-27-§25 — walker-cost reflexivity lever; per-section walker-cost + per-fixture verifier-cost columns + NEW §7 load-budget pin) |
 
 ### Subfolders
 
