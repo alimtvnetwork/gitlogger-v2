@@ -144,6 +144,8 @@ def scan_file(path: Path) -> Tuple[List[str], int]:
     seen_section = False
     section_titles: dict[str, List[int]] = {}
     ac_ids: dict[str, List[int]] = {}
+    # parents: list of (title, lineno, ac_child_count)
+    parents: List[List] = []
 
     text = path.read_text(encoding="utf-8")
     for lineno, line in enumerate(text.splitlines(), start=1):
@@ -152,16 +154,28 @@ def scan_file(path: Path) -> Tuple[List[str], int]:
             seen_section = True
             title = sm.group(1).strip()
             section_titles.setdefault(title, []).append(lineno)
+            parents.append([title, lineno, 0])
             continue
         am = AC_HEADER_RE.match(line)
         if am:
             ac_count += 1
             ac_id = am.group(1).rstrip(":").rstrip(",")
             ac_ids.setdefault(ac_id, []).append(lineno)
+            if parents:
+                parents[-1][2] += 1
             if not seen_section:
                 violations.append(
                     f"{path}:{lineno}: clause-1 orphan-ac: `{ac_id}` "
                     f"declared before any `## ` parent section header"
+                )
+            # clause-4: validate any opt-in status tag
+            tm = STATUS_TAG_RE.search(line)
+            if tm and tm.group(1) not in STATUS_TAG_VOCABULARY:
+                violations.append(
+                    f"{path}:{lineno}: clause-4 status-tag-vocabulary: "
+                    f"`{ac_id}` carries unknown status tag "
+                    f"`[{tm.group(1)}]` (allowed: "
+                    f"{', '.join('[' + t + ']' for t in STATUS_TAG_VOCABULARY)})"
                 )
 
     for ac_id, lines in ac_ids.items():
@@ -176,6 +190,16 @@ def scan_file(path: Path) -> Tuple[List[str], int]:
                 f"{path}:{lines[1]}: clause-3 section-name-duplicate: "
                 f"`## {title}` appears at lines {lines}"
             )
+    # clause-5: empty-parent taxonomy
+    for title, lineno, ac_count_in in parents:
+        if ac_count_in == 0 and not _is_empty_parent_allowed(title):
+            violations.append(
+                f"{path}:{lineno}: clause-5 empty-parent-taxonomy: "
+                f"`## {title}` carries zero `### AC-…` children and is "
+                f"not on the EMPTY_PARENT_ALLOWLIST "
+                f"(regression candidate — either add an AC under it or "
+                f"add `{title}` to the frozen allowlist with rationale)"
+            )
     return violations, ac_count
 
 
@@ -186,9 +210,12 @@ def filter_violations(violations: List[str], check: str) -> List[str]:
         "no-orphan-ac": "clause-1",
         "ac-id-uniqueness": "clause-2",
         "section-name-uniqueness": "clause-3",
+        "status-tag-vocabulary": "clause-4",
+        "empty-parent-taxonomy": "clause-5",
     }
     needle = keymap[check]
     return [v for v in violations if needle in v]
+
 
 
 def run_disk(check: str, root: Path) -> int:
