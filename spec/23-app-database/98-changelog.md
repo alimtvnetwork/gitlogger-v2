@@ -1,7 +1,8 @@
 # Changelog — App Database
 
-**Version:** 4.10.0
-**Updated:** 2026-05-11 (Sess-78 B-27-§23 — created `00-tier1-bundle.md` v1.0.0 + walker-cost reflexivity lever in same turn (mirror-sextet step 6/7); §00 v4.7.0 → v4.8.0; §99 v2.1.7 → v2.1.8; §23 R-band C6 +1 → 19, cumulative 118 → 119/120; aggregate Raw-LLM Σ 818 → 819/840.)
+**Version:** 4.11.0
+**Updated:** 2026-05-11 (Sess-81 B-2-§23 — added closed-set "Mechanically enforced by" gate-citation matrix to §97 (v3.6.0 → v3.7.0) covering 18/18 AC-ADB-NN families; §23 R C4 18 → 19 band-anchor advance; §23 R total 119 → 120/120 ceiling reached; aggregate Raw-LLM Σ 822 → 823/840 (98.0/100); §00 v4.8.0 → v4.9.0; §99 v2.1.8 → v2.1.9.)
+**Prior banner — Version:** 4.10.0 (Sess-78 B-27-§23 — tier-1 manifest + walker-cost reflexivity; §23 R C6 +1 → 19.)
 **Scope:** `spec/23-app-database/`
 
 ---
