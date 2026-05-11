@@ -1,107 +1,107 @@
-## Goal
+# Implementation Plan — Git Logs v2 + glci + Generic Runtime
 
-Lift the 7 in-scope modules (mean **92.0/100**) to a state where any AI can build the application blindly from the spec — i.e. every dimension ≥ **19/20** and zero open issues.
+## Stack (locked)
 
-The audit measures 5 dimensions (each /20):
+| Component | Language | Repo | Source spec |
+|---|---|---|---|
+| WP Git Logs plugin (backend: REST + SQLite + auth) | PHP 8.1+, PSR-4/PSR-12 | `git-logs-plugin/` (new) | spec/22, spec/23 |
+| Admin UI bundle (loaded into wp-admin page) | TypeScript + React + Vite | inside plugin repo (`/admin-ui`) | spec/24, spec/26 |
+| `glci` Universal CI CLI | Go 1.22+ | `glci/` (new) | spec/28 |
+| Generic CLI runtime (update, install, status) | Go 1.22+ | shared Go module in `glci/` | spec/13, spec/14, spec/15, spec/16 (referenced by spec/28) |
+| Spec corpus + linter-scripts | unchanged | this repo | spec/22..28 (frozen scope) |
 
-| Dim | What it measures | What "100%" looks like |
-|---|---|---|
-| **D1 Contract clarity** | One unambiguous source of truth per fact | Every type/enum/DDL/JSON-schema has exactly one canonical home; no dialect or unit ambiguity |
-| **D2 AC coverage** | §97 GWT ACs cover every normative claim | Every prose rule has a `**Verifies:**` AC; no underclaim banners |
-| **D3 Edge & error** | All failure modes enumerated | Closed-set outcome enums; explicit timeouts/retries/concurrency rules; no "should handle errors" handwaving |
-| **D4 Examples** | Runnable, copy-pasteable artifacts | Every contract has an example payload, every flow has a worked transcript |
-| **D5 Cross-refs** | External pointers resolve in-tree | Every link/citation lands inside a canonical AC slot; no dangling external dep |
+Memory note: this turn lifts the "spec-only" lock because you said "implementation". Spec edits still respect the 7-folder scope lock.
 
-## Current state (from cache)
+## Architecture (one diagram)
 
 ```text
-Module                            Tot   D1   D2   D3   D4   D5  Open issues
-22-git-logs-v2                     76   18   14   16   12   16   0  (cache pre-AC-80)
-23-app-database                    97   19   20   18   20   20   3
-24-app-design-system-and-ui        95   20   20   18   20   15   3
-25-app-issues                      93   18   19   17   20   18   3
-26-gitlogs-diagrams                94   20   20   18   19   15   3
-27-spec-toolchain                  92   18   19   18   17   20   0
-28-universal-ci-cli                97   20   20   18   19   20   3
+  ┌──────────────────┐  WP App-Password / SSH-key signed
+  │ glci (Go CLI)    │ ───────────────────────────────► ┌──────────────────────┐
+  └──────────────────┘                                  │  WP Git Logs plugin  │
+  ┌──────────────────┐  fetch (same-origin, WP nonce)   │  PHP · REST · SQLite │
+  │ wp-admin UI (TS) │ ───────────────────────────────► │  10 endpoints        │
+  └──────────────────┘                                  └──────────────────────┘
+                                                              │
+                                                              ▼
+                                                     root.sqlite + per-SHA *.sqlite
 ```
 
-Two distinct workloads: **spec/22 self-lift** (single big push, +24 expected) and **15 specific issues** spread across the other 6 modules (most are 1-AC fixes).
+No Go backend. No standalone dashboard. WP plugin is the single source of truth.
 
----
+## Phase 1 — Walking skeleton (MVP)
 
-## Phase plan
+Goal: end-to-end "hello world" across all four components. **One** REST endpoint, **one** CLI command, **one** UI page.
 
-Sequenced largest-leverage first. Each phase is independently shippable; lockstep budget noted per phase.
+- `git-logs-plugin/`: PHP plugin scaffold, activates in WP, registers `/wp-json/gitlogs/v1/health`, opens root SQLite on activate, runs migration #1 (one table).
+- `glci/`: Go module, `glci ping <wp-url>` calls `/health` with App Password auth, prints OK.
+- `admin-ui/`: Vite + React, builds to `plugin/build/`, plugin enqueues bundle on a "Git Logs" wp-admin page that hits `/health` and renders status.
+- CI: GitHub Actions per repo — `phpcs` + `phpstan` for plugin, `go test ./... + golangci-lint` for CLI, `tsc + vitest` for UI.
 
-### Phase 1 — spec/22 self-lift (76 → ≥92), ~3 sub-phases
+Acceptance: fresh WordPress install + plugin activation + `glci ping` + admin page = green.
 
-**Why first:** lifts tree mean from 92.0 → 95.4 alone.
+## Phase 2 — Auth lanes (spec/22 §auth)
 
-Cache D2=14, D4=12, D1=18 — three weakest dims:
+- WP App Password lane (cookie + Basic for REST).
+- SSH-key signed-request lane (Ed25519, nonce + timestamp window per spec/22).
+- Shared PHP middleware that resolves `current_user` from either lane.
+- glci: `glci auth login` (App Password) and `glci auth key add` (SSH key registration).
 
-- **1a (D4 Examples, +6 expected):** Add worked transcripts to the 11 "governed-but-unnamed" sibling files identified in AC-80; each gets a `## Example` block (sample request, sample response, sample DB row). Lockstep: §97 patch + §00/§98/§99 patch.
-- **1b (D2 AC coverage, +5 expected):** Walk the §97 AC index against `01-foundation/*` and `02-features/*` prose; every normative paragraph without a `**Verifies:**` link gets an AC stub. Lockstep: §97 minor + §00/§98/§99 patch.
-- **1c (D1 Contract clarity, +2 expected):** Promote inline DDL fragments scattered across §10–§13 into a single `10-database/00-schema.sql` canonical file; everywhere else `link, never restate` (Lesson #36). Lockstep: §97 patch + §00/§98/§99 patch.
+## Phase 3 — Database layer (spec/23)
 
-### Phase 2 — spec/26 D5 + D4 (94 → 99)
+- Root SQLite schema: repos, branches, runs, sha_index, users, audit.
+- Per-SHA SQLite file lifecycle: create on first push, sealed when run completes, GC policy.
+- PHP repository classes (one per aggregate), prepared statements only, WAL mode.
+- Migration runner with `phinx`-style versioning.
 
-- **2a:** "Missing Authoritative Source (spec/22)" — every `.mmd` diagram cites the §22 AC it visualises in front-matter `verifies:` field. Add JSON-schema for diagram metadata.
-- **2b:** Inline `.mmd` source content into the spec body (currently file-only); ensures auditor walker sees it.
-- **2c:** Replace `xmllint` external dep with a vendored Node check (or document the Lesson #36 cross-ref to §27).
+## Phase 4 — Full REST surface (spec/22, all 10 endpoints)
 
-### Phase 3 — spec/24 D5 + D3 (95 → 99)
+`POST /runs`, `GET /runs/{id}`, `POST /runs/{id}/events`, `POST /runs/{id}/finalize`, `GET /repos`, `GET /repos/{id}/shas`, `GET /shas/{sha}/diagram`, `GET /diagrams/{id}`, `GET /audit`, `POST /admin/gc`. Includes OpenAPI 3 doc generated from PHP attributes; mirrored to `glci/internal/api/openapi.yaml`.
 
-- **3a:** "External Dependency §07 Missing" — §07 is out-of-scope per scope lock; add an in-§24 "Design Token Contract" section that fully self-contains the tokens needed (no §07 dependency). This converts a cross-ref into a local contract.
-- **3b:** "Missing linter-scripts" — bind the design-system-related linters to canonical §27 slots (Lesson #36 link, never restate).
-- **3c:** Sidebar State Concurrency — add closed-state enum `{COLLAPSED, EXPANDED, PINNED, FLOATING}` + transition table.
+## Phase 5 — glci feature parity (spec/28)
 
-### Phase 4 — spec/25 D5 + D3 + D1 (93 → 98)
+- Runtime detection (TS/Go/PHP/Rust/C# per spec/28 §03).
+- Command surface: `init`, `run`, `submit`, `status`, `diagram`, `config` (spec/28 §04).
+- CI-provider bindings: GitHub Actions, GitLab CI, generic (spec/28 §08).
+- Output classification + error catalog (spec/28 §07, §09).
+- Config resolution chain: flag > env > file > defaults (spec/28 §05).
 
-- **4a:** "Truncated context" — apply Lesson #11 walker tier-1 fix locally (already shipped in audit harness; this phase verifies it lands per-file).
-- **4b:** "Inconsistent Severity Enums" — pick one severity enum (suggest `{BLOCKING, CRITICAL, HIGH, MEDIUM, LOW, INFO}`) and pin in §97 as canonical AC; both child trackers link.
-- **4c:** "Ambiguous 'Phase 153'" references — convert every bare `Phase 153` to `Phase 153 Task X` with link.
+## Phase 6 — Generic CLI runtime (spec/13–16, referenced by spec/28)
 
-### Phase 5 — spec/28 D3 + D4 (97 → 99)
+Pulled into `glci/internal/runtime` as a reusable Go package: parallel V→V+5 update discovery (spec/14 §24), pinned-installer self-update, `Status.ps1`/`Status.sh` JSON contract, pre/post-command hooks, JSON fallback store.
 
-- **5a:** "Parallel runtime failures" — add a closed outcome enum + state machine for parallel-step failures (mirrors spec/13 AC-22 concurrency pattern).
-- **5b:** "SSH signature generation example" — add a worked `ssh-keygen -Y sign` transcript with sample stdin/stdout.
-- **5c:** "Log shipping timeout" — add explicit `TIMEOUT_MS=30000` constant + retry policy (mirror spec/27 AC-T-28 R3).
+## Phase 7 — Admin UI full surface (spec/24, spec/26)
 
-### Phase 6 — spec/23 D3 + D1 (97 → 99)
+- Design system: tokens, typography, motion (spec/24 §01..§06).
+- Pages: dashboard, run detail, diagram viewer (Mermaid), repo list, audit log, settings.
+- spec/26 diagram parity: all 24 AC-DG diagrams render identically client-side.
+- a11y: WCAG 2.2 AA, keyboard nav, screen-reader pass.
 
-- **6a:** "Conflicting DDL Dialects" — declare canonical engine (suggest SQLite per Core memory) at §00; every other dialect block is moved to an explicit `## Migration target: <engine>` annexe.
-- **6b:** "SQLite Busy Timeout/WAL" — link to §13 AC-22 + §05 AC-SD-22 (Lesson #36, do NOT restate).
-- **6c:** "Timestamp unit ambiguity" — pin `ALL timestamps are UTC ISO-8601 strings; INTEGER columns are seconds-since-epoch` in §00 + AC.
+## Phase 8 — Hardening + release
 
-### Phase 7 — spec/27 D4 + D1 (92 → 96)
+- E2E: Playwright (UI ↔ plugin) + `glci` integration tests against ephemeral WP container.
+- Load tests: 1000 concurrent run-events.
+- Release pipeline: WP.org plugin SVN push, `glci` GoReleaser → GitHub releases + Homebrew tap + scoop bucket.
+- Security: dependency scan, RLS-equivalent (capability checks) audit, SBOM.
 
-- **7a:** Add a worked end-to-end transcript: `linter-scripts/audit-ai-implementability.py spec/22-git-logs-v2 --json` → sample output → interpretation.
-- **7b:** Tighten 2 D1 ambiguities (TBD until we run a fresh `--force` re-score; gateway is up per Lesson #38).
+## Backlog — Listed up front
 
-### Phase 8 — Final tree-wide re-score (gate to 100%)
+- **P1** Walking skeleton
+- **P2** Auth lanes
+- **P3** Database layer
+- **P4** Full REST surface
+- **P5** glci feature parity
+- **P6** Generic CLI runtime
+- **P7** Admin UI full surface
+- **P8** Hardening + release
 
-- Run `python3 linter-scripts/audit-ai-implementability.py --modules 22,23,24,25,26,27,28 --force --report-only` against `.lovable/cache/audit-ai/`.
-- Any module < 100 → open a follow-up sub-phase against its remaining `issues[]`.
-- Update scorecard memory snapshot with new totals.
+`next` after approval = start P1. I will only do **one phase per `next`**, render a per-phase done-checklist when complete, and ask before starting the next.
 
----
+## Open questions (none blocking; flag if you disagree)
 
-## Cross-cutting principles enforced every phase
+1. **Plugin repo name** — proposing `git-logs` (slug for WP.org). OK?
+2. **Go module path** — proposing `github.com/<your-handle>/glci`. Confirm handle.
+3. **Mermaid renderer in UI** — using `mermaid` npm (client-side). spec/26 doesn't mandate server-side render. OK?
+4. **WP min version** — proposing WP 6.5 + PHP 8.1. OK?
+5. **glci distribution** — Homebrew + Scoop + raw binaries. Add `apt`/`yum` later? (P8 decision, not blocking.)
 
-1. **Lockstep:** every spec edit touches `§97 + §98 row + §99 inventory` in one commit; banner bumps follow Lesson #25 (minor for new content, patch for prose).
-2. **Lesson #36 always:** new cross-module facts **link, never restate** — eliminates a whole drift class.
-3. **Closed enumerations always:** any "etc." or "language-specific exception" gets converted to an explicit Exception Ledger (Lesson #22).
-4. **`**Verifies:**` on every new AC** (Lesson #16/#17), authored via `linter-scripts/fill-missing-acceptance-criteria.cjs` not by hand.
-5. **5 strict gates GREEN before declaring phase closed:** lockstep · tree-health strict · version-parity · freshness · folder-refs.
-6. **Re-score after every spec/22 phase + at end of every other phase** (gateway is up per Lesson #38; single-module `--force` is cheap).
-
----
-
-## What I need from you
-
-Pick the entry point — recommended order is the impact ranking above (**Phase 1 = spec/22**), but you may want a different driver:
-
-1. **Phase 1 (spec/22 self-lift)** — biggest single-module lift, highest leverage.
-2. **Phase 8-style "quick wins" sweep first** — close all 15 small issues across modules 23/24/25/26/28 before tackling spec/22; faster green-checks but smaller mean lift.
-3. **Re-score first** — burn one gateway call to refresh all 7 cache entries (cache may already be stale; numbers above could change), then re-plan.
-4. **Different module first** — pick any of the 7 by name.
+If any of those are wrong, tell me before P1.
