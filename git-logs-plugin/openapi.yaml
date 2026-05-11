@@ -1,0 +1,468 @@
+openapi: 3.0.3
+info:
+  title: Git Logs Plugin API
+  version: 0.4.0
+  description: |
+    REST surface exposed by the WordPress Git Logs plugin (spec/22).
+    All endpoints (except /health) require authentication via either:
+      - WP App Password (HTTP Basic), or
+      - X-GitLogs-Auth: GLCI1-ED25519 keyId=<id>,nonce=<n>,ts=<unix>,sig=<base64>
+
+    Canonical signing string for the Ed25519 lane (LF-separated, no trailing LF):
+      GLCI1-ED25519
+      <METHOD>
+      <PATH-AND-QUERY>
+      <SHA256_HEX_OF_BODY>
+      <NONCE>
+      <TIMESTAMP>
+      <KEY_ID>
+servers:
+  - url: https://example.test/wp-json/git-logs/v1
+    description: Replace with your WP base + /wp-json/git-logs/v1
+
+security:
+  - basicAppPassword: []
+  - ed25519Signed: []
+
+tags:
+  - name: meta
+  - name: auth
+  - name: repos
+  - name: runs
+  - name: events
+  - name: audit
+  - name: admin
+
+paths:
+  /health:
+    get:
+      tags: [meta]
+      security: []
+      summary: Public health probe
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Health" }
+
+  /whoami:
+    get:
+      tags: [auth]
+      summary: Authenticated identity probe
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/WhoAmI" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /keys:
+    get:
+      tags: [auth]
+      summary: List current user's Ed25519 keys
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  keys:
+                    type: array
+                    items: { $ref: "#/components/schemas/PublicKeySummary" }
+    post:
+      tags: [auth]
+      summary: Register a new Ed25519 public key for the current user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [label, pubkey_b64]
+              properties:
+                label:      { type: string, maxLength: 100 }
+                pubkey_b64: { type: string, description: base64 of 32-byte raw Ed25519 pubkey }
+      responses:
+        "201": { description: created, content: { application/json: { schema: { type: object, properties: { id: { type: string } } } } } }
+        "400": { $ref: "#/components/responses/BadRequest" }
+
+  /keys/{id}:
+    delete:
+      tags: [auth]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, pattern: "^[A-Fa-f0-9]{8}$" }
+      responses:
+        "200": { description: deleted }
+        "404": { description: not found }
+
+  /repos:
+    get:
+      tags: [repos]
+      parameters:
+        - in: query
+          name: include_archived
+          schema: { type: string, enum: ["0","1"], default: "0" }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  repos: { type: array, items: { $ref: "#/components/schemas/Repo" } }
+    post:
+      tags: [repos]
+      summary: Upsert a repo by slug
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [slug, display_name]
+              properties:
+                slug:           { type: string, pattern: "^[a-z0-9][a-z0-9._/-]{0,127}$" }
+                display_name:   { type: string }
+                remote_url:     { type: string, nullable: true }
+                default_branch: { type: string, default: main }
+      responses:
+        "201":
+          description: created/updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:   { type: integer }
+                  slug: { type: string }
+
+  /runs:
+    get:
+      tags: [runs]
+      parameters:
+        - in: query
+          name: repo_slug
+          required: true
+          schema: { type: string }
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 200, default: 50 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  runs: { type: array, items: { $ref: "#/components/schemas/Run" } }
+        "404": { description: unknown repo }
+    post:
+      tags: [runs]
+      summary: Create a new run (auto-transitions from queued to running)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [repo_slug, branch, sha, ci_provider]
+              properties:
+                repo_slug:   { type: string }
+                branch:      { type: string }
+                sha:         { type: string, pattern: "^[0-9a-f]{40}$" }
+                ci_provider: { type: string, enum: [github, gitlab, bitbucket, azure, jenkins, local, other] }
+                ci_run_url:  { type: string, format: uri, nullable: true }
+                metadata:    { type: object, additionalProperties: true }
+      responses:
+        "201": { description: created, content: { application/json: { schema: { type: object, properties: { id: { type: string, format: uuid } } } } } }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "404": { description: unknown repo_slug }
+
+  /runs/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [runs]
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { type: object, properties: { run: { $ref: "#/components/schemas/Run" } } } } } }
+        "404": { description: unknown run }
+
+  /runs/{id}/events:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [events]
+      summary: Append an events batch (idempotent on (run_id, seq))
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [events]
+              properties:
+                events:
+                  type: array
+                  items: { $ref: "#/components/schemas/Event" }
+      responses:
+        "202": { description: accepted, content: { application/json: { schema: { $ref: "#/components/schemas/AppendResult" } } } }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "404": { description: unknown run }
+    get:
+      tags: [events]
+      parameters:
+        - in: query
+          name: after_seq
+          schema: { type: integer, minimum: 0, default: 0 }
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 500, default: 200 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events: { type: array, items: { $ref: "#/components/schemas/Event" } }
+
+  /runs/{id}/finalize:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [runs]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:    { type: string, enum: [succeeded, failed, cancelled, timed_out] }
+                exit_code: { type: integer, nullable: true }
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { type: object, properties: { run: { $ref: "#/components/schemas/Run" } } } } } }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "404": { description: unknown run }
+
+  /audit:
+    get:
+      tags: [audit]
+      summary: Admin-only audit log read
+      parameters:
+        - in: query
+          name: action
+          schema: { type: string }
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 500, default: 100 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  entries: { type: array, items: { $ref: "#/components/schemas/AuditEntry" } }
+        "403": { description: forbidden }
+
+  /admin/migrate:
+    get:
+      tags: [admin]
+      summary: List applied migration versions
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  applied: { type: array, items: { type: string } }
+    post:
+      tags: [admin]
+      summary: Apply pending migrations
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/MigrateResult" } } } }
+        "500": { description: failed, content: { application/json: { schema: { $ref: "#/components/schemas/MigrateResult" } } } }
+
+  /admin/gc:
+    post:
+      tags: [admin]
+      summary: Garbage-collect old per-SHA SQLite files
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                older_than_days: { type: integer, minimum: 1, maximum: 3650, default: 90 }
+                dry_run:         { type: boolean, default: true }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/GcResult" }
+
+components:
+  securitySchemes:
+    basicAppPassword:
+      type: http
+      scheme: basic
+      description: WordPress Application Password (Users → Profile → Application Passwords).
+    ed25519Signed:
+      type: apiKey
+      in: header
+      name: X-GitLogs-Auth
+      description: |
+        Custom signed header. Format:
+          GLCI1-ED25519 keyId=<id>,nonce=<n>,ts=<unix>,sig=<base64>
+
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    BadRequest:
+      description: Validation error
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        error: { type: string }
+
+    Health:
+      type: object
+      properties:
+        status:           { type: string, example: ok }
+        plugin:           { type: string, example: git-logs }
+        plugin_version:   { type: string }
+        wp_version:       { type: string }
+        php_version:      { type: string }
+        rest_namespace:   { type: string }
+        server_time_utc:  { type: string, format: date-time }
+
+    WhoAmI:
+      type: object
+      properties:
+        user_id:         { type: integer }
+        user_login:      { type: string }
+        display_name:    { type: string }
+        roles:           { type: array, items: { type: string } }
+        auth_lane:       { type: string, enum: [wp_session, ed25519] }
+        server_time_utc: { type: string, format: date-time }
+
+    PublicKeySummary:
+      type: object
+      properties:
+        id:            { type: string, pattern: "^[A-Fa-f0-9]{8}$" }
+        label:         { type: string }
+        created_utc:   { type: string, format: date-time }
+        last_used_utc: { type: string, format: date-time, nullable: true }
+
+    Repo:
+      type: object
+      properties:
+        id:             { type: integer }
+        slug:           { type: string }
+        display_name:   { type: string }
+        remote_url:     { type: string, nullable: true }
+        default_branch: { type: string }
+        created_utc:    { type: string, format: date-time }
+        archived:       { type: integer, enum: [0,1] }
+
+    Run:
+      type: object
+      properties:
+        id:            { type: string, format: uuid }
+        repo_id:       { type: integer }
+        branch:        { type: string }
+        sha:           { type: string, pattern: "^[0-9a-f]{40}$" }
+        ci_provider:   { type: string }
+        ci_run_url:    { type: string, format: uri, nullable: true }
+        triggered_by:  { type: string, nullable: true }
+        status:        { type: string, enum: [queued, running, succeeded, failed, cancelled, timed_out] }
+        exit_code:     { type: integer, nullable: true }
+        started_utc:   { type: string, format: date-time }
+        finished_utc:  { type: string, format: date-time, nullable: true }
+        duration_ms:   { type: integer, nullable: true }
+        event_count:   { type: integer }
+        error_count:   { type: integer }
+        warn_count:    { type: integer }
+        metadata_json: { type: string, nullable: true }
+
+    Event:
+      type: object
+      required: [seq, ts_utc, stream, phase, severity, message]
+      properties:
+        seq:        { type: integer, minimum: 0 }
+        ts_utc:     { type: string, format: date-time }
+        stream:     { type: string, enum: [stdout, stderr, meta] }
+        phase:      { type: string }
+        severity:   { type: string, enum: [debug, info, warn, error, fatal] }
+        message:    { type: string }
+        attrs:      { type: object, additionalProperties: true }
+        attrs_json: { type: string, description: "Server-side serialized form of attrs (read responses only)" }
+
+    AppendResult:
+      type: object
+      properties:
+        appended: { type: integer }
+        errors:   { type: integer }
+        warns:    { type: integer }
+
+    AuditEntry:
+      type: object
+      properties:
+        id:            { type: integer }
+        ts_utc:        { type: string, format: date-time }
+        actor_user_id: { type: integer, nullable: true }
+        actor_login:   { type: string, nullable: true }
+        auth_lane:     { type: string, enum: [wp_session, ed25519, system] }
+        action:        { type: string }
+        target_type:   { type: string, nullable: true }
+        target_id:     { type: string, nullable: true }
+        request_ip:    { type: string, nullable: true }
+        request_id:    { type: string, nullable: true }
+        result:        { type: string, enum: [ok, denied, error] }
+        detail_json:   { type: string, nullable: true }
+
+    MigrateResult:
+      type: object
+      properties:
+        applied: { type: array, items: { type: string } }
+        skipped: { type: array, items: { type: string } }
+        failed:  { type: string, nullable: true }
+
+    GcResult:
+      type: object
+      properties:
+        dry_run:         { type: boolean }
+        older_than_days: { type: integer }
+        count:           { type: integer }
+        bytes_freed:     { type: integer }
+        shas:            { type: array, items: { type: string, pattern: "^[0-9a-f]{40}$" } }
