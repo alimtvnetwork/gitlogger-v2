@@ -172,6 +172,72 @@ def check_parity_declaration(overview_text: str) -> list[str]:
     return errs
 
 
+def check_narrative_header(mmd_files: list[Path]) -> list[str]:
+    """clause-6 (AC-DG-23): every active .mmd MUST carry the 4 canonical
+    narrative-header keys, in the prescribed order, before the first
+    Mermaid directive line. Continuation lines + other `%%` comments
+    between keys are permitted."""
+    errs: list[str] = []
+    for p in mmd_files:
+        if is_exempt(p):
+            continue
+        try:
+            text = p.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        # Slice out a YAML frontmatter block if present.
+        body = text
+        if body.startswith("---"):
+            end = body.find("\n---", 3)
+            if end >= 0:
+                body = body[end + 4:]
+        seen_keys: list[tuple[str, int]] = []
+        directive_at: int | None = None
+        for i, raw in enumerate(body.splitlines(), start=1):
+            stripped = raw.lstrip()
+            if not stripped:
+                continue
+            if stripped.startswith("%%"):
+                payload = stripped[2:].lstrip()
+                for key in NARRATIVE_HEADER_KEYS:
+                    if payload.startswith(key) and key not in {k for k, _ in seen_keys}:
+                        seen_keys.append((key, i))
+                        break
+                continue
+            # First non-comment, non-blank line bounds the header window
+            # iff it begins a Mermaid directive.
+            for d in MERMAID_DIRECTIVES:
+                if stripped.startswith(d):
+                    directive_at = i
+                    break
+            if directive_at is not None:
+                break
+            # Otherwise (e.g. unexpected prose), stop scanning to avoid
+            # spurious matches mid-diagram.
+            directive_at = i
+            break
+        # Validate
+        if not seen_keys:
+            errs.append(f"clause-6: {p.name}: no AC-DG-23 narrative-header keys found before first directive")
+            continue
+        observed = [k for k, _ in seen_keys]
+        missing = [k for k in NARRATIVE_HEADER_KEYS if k not in observed]
+        if missing:
+            errs.append(
+                f"clause-6: {p.name}: AC-DG-23 missing key(s) "
+                f"{missing} (observed order: {observed})"
+            )
+            continue
+        # Order check
+        canonical_idx = [NARRATIVE_HEADER_KEYS.index(k) for k in observed]
+        if canonical_idx != sorted(canonical_idx):
+            errs.append(
+                f"clause-6: {p.name}: AC-DG-23 keys out of order "
+                f"(observed: {observed}; expected order: {list(NARRATIVE_HEADER_KEYS)})"
+            )
+    return errs
+
+
 def run_against(diagrams_dir: Path, which: str = "all") -> list[str]:
     if not diagrams_dir.exists():
         return [f"clause-0: diagrams dir not found: {diagrams_dir}"]
@@ -182,6 +248,17 @@ def run_against(diagrams_dir: Path, which: str = "all") -> list[str]:
         return ["vacuous-pass: §26 has zero .mmd files"]
     if not overview_text:
         return ["vacuous-pass: §26 §00 absent"]
+
+    errs: list[str] = []
+    if which in ("all", "consumes-binding-completeness"):
+        errs.extend(check_consumes_binding(overview_text, mmd_files))
+    if which in ("all", "er-entity-superset"):
+        er = diagrams_dir / "01-er-diagram.mmd"
+        if er.exists():
+            errs.extend(check_er_superset(er.read_text(encoding="utf-8")))
+        else:
+            errs.append("clause-2: 01-er-diagram.mmd absent")
+
 
     errs: list[str] = []
     if which in ("all", "consumes-binding-completeness"):
