@@ -366,8 +366,10 @@ func Doctor(args []string) error {
 	}
 	fmt.Println("doctor: config      ok")
 	// Check 3: server reach via GET /get-logs?q=<repo>&limit=0 (§06).
+	authCfg, _ := resolveAuth(cfg, "", "")
 	status, rerr := ship.Reach(context.Background(), ship.Options{
 		ServerURL: cfg.ServerURL,
+		Auth:      authCfg,
 	}, cfg.RepoURL, cfg.TempToken, cfg.Token)
 	switch {
 	case rerr != nil:
@@ -388,6 +390,39 @@ func Doctor(args []string) error {
 }
 
 // --- helpers ---
+
+// resolveAuth returns an *auth.Config when the resolved configuration
+// indicates Lane B (AuthMode=ssh) — explicit flags win, then env, then
+// cfg.SSHKeyPath. Returns (nil, nil) when no auth lane is configured;
+// callers can ship without auth (TempToken/Token headers may still be set).
+func resolveAuth(cfg *config.Config, flagKeyID, flagKeyFile string) (*auth.Config, error) {
+	if cfg.AuthMode != "ssh" {
+		return nil, nil
+	}
+	a := &auth.Config{
+		Mode:  auth.ModeEd25519,
+		KeyID: flagKeyID,
+	}
+	keyFile := flagKeyFile
+	if keyFile == "" {
+		keyFile = cfg.SSHKeyPath
+	}
+	if keyFile == "" {
+		return nil, fmt.Errorf("GLCI-AUTH-SSH-NO-KEY: AuthMode=ssh requires --key-file or GLCI_SSH_KEY_PATH")
+	}
+	seed, err := auth.LoadPrivateSeed(keyFile)
+	if err != nil {
+		return nil, fmt.Errorf("GLCI-AUTH-SSH-KEY-LOAD: %w", err)
+	}
+	a.PrivateSeed = seed
+	if err := a.Resolve(); err != nil {
+		return nil, err
+	}
+	if a.KeyID == "" {
+		return nil, fmt.Errorf("GLCI-AUTH-SSH-NO-KEYID: pass --key-id or set GLCI_KEY_ID")
+	}
+	return a, nil
+}
 
 type cmdErr struct {
 	code int
