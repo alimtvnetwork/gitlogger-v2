@@ -15,6 +15,8 @@ status: active
 
 ## Purpose
 
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
+
 Turn the H1/H2 honor-system into a CI check: when a `99-consistency-report.md`
 file is materially edited (any non-stamp line changed in the diff), the
 `<!-- verified-phase: NNN -->` stamp MUST be bumped to the current phase

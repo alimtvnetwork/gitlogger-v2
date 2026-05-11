@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/check-spec-folder-refs.py`](../../linter-scripts/check-spec-folder-refs.py)  
 **Category:** Validator (read-only)
 
+
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

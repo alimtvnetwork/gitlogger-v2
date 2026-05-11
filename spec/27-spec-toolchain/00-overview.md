@@ -22,6 +22,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 <!-- h10-verified-phase: 158 -->
 **Scope:** `linter-scripts/` + `.github/workflows/` — every executable artifact that maintains, validates, audits, or scaffolds the `spec/` tree.
 
+
+**Test pair:** N/A — audit-aid  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 > 🤖 **Walker-Pin (Lesson #55 + Lesson #61 — surfaced for context-bounded auditors)**

@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/spec-cross-links.allowlist`](../../linter-scripts/spec-cross-links.allowlist)  
 **Category:** Configuration (consumed by §01)
 
+
+**Test pair:** N/A — convention  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/readme-cross-links.md`](../../linter-scripts/readme-cross-links.md)  
 **Category:** Configuration (registry of sibling-repo readme links)
 
+
+**Test pair:** N/A — convention  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

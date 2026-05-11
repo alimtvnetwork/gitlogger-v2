@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/scaffold-spec-module.cjs`](../../linter-scripts/scaffold-spec-module.cjs)
 **Category:** Filler / scaffolder
 
+
+**Test pair:** N/A — scaffold  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

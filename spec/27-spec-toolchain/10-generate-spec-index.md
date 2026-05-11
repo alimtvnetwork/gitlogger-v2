@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/generate-spec-index.cjs`](../../linter-scripts/generate-spec-index.cjs)  
 **Category:** Generator
 
+
+**Test pair:** N/A — generator  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

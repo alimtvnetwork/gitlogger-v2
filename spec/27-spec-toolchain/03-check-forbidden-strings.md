@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/check-forbidden-strings.py`](../../linter-scripts/check-forbidden-strings.py)  
 **Category:** Validator (read-only)
 
+
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

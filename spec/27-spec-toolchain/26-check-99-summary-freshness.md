@@ -15,6 +15,8 @@ status: active
 
 ## Purpose
 
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
+
 Codify the Phase 136/139 lesson into a CI gate: §99 `## Summary` narrative claims
 (counts, versions, status flags) accumulate stale assertions over time and
 diverged from the source-of-truth (§97 ACs, §00 inventory) by 19 modules in

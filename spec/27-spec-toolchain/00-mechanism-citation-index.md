@@ -14,6 +14,8 @@ axis_rationale: "Inverts the per-cohort citation graph (AC → slot file) into a
 
 > 🤖 **Why this file exists.** Today the citation graph is one-way: each cohort's `97-acceptance-criteria.md` cites a §27 active-gate slot via a `**Mechanically enforced by:**` paragraph. There is no reverse pointer from the slot file (or any §27 surface) listing the ACs across the 7 cohorts that depend on that slot. A Raw-LLM walker investigating "if I change slot 64, what breaks?" must run a 7-cohort grep — no single bundle reachable in tier-1 answers it. This file is the reverse index: per-slot → list-of-AC-callers + cohort + role (primary citer, drift-contract pin, walker-pin, etc.). Lifts §27 R-band C4 (Consistency) **15 → 16** by making the citation graph bidirectional and audit-followable.
 
+
+**Test pair:** N/A — audit-aid  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## 1. Reverse index — per-slot AC callers

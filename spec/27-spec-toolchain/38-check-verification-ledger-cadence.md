@@ -6,6 +6,8 @@
 
 ## What it does
 
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
+
 Mechanically enforces the §25 `02-consolidated-audit-findings/00-overview.md`
 **invariant 5** verification-cadence rule (A-46 Sess-56): every spec-improvement
 session that does NOT materially edit a `Carried-open` row MUST append a row

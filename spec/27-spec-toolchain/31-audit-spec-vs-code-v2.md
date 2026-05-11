@@ -6,6 +6,8 @@
 **Category:** Auditor (AI-driven by default; **deterministic mode** + **hard scoring gates** + **CI threshold flags** + **--explain debugger** + **CLI contract self-tests** ×7 incl. determinism + README parity + footer parity + §27 inventory parity triangle + WEIGHTS dimension-table parity + **inventory README** + **QA-baseline footer** + **memo retrospective-heading meta-linter** + **grammar-library pin contract** + **multi-file enumeration parity contract**)
 **Predecessor:** §30 [`30-audit-spec-vs-code.md`](./30-audit-spec-vs-code.md)
 
+
+**Test pair:** N/A — audit-aid  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

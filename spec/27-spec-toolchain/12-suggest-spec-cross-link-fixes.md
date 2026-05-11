@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/suggest-spec-cross-link-fixes.py`](../../linter-scripts/suggest-spec-cross-link-fixes.py)  
 **Category:** Generator (advisory + optional `--apply`)
 
+
+**Test pair:** N/A — generator  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

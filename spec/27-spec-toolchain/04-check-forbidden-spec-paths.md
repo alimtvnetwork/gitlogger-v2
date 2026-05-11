@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/check-forbidden-spec-paths.sh`](../../linter-scripts/check-forbidden-spec-paths.sh)  
 **Category:** Validator (read-only)
 
+
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

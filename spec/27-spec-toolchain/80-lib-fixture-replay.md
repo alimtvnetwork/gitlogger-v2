@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/_lib/fixture_replay/`](../../linter-scripts/_lib/fixture_replay/)  
 **Category:** Shared library (NOT a gate — imported by gates #17 + #18 + future integration-test gates)
 
+
+**Test pair:** N/A — scaffold  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

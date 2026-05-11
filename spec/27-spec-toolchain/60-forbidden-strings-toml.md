@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/forbidden-strings.toml`](../../linter-scripts/forbidden-strings.toml)
 **Category:** Configuration (consumed by §03)
 
+
+**Test pair:** N/A — convention  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

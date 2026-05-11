@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/generate-trace-map.py`](../../linter-scripts/generate-trace-map.py)  
 **Category:** Generator (writes `spec/27-spec-toolchain/trace-map.md` + `.lovable/memory/audit/trace-map.json`)
 
+
+**Test pair:** N/A — generator  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

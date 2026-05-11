@@ -5,6 +5,8 @@
 **Source:** [`linter-scripts/generate-gwt-acceptance.py`](../../linter-scripts/generate-gwt-acceptance.py)  
 **Category:** Generator (AI-driven)
 
+
+**Test pair:** N/A — generator  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

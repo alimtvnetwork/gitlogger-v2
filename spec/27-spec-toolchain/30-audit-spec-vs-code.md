@@ -6,6 +6,8 @@
 **Category:** Auditor (AI-driven, **deprecated** — kept for diffing)  
 **Successor:** §31 [`31-audit-spec-vs-code-v2.md`](./31-audit-spec-vs-code-v2.md)
 
+
+**Test pair:** N/A — audit-aid  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Purpose

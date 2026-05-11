@@ -15,6 +15,8 @@ status: Proposed (Sess-69 B-22) — spec-only authored; implementation gated on 
 
 > 🤖 **Why this file exists.** §00 §"Inventory" enumerates 49 slot files; §97 AC-T-37 four-way-parity invariant resolves the 26 active-gate count by `grep -lE '^\*\*Status:\*\*\s+Active\s+gate\s+#' spec/27-spec-toolchain/*.md | wc -l`. The 6 carrier files (TOML, three allowlists, two CI workflow mirrors, one fixture-replay library spec) are **structurally indistinguishable** from active-gate slots in path-shape but have **dead banner triples** (no `**Status:** Active gate #N` anchor) and represent **configuration data + workflow descriptions**, not gate-bearing slots. They compete for slot-numbering attention, dilute the §00 inventory readability, and force every parity verifier to filter them out per-call. This document specifies the migration plan that partitions them off into `spec/27-spec-toolchain/_carriers/`.
 
+
+**Test pair:** N/A — scaffold  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## 1. The 6 dead-banner carrier slot files

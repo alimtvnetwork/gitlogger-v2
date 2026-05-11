@@ -6,6 +6,8 @@
 **Self-test:** `python3 linter-scripts/check-ads-boundaries.py --self-test` (built-in; no separate `.sh` wrapper needed — three negative-fixture corpora live under `linter-scripts/fixtures/`)
 **Category:** Validator (read-only)
 
+
+**Test pair:** N/A — advisory  <!-- AC-T-41 closed-set axis-class stub -->
 ---
 
 ## Slot-range note
