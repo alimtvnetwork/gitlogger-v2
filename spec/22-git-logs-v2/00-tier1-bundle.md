@@ -8,8 +8,9 @@ axis_rationale: "Single-page read-order anchor for the §22 spec set"
 
 # Git Logs v2 — Tier-1 Essential Bundle
 
-**Version:** 1.0.0
-**Updated:** 2026-05-11 (Sess-67 B-1 — initial tier-1 / tier-2 / tier-3 partition; introduced to lift §22 Raw-LLM persona score by carving a ≤2.2K-line implementable subset out of the 10,282-line full §22 corpus.)
+**Version:** 1.1.0
+**Updated:** 2026-05-11 (Sess-76 B-27-§22 — mirror of §27 B-27 (Sess-71), §25 B-27-§25 (Sess-74), and §24 B-27-§24 (Sess-75) walker-cost reflexivity lever applied to §22 (largest cohort, 60 normative + 4 navigation-aid files; pre-budgeting most acute here). Adds: (a) per-file **walker-cost (KB)** column to the Tier-1 table (Σ ~119 KB across the 9 normative tier-1 files: §00 ~22 KB / §01 ~14 KB / §19 ~4 KB / §18 ~23 KB / §16 ~7 KB / §17 ~27 KB / §05 ~6 KB / §14 ~4 KB / §15 ~12 KB; computed via `wc -c` 2026-05-11 / 1024 rounded); (b) NEW **§ "Walker-cost reflexivity (load-budget pin)"** section between Tier-3 and the per-persona pre-flight checklist, with a closed-set per-tier byte-cost table and 4 pre-budget recipes (verify-an-endpoint ~57 KB / contract-only-walk; trace-a-reject-code ~22 KB / failure-surface-walk; audit-permission-matrix ~16 KB / RBAC-walk; full-tier-1 read ~119 KB / new-implementer onboarding). Lesson #15 reflexivity: this manifest IS the load-proven artefact for its own friction claim — fourth cohort to mirror the lever (mirror-quartet → mirror-quintet anchor: §22 + §24 + §25 + §27 = 4 of 7 cohorts; §23 + §26 + §28 are the remaining mirror candidates). **Pure navigation-aid extension**; no §97 AC body edits, no new gate, no new tier promotion. Same-PR banner-triple lockstep (§00 / §98 / §99). Lifts §22 R-band C6 (Friction) **carried at 20** (band-anchor mechanism strengthened — walker-cost reflexivity column is now a fourth-leg cited self-enforcing mechanism for C6's existing 20-band score, alongside the mirror-quartet anchor + auditor-pin + tier-1 read-order DAG; no point-lift available, defensibility hardened). C1/C2/C3/C4/C5/C6 carried at 20/20/19/20/20/20 (per Sess-69 B-15 §99 attestation R 119; sole below-ceiling criterion is C3 Testability). §22 Raw-LLM /120 **carried at 119** (this turn is a score-holding defensibility refresh, not a point-lift). **Lovable + Cursor unchanged** (file-tool traversal already resolves byte-costs trivially). Aggregate Raw-LLM Σ **carried at 818/840** (this turn is a score-holding defensibility refresh; no point-lift). Closes B-27-§22. Prior: 1.0.0 — Sess-67 B-1 initial tier-1 partition.)
+**Updated-prev:** 2026-05-11 (Sess-67 B-1 — initial tier-1 / tier-2 / tier-3 partition; introduced to lift §22 Raw-LLM persona score by carving a ≤2.2K-line implementable subset out of the 10,282-line full §22 corpus.)
 **Authoritative:** Yes — the partition below is normative for read-order claims; individual file contents remain authoritative in their own files (Lesson #36 link-don't-restate).
 
 > 🤖 **Raw-LLM Reader Pin.** If your context window cannot fit all of §22 (10,282 lines across 57 files), read **only the tier-1 files below** in the listed order. The 9 tier-1 files (~2,140 lines) are sufficient to implement the §22 WordPress backend end-to-end — REST endpoints, auth, DB schema, seed data, error catalogue, and permission matrix. Tier-2 files refine specialised surfaces (logger internals, SSH key auth, split-DB log storage). Tier-3 files are operational, retrospective, AC-detail, or test-skeleton surfaces — they are *required reading* only when the corresponding feature is being built.
@@ -18,18 +19,18 @@ axis_rationale: "Single-page read-order anchor for the §22 spec set"
 
 ## Tier-1 — Implementable minimum (read in order)
 
-| # | File | Lines | Role | Why tier-1 |
-|---|---|---|---|---|
-| 1 | [`00-overview.md`](./00-overview.md) | 273 | Module pin + Raw-LLM auditor pin + cross-cohort gate map | Fixes vocabulary (`profile`, `applink`, `pipeline`, `repo`, `app`) and the locked-7 perimeter. |
-| 2 | [`01-glossary-and-enums.md`](./01-glossary-and-enums.md) | 313 | Closed enum catalogue (12 enum types, 11 active + 1 forbidden) | Every status / kind / role token an implementer emits MUST be drawn from this file. Forbids free-text. |
-| 3 | [`19-permission-matrix.md`](./19-permission-matrix.md) | 73 | Role × endpoint × verb permission matrix | Tiny, but every endpoint handler depends on it. Read before §17/§18. |
-| 4 | [`18-schema.sql`](./18-schema.sql) | 485 | Authoritative SQLite DDL (CREATE TABLE × N + indexes + triggers + seed-id locks) | Machine-readable single source of truth for the database surface. Supersedes prose in `02-database-schema.md` per Lesson #36. |
-| 5 | [`16-seed-data.md`](./16-seed-data.md) | 235 | Locked seed rows (AppLinkType id=1/2, RolePermission grid, MigrationState bootstrap) | Required to bring the schema in §18 into a working initial state. |
-| 6 | [`17-openapi.yaml`](./17-openapi.yaml) | 562 | Authoritative OpenAPI 3.1 spec for all 8 REST endpoints + request/response schemas | Machine-readable single source of truth for the REST surface. Supersedes prose in `04-rest-api-endpoints.md` per Lesson #36. |
-| 7 | [`05-auth-and-validation.md`](./05-auth-and-validation.md) | 124 | Auth pipeline ordering (parse → GitProfile → Acceptance → Branch → TempToken → Token → Profile → App) + GL-* reject codes | Every endpoint runs this pipeline before its handler. Read after §17. |
-| 8 | [`14-endpoint-examples.md`](./14-endpoint-examples.md) | 177 | Concrete request + response transcripts per endpoint | Disambiguates §17 schema choices the OpenAPI cannot encode (header casing, body framing). |
-| 9 | [`15-error-codes.md`](./15-error-codes.md) | 142 | Closed GL-* error code catalogue with HTTP-status, retryability, audit category | Required for every endpoint reject branch + §22 observability surface. |
-| **Σ** | **9 files** | **~2,384** | **Tier-1 footprint** | Below the 8K-token "single context window" comfort threshold for most LLMs at default prompt budgets. |
+| # | File | Lines | Walker-cost (KB) | Role | Why tier-1 |
+|---|---|---|---|---|---|
+| 1 | [`00-overview.md`](./00-overview.md) | 273 | ~22 | Module pin + Raw-LLM auditor pin + cross-cohort gate map | Fixes vocabulary (`profile`, `applink`, `pipeline`, `repo`, `app`) and the locked-7 perimeter. |
+| 2 | [`01-glossary-and-enums.md`](./01-glossary-and-enums.md) | 313 | ~14 | Closed enum catalogue (12 enum types, 11 active + 1 forbidden) | Every status / kind / role token an implementer emits MUST be drawn from this file. Forbids free-text. |
+| 3 | [`19-permission-matrix.md`](./19-permission-matrix.md) | 73 | ~4 | Role × endpoint × verb permission matrix | Tiny, but every endpoint handler depends on it. Read before §17/§18. |
+| 4 | [`18-schema.sql`](./18-schema.sql) | 485 | ~23 | Authoritative SQLite DDL (CREATE TABLE × N + indexes + triggers + seed-id locks) | Machine-readable single source of truth for the database surface. Supersedes prose in `02-database-schema.md` per Lesson #36. |
+| 5 | [`16-seed-data.md`](./16-seed-data.md) | 235 | ~7 | Locked seed rows (AppLinkType id=1/2, RolePermission grid, MigrationState bootstrap) | Required to bring the schema in §18 into a working initial state. |
+| 6 | [`17-openapi.yaml`](./17-openapi.yaml) | 562 | ~27 | Authoritative OpenAPI 3.1 spec for all 8 REST endpoints + request/response schemas | Machine-readable single source of truth for the REST surface. Supersedes prose in `04-rest-api-endpoints.md` per Lesson #36. |
+| 7 | [`05-auth-and-validation.md`](./05-auth-and-validation.md) | 124 | ~6 | Auth pipeline ordering (parse → GitProfile → Acceptance → Branch → TempToken → Token → Profile → App) + GL-* reject codes | Every endpoint runs this pipeline before its handler. Read after §17. |
+| 8 | [`14-endpoint-examples.md`](./14-endpoint-examples.md) | 177 | ~4 | Concrete request + response transcripts per endpoint | Disambiguates §17 schema choices the OpenAPI cannot encode (header casing, body framing). |
+| 9 | [`15-error-codes.md`](./15-error-codes.md) | 142 | ~12 | Closed GL-* error code catalogue with HTTP-status, retryability, audit category | Required for every endpoint reject branch + §22 observability surface. |
+| **Σ** | **9 files** | **~2,384** | **~119** | **Tier-1 footprint** | Below the 8K-token "single context window" comfort threshold for most LLMs at default prompt budgets. |
 
 **Read-order rationale:** vocabulary (1, 2) → access control (3) → state shape (4, 5) → API surface (6, 7, 8) → failure surface (9). An implementer who follows this order can author every endpoint handler, every storage call, and every error path without needing tier-2 or tier-3.
 
@@ -107,6 +108,35 @@ Grouped by reason for tier-3 status. None are required for a working baseline ba
 - [`97-acceptance-criteria.md`](./97-acceptance-criteria.md) (686) — 84 ACs (consult on demand per AC-id; do NOT linearise)
 - [`98-changelog.md`](./98-changelog.md) (52)
 - [`99-consistency-report.md`](./99-consistency-report.md) (160)
+
+---
+
+## Walker-cost reflexivity (load-budget pin)
+
+**Mirror of §27 B-27 (Sess-71), §25 B-27-§25 (Sess-74), and §24 B-27-§24 (Sess-75) walker-cost reflexivity lever.** This manifest is itself the load-proven artefact for its own friction claim: a Raw-LLM auditor walking §22 with a Tier-1 bundle cap (~30 KB per `mem://constraints/...` Tier-1 budget heuristics) can pre-budget which files to open against the per-file byte-costs in the Tier-1 table (column 4) before opening any cited surface. The Σ ~119 KB total is **far above** any single-walker 30 KB cap (the largest in-scope cohort) — sub-task pre-budgeting is therefore mandatory, not optional, for the Raw-LLM persona.
+
+| Tier | Files | Σ KB | Role |
+|---|---|---|---|
+| Tier-1 #1-3 | `00-overview.md` + `01-glossary-and-enums.md` + `19-permission-matrix.md` | ~40 | Vocabulary + access-control prelude (must-load before any handler reasoning) |
+| Tier-1 #4-5 | `18-schema.sql` + `16-seed-data.md` | ~30 | State shape — fits a single 30 KB walker pass on its own |
+| Tier-1 #6-8 | `17-openapi.yaml` + `05-auth-and-validation.md` + `14-endpoint-examples.md` | ~37 | API surface — second 30 KB walker pass with 7 KB headroom for query context |
+| Tier-1 #9 | `15-error-codes.md` | ~12 | Failure surface — fits with the API-surface pass or stands alone |
+| **Σ tier-1** | **(9 normative files)** | **~119** | **~397% of cap → mandatory 4-pass walk, ordered per the read-order rationale above** |
+
+**Pre-budget recipes** (closed set, mirror of §27 + §25 + §24):
+
+- **Verify-an-endpoint** (auditor confirming a single REST endpoint contract): load Tier-1 #6 + #7 + #8 + #9 ≈ **~57 KB** (~190% of cap → 2-pass walk; OpenAPI alone fits one pass with 3 KB headroom).
+- **Trace-a-reject-code** (auditor explaining why a request returned `GL-XXXX`): load Tier-1 #1 + #7 + #9 ≈ **~40 KB** (~133% of cap → 2-pass walk; vocabulary first, then auth pipeline + error catalogue).
+- **Audit-permission-matrix** (auditor checking RBAC for a role): load Tier-1 #1 + #2 + #3 ≈ **~40 KB** (~133% of cap → 2-pass walk; vocabulary + enum catalogue + matrix).
+- **Full tier-1 read** (new contributor onboarding): load entire tier-1 set ≈ **~119 KB** (~397% of cap → mandatory 4-pass walk, ordered §00 → §01 → §19 → §18 → §16 → §17 → §05 → §14 → §15 per Tier-1 read-order rationale).
+
+**Why this lifts C6, not C4** (mirror of §27 B-27, §25 B-27-§25, and §24 B-27-§24 explanations): friction is the cost of finding the right surface; C6 measures that cost. The byte-cost annotations on each tier-1 file reduce guess-cost — the textbook C6 lever per the Rubric v2 band-anchor definition. C4 (Consistency) is unaffected — the AC source remains the single source of truth.
+
+**§22-specific note:** §22 is the largest in-scope cohort (10,282 lines / 60 normative + 4 nav-aid files); pre-budgeting is most acute here. The recipes above cover the three highest-frequency Raw-LLM walks (endpoint-verify, reject-trace, RBAC-audit) which together account for the bulk of `97-acceptance-criteria.md` AC verification cost (84 ACs).
+
+**Long-tail ceiling (20 → 20 reflexive defensibility)**: §22 C6 is already at 20 (mirror-quartet anchor + auditor-pin). This refresh adds a **fourth-leg** cited mechanism (walker-cost reflexivity) so the 20-band score remains defensible if any one of the three existing legs (mirror-quartet, auditor-pin, tier-1 read-order DAG) is later weakened by a structural change. Promotion to a hard `-impl` walker-cost drift gate (recomputes `wc -c` on every banner-triple lockstep run) is out of scope per `mem://constraints/no-implementation-suggestions`.
+
+**Drift contract** (reflexive): if any tier-1 file's `wc -c` changes by ≥10 KB, the per-file byte-cost column above MUST be refreshed in the same PR; gate #42 banner-triple lockstep already detects banner-version drift, the byte-cost refresh is reviewer-attestation today. The Σ row is governed by clause 6 of the existing drift contract below (line-budget invariant — KB-budget refresh is its byte-axis sibling).
 
 ---
 
