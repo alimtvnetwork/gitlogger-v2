@@ -1,8 +1,16 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.95.0
-**Updated:** 2026-05-11 (Sess-80 B-33 — closes §27 walker-cost asymmetry: `00-tier1-bundle.md` v1.2.0 → v1.3.0 gains per-file Walker-cost (KB) column (Σ ~419 KB) + Walker-cost reflexivity section + reflexive drift contract (special §99 cadence); cites mirror-septet anchor closure (Sess-79 B-27-§26 — 7 of 7 in-scope cohorts); `00-raw-llm-bottleneck-decomposition.md` v1.10.0 → v1.11.0 C6 row 16 → 17; §27 R total 110 → 111; aggregate Raw-LLM Σ 820 → 821/840 (97.7/100); §27 still sole Raw-LLM cohort floor; total active gates 26 unchanged.)
+**Version:** 4.96.0
+**Updated:** 2026-05-11 (Sess-81 B-3 — NEW `00-cross-cohort-read-order-dag.md` v1.0.0 root-level manifest in §27: pins canonical 7-cohort read-order §27 → §28 → §22 → §23 → §24 → §26 → §25, 9 inter-cohort edges E-1..E-9, per-cohort tier-1 KB roll-up Σ ~1,084 KB, 4 cross-cohort recipes R-1..R-4, 5-clause reflexive drift contract; §27 R C2 18 → 19 band-anchor advance; §27 R total 111 → 112; aggregate Raw-LLM Σ 821 → 822/840 (97.9/100); §27 still sole Raw-LLM cohort floor; total active gates 26 unchanged.)
+**Prior banner — Version:** 4.95.0 (Sess-80 B-33 — closes §27 walker-cost asymmetry; §27 R C6 16 → 17 band-anchor; §27 R total 110 → 111.)
 **Prior banner — Version:** 4.94.0 (Sess-74 B-28-stub-sweep — AC-T-41 ceiling reached; §27 R C3 17 → 18 band-anchor; §27 R total 109 → 110.)
+
+### 4.96.0 — 2026-05-11 — Sess-81 B-3: cross-cohort read-order DAG root manifest created (C2 18 → 19 band-anchor)
+- **Action**: Created `00-cross-cohort-read-order-dag.md` v1.0.0 — root-level manifest sitting one layer above each cohort's `00-tier1-bundle.md`. Sections: in-scope cohort set table (7 cohorts + locked perimeter), DAG ASCII diagram, canonical read-order list (§27 → §28 → §22 → §23 → §24 → §26 → §25), inter-cohort dependency edges table (E-1..E-9 with cycle check), walker-cost reflexivity cross-cohort roll-up (Σ ~1,084 KB across all 7 cohort tier-1 sets), 4 pre-budget recipes (R-1 decode-current-state ~14 KB / R-2 verify-an-AC ~25-50 KB / R-3 trace-a-gate ~70 KB / R-4 full audit ~250 KB chunked), 5-clause reflexive drift contract (cohort tier-1 KB ≥10 KB change / new edge / scope change / read-order change / §25 tier-1 mint).
+- **Banners**: cross-cohort-read-order-dag v1.0.0 NEW; §00 v4.95.0 → **v4.96.0**; §98 v4.95.0 → **v4.96.0**; §99 v3.34.0 → **v3.35.0**. AC count 40 unchanged. No new active gate. **Total active gates: 26 unchanged.** No CI workflow change.
+- **Scorecard impact**: §27 R-band C2 (Completeness) **18 → 19** (+1; band-anchor advance via 1 new cited mechanism — the cross-cohort root manifest itself, which closes the long-standing "no root above per-cohort tier-1" gap noted in `00-raw-llm-bottleneck-decomposition.md`). §27 R total **111 → 112**; aggregate Raw-LLM Σ **821 → 822/840** (97.9/100). §27 still sole Raw-LLM cohort floor at R 112 (next-lowest cohort at R 119, gap = 7). Lovable + Cursor unchanged at 120 ceiling. B-3 status "open" → "closed".
+
+
 **Prior banner — Version:** 4.93.0 (Sess-73 B-28 — AC-T-41 minted; §27 R C3 16 → 17 band-anchor.)
 **Total active gates: 26**
 
