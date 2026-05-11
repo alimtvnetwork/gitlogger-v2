@@ -13,6 +13,13 @@ func Run(args []string, version string) error {
 		return nil
 	}
 
+	// Global --self-test short-circuits subcommand dispatch (§04 v1.2.0).
+	for _, a := range args {
+		if a == "--self-test" {
+			return SelfTest(filterOut(args, "--self-test"))
+		}
+	}
+
 	switch args[0] {
 	case "ping":
 		return Ping(args[1:])

@@ -323,13 +323,31 @@ func Doctor(args []string) error {
 	}
 	fmt.Println("doctor: detect      ok")
 	// Check 2: config resolves.
-	if _, err := config.Resolve(*cwd, config.Flags{}, os.Getenv); err != nil {
+	cfg, err := config.Resolve(*cwd, config.Flags{}, os.Getenv)
+	if err != nil {
 		fmt.Fprintln(os.Stderr, "doctor: "+err.Error())
 		return exitCode(5)
 	}
 	fmt.Println("doctor: config      ok")
-	// Check 3 (server reach) requires shipping client — defer to P-shipping.
-	fmt.Println("doctor: server      skip (shipping client not yet wired)")
+	// Check 3: server reach via GET /get-logs?q=<repo>&limit=0 (§06).
+	status, rerr := ship.Reach(context.Background(), ship.Options{
+		ServerURL: cfg.ServerURL,
+	}, cfg.RepoURL, cfg.TempToken, cfg.Token)
+	switch {
+	case rerr != nil:
+		fmt.Fprintf(os.Stderr, "doctor: server reach failed: %v\n", rerr)
+		return exitCode(5)
+	case status == 401:
+		fmt.Fprintln(os.Stderr, "doctor: GLCI-DOCTOR-AUTH-INVALID (HTTP 401)")
+		return exitCode(5)
+	case status == 404:
+		fmt.Fprintln(os.Stderr, "doctor: GLCI-DOCTOR-PROFILE-NOT-FOUND (HTTP 404)")
+		return exitCode(5)
+	case status >= 500:
+		fmt.Fprintf(os.Stderr, "doctor: server error HTTP %d\n", status)
+		return exitCode(5)
+	}
+	fmt.Printf("doctor: server      ok (HTTP %d)\n", status)
 	return nil
 }
 
