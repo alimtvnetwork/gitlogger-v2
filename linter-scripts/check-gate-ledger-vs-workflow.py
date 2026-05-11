@@ -124,7 +124,7 @@ def run_real() -> int:
     workflow_text = WORKFLOW.read_text(encoding="utf-8", errors="replace")
     scripts_on_disk = {
         p.name for p in SCRIPTS_DIR.iterdir()
-        if p.is_file() and p.suffix in {".py", ".sh", ".cjs", ".mjs", ".js"}
+        if p.is_file() and p.suffix in {".py", ".sh", ".cjs", ".mjs", ".js", ".go"}
     }
 
     errors, cited, active = collect(slot_files, workflow_text, scripts_on_disk)
