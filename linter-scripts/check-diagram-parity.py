@@ -271,7 +271,8 @@ def run_against(diagrams_dir: Path, which: str = "all") -> list[str]:
 
 def _make_fixture(tmp: Path, *, with_orphan=False, er_missing_repo=False,
                   mindmap_missing_clear=False, emoji_in_label=False,
-                  strip_parity_self=False) -> Path:
+                  strip_parity_self=False, strip_audience=False,
+                  swap_header_order=False) -> Path:
     d = tmp
     d.mkdir(parents=True, exist_ok=True)
     consumes_lines = [
@@ -293,6 +294,20 @@ def _make_fixture(tmp: Path, *, with_orphan=False, er_missing_repo=False,
         overview += f"> {PARITY_LITERAL_SELF}.\n"
     (d / "00-overview.md").write_text(overview, encoding="utf-8")
 
+    def _hdr(kind: str, audience_token: str) -> str:
+        keys = [
+            f"%% Diagram type: {kind}",
+            "%% What this answers: \"Synthetic fixture for clause-6 self-test.\"",
+            "%% Authoritative source: spec/22-git-logs-v2/00-overview.md",
+            f"%% Audience: {audience_token}",
+        ]
+        if strip_audience:
+            keys = keys[:-1]
+        if swap_header_order:
+            # swap 'Authoritative source' and 'Audience' to fail clause-6 order
+            keys = [keys[0], keys[1], keys[3], keys[2]]
+        return "\n".join(keys) + "\n"
+
     er_lines = [
         "erDiagram",
         "    Profile ||--o{ GitProfile : owns",
@@ -305,7 +320,7 @@ def _make_fixture(tmp: Path, *, with_orphan=False, er_missing_repo=False,
     if er_missing_repo:
         er_lines = [l for l in er_lines if "Repo" not in l or "RepoVersion" in l]
     label = " 🔐" if emoji_in_label else ""
-    er_text = "\n".join(er_lines) + f"\n%% trailing comment{label}\n"
+    er_text = _hdr("erDiagram", "auditors") + "\n".join(er_lines) + f"\n%% trailing comment{label}\n"
     (d / "01-er-diagram.mmd").write_text(er_text, encoding="utf-8")
 
     mindmap_text = (
@@ -317,10 +332,15 @@ def _make_fixture(tmp: Path, *, with_orphan=False, er_missing_repo=False,
     )
     if not mindmap_missing_clear:
         mindmap_text += "      clear-log\n"
+    mindmap_text = _hdr("mindmap", "implementers") + mindmap_text
     (d / "09-endpoints-mindmap.mmd").write_text(mindmap_text, encoding="utf-8")
 
     if with_orphan:
-        (d / "99-orphan.mmd").write_text("flowchart TD\n  A --> B\n", encoding="utf-8")
+        # orphan also needs the header so clause-6 doesn't shadow clause-1
+        (d / "99-orphan.mmd").write_text(
+            _hdr("flowchart TD", "auditors") + "flowchart TD\n  A --> B\n",
+            encoding="utf-8",
+        )
     return d
 
 
@@ -332,7 +352,10 @@ def self_test(tmp_root: Path) -> int:
         ("F-4 mindmap missing clear-log", False, "clause-3", dict(mindmap_missing_clear=True)),
         ("F-5 emoji in .mmd", False, "clause-4", dict(emoji_in_label=True)),
         ("F-6 parity-self literal stripped", False, "clause-5", dict(strip_parity_self=True)),
+        ("F-7 narrative-header missing Audience", False, "clause-6", dict(strip_audience=True)),
+        ("F-8 narrative-header keys out of order", False, "clause-6", dict(swap_header_order=True)),
     ]
+
     fails = 0
     for i, (name, should_pass, expect, kwargs) in enumerate(cases):
         d = _make_fixture(tmp_root / f"f{i}", **kwargs)
