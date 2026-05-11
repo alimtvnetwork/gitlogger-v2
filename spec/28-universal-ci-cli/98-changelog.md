@@ -1,9 +1,19 @@
 # Changelog
 
-**Updated:** 2026-05-10 (Phase-5 T-38 / P19c — gate #40 SHIPPED real-disk pass; AC-28-49 promotes literal-cited → load-proven; §04 declares `--self-test`+`--check`; §07 4-row exit-code table; phantom-script count 37 → 36)
+**Updated:** 2026-05-11 (Sess-68 B-7 — added `00-tier1-bundle.md` Raw-LLM tier-1 partition manifest)
 
 
 All notable changes to `spec/28-universal-ci-cli/`.
+
+## [2.16.0] — 2026-05-11 — Sess-68 B-7: tier-1 essential bundle manifest added
+
+- **Action**: Created new file `00-tier1-bundle.md` (~120 lines) at the top of §28 alongside `00-overview.md`. Mirrors the §22 B-1 (Sess-67) and §27 B-6 (Sess-67) tier-1 manifest pattern. Partitions all 13 §28 source files (+ 2 schemas) into three tiers: **tier-1** (7 files, ~1 627 lines — implementable minimum for the Raw-LLM persona: §00 → §01 → §04 → §06 → §07 → §97 → §99), **tier-2** (5 files, ~580 lines — recommended adjuncts §02/§03/§05/§08/§09), **tier-3** (rest — yaml/json schemas, changelog, lifecycle diagram).
+- **Drift contract pinned (6 clauses, Lesson #15 reflexivity)**: (1) new normative cross-surface contract MUST surface in tier-1 first; (2) new tier-2 file with un-pinned contract is forbidden; (3) tier-2/3 → tier-1 promotion MUST cite the AC family + re-tally Σ; (4) tier-1 demotion requires Lesson #36 link-don't-restate audit + per-persona checklist update; (5) restating clause bodies in the manifest itself is forbidden; (6) line-budget invariant: 7-file `wc -l` sum MUST be ≤ 2 500 (single-context-window comfort threshold).
+- **Per-persona pre-flight checklist contract**: 3 personas × explicit halt/load instructions (Raw-LLM stops after file 7; Cursor/Claude-Code reads tier-1 in order then loads tier-2 on demand; Lovable uses tier-1 as primer and jumps to tier-2/3 per current sub-task).
+- **Self-citation**: drift contract enforced by `meta-verify-lockstep.py` (slot 64, gate #42) clause-5 banner-triple lockstep against §00 / §98 / §99; line-budget MAY be additionally enforced by future extension of `audit-bundle-budget.py` (slot 35, gate #34) loading the 7-file set as a named bundle target — until that ships, reviewer attestation; closed-set perimeter enforced by `check-no-out-of-scope-spec-folder-link.py` (slot 61, gate #39).
+- **Why now**: Sess-67 hand-score Rubric v2 audit surfaced §28 Raw-LLM C1 (Clarity) capping at 19/20 — read order across the 13-file corpus was implicit. Tier-1 manifest is the spec-only mitigation: navigation-aid surface, zero edits to existing §28 body files, zero new normative contracts.
+- **Banners**: §00 v2.14.0 → **v2.15.0** (auditor banner update + new file row); §97 unchanged (no AC added — pure navigation-aid); §98 v2.15.0 → **v2.16.0** (this entry); §99 v2.5.4 → **v2.5.5** (lockstep audit-row tail). AC count 49/49 unchanged. No new gate.
+- **Scorecard impact (Sess-68 B-7)**: §28 R-band C1 (Clarity) 19 → **20** (cited mechanism: gate #42 clause-5 banner-triple lockstep + per-persona pre-flight checklist contract — read-order fully self-cited on disk). C2 / C5 / C6 carried at their existing values. §28 Raw-LLM /120 116 → **117**; normalised /100 ~97 → ~98. **Lovable + Cursor unchanged at 120 ceiling** (those personas already had file-tool access — tier-1 manifest is for the Raw-LLM persona specifically). Closes B-7 from Sess-67 remaining-tasks list.
 
 ## [2.15.0] — 2026-05-10 — Phase-5 T-38 / P19c: gate #40 ships real-disk (AC-28-49 load-proven)
 
