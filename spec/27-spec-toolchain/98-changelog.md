@@ -1,8 +1,14 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.64.0
-**Updated:** 2026-05-10 (Sess-66 G-6t — slot 52 `check-axios-version.sh` phantom-cleared; `--self-test` 6/6 fixtures wired as gate #46 alongside live disk run; phantom 7 → 6; banner-triple recount goes 25 → **26**)
+**Version:** 4.65.0
+**Updated:** 2026-05-11 (Sess-67 G-6u — §27 §97 row 52 citation corrected `.py` → `.sh`; gate #43 I-1 EXISTS failures 14 → 13; zero source/script changes; banner-triple still 26)
 **Total active gates: 26**
+
+### 4.65.0 — 2026-05-11 — Sess-67 G-6u: §27 §97 row 52 axios citation truthified (`.py` → `.sh`); gate #43 I-1 ledger 14 → 13
+- **Action**: Edited `spec/27-spec-toolchain/97-acceptance-criteria.md` row 52 to cite `linter-scripts/check-axios-version.sh` (the file actually shipped in Sess-66 G-6t). Prior citation `linter-scripts/check-axios-version.py` was a phantom — the script never existed under that path.
+- **Verification**: `python3 linter-scripts/check-gate-ledger-vs-workflow.py` I-1 EXISTS failures dropped from 14 → 13 in lockstep; resolution rate climbs accordingly. Scanned-script-citation count goes 76 → 75.
+- **Lockstep**: §27 §00 4.64.0 → 4.65.0; §27 §98 4.64.0 → 4.65.0; §99 to bump in same wave.
+- **Scorecard**: §27 R-band C4 (Consistency) +1.
 
 ### 4.64.0 — 2026-05-10 — Sess-66 G-6t: slot 52 `check-axios-version.sh` load-proven (gate #46; six synthetic package.json fixtures + live disk run; phantom 7 → 6)
 - **Action**: Rewrote `linter-scripts/check-axios-version.sh` (~75 → ~135 LOC) to factor the version check into `check_pkg()` and add `--self-test` + `--pkg <path>` flags. The self-test creates a tmp dir with six synthetic `package.json` files and exercises the AC-52-01/02/03 contracts plus the NOT_FOUND vacuous-pass anchor: F-1 `^1.14.0` range MUST fail; F-2 `1.14.1` blocked MUST fail; F-3 `1.14.0` approved MUST pass; F-4 `0.30.3` (devDep path) MUST pass; F-5 `0.30.4` blocked MUST fail; F-6 missing axios MUST pass. `set -u` discipline preserved; tmp dir cleaned up on both success and failure paths (no EXIT trap to avoid `td: unbound variable` after function returns).
