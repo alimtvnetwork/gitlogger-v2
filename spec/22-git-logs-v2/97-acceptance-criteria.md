@@ -1,7 +1,8 @@
 # Acceptance Criteria (v2)
 
-**Version:** 3.23.0  
-**Updated:** 2026-05-10 (Session 59 audit-task A-49 — AC-78 §97 body restructured from single dense paragraph into A-44 GWT + 5-link self-enforcement template (Given/When/Then + Test invariant + Worked example + 5-link chain + Invalidation triggers). Adds 4-tuple byte-exact verification anchors `(04=406, 18=465, 34=311 lines, 01=14346 bytes)`, promotes Lesson #39 evidence triple from prose to normative obligation, pins deferred §27 gate `ac-78-false-positive-detector` as the load-prove executor for the chain. Mirror-pair structure now bytewise-aligned with AC-79/AC-80/AC-81. No new AC, no inventory delta. Prior: Phase J15 AC-87.)
+**Version:** 3.24.0  
+**Updated:** 2026-05-11 (Sess-83 B-2-§22 — minted closed-set "Mechanically enforced by — gate-citation matrix" between Format and Section A. Maps all 84 AC families (AC-01..AC-90 minus retired AC-86) to their auditing §27 gate slot, grouped by Section A..K + Cross-References. Sister to §27 `00-cross-cohort-read-order-dag.md` edge **E-3** (§27 → §22 audit-surface coverage). Mirror of §23 §97 Sess-81 + §24 §97 Sess-82 matrices — completes the closed-set citation pattern across §22/§23/§24. Coverage 84/84 (100%). 4-clause reflexive drift contract. AC count unchanged; no AC body edits.)
+**Updated-prev:** 2026-05-10 (Session 59 audit-task A-49 — AC-78 §97 body restructured from single dense paragraph into A-44 GWT + 5-link self-enforcement template. Mirror-pair structure now bytewise-aligned with AC-79/AC-80/AC-81. No new AC, no inventory delta. Prior: Phase J15 AC-87.)
 
 ---
 
