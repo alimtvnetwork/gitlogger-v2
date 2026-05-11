@@ -110,13 +110,17 @@ def collect(slot_files: list[Path], workflow_text: str, scripts_on_disk: set[str
     if dups:
         errors.append((3, f"I-3 NUMBERED: duplicate gate numbers: {sorted(set(dups))}"))
     if nums:
-        expected = set(range(1, max(nums) + 1))
+        expected = set(range(1, max(nums) + 1)) - RETIRED_GATE_NUMBERS
         missing = sorted(expected - set(nums))
         if missing:
-            # Gaps are warnings only when small; >5 is a failure
+            # NEW gaps are warnings when small (≤5), failure otherwise.
+            # Pre-existing retired holes are excluded via RETIRED_GATE_NUMBERS.
             if len(missing) > 5:
                 errors.append((3, f"I-3 NUMBERED: gate-number ledger has "
-                                  f"{len(missing)} gaps (e.g. {missing[:5]})"))
+                                  f"{len(missing)} NEW gaps (e.g. {missing[:5]}); "
+                                  f"either assign the next slot to one of these "
+                                  f"or extend RETIRED_GATE_NUMBERS + §27 §00 "
+                                  f"\"Retired Gate Numbers\" subsection in the same PR"))
 
     return errors, cited, active
 
