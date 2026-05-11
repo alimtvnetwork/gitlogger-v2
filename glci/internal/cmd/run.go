@@ -76,6 +76,7 @@ func RunCmd(args []string, only string) error {
 	runtimeFilter := fs.String("runtime", "", "Restrict to one runtime")
 	phasesCSV := fs.String("phases", "", "CSV subset (default lint,build,test)")
 	jsonOut := fs.Bool("json", false, "Machine-readable output")
+	stream := fs.Bool("stream", false, "Stream events live (POST /events + /finalize) instead of batched POST /append-log")
 	if err := fs.Parse(args); err != nil {
 		return exitErr(64, err)
 	}
