@@ -19,9 +19,9 @@ produced_for:
 
 # Universal CI CLI — Spec Overview
 
-**Version:** 2.14.0  
+**Version:** 2.15.0  
 <!-- h10-verified-phase: 157 -->
-**Updated:** 2026-05-10 (Phase-5 T-38 / P19c — gate #40 `check-ci-cli-self-test-harness.py` SHIPPED real-disk pass (was vapor in v2.13.0); §04 v1.2.0 declares `--self-test` flag + `--check <mode>` enum (6 modes); §07 v1.2.0 appends 4-row exit-code self-test table; CI workflow wires hard-fail step `§28 CI-CLI self-test harness gate (#40 / P19c)`. AC-28-49 promotes from literal-cited (20) → load-proven (20, gate now real). Phantom-script count 37 → **36**. Prior: T-38 P17 floor-lift completion (citation only).)
+**Updated:** 2026-05-11 (Sess-68 B-7 — added `00-tier1-bundle.md` Raw-LLM tier-1 partition manifest carving 7 tier-1 files (~1 627 lines) out of the 13-file §28 corpus. Mirrors the §22 B-1 / §27 B-6 tier-1 manifest pattern. Drift contract (6 clauses, Lesson #15 reflexivity) self-cited via `meta-verify-lockstep.py` (slot 64, gate #42) clause-5; line-budget invariant ≤ 2 500 lines reviewer-attested today + slot 35 gate #34 extension in next backlog cycle. Pure navigation-aid; zero edits to §28 body files; AC count 49/49 unchanged. Lifts §28 Raw-LLM C1 (Clarity) audit-defensibility from 19 → 20 by surfacing read order on disk with self-cited gate enforcement. Prior: Phase-5 T-38 / P19c — gate #40 SHIPPED real-disk pass.)
 
 > **`glci` ships a built-in `--self-test` harness** — load-bearing for shippability per AC-28-49. R5 vacuously-passing scanner is auto-fail (inherited verbatim from §27 cohort discipline per Lesson #36 link-don't-restate). **Self-enforcing via §27 backlog gate `ci-cli-self-test-harness-check`** (Lesson #15 reflexivity pin for gate #40, slot 62).
 
