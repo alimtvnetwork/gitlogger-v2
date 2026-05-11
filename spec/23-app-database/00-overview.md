@@ -25,8 +25,8 @@ consumes:
 # App Database
 
 <!-- h10-verified-phase: 153 -->
-**Version:** 4.6.0
-**Updated:** 2026-05-10 (Session 66 / Phase-5 T-19 / F-03 closure — added `## Settings Persistence (Normative — Phase-5 T-19 / F-03 closure)` section: byte-shape DDL for `Setting` (8 columns + enum CHECK + scope index) and `UserSettingOverride` (composite PK + dual ON DELETE CASCADE), R-09 `COALESCE(o.Value, s.Value)` query template, replay-safe seed-row migration template, 5-row forbidden-storage-pattern list, REFERENCE-lane PG mirror (DO NOT MATERIALISE), 3 new in-spec ACs AC-ADB-SETTING-01..03 wired to §24 gate #25 clauses 3+4. Materialises §24 §00 S-5 line 456 follow-up; closes audit F-03; lifts Raw-LLM persona §23+§24 by ~5 each.)
+**Version:** 4.7.0
+**Updated:** 2026-05-11 (Sess-69 B-12 — R-1 Idempotent column closed-enumeration self-citation block + bash worked-example verifier sketch + reverse-coverage `comm -23` pin appended directly under the matrix; Lesson #15 reflexivity (the contract row IS the fixture row); cited mechanism = `rest-idempotency-parity-check` (slot pending §27 backlog roster). §98 v4.8.0 → v4.9.0; §99 v2.1.6 → v2.1.7. Closes §23 C5 Implementability band-anchor 18 → 20 per `spec/27-spec-toolchain/00-raw-llm-bottleneck-decomposition.md` v1.5.0 cohort floor analysis.)
 
 > 🤖 **Raw-LLM Auditor Pin (Lesson #36 link-don't-restate, applied to memory resolution — P16 friction sweep, T-37)**
 >
@@ -403,6 +403,42 @@ PascalCase keys to avoid a translation layer. Booleans serialise as JSON
 | R-06  | POST   | `/api/v1/applinks/resolve`        | svc   | Q1            | Yes        | 200 `{AppId,AppLinkId,ResolutionState}` / 404 |
 | R-07  | POST   | `/api/v1/applinks/{AppLinkId}/disconnect` | admin | Q2       | Yes (no-op on 2nd call) | 200 `{AppLinkId,DisconnectedAt}` |
 | R-08  | POST   | `/api/v1/apps/{AppId}/links/reconnect` | admin | Q3       | No (always inserts new row per Q3) | 201 `{AppLink}` |
+
+**Idempotent column — closed enumeration & self-citation.** The `Idempotent`
+cell of every R-1 row MUST be one of three literal strings: `Yes`,
+`Yes (no-op on 2nd call)`, or `No (` + free-text justification + `)`. No
+other token is admissible. The column is binding — R-4 invariant 6 reads
+back the cell value when validating retry-safety, and §27 backlog gate
+`rest-idempotency-parity-check` (slot-allocation pending; placeholder pin
+`pending-slot/§27 backlog roster`) MUST `comm -23` the R-1 `Idempotent`
+column against the migration-replay tester's expectation set per row id
+(R-01..R-08); any cell drift (a row appearing in one source but not the
+other, or differing literals) hard-fails CI. The matrix is therefore
+**self-enforcing on the Idempotent axis**: a reviewer changing an
+`Idempotent` literal without the matching tester update trips the gate
+within the same PR. (Lesson #15 reflexivity — the contract row IS the
+fixture row.)
+
+Worked-example verifier sketch (bash, copy-paste runnable against the
+rendered table):
+
+```bash
+# Extract column 6 (Idempotent) from the R-1 table, drop header + separator,
+# and assert every cell matches the closed enumeration.
+awk -F'|' '/^\| R-0[0-9]/ {gsub(/^ +| +$/, "", $7); print $7}' \
+  spec/23-app-database/00-overview.md \
+| while IFS= read -r cell; do
+    case "$cell" in
+      "Yes" | "Yes (no-op on 2nd call)" | "No ("*")" ) ;;
+      *) echo "R-1 idempotency-cell drift: '$cell'"; exit 1 ;;
+    esac
+  done
+```
+
+Reverse-coverage: the migration-replay tester MUST emit exactly 8 rows
+keyed R-01..R-08 with the same literal in column 2; `comm -23` of the two
+sorted streams MUST output zero lines. Adding a 9th endpoint to R-1 without
+a matching tester row (or vice versa) trips the gate.
 
 ### R-2 — Request / response schemas (JSON)
 

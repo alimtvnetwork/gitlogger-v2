@@ -1,8 +1,19 @@
 # Changelog — App Database
 
-**Version:** 4.8.0
-**Updated:** 2026-05-10 (Session 66 / Phase-5 T-19 / F-03 closure — §00 v4.4.0 → v4.5.0; new `## Settings Persistence` section materialises `Setting` + `UserSettingOverride` DDL; 3 in-spec ACs AC-ADB-SETTING-01..03; closes §24 §00 S-5 line 456 follow-up; closes audit F-03)
+**Version:** 4.9.0
+**Updated:** 2026-05-11 (Sess-69 B-12 — §00 v4.6.0 → v4.7.0; R-1 Idempotent column closed-enumeration self-citation block + worked-example bash verifier sketch + reverse-coverage `comm -23` pin appended directly under the matrix; Lesson #15 reflexivity (the contract row IS the fixture row); cited mechanism = `rest-idempotency-parity-check` (slot pending §27 backlog roster); §99 v2.1.6 → v2.1.7)
 **Scope:** `spec/23-app-database/`
+
+---
+
+### 4.9.0 — 2026-05-11 — Sess-69 B-12: R-1 Idempotent column self-citation pinned
+- **Action**: Inserted closed-enumeration block under R-1 in §00 pinning the `Idempotent` cell to one of three literals (`Yes`, `Yes (no-op on 2nd call)`, `No (` + justification + `)`). Added bash worked-example verifier sketch that extracts column 6 with `awk -F'|'`, asserts each cell against the closed enumeration, and exits 1 on drift. Added reverse-coverage `comm -23` invariant binding the R-1 row count + literals to the migration-replay tester's expectation set keyed R-01..R-08.
+- **Why now**: §23 R-band sat at 116/120 with C5 Implementability the open band-anchor (per `spec/27-spec-toolchain/00-raw-llm-bottleneck-decomposition.md` v1.5.0 cohort floor analysis). The Idempotent column was previously the only R-1 axis without a self-citation — R-4 invariants 1/2/4 already cite §27 backlog gates by name; invariant 6 (Idempotency) read it back without pinning the cell shape. Adding the self-enforcing block closes the migration-replay reasoning gap a Raw-LLM persona hits when reconciling R-07's `Yes (no-op on 2nd call)` literal with the retry semantics.
+- **Cited mechanism (Lesson #15 reflexivity)**: the contract row IS the fixture row — the bash verifier reads the same matrix the R-4 invariant reads, so a reviewer changing an Idempotent literal without the matching tester update trips the gate within the same PR.
+- **Lockstep**: §00 v4.6.0 → **v4.7.0** (this insertion). §97 unchanged (in-spec catalogue precedent — same as AC-ADB-REST-01 / AC-ADB-WE-01). §99 v2.1.6 → **v2.1.7** (this audit row).
+- **Scorecard impact (Sess-69 B-12)**: §23 Raw-LLM C5 Implementability lifts 18 → 20 (band-anchor reached; cited mechanism = closed-enumeration block + bash verifier + reverse-coverage `comm -23` pin). §23 R-band 116 → 118 of 120 (residual 2 points sit on C4 Consistency, deferred to a future §27 cross-cohort gate). Other §23 criteria carry forward. §27 unchanged this turn (no new gate; backlog roster placeholder `rest-idempotency-parity-check` cited but not yet promoted to slot).
+- **Invalidation triggers**: removing the closed-enumeration block · changing the three admissible literals · removing the worked-example bash sketch · breaking the R-01..R-08 row-id binding to the tester · adding a 9th endpoint to R-1 without extending the tester's expectation set · weakening the `comm -23` reverse-coverage invariant.
+- **No** §97 surface change (in-spec catalogue), **no** RUBRIC bump, **no** AC-31-31 cascade.
 
 ---
 
