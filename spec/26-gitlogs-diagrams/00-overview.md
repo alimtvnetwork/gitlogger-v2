@@ -50,9 +50,9 @@ produced_for:
 ---
 # Gitlogs Diagrams
 
-**Version:** 3.11.0
-**Updated:** 2026-05-11 (Sess-70 B-25 — Sess-58 A-47 deferred binding ratified in §97 as **AC-DG-24** (NOT AC-DG-23, which shipped Sess-13 with unrelated narrative-header content). Enum-mirror parity is now AC-bound + load-proven via the inline `diff` command in line 151 of this file (zero-install bash, runnable from repo root); §27 gate `enum-mirror-26-vs-22-aligned` remains queued but no longer blocks load-proof status per §97 AC-DG-24 clause-1. Reflexivity binding via gate #42 banner-triple lockstep. §26 Raw-LLM C5 19 → 20.)
-**Updated-prev:** 2026-05-10 (Session 58 audit-task A-47 — `## §22 Enum Catalog Mirror` section added; AC-DG-23 binding pinned, §97 ratification deferred.)
+**Version:** 3.12.0
+**Updated:** 2026-05-11 (Sess-79 B-27-§26 — created `00-tier1-bundle.md` v1.0.0 (4-file tier-1 partition: §00-overview + §00-diagram-sources + §97 + §99 = ~105 KB / ~1 380 lines; .mmd diagrams → tier-2; §98 changelog → tier-3) AND applied walker-cost reflexivity lever in the same turn (mirror-septet step 7/7 → **mirror-septet anchor CLOSED**: §22 + §23 + §24 + §25 + §26 + §27 + §28 = 7 of 7 cohorts cite walker-cost reflexivity). Per-file Walker-cost (KB) column added; closed-set per-tier byte-cost table + 3 pre-budget recipes (verify-an-AC ~74 KB / decode-current-state ~30 KB / full-tier-1 read ~105 KB) + reflexive drift contract (≥10 KB `wc -c` change → same-PR refresh). Pure navigation-aid surface; no §97 AC body edits, no new gate. Same-PR banner-triple lockstep. **Scorecard impact**: §26 R-band C6 (Friction) **19 → 20** (+1; cited mechanisms: tier-1 partition surfaces read order on disk via gate #42 banner-triple lockstep + walker-cost reflexivity column makes byte-cost guess-cost zero + **mirror-septet anchor closure** as third independent lever — §26 closes the 7-of-7 cross-cohort citation, the closure citation IS the third mechanism). §26 R-band 119 → **120/120** (band-anchor reached on every criterion). Aggregate Raw-LLM Σ 819 → **820/840** (97.6/100). **Lovable + Cursor unchanged at 120 ceiling**. Cohort floor remains §27 R 110. Prior: Sess-70 B-25 — AC-DG-24 minted (enum-mirror parity ratified).)
+**Updated-prev:** 2026-05-11 (Sess-70 B-25 — Sess-58 A-47 deferred binding ratified in §97 as **AC-DG-24**. Enum-mirror parity AC-bound + load-proven via inline `diff` command in line 151. §26 Raw-LLM C5 19 → 20.)
 <!-- h10-verified-phase: 153 -->
 
 Authoritative source: [`../22-git-logs-v2/00-overview.md`](../22-git-logs-v2/00-overview.md).

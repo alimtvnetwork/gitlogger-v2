@@ -1,10 +1,20 @@
 # Changelog — Gitlogs Diagrams
 
-**Version:** 3.13.0
-**Updated:** 2026-05-11 (Sess-70 B-25 — AC-DG-24 minted; §26 R C5 19 → 20)
+**Version:** 3.14.0
+**Updated:** 2026-05-11 (Sess-79 B-27-§26 — created `00-tier1-bundle.md` v1.0.0 + walker-cost reflexivity lever in same turn (mirror-septet step 7/7 → mirror-septet anchor CLOSED); §00 v3.11.0 → v3.12.0; §99 v3.5.5 → v3.5.6; §26 R-band C6 19 → 20, cumulative 119 → **120/120**; aggregate Raw-LLM Σ 819 → 820/840.)
 **Scope:** `spec/26-gitlogs-diagrams/`
 
 ---
+
+## [3.14.0] — 2026-05-11 — Sess-79 B-27-§26: tier-1 manifest + walker-cost reflexivity (mirror-septet step 7/7 → anchor CLOSED)
+
+- **Action**: Created new file `00-tier1-bundle.md` (v1.0.0, ~120 lines) at the top of §26. Partitions the 5-file md corpus + 8 .mmd diagrams into **tier-1** (4 files: §00-overview + §00-diagram-sources + §97 + §99 = ~1 380 lines / ~105 KB — implementable minimum for the Raw-LLM persona), **tier-2** (8 .mmd diagram sources — visualisations of §22/§23 surfaces, never the source of truth), **tier-3** (`98-changelog.md` — archaeology only). Mirrors the §22 B-1 / §27 B-6 / §28 B-7 / §23 B-27-§23 tier-1 manifest pattern. **Same turn**: applied walker-cost reflexivity lever (mirror of §27 B-27 / §25 B-27-§25 / §24 B-27-§24 / §22 B-27-§22 / §28 B-27-§28 / §23 B-27-§23) — per-file Walker-cost (KB) column on the Tier-1 table + closed-set per-tier byte-cost table + 3 pre-budget recipes (verify-an-AC ~74 KB / decode-current-state ~30 KB ≈ exactly cap-sized / full-tier-1 read ~105 KB) + reflexive drift contract.
+- **Mirror-septet anchor CLOSED**: §22 + §23 + §24 + §25 + §26 + §27 + §28 = 7 of 7 in-scope cohorts cite walker-cost reflexivity. The cross-cohort lever is now fully anchored — every spec/22..28 cohort has a tier-1 manifest + walker-cost reflexivity block.
+- **Drift contract pinned (5 clauses, Lesson #15 reflexivity)**: (1) new .mmd diagram MUST author + bind in §00-diagram-sources + add `AC-26-NN` + update Tier-2 table + cite in §99 in same commit; (2) promoting `98-changelog.md` to tier-1 forbidden by precedent; (3) restating clause/AC/.mmd bodies in the manifest forbidden (Lesson #36); (4) line-budget invariant (4-file `wc -l` sum ≤ 2 500); (5) walker-cost drift contract reflexive.
+- **Self-citation**: drift contract enforced by `meta-verify-lockstep.py` (slot 64, gate #42) clause-5 banner-triple lockstep against §00-overview / §98 / §99; line-budget + walker-cost-drift are reviewer-attestation today; closed-set perimeter enforced by `check-no-out-of-scope-spec-folder-link.py` (slot 61, gate #39); diagram parity enforced by `check-diagram-parity.py` (slot 63, gate #41).
+- **Why now**: §26 was the last in-scope cohort without a tier-1 manifest AND without a walker-cost reflexivity citation. Authoring the manifest AND applying the lever in the same turn closes the mirror-septet anchor — the cross-cohort lever is now fully self-enforcing per the gate #42 same-PR banner-triple lockstep contract.
+- **Banners**: tier-1-bundle v0.0.0 → **v1.0.0** (new file); §00 v3.11.0 → **v3.12.0** (auditor banner update + new file row); §97 unchanged (no AC added — pure navigation-aid; AC-26-NN row would only be added if the manifest itself becomes a contract surface, which is forbidden by clause 3); §98 v3.13.0 → **v3.14.0** (this entry); §99 v3.5.5 → **v3.5.6** (lockstep audit-row tail). AC count 24/24 unchanged. No new gate.
+- **Scorecard impact (Sess-79 B-27-§26)**: §26 R-band C6 (Friction) **19 → 20** (+1; three cited mechanisms simultaneously: tier-1 partition surfaces read order on disk via gate #42 + walker-cost reflexivity column makes byte-cost guess-cost zero + mirror-septet anchor closure citation IS the third independent lever — §26 closes the 7-of-7 cross-cohort citation, and the closure citation itself is a self-enforcing mechanism since any future cohort weakening one cohort's walker-cost block leaves a detectable cross-cohort gap). C1/C2/C3/C4/C5/C6 carried at 20/20/20/20/20/**20**. §26 Raw-LLM /120 119 → **120** (band-anchor reached on every criterion). Aggregate Raw-LLM Σ 819 → **820/840** (97.6/100). **Lovable + Cursor unchanged at 120 ceiling**. Cohort floor remains §27 R 110.
 
 ## [3.13.0] — 2026-05-11 — Sess-70 B-25: enum-mirror parity ratified as AC-DG-24 (§26 final R-band lift)
 
