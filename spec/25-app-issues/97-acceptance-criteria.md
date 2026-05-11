@@ -1,7 +1,8 @@
 # Acceptance Criteria — App Issues
 
-**Version:** 1.7.0  
-**Updated:** 2026-05-10 (Phase-5 T-14 — added **AC-AI-18** Parent/child AC-prefix contract for `kind: index` + `kind: tracker` modules. Codifies 4-clause discipline (AC-01..AC-08 generic floor across all 3 §97 files; `AC-AI-NN` parent-only; bare `AC-NN >= AC-09` child-extension folder-scoped; cross-child collisions EXPECTED and NOT a defect). Self-enforcing via in-spec catalogue + §27 backlog gate `ac-prefix-contract-check` (3-turn decay). Closes recurring audit-v? MEDIUM D2 `Inconsistent AC-ID prefixes across §25 tree` finding class. AC count 17 → 18. Prior: 1.6.0 — AC-AI-17 process-terminology pin.)  
+**Version:** 1.8.0  
+**Updated:** 2026-05-11 (Sess-69 B-13 — AC-AI-000 reword in `00-overview.md` + AC-AI-19 added (verifier-misroute pin: declares that `check-spec-cross-links.py` is a link-target verifier, NOT a finding-structure verifier; the AC-AI-000 inline Python grep is the canonical structural check). §99 `## Module Health` table sync'd in same PR (Health Score 85/100 → 96/100; §97/§98 rows ⚠️ → ✅). AC count 18 → 19. Prior: 1.7.0 — AC-AI-18 parent/child AC-prefix contract.)  
+**Updated-prev:** 2026-05-10 (Phase-5 T-14 — added **AC-AI-18** Parent/child AC-prefix contract for `kind: index` + `kind: tracker` modules.)  
 **Scope:** `spec/25-app-issues/`
 
 ---
