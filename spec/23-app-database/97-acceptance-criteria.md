@@ -45,6 +45,41 @@ Defines the App, AppLink, AppStatus, and AppLinkType tables — the polymorphic-
 
 ---
 
+## Mechanically enforced by — gate-citation matrix (Sess-81 B-2-§23)
+
+**Closed-set inventory** mapping each AC family in this file to the §27 active gate slot that audits it. Sister to §27 `00-cross-cohort-read-order-dag.md` edge **E-2** (§27 → §23 audit-surface coverage). Pinned closed-set: every AC-ADB-NN MUST appear in exactly one row below; new ACs require a same-PR row addition (reflexive drift contract clause-1).
+
+| AC | Surface audited | **Mechanically enforced by** (§27 slot) | Status |
+|---|---|---|---|
+| AC-ADB-01 | Forward-only migration keywords (`DROP`, `ROLLBACK`, `-- DOWN`) | `03-check-forbidden-strings.md` (gate #03 active) | active |
+| AC-ADB-02 | PascalCase identifier regex on DDL | `31-audit-spec-vs-code-v2.md` (gate #31 active) + `56-check-rest-pascalcase-parity.md` (gate active) | active |
+| AC-ADB-03 | New-column NULLABLE without DEFAULT | `03-check-forbidden-strings.md` (forbidden-strings toml `60-forbidden-strings-toml.md` clause for `NOT NULL`/`DEFAULT` on `ALTER … ADD COLUMN`) | active |
+| AC-ADB-04 | `check-forbidden-strings.py` exit code 0 | `03-check-forbidden-strings.md` (gate #03 active; AC self-references the gate) | active |
+| AC-ADB-05 | AppLink XOR `CHECK` clause presence | `39-check-applink-xor-clause.md` (gate active) | active |
+| AC-ADB-06 | AppLink disconnect-timestamp `CHECK` clause | `39-check-applink-xor-clause.md` (sister-clause; same gate covers both XOR + disconnect) | active |
+| AC-ADB-07 | Reconnect-inserts-new-row invariant | `45-check-idempotency-observability.md` (gate active) | active |
+| AC-ADB-08 | `AppSlug` UNIQUE constraint | `31-audit-spec-vs-code-v2.md` (DDL parity audit) | active |
+| AC-ADB-09 | Lookup-seed presence post-migration | `44-check-seedable-config-row-present.md` (gate active) + `54-check-seed-id-explicit-locked-form.md` (gate active) | active |
+| AC-ADB-10 | Push attribution Repo > GitProfile precedence | `30-audit-spec-vs-code.md` (gate active) | active |
+| AC-ADB-11 | SQLite primary / Postgres reference dialect | `55-check-dialect-precedence-banner-present.md` (gate active) | active |
+| AC-ADB-12 | External-table prerequisites inlined as DDL summary | `04-check-forbidden-spec-paths.md` (gate active; closed-set spec-path allowlist) | active |
+| AC-ADB-13 | AppLink `CHECK` uses hardcoded ID constants, not subqueries | `39-check-applink-xor-clause.md` (sister-clause shape audit) | active |
+| AC-ADB-14 | Polymorphic AppLink resolution algorithm normative | `30-audit-spec-vs-code.md` + `31-audit-spec-vs-code-v2.md` (algorithm-↔-code parity) | active |
+| AC-ADB-15 | SQLite concurrency pragmas link to spec/13 | `04-check-forbidden-spec-paths.md` (link presence; spec/13 was in-scope at AC-15 mint and remains link-target-only — does NOT promote it back into spec scope) | active |
+| AC-ADB-16 | Postgres reference block UTC Unix-seconds parity | `55-check-dialect-precedence-banner-present.md` (sister-clause for dialect-pair parity rows) | active |
+| AC-ADB-17 | Cross-Module Externalized Citation Map (Lesson #36/37) | `01-check-spec-cross-links.md` (gate #01 active) + `02-check-spec-folder-refs.md` (gate #02 active) | active |
+| AC-ADB-18 | §22 operational-pattern inheritance (ErrorEnvelope + AuditTrail + observability + schema-drift) | `42-check-error-envelope-uniformity.md` (gate active) + `46-check-audit-quoted-evidence-marker.md` (gate active) | active |
+
+**Reflexive drift contract (this matrix):**
+1. Every new AC-ADB-NN MUST add a row here in the same PR (mechanically enforced by `47-check-ac-section-orphan-header.md` + reviewer-attestation).
+2. If a §27 gate slot in column 3 is renumbered or retired, this matrix MUST refresh in the same PR (mechanically enforced by `64-meta-verify-lockstep.md` clause-3 banner-triple lockstep).
+3. The "Status" column MUST stay as `active` for all rows; if any drops to `proposed` or `deferred`, the same-PR change MUST also bump §99 with a downgrade banner explaining why.
+4. Cross-cohort consistency: this matrix MUST cite gate slots from §27 only — never from §28 or other cohorts (mechanically enforced by edge **E-2** in `spec/27-spec-toolchain/00-cross-cohort-read-order-dag.md`).
+
+**Coverage**: 18/18 ACs cited (100 %). Gate-slot reuse-count distribution: `03` (×3), `31` (×3), `39` (×3), `30` (×2), `04` (×2), `55` (×2), all others (×1). No AC is unenforced; no §27 gate is over-cited beyond justified sister-clause reuse.
+
+---
+
 ## Acceptance Criteria
 
 ### AC-ADB-01: Forward-only migrations  `[critical]`
