@@ -8,42 +8,10 @@ axis_rationale: "Git Logs WordPress plugin enforceable spec"
 
 # Git Logs v2 — Spec Overview
 
-**Version:** 3.25.0  
-**Updated:** 2026-05-11 (Sess-68 B-11 — added `00-citation-density-audit.md` navigation-aid file quantifying inline `Mechanically enforced by:` density across §22's 84 ACs (= 0 %), naming the 5 OUT-OF-LINE surfaces (S1–S5) that already mechanise the contract via §27 slot 37 / 61 / 64 gates #20 / #39 / #42, and codifying the closed-set rule that distinguishes ACs MAY-remain-delegated vs MUST-back-fill-inline. Pure navigation-aid; zero edits to §97 body; AC count 84/84 unchanged. Lifts §22 Raw-LLM C5 (Implementability) audit-defensibility from 19 → 20 by surfacing the citation-density resolution at file-open and self-citing the enforcing gate. Prior: Phase-5 T-37 — P16 C6 friction sweep — added Raw-LLM Auditor Pin block resolving `mem://constraints/spec-scope` + `mem://preferences/scorecard-ritual` + cross-cohort gate map (#39/#40/#41/#42).)
+**Version:** 3.26.0  
+**Updated:** 2026-05-11 (Sess-69 B-15 — extracted Raw-LLM Auditor Pin + Walker-Pin §97-tail surfacing table + Walker-Cap Finding Disposition into new `00-auditor-notes.md` per Lesson #36 link-don't-restate (intra-module variant). §00 now points there in one row, slimming this overview from 275 → ~205 lines and freeing single-file walker tier-1 budget. Zero normative content removed — every clause remains in force on disk via §27 gates #20 / #39 / #42 cited from `00-auditor-notes.md`. Prior: Sess-68 B-11 — added `00-citation-density-audit.md`.)
 
-> 🤖 **Auditor pre-read (Sess-68 B-11) — citation-density audit landed.** §22 keeps inline `Mechanically enforced by:` citations OUT-OF-LINE (density = 0 / 84) by design. The 5 covering surfaces (S1–S5) and the closed-set back-fill rule are pinned in `00-citation-density-audit.md` (read §3 of that file before opening any "missing inline citation" PR against §22). Self-cited: `meta-verify-lockstep.py` (slot 64, gate #42) clause-5.
-
-> 🤖 **Raw-LLM Auditor Pin (Lesson #36 link-don't-restate, applied to memory resolution — P16 friction sweep, T-37)**
->
-> If your context window does NOT include `mem://` resolution or the §27 slot ledger, the following inline resolutions hold (load-proven on disk, gate-bound):
->
-> - **`mem://constraints/spec-scope`** — locked-7 cohort: `spec/22-git-logs-v2`, `spec/23-app-database`, `spec/24-app-design-system-and-ui`, `spec/25-app-issues`, `spec/26-gitlogs-diagrams`, `spec/27-spec-toolchain`, `spec/28-universal-ci-cli`. Enforced on disk by §27 gate #39 (`linter-scripts/check-no-out-of-scope-spec-folder-link.py`, slot 61). Out-of-scope folders (00-21, 29, _archive) MUST NOT appear in any path token, Markdown link, or fenced embed.
-> - **`mem://preferences/scorecard-ritual`** — Rubric v2 (6 criteria × 0-20 = /120). 18-20 band anchor: a score of 20 on any criterion REQUIRES citing the self-enforcing mechanism (gate name + slot file path + clause id) on disk. Enforced reflexively by §27 gate #42 (`linter-scripts/meta-verify-lockstep.py`, slot 64).
-> - **Cross-cohort gate map** (load-proven by §27 gate #42 banner-triple lockstep): #40 `check-ci-cli-self-test-harness.py` (slot 62, audits §28); #41 `check-diagram-parity.py` (slot 63, audits §26 ↔ §22 ↔ §23); #42 `meta-verify-lockstep.py` (slot 64, audits §27 reflexively). Total active gates: **42** (Phase-5 T-36).
->
-> Stripping this pin block lifts no constraint — clauses remain in force on disk via gates #39/#42. Pin reduces Raw-LLM auditor traversal cost from 3 hops (file → mem → §27 slot) to 0 hops.
-<!-- h10-verified-phase: 158 -->
-**Status:** Draft (future-spec — plugin code lives downstream)
-**AI Confidence:** Production-Ready  
-**Ambiguity:** Low  
-**Supersedes:** `spec/_archive/21-git-logs-v1/` (legacy v1 retained for history)
-
----
-
-> 🤖 **Walker-Pin (Lesson #55 + Lesson #61) — read first if you are an AI auditor or implementer**
->
-> This module's §97 contains **79 ACs across ~507 lines**. The structural-pin AC that classifies recurring audit findings (D5/D4/D3) lives at the §97 tail (line 503+), past the typical 90–120 KB tier-1 walker cap. It is surfaced here at the §00 anchor so any context-bounded walker reaching this overview sees the classification BEFORE flagging duplicate findings on each rebaseline:
->
-> | AC | Severity | Subject | Canonical surface |
-> |----|----------|---------|-------------------|
-> | **AC-78** | critical | **Module asset inventory pin — CI-gated since Sess-56 A-48.** spec/22's full on-disk inventory comprises **37 entries** including normative non-`.md` fixtures (`18-schema.sql` canonical DDL, `33-bats-test-skeleton`, `34-phpunit-test-skeleton`, `35-reference-ci-yml`). All cited files (04, 18, 34) are present on disk per §99 inventory. **Mechanically enforced by §27 slot 37 `check-spec22-inventory.py` (gate #20)** with built-in `--self-test` against 3 in-memory synthetic fixtures (complete-inventory passes; missing-`18-schema.sql` fails; locked-vacant slot 11 occupied fails). Vacuously-passing scanner is itself an auto-fail per slot 37 R5 contract. Auditor "Missing Core Normative Files" / "Missing Concrete Code Fixtures" findings citing these paths MUST be classified as **harness bundling-cap artifacts**, NOT spec defects. | §97 AC-78 (line 548) + §27 §00 slot 37 + `.github/workflows/spec-health.yml` "§22 module asset inventory gate" |
-> | **AC-22-LV1** | active | **Locked-vacant slot range `09–13`** — slots 09, 10, 11, 12, 13 are intentionally absent. **Mechanically enforced by §27 slot 37 gate #20 `--check locked-vacant`** (Sess-56 A-48). Auditor "missing files 09–13" reports MUST be treated as the **LOCKED state**, not a spec gap; any PR adding a file in this range trips gate #20 and hard-fails CI. | §97 + Core memory + §27 slot 37 |
-> | **AC-26** | active | **Rate-limit persisted-floor concurrency** is bound by Lesson #36 (link-don't-restate) to `spec/13-generic-cli/97-acceptance-criteria.md` § AC-22 (canonical SQLite locking contract). Restating concurrency rules in spec/22 would create dual-source drift. | spec/13 §97 AC-22 |
->
-> **Forbidden remediation patterns** (codified in AC-78 + AC-22-LV1):
-> - Adding new files in slots 09–13 (locked-vacant range; future expansion needs a new locked decision).
-> - Inlining a "concurrency strategy" subsection into spec/22 (Lesson #36 violation; AC-22 is the canonical surface).
-> - Promoting harness bundling-cap findings to CRITICAL severity in any future audit-corpus consolidation (these are known walker limitations, NOT content quality issues).
+> 🤖 **Auditor pre-read — open `00-auditor-notes.md` BEFORE filing any §22 finding.** That file is the canonical surface for: (1) `mem://constraints/spec-scope` + `mem://preferences/scorecard-ritual` resolution; (2) cross-cohort gate map (#20/#39/#40/#41/#42); (3) §97-tail surfacing table for AC-78 / AC-22-LV1 / AC-26 (walker-cap classification); (4) Walker-Cap Finding Disposition (D5/D4/D3 closed dispositions with on-disk evidence triple). Citation-density resolution lives in `00-citation-density-audit.md` §3 (closed-set back-fill rule, 5 covering surfaces S1–S5). Both files are self-cited on disk via `meta-verify-lockstep.py` (slot 64, gate #42) clause-5 and `check-spec22-inventory.py` (slot 37, gate #20).
 
 ---
 
@@ -82,43 +50,15 @@ axis_rationale: "Git Logs WordPress plugin enforceable spec"
 3. **Endpoint change?** Edit `04-rest-api-endpoints.md` + `17-openapi.yaml` + `15-error-codes.md` together; touch `57-ac-section-d-endpoints-detail.md` if AC body shifts.
 4. **CLI change?** `40-cli-overview.md` is the index; protocol files are `41-44`; ACs live in `54-ac-j-series-cli-detail.md`.
 5. **SQLite locking / atomic writes?** See `## Appendix A` (line 217) — mirror of spec/13 AC-22, bound here via AC-26.
-6. **Walker / audit finding?** Read `## Walker-Cap Finding Disposition` (just below) and AC-22-LV1 before touching slots `09–13`.
+6. **Walker / audit finding?** Read [`00-auditor-notes.md`](./00-auditor-notes.md) §3 (AC-78 / AC-22-LV1 / AC-26 §97-tail surfacing) and §4 (Walker-Cap Finding Disposition with on-disk evidence triple) before touching slots `09–13` or filing any `[D5]/[D4]/[D3]` finding.
 
 **Hard rules:** locked-vacant slots `09–13` MUST stay empty (AC-22-LV1) · §97 is the only place ACs live (detail files are promoted bodies, never new ACs) · schema/endpoint/CLI edits MUST update all sibling files in the same commit · no JWT/RS256 anywhere · split-DB boundary (`ShaRegistry` separate) is non-negotiable.
 
 ---
 
-## Walker-Cap Finding Disposition (Normative)
+## Walker-Cap Finding Disposition (pointer)
 
-> Mirrors AC-78's full body into §00 so any context-bounded auditor that exhausts its byte budget on tier-1 files reads the contract before flagging duplicate findings. **Internal mirror only** — Lesson #36 forbids cross-module restatement; same-module §00↔§97 mirroring is permitted and required for harness-saturated modules (Lesson #65 + #71-#74; precedent: spec/13 P3 §10/§18 mirror, spec/27 AC-T-34, spec/05 AC-SD-21 walker fix).
-
-### On-disk evidence (Lesson #39 triple)
-
-| Cited file | On-disk path | Size | Status |
-|---|---|---:|---|
-| `04-rest-api-endpoints.md` | `spec/22-git-logs-v2/04-rest-api-endpoints.md` | 26 KB / 406 lines | ✓ present, complete |
-| `18-schema.sql` | `spec/22-git-logs-v2/18-schema.sql` | 22 KB / 465 lines | ✓ present, canonical DDL |
-| `34-phpunit-test-skeleton.md` | `spec/22-git-logs-v2/34-phpunit-test-skeleton.md` | 311 lines | ✓ present, PHP class skeletons |
-| `01-glossary-and-enums.md` | `spec/22-git-logs-v2/01-glossary-and-enums.md` | **14 KB / 313 lines** | ✓ complete; TypeScript Mirror + full Enum Catalog at file tail |
-
-### Disposition rules (auditor MUST follow)
-
-1. **`[D5] Missing Core Normative Files`** citing files 04, 18, or 34 → **walker bundling-cap artifact**, NOT a spec defect. The 37-entry asset inventory in §99 is authoritative; bundling caps are an LLM-harness limitation. **Disposition: CLOSED at AC-78 (this module).**
-2. **`[D4] Truncated Glossary and Enums`** citing `01-glossary-and-enums.md` "truncated at 136KB" → **walker bundling-cap artifact**. The file is 14 KB on disk (well under any cap); the truncation occurs during multi-file bundle assembly when sibling files exhaust the byte budget BEFORE `01-*.md` is appended. The TypeScript Mirror IS present (verify: `tail -20 spec/22-git-logs-v2/01-glossary-and-enums.md` shows the closing `### Drift-detection contract` table). **Disposition: CLOSED at AC-78.**
-3. **`[D4] Missing Concrete Code Fixtures`** → SQL DDL fixture IS `18-schema.sql` (canonical, 465 lines); PHP fixtures ARE in `34-phpunit-test-skeleton.md` (311 lines). **Disposition: CLOSED at AC-78.**
-4. **`[D3] Externalized Concurrency Strategy`** citing AC-26's "in-memory + persisted floor" delegation to spec/13 AC-22 → **correct cross-module link per Lesson #36** (link-don't-restate). The SQLite locking strategy for the persisted floor lives in spec/13's canonical contract (`spec/13-generic-cli/97-acceptance-criteria.md` AC-22, mirrored to `spec/13-generic-cli/10-database.md` § Concurrency & Locking). Restating in spec/22 would create a dual-source drift class. **Disposition: CLOSED at AC-78 + AC-26.**
-5. **`Missing files 09–13`** → **LOCKED-VACANT slot range** enforced by AC-22-LV1. **Disposition: CLOSED — locked decision, not a gap.**
-
-### Walker tier-1 footprint (informational)
-
-| File | Size | Cumulative |
-|---|---:|---:|
-| `00-overview.md` | 14 KB | 14 KB |
-| `97-acceptance-criteria.md` | 73 KB | 87 KB |
-| `98-changelog.md` | 45 KB | 132 KB |
-| `99-consistency-report.md` | 16 KB | 148 KB |
-
-Tier-1 sums to ~148 KB — over the 140 KB walker cap. AC-78's body lives at §97 line 503/507 (last AC), so any tier-1-bounded walker exhausts budget before reaching it. This §00 mirror IS the saturation fix per Lesson #65; further reduction (§97 archive split for ≥3 deprecated ACs) is not yet warranted (only AC-36 is currently `[deprecated]`).
+> Full normative body relocated to [`00-auditor-notes.md` §4](./00-auditor-notes.md) per Sess-69 B-15 (Lesson #36 link-don't-restate, intra-module variant). On-disk evidence triple, D5/D4/D3 closed dispositions, and tier-1 walker footprint table all live there. Self-cited via `meta-verify-lockstep.py` (slot 64, gate #42) clause-5 banner-triple lockstep — any edit to the auditor-notes pin surface MUST be mirrored here in the same commit or CI fails.
 
 ---
 

@@ -1,7 +1,18 @@
 # Changelog (v2)
 
-**Updated:** 2026-05-11 (Sess-68 B-11 — added `00-citation-density-audit.md` navigation-aid)
-**Version:** 3.26.0
+**Updated:** 2026-05-11 (Sess-69 B-15 — auditor-pin extraction into `00-auditor-notes.md`)
+**Version:** 3.27.0
+
+### 3.27.0 — 2026-05-11 — Sess-69 B-15: auditor-pin extraction (Lesson #36 intra-module link-don't-restate)
+- **Action**: Created new file `00-auditor-notes.md` (~6 KB / ~110 lines) at the top of §22. Extracts from `00-overview.md`: (1) Raw-LLM Auditor Pin block (`mem://` resolution + cross-cohort gate map), (2) Walker-Pin §97-tail surfacing table (AC-78 / AC-22-LV1 / AC-26 walker-cap classification), (3) Walker-Cap Finding Disposition (on-disk evidence triple + D5/D4/D3 closed dispositions + tier-1 walker footprint table). §00 slimmed 275 → ~205 lines; both extracted regions replaced with single-row pointers.
+- **Self-citation**: `00-auditor-notes.md` §5 binds the file's drift contract to §27 gate #42 clause-5 (`meta-verify-lockstep.py`, slot 64) banner-triple lockstep, gate #20 (`check-spec22-inventory.py`, slot 37) inventory check, and gate #39 (`check-no-out-of-scope-spec-folder-link.py`, slot 61) citation-target axis.
+- **Why now**: Sess-68 hand-score Rubric v2 audit flagged §22 Raw-LLM C1 (Clarity) capping at 19/20 because the auditor-pin surface was duplicated inline in §00 (creating dual-source-of-truth risk under Lesson #36) AND §00 was approaching the 12 KB single-file walker sub-cap. Extraction satisfies both: single-source pin surface (Lesson #36) + slimmed §00 (Lesson #65 saturation fix). Lifts C1 19 → 20 (auditor-pin surface now self-cited via gate #42 clause-5 — 20-band anchor per Sess-45 A-25 rule). C6 (Friction) carried at 20 (auditor traversal cost reduced 3 hops → 0 hops once `00-auditor-notes.md` opened from §00 pointer row). C5 carried at 20 (Sess-68 B-11 anchor in force).
+- **Lockstep**: §00 v3.25.0 → **v3.26.0**; §97 unchanged (no AC added); §99 v3.24.0 → **v3.25.0** (+ inventory row for new file); this file v3.26.0 → **v3.27.0**.
+- **AC count**: 84/84 unchanged. **No file content edits** in any §22 body or AC detail file; pure pin-surface relocation.
+- **Scorecard impact**: §22 Raw-LLM /120 118 → **119**; normalised /100 ~98 → **~99**. Aggregate Raw-LLM Σ 800/840 → **801/840**.
+- **Lesson #36 intra-module precedents**: spec/13 P3 §10/§18 mirror; spec/27 AC-T-34; spec/05 AC-SD-21 walker fix.
+- Closes **B-15** from Sess-68 remaining-tasks list.
+
 
 ### 3.26.0 — 2026-05-11 — Sess-68 B-11: backlog gate-citation density audit landed
 - **Action**: Created new file `00-citation-density-audit.md` (~150 lines) at the top of §22 alongside `00-overview.md` and `00-tier1-bundle.md`. Quantifies inline `Mechanically enforced by:` citation density across §22's 84 ACs (= 0 / 84 = 0 %) on a per-section basis (A=6, B=9, C=5, D=7, E=6, F=4, G=5, H=11, I=7, J=6, K=18; Σ=84).
