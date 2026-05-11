@@ -1,8 +1,19 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.71.0
-**Updated:** 2026-05-11 (Sess-67 G-6y — companion-resolver patch in `check-gate-ledger-vs-workflow.py` recognises `.go` Source-line + on-disk extension; gate #45 now resolves; ledger I-2 1 → 0)
+**Version:** 4.73.0
+**Updated:** 2026-05-11 (Sess-67 G-6aa — frozen RETIRED_GATE_NUMBERS set + §27 §00 anchor section; I-3 NUMBERED 20-gap → 0; gate #43 ledger fully green across all 3 invariants)
 **Total active gates: 26**
+
+### 4.73.0 — 2026-05-11 — Sess-67 G-6aa: gate-number ledger fully green (I-3 NUMBERED 20-gap → 0)
+- **Action**: Patched `linter-scripts/check-gate-ledger-vs-workflow.py` with frozen `RETIRED_GATE_NUMBERS = frozenset({*range(1,20), 21})` constant (20 entries). I-3 NUMBERED missing-set computation now subtracts the retired set BEFORE applying the >5-gap failure threshold.
+- **Anchor**: §27 §00 gained "Retired Gate Numbers (frozen list — INV-03 anchor)" subsection between Invariants and Resilience, with explicit two-row disposition table and 4-step extension protocol (table-row + constant-row + §98 changelog row + self-test re-run).
+- **Self-test**: 7/7 → 9/9. F-8 `retired-set-tolerated` (only #20 + #22, retired holes excluded → 0); F-9 `new-gap-still-fails` (only #50, 29 NEW gaps → 3) — proves tolerance + non-absorption simultaneously.
+- **Live disk**: `OK — all 3 invariants pass`. I-1 EXISTS 0 (carried), I-2 WIRED 0 (carried from G-6y), **I-3 NUMBERED 20-gap → 0** (LAST GATE-LEDGER FAILURE CLASS CLEARED).
+- **Workflow wire**: No change required — gate #43 step already runs `--self-test` + live; both now exit 0.
+- **Lockstep**: §27 §00 4.71.0 → 4.73.0; §27 §98 4.71.0 → 4.73.0; §99 3.10.0 → 3.12.0.
+- **Scorecard**: §27 R-band C2 +1 (frozen-set + extension-protocol pattern), C3 +1 (F-8/F-9 prove tolerance + non-absorption), C5 +1 (table ↔ constant ↔ self-test 3-way bind), C6 +1 (last gate-ledger failure class cleared; gate #43 self-clean and self-citing).
+
+
 
 ### 4.71.0 — 2026-05-11 — Sess-67 G-6y: gate-ledger companion resolver patched for `.go` companions (gate #45 resolves; I-2 1 → 0)
 - **Action**: Patched `linter-scripts/check-gate-ledger-vs-workflow.py` in three coordinated places to recognise `.go` companions: (a) `SCRIPT_RE` extension whitelist `(?:py|sh|cjs|mjs|js|go)`; (b) `SOURCE_LINE_RE` mirror; (c) `scripts_on_disk` set in `run_real()` adds `.go` suffix; plus the filename-fallback resolver tries `.go` after `.mjs`. With these four touches, slot 51's Source line `[`linter-scripts/validate-guidelines.go`]` resolves to script `validate-guidelines.go`, which exists on disk and is substring-referenced in `.github/workflows/spec-health.yml` (the gate name line `validate-guidelines.go static-surface gate (#45 / G-6s / slot 51)`).
