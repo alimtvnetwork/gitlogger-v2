@@ -5,6 +5,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/example/glci/internal/ci"
@@ -12,6 +14,8 @@ import (
 	"github.com/example/glci/internal/config"
 	"github.com/example/glci/internal/detect"
 	"github.com/example/glci/internal/runner"
+	"github.com/example/glci/internal/selftest"
+	"github.com/example/glci/internal/ship"
 )
 
 // Detect implements `glci detect`.
@@ -131,9 +135,31 @@ func RunCmd(args []string, only string) error {
 				continue
 			}
 			emitResult(res, *jsonOut)
-			if *noPush {
-				_ = cfg // suppress unused if no shipping yet
+
+			// §06 shipping (batched mode, Lane A).
+			if !*noPush {
+				body := buildBody(cfg, rt.ID, p.Phase, res)
+				sres := ship.Ship(context.Background(), ship.Options{
+					ServerURL:  cfg.ServerURL,
+					MaxRetries: cfg.MaxRetries,
+				}, body)
+				if sres.ExitCode != 0 {
+					if *jsonOut {
+						fmt.Printf(`{"Push":"failed","Runtime":%q,"Phase":%q,"ExitCode":%d,"OurCode":%q,"ServerCode":%q,"Attempts":%d}`+"\n",
+							rt.ID, p.Phase, sres.ExitCode, sres.OurCode, sres.ServerCode, sres.Attempts)
+					} else {
+						fmt.Fprintf(os.Stderr, "[ship] %s/%s exit=%d code=%s%s attempts=%d\n",
+							rt.ID, p.Phase, sres.ExitCode, sres.OurCode, sres.ServerCode, sres.Attempts)
+					}
+					if exit < sres.ExitCode {
+						exit = sres.ExitCode
+					}
+					if !*keepGoing {
+						return exitCode(exit)
+					}
+				}
 			}
+
 			if res.ExitCode != 0 {
 				if exit == 0 {
 					exit = 1
@@ -145,6 +171,77 @@ func RunCmd(args []string, only string) error {
 		}
 	}
 	return exitCode(exit)
+}
+
+// buildBody assembles the §06 batched body from runner output.
+//
+// FilePaths[] is sorted lexicographically (determinism contract).
+// HasError is true iff ErrorLogs[] is non-empty OR runner exit code ≠ 0.
+func buildBody(cfg *config.Config, runtimeID, phase string, r *runner.Result) ship.Body {
+	pipeline := strings.NewReplacer("{runtime}", runtimeID, "{phase}", phase).Replace(cfg.PipelineTpl)
+
+	logs := make([]string, 0, len(r.Lines))
+	errs := make([]string, 0)
+	pathSet := map[string]struct{}{}
+	pathRe := regexp.MustCompile(`(?:[A-Za-z0-9_./\-]+\.(?:go|ts|tsx|js|jsx|php|py|md))(?::\d+)?`)
+
+	for _, ln := range r.Lines {
+		logs = append(logs, ln.Text)
+		if classify.Classify(ln.Text, nil, nil) == classify.Error {
+			errs = append(errs, ln.Text)
+			for _, m := range pathRe.FindAllString(ln.Text, -1) {
+				if i := strings.Index(m, ":"); i > 0 {
+					m = m[:i]
+				}
+				if len(pathSet) < 100 {
+					pathSet[m] = struct{}{}
+				}
+			}
+		}
+	}
+	paths := make([]string, 0, len(pathSet))
+	for p := range pathSet {
+		paths = append(paths, p)
+	}
+	sort.Strings(paths)
+
+	rootRepo := stripVersionSuffix(cfg.RepoURL)
+	return ship.Body{
+		RepoUrl:      cfg.RepoURL,
+		RootRepo:     rootRepo,
+		Branch:       cfg.Branch,
+		TempToken:    cfg.TempToken,
+		Token:        cfg.Token,
+		PipelineName: pipeline,
+		GitSha256:    cfg.GitSha,
+		Logs:         logs,
+		ErrorLogs:    errs,
+		FilePaths:    paths,
+		HasError:     len(errs) > 0 || r.ExitCode != 0,
+	}
+}
+
+// stripVersionSuffix removes a trailing -vN segment from a repo URL
+// (e.g. ".../repo-v2" → ".../repo") per §08 RootRepo derivation.
+func stripVersionSuffix(u string) string {
+	re := regexp.MustCompile(`-v\d+$`)
+	return re.ReplaceAllString(u, "")
+}
+
+// SelfTest implements `glci --self-test [--check <mode>]`.
+func SelfTest(args []string) error {
+	fs := flag.NewFlagSet("self-test", flag.ContinueOnError)
+	mode := fs.String("check", "all", "self-test mode")
+	if err := fs.Parse(args); err != nil {
+		return exitErr(64, err)
+	}
+	code, msg := selftest.Run(selftest.Mode(*mode))
+	if code == 0 {
+		fmt.Println(msg)
+		return nil
+	}
+	fmt.Fprintln(os.Stderr, msg)
+	return exitCode(code)
 }
 
 func emitResult(r *runner.Result, jsonOut bool) {
@@ -226,13 +323,31 @@ func Doctor(args []string) error {
 	}
 	fmt.Println("doctor: detect      ok")
 	// Check 2: config resolves.
-	if _, err := config.Resolve(*cwd, config.Flags{}, os.Getenv); err != nil {
+	cfg, err := config.Resolve(*cwd, config.Flags{}, os.Getenv)
+	if err != nil {
 		fmt.Fprintln(os.Stderr, "doctor: "+err.Error())
 		return exitCode(5)
 	}
 	fmt.Println("doctor: config      ok")
-	// Check 3 (server reach) requires shipping client — defer to P-shipping.
-	fmt.Println("doctor: server      skip (shipping client not yet wired)")
+	// Check 3: server reach via GET /get-logs?q=<repo>&limit=0 (§06).
+	status, rerr := ship.Reach(context.Background(), ship.Options{
+		ServerURL: cfg.ServerURL,
+	}, cfg.RepoURL, cfg.TempToken, cfg.Token)
+	switch {
+	case rerr != nil:
+		fmt.Fprintf(os.Stderr, "doctor: server reach failed: %v\n", rerr)
+		return exitCode(5)
+	case status == 401:
+		fmt.Fprintln(os.Stderr, "doctor: GLCI-DOCTOR-AUTH-INVALID (HTTP 401)")
+		return exitCode(5)
+	case status == 404:
+		fmt.Fprintln(os.Stderr, "doctor: GLCI-DOCTOR-PROFILE-NOT-FOUND (HTTP 404)")
+		return exitCode(5)
+	case status >= 500:
+		fmt.Fprintf(os.Stderr, "doctor: server error HTTP %d\n", status)
+		return exitCode(5)
+	}
+	fmt.Printf("doctor: server      ok (HTTP %d)\n", status)
 	return nil
 }
 

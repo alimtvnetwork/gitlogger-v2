@@ -13,6 +13,13 @@ func Run(args []string, version string) error {
 		return nil
 	}
 
+	// Global --self-test short-circuits subcommand dispatch (§04 v1.2.0).
+	for _, a := range args {
+		if a == "--self-test" {
+			return SelfTest(filterOut(args, "--self-test"))
+		}
+	}
+
 	switch args[0] {
 	case "ping":
 		return Ping(args[1:])
@@ -65,4 +72,14 @@ func printUsage(version string) {
 	fmt.Println("  keys            Manage Ed25519 keys (generate)")
 	fmt.Println("  version         Print glci version")
 	fmt.Println("  help            Show this help")
+}
+
+func filterOut(xs []string, drop string) []string {
+	out := make([]string, 0, len(xs))
+	for _, x := range xs {
+		if x != drop {
+			out = append(out, x)
+		}
+	}
+	return out
 }
