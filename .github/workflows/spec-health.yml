@@ -866,13 +866,16 @@ jobs:
         # (4) partial indexes IX_AppLink_TargetRepoId / _TargetGitProfileId
         #     with `WHERE Target… IS NOT NULL` clauses on both lanes.
         # `--self-test` runs 6 in-memory fixtures (F-1 unique-passing +
-        # F-2..F-5 clause failures + F-6 R5 vacuous-pass guard). §22
-        # `18-schema.sql` mirror coverage deferred (G-6w-mirror) — §22 currently
-        # carries the pre-rename column shape; rebase is a separate work item.
+        # F-2..F-5 clause failures + F-6 R5 vacuous-pass guard). Sess-67
+        # G-6w-mirror — §22 `18-schema.sql` AppLink rebased to
+        # TargetGitProfileId/TargetRepoId + IsActive/DisconnectedAt + partial
+        # Target indexes; mirror coverage promoted from deferred to
+        # load-proven via `--all-sources`, which walks both §23 §00 AND §22
+        # §18-schema.sql in lockstep and fails on the first divergence.
         # Spec: spec/27-spec-toolchain/39-check-applink-xor-clause.md
         run: |
           python3 linter-scripts/check-applink-xor-clause.py --self-test
-          python3 linter-scripts/check-applink-xor-clause.py
+          python3 linter-scripts/check-applink-xor-clause.py --all-sources
 
       - name: §26 diagram parity gate (#41 / G-6x / slot 63)
         # Sess-67 G-6x — phantom-clearing for slot 63 / gate #41. Promotes
