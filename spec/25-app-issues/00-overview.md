@@ -58,6 +58,7 @@ Any content that analyzes bugs, failures, root causes, or fixes for application-
 
 | # | Folder | Status | Description |
 |---|--------|--------|-------------|
+| 00 | [00-finding-template.md](./00-finding-template.md) | **active** (Sess-70 B-23) | Closed-set normative template for §25 audit findings — file-shape triggers, body-shape canonical four-section contract, verifier source (mirror of AC-AI-000), F1..F6 fixture matrix, D1..D5 finding-class taxonomy. Read BEFORE authoring any new finding. |
 | 01 | [01-phase-2-git-logs-audit/](./01-phase-2-git-logs-audit/00-overview.md) | **superseded** by 02 (preserved for traceability) | Phase-2 spec-only audit of `spec/_archive/21-git-logs-v1/` — first pass; contained false-positives later corrected by the consolidated tracker. |
 | 02 | [02-consolidated-audit-findings/](./02-consolidated-audit-findings/00-overview.md) | **active** (start here) | Single source of truth — 24 numbered findings with file paths + verbatim evidence snippets. Re-scored every Phase-2 item against line-anchored evidence. |
 
