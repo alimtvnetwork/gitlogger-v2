@@ -7,17 +7,14 @@
 
 declare( strict_types = 1 );
 
-defined( 'ABSPATH' ) || exit;
-
-// REST namespace constant the controllers reference. We must use define()
-// (not `const`) because `const` cannot live inside a conditional block.
 namespace {
+	defined( 'ABSPATH' ) || exit;
+
+	// REST namespace constant the controllers reference. We must use define()
+	// (not `const`) because `const` cannot live inside a conditional block.
 	if ( ! defined( 'GitLogs\\GIT_LOGS_REST_NS' ) ) {
 		define( 'GitLogs\\GIT_LOGS_REST_NS', 'git-logs/v1' );
 	}
-}
-
-namespace {
 
 	if ( ! class_exists( 'WP_REST_Response' ) ) {
 		class WP_REST_Response {
