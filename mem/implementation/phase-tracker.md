@@ -17,6 +17,7 @@ type: feature
 - #6 PHP plugin PHPUnit-lite harness (auth surface) — ✅ done
 - #7 Go CLI/runner harness (runner/selftest/laneb/selfupdate) — ✅ done
 - #8 REST controller PHP harness — ✅ done (48 tests, 106 assertions)
-- #9 DB layer tests — wpdb shim for RepoStore/RunStore/EventStore/AuditLog/SHA-index/MigrationRunner — ⏳ todo (next default)
+- #9 DB-layer tests with real PDO/SQLite (Database/Migration/Repos/Runs/Events/Audit/Branches/ShaIndex) — ✅ done (41 tests, 115 assertions)
 - #10 Admin UI E2E (Playwright) for the WP admin React/HTML page — ⏳ todo
 - #11 Glci end-to-end harness: spawn `glci ship/selftest` against a stub WP server — ⏳ todo
+- #12 Per-package Go coverage gates in `ci-glci.yml` (fail PR if coverage drops below current floor) — ⏳ todo
