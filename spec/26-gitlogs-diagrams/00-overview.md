@@ -50,8 +50,9 @@ produced_for:
 ---
 # Gitlogs Diagrams
 
-**Version:** 3.10.0
-**Updated:** 2026-05-10 (Session 58 audit-task A-47 — `## §22 Enum Catalog Mirror — 12 enum types (Lesson #36 inline pin)` section added between Inventory and Diagram metadata contract. Inlines the 12 enum-type **names** (11 active + 1 forbidden-deprecated) pinned by §22 §97 AC-81, with cardinality, diagram-relevance, and authority columns. Codes remain single-source in §22 AC-81 + `18-schema.sql` per Lesson #36. Adds AC-DG-23 binding — diagram authors MUST cite enum values by PascalCase codes from this table; free-text synonyms = breach. Establishes §26 as the fifth landing surface for new enum types (mirror of AC-81's four-surface rule). Drift-check command pinned for future §27 gate `enum-mirror-26-vs-22-aligned`. Closes Raw-LLM Implementability gap: diagram authors without §22 in context window can now cite by enum-type name + cardinality without traversing 14 KB glossary. Prior: Sess-47 A-27 produced_for: bidirectional binding.)
+**Version:** 3.11.0
+**Updated:** 2026-05-11 (Sess-70 B-25 — Sess-58 A-47 deferred binding ratified in §97 as **AC-DG-24** (NOT AC-DG-23, which shipped Sess-13 with unrelated narrative-header content). Enum-mirror parity is now AC-bound + load-proven via the inline `diff` command in line 151 of this file (zero-install bash, runnable from repo root); §27 gate `enum-mirror-26-vs-22-aligned` remains queued but no longer blocks load-proof status per §97 AC-DG-24 clause-1. Reflexivity binding via gate #42 banner-triple lockstep. §26 Raw-LLM C5 19 → 20.)
+**Updated-prev:** 2026-05-10 (Session 58 audit-task A-47 — `## §22 Enum Catalog Mirror` section added; AC-DG-23 binding pinned, §97 ratification deferred.)
 <!-- h10-verified-phase: 153 -->
 
 Authoritative source: [`../22-git-logs-v2/00-overview.md`](../22-git-logs-v2/00-overview.md).

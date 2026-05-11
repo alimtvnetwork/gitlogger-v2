@@ -1,7 +1,9 @@
 # Consistency Report — Gitlogs Diagrams
 
-**Version:** 3.5.4
-**Updated:** 2026-05-10 (Session 60 P14 — §26 final lift; AC-DG-01/02/06 literal-cited via gate #41)
+**Version:** 3.5.5
+**Updated:** 2026-05-11 (Sess-70 B-25 — AC-DG-24 minted ratifying Sess-58 A-47 deferred enum-mirror parity binding; §26 R C5 19 → 20 → totals **L 120 / C 120 / R 119**)
+
+> **v3.5.5 update (Sess-70 B-25 — enum-mirror parity ratified as AC-DG-24):** Closes the Sess-58 A-47 deferred-binding loop. §00 line 142 pinned the binding "AC-DG-23 binding — see §97" but the matching §97 contract was deferred. Ratified as **AC-DG-24** (NOT AC-DG-23, which shipped Sess-13 with unrelated narrative-header content) with 6 invariants + 4 test invariants + extended Externalized Citation Map row. Load-proven via §00 line 151 inline `diff` command (zero-install bash, runnable from repo root); §27 gate `enum-mirror-26-vs-22-aligned` promotion remains queued but no longer blocks load-proof status per AC-DG-24 clause-1. Reflexivity binding via gate #42 (`meta-verify-lockstep.py`, slot 64) banner-triple lockstep on §00 / §97 / §98 / this file. Banners: §00 v3.10.0 → **v3.11.0**; §97 v3.8.0 → **v3.9.0** (AC count 23 → 24); §98 v3.12.0 → **v3.13.0**; this file v3.5.4 → **v3.5.5**. **Scorecard delta**: §26 Raw-LLM **C5 Implementability 19 → 20**; §26 totals **L 120 / C 120 / R 119**. Sole Raw-LLM cohort floor remains §27 (R 106). No new active gate (total **26 unchanged**). No CI workflow change.
 
 > **v3.5.4 update (Session 60 P14 — §26 final lift to 120/120/118 = first folder to clear 118+ on Raw-LLM):** AC-DG-01 (ER entity-set), AC-DG-02 (ER cardinality), AC-DG-06 (emoji-free Mermaid lexer) each gained an inline `**Mechanically enforced by:**` clause naming `spec/27-spec-toolchain/63-check-diagram-parity.py` (gate #41) plus the specific clause within the gate. Promotes the three from conditional-cited (18) to literal-cited (20) on the Cursor + Raw-LLM ledgers. Score evolution carried forward: Lovable 120 → 120 (held); Cursor 117 → **120** (+3); Raw-LLM 113 → **118** (+5). Closes `AC-DG-emoji-free` placeholder. No CI workflow change, no gate-count change.
 

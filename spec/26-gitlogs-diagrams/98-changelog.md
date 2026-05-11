@@ -1,10 +1,22 @@
 # Changelog — Gitlogs Diagrams
 
-**Version:** 3.12.0
-**Updated:** 2026-05-10 (Session 60 P14 — §26 final lift: AC-DG-01 / AC-DG-02 / AC-DG-06 promoted from conditional to literal-cited via gate #41 binding clauses)
+**Version:** 3.13.0
+**Updated:** 2026-05-11 (Sess-70 B-25 — AC-DG-24 minted; §26 R C5 19 → 20)
 **Scope:** `spec/26-gitlogs-diagrams/`
 
 ---
+
+## [3.13.0] — 2026-05-11 — Sess-70 B-25: enum-mirror parity ratified as AC-DG-24 (§26 final R-band lift)
+
+- **Action**: Minted **AC-DG-24** `[critical]` "§22 enum-catalog mirror parity is on-disk drift-checkable" in `97-acceptance-criteria.md` (v3.8.0 → **v3.9.0**, AC count 23 → 24). 6 invariants (row-set parity via inline `diff`, cardinality parity, forbidden-deprecated retention, diagram-relevance integrity, no per-code restatement, Lesson #15 reflexivity) + 4 test invariants T-DG-24-01..04 + extended Externalized Citation Map row.
+- **Why now**: Sess-58 A-47 minted the §00 enum-mirror table + pinned binding text "AC-DG-23 binding — see §97" but the matching §97 AC was deferred to "next §97 touch". Per scorecard ritual, a 20 on any criterion REQUIRES citing a self-enforcing mechanism on disk — §00 line 151 already carries a load-proven inline `diff` command (zero-install bash, runnable from repo root), so the load-proof exists; only the §97 contract row was missing. AC-DG-24 (NOT AC-DG-23, which shipped Sess-13 with unrelated narrative-header content) closes the loop without ID collision and without violating slot/AC immutability.
+- **Self-enforcement chain (load-proven, gate-pending)**: §97 AC-DG-24 clause-1 → §00 line 151 inline `diff` command → row-set parity assertion against `spec/22-git-logs-v2/51-ac-enum-catalog-detail.md` AC-81. Promotion to §27 active gate `enum-mirror-26-vs-22-aligned` (Sess-58 A-47 deferred binding) remains queued but no longer blocks load-proof status — the bash diff IS the verifier on disk today. Reflexivity binding via `meta-verify-lockstep.py` (slot 64 / gate #42) clause-5 banner-triple lockstep.
+- **Lockstep**: §00 v3.10.0 → **v3.11.0** (banner + Updated-prev demoted; no body change — line 151 diff command and §00 line 142 binding pointer were already on disk); §97 v3.8.0 → **v3.9.0** (this AC); this file v3.12.0 → **v3.13.0** (this entry); §99 v3.5.4 → **v3.5.5** (audit-row tail). **No** §27 slot bump (citation reuses existing slot 64 → gate #42; gate `enum-mirror-26-vs-22-aligned` promotion deferred). **No** new active gate. Total active gates **26 unchanged**.
+- **Scorecard impact (Sess-70, B-25)**: §26 Raw-LLM **C5 Implementability 19 → 20** (previously 19 because the deferred §97 binding meant a Raw-LLM walker reading only §97 saw no enum-mirror contract; now AC-DG-24 anchors the obligation + cites the load-proven verifier in the same file). §26 totals: **L 120 / C 120 / R 119** (was 120/120/118 post-Sess-60 P14; Δ 0/0/+1). Cohort Raw-LLM mean lifts by ~0.14. Sole Raw-LLM cohort floor remains §27 (R 106, post Sess-69 B-22).
+- **Invalidation triggers**: (a) Removing AC-DG-24 → revert R C5 to 19. (b) Mutating or removing the §00 line 151 `diff` command → trips AC-DG-24 clause-1 + clause-6 reflexivity (citation drifts). (c) Adding a `Codes` or `Values` column to the §00 enum-mirror table → trips clause-5 (Lesson #36 violation). (d) Promoting `enum-mirror-26-vs-22-aligned` to a §27 active gate → no §26 score change (already at C5 ceiling); contributes to §27 Raw-LLM lift instead.
+
+---
+
 
 ## [3.12.0] — 2026-05-10 — Session 60 P14: AC-DG-01/02/06 literal-cited promotion (§26 final lift)
 
