@@ -8,7 +8,8 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.88.0  
+**Version:** 4.89.0  
+**Version-prev:** 4.88.0  
 **Updated:** 2026-05-11 (Sess-69 B-16 — authored "Navigation-quintet inline cross-reference convention" into `00-tier1-bundle.md` (v1.1.0 → v1.2.0). 5-clause frontmatter contract pins that every active-gate slot file MUST inline AC-T-30/-31/-36/-37/-38 under a `navigation_quintet` frontmatter key in canonical order: (1) presence; (2) canonical order encoding the navigation read-flow; (3) closed set of exactly 5 AC-IDs; (4) no-restate (Lesson #36); (5) reverse-coverage invariant (every AC must appear in ≥1 active-gate slot). Carve-out: 7 module-level surfaces exempt (overview/bundle/binding/decomposition/AC/changelog/§99 — circular self-citation). Worked-example YAML + worked-example bash verifier sketch included for the post-mass-edit reverse-coverage check (candidate body for slot 66 / gate #44 clause-5 extension at promotion). Phased rollout pinned: today = spec-only authorship + reviewer-attestation only; B-16-impl mass-edit across 28 active-gate slot files gated on B-20-impl per slot 66 schema floor (mass-edit could itself introduce drift without active uniformity gate). Lifts §27 R-band C4 (Consistency) **13 → 14** (partial +1 today; cited mechanism: 5-clause contract + worked-example YAML in bundle file body — reviewer-attestation only). Cumulative C4 trajectory post all impls: 14 → 16 (B-20-impl machine-checked schema) → 18 (B-16-impl 28/28 reverse coverage) — band-anchor reached. Same-PR refresh of `00-raw-llm-bottleneck-decomposition.md` (v1.3.0 → v1.4.0): C4 row 13 → 14, B-16 status "open" → "spec-only authored / mass-edit pending B-20-impl". Total active gates **26 unchanged**.  
 **Prior banner — Version:** 4.87.0; **Updated:** 2026-05-11 (Sess-69 B-20 — `66-check-slot-frontmatter-uniformity.md` authored as Proposed gate #44 slot doc; lifts §27 R C4 +2.)
 
