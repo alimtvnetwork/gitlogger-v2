@@ -140,6 +140,13 @@ exit-code table absent / §28 §00 harness declaration absent /
   §27 R5 contract; gate clause-2 enforces the inheritance is
   by literal cite, not by re-derivation.
 
+## Red-green test pairs (AC-T-39)
+
+- **RED:** mutate `spec/28-universal-ci-cli/07-error-catalog.md` `--self-test` exit-code table so any of the 4 canonical rows (`OK=0`, `Bootstrap=1`, `Internal=2`, `UserError=3`) is missing or carries a different code → `python3 linter-scripts/check-ci-cli-self-test-harness.py --self-test` MUST exit non-zero with `clause-2 inheritance-by-cite fail: §28 §07 exit-code table drift` (cites clause-2 in this slot's Contract section; fixture `linter-scripts/_fixtures/slot-62/F-1-exit-code-drift/`).
+- **GREEN:** with §28 §07 exit-code table intact (4 rows in canonical order, each citing §27 R5 vacuous-pass inheritance) → `python3 linter-scripts/check-ci-cli-self-test-harness.py --self-test` MUST exit 0 with `OK: §28 self-test harness inherits §27 R5 by literal cite`.
+- **RED:** restate the §27 R5 vacuous-pass contract body inline in §28 §07 (instead of citing it) → clause-2 MUST trip with `Lesson #36 link-don't-restate violation: §28 §07 contains R5 contract restatement, not citation`.
+- **GREEN:** §28 §07 contains exactly the literal `inherits R5 from spec/27` (or canonical equivalent) → clause-2 reports `OK: cite-only inheritance pattern preserved`.
+
 ## Scorecard impact (Rubric v2 /120)
 
 - **§28** — C3 (Testability) +1 (self-test harness now

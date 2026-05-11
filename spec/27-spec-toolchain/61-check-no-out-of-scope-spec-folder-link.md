@@ -163,6 +163,13 @@ cannot prove its exemption logic is wired)`.
 - **Lesson #15 reflexivity** — clause-5 enforces gate name
   remains in §27 §00 in-scope enumeration block.
 
+## Red-green test pairs (AC-T-39)
+
+- **RED:** add `See also [spec/05-platform-overview.md](../05-platform-overview/00-overview.md)` to any in-scope `.md` under `spec/22..28/` → `python3 linter-scripts/check-no-out-of-scope-spec-folder-link.py --self-test` MUST exit non-zero with `out-of-scope folder link in <file>:<line>: spec/05-…` (cites clause-1 link-target axis in this slot's Contract section).
+- **GREEN:** with all in-scope `.md` files linking only to `mem://`, `spec/22..28/`, or repo-relative `linter-scripts/`/`.github/` paths → `python3 linter-scripts/check-no-out-of-scope-spec-folder-link.py --self-test` MUST exit 0 with `OK: 0 out-of-scope spec folder links across <N> in-scope files` (cites the 7-folder allowlist in `linter-scripts/_fixtures/slot-61/locked-7.txt`).
+- **RED:** rename one of the 7 in-scope folders in the script's `LOCKED_SEVEN` constant without updating `mem://constraints/spec-scope` → R5 vacuous-pass guard MUST trip clause-5 because the in-scope walk-set count would diverge from the memory pin.
+- **GREEN:** `LOCKED_SEVEN` constant ↔ `mem://constraints/spec-scope` ↔ §00 in-scope enumeration block triple-parity holds → R5 clause-5 reports `OK: locked-7 triple-parity intact`.
+
 ## Scorecard impact (Rubric v2 /120)
 
 - **§27** — C4 (Consistency) +1 (perimeter now load-proven —

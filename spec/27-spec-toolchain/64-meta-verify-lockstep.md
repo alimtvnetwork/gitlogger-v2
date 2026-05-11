@@ -151,6 +151,13 @@ unparseable / §27 §00 meta-verify self-citation absent`.
   not "and here is what R5 means restated"); slot 64 verifies
   the cite-only pattern across all 21+ slot docs.
 
+## Red-green test pairs (AC-T-39)
+
+- **RED:** strip the literal `Total active gates: 26` line from `spec/27-spec-toolchain/00-overview.md` (banner block) → run `python3 linter-scripts/meta-verify-lockstep.py --self-test` MUST exit non-zero with a `clause-5: GATE_COUNT_RE banner-triple parity` failure (cites clause-5 fixture in this slot's Contract section). Restore line to revert.
+- **GREEN:** with §00, §98, §99 banner triple all carrying the same `Total active gates: NN` literal (verify via `grep -c '^\*\*Total active gates: 26\*\*$' spec/27-spec-toolchain/{00-overview.md,98-changelog.md,99-consistency-report.md}` → 3) → `python3 linter-scripts/meta-verify-lockstep.py --self-test` MUST exit 0 with `OK: clause-5 banner-triple lockstep` (cites the same clause-5 fixture).
+- **RED:** add a stray `[link](spec/05-something/foo.md)` to any in-scope tier-1 file → re-run `--self-test` MUST exit non-zero on clause-2 closed-set perimeter (cites the locked-7 fixture roster in `linter-scripts/_fixtures/slot-64/clause-2/`).
+- **GREEN:** with no out-of-scope link present (verify via `python3 linter-scripts/check-no-out-of-scope-spec-folder-link.py --check=tier1` → exit 0) → clause-2 of slot 64's `--self-test` MUST exit 0.
+
 ## Scorecard impact (Rubric v2 /120)
 
 - **§27** — C3 (Testability) +1 (every active slot doc now
