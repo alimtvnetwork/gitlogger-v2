@@ -141,6 +141,13 @@ absent / §26 §00 parity declaration absent`.
 - **Lesson #15 reflexivity** — clause-5 enforces gate name
   remains in §26 §00 parity declaration block.
 
+## Red-green test pairs (AC-T-39)
+
+- **RED:** drop a `.mmd` file under `spec/26-gitlogs-diagrams/` whose `consumes:` frontmatter cites a §22 anchor that no longer exists (e.g., rename the §22 anchor without updating the diagram's frontmatter) → `python3 linter-scripts/check-diagram-parity.py --check=consumes-binding-completeness` MUST exit non-zero with `orphan consumes-binding in <file>: anchor <name> not resolved in §22` (cites clause-1 walk-scope in this slot's Contract section; fixture `linter-scripts/_fixtures/slot-63/F-2-orphan-consumes/`).
+- **GREEN:** with all `.mmd` `consumes:` rows resolving to live §22/§23 anchors → `python3 linter-scripts/check-diagram-parity.py --check=all` MUST exit 0 with `OK: §26 diagram parity gate clean (--check=all)` (cites the live disk attestation captured in §99 v3.17.0 changelog entry).
+- **RED:** strip the `Audience:` row from any `.mmd` narrative header → `python3 linter-scripts/check-diagram-parity.py --check=narrative-header-schema` MUST exit non-zero on clause-6 with `narrative-header-schema fail in <file>: missing key 'Audience:'` (cites `NARRATIVE_HEADER_KEYS` constant + fixture `linter-scripts/_fixtures/slot-63/F-7-strip-audience/`).
+- **GREEN:** with all 4 narrative-header keys present in canonical order before the first Mermaid directive → clause-6 reports `OK: narrative-header-schema parity intact across <N> .mmd files`.
+
 ## Scorecard impact (Rubric v2 /120)
 
 - **§26** — C2 (Completeness) +2 (per-diagram bindings now

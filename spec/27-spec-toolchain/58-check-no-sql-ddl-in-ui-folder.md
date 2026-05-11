@@ -147,6 +147,13 @@ exemption logic is wired)`.
   asserts code-vs-spec parity; slot 58 asserts spec-folder-vs-
   spec-folder boundary parity.
 
+## Red-green test pairs (AC-T-39)
+
+- **RED:** add a `CREATE TABLE app_widget_config (...)` Postgres DDL block to any `.md` under `spec/24-app-design-system-and-ui/` → `python3 linter-scripts/check-no-sql-ddl-in-ui-folder.py --self-test` MUST exit non-zero with `SQL DDL detected in §24: <file>:<line> '^CREATE TABLE'` (cites clause-1 closed-set DDL-token roster `^CREATE TABLE|^CREATE INDEX|^ALTER TABLE|^DROP TABLE` in this slot's Contract section; fixture `linter-scripts/_fixtures/slot-58/F-1-create-table/`).
+- **GREEN:** `rg -c '^CREATE TABLE|^CREATE INDEX|^ALTER TABLE|^DROP TABLE' spec/24-app-design-system-and-ui/*.md` MUST return 0 across all files → `python3 linter-scripts/check-no-sql-ddl-in-ui-folder.py --self-test` exits 0 with `OK: §24 contains 0 DDL blocks (boundary closed by AC-ADS-17)` (cites the live disk attestation captured in §24 §99 v2.2.4 negative-evidence sweep).
+- **RED:** wrap a DDL block inside a fenced ```` ```sql ```` code block thinking the fence exempts it → clause-3 MUST still trip because the closed-set roster matches against line-start regex regardless of fence wrapping (cites clause-3 R5 vacuous-pass-guard in this slot's Contract section).
+- **GREEN:** §24 contains routing pins like `Persistence DDL: see §23` (link-only, no DDL body) → clause-3 reports `OK: routing-pin pattern preserved per Lesson #36`.
+
 ## Scorecard impact (Rubric v2 /120)
 
 - **§24** — C4 (Consistency) +1 (boundary now load-proven —
