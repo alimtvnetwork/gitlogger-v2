@@ -23,3 +23,4 @@ type: feature
 - #12 Per-package Go coverage gates in `ci-glci.yml` — ✅ done (`scripts/coverage-gate.sh`, statement-weighted, 10 packages gated)
 - #13 Verify Playwright suite by triggering CI workflow once user pushes; fix any environmental issues that surface there — ⏳ followup
 - #14 Cover the `cmd` dispatcher (`CodeOf`, `Run`, `filterOut`, `contains`, `exitCode`) — ✅ done (cmd_test.go, gate floor 15%)
+- #15 Quickstart docs (`glci/README.md` + `git-logs-plugin/README.md`) — ✅ done
