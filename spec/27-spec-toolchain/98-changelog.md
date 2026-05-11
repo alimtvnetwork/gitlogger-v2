@@ -1,8 +1,20 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.77.0
-**Updated:** 2026-05-11 (Sess-67 G-T-22 — `ac-status-tag-and-parent-taxonomy-check` clauses 4+5 shipped; T-22 backlog ticket retired)
+**Version:** 4.78.0
+**Updated:** 2026-05-11 (Sess-67 G-8 — `check-diagram-parity.py` clause-6 `narrative-header-schema` shipped; §26 R-band lift +2)
 **Total active gates: 26**
+
+### 4.78.0 — 2026-05-11 — Sess-67 G-8: §26 R-band lift via clause-6 narrative-header schema (gate #41 / slot 63)
+- **Action — clause-6**: `linter-scripts/check-diagram-parity.py` gained `NARRATIVE_HEADER_KEYS = ('Diagram type:','What this answers:','Authoritative source:','Audience:')` + 15-token `MERMAID_DIRECTIVES` enum + `check_narrative_header()` and a new `narrative-header-schema` `--check` mode. Scans every active `.mmd` (exemptions carried) for the 4 keys in canonical order before the first directive line; YAML frontmatter tolerated; intervening `%%` comments + blank lines permitted.
+- **Action — regression repair**: An earlier `_make_fixture` refactor had dropped the `consumes-binding-completeness` and `er-entity-superset` arms from `run_against`. Restored both with explicit `which in ('all', …)` branches; F-2 (orphan .mmd) + F-3 (ER missing Repo) green again.
+- **Self-test**: 6/6 → 8/8. F-7 strips `Audience` → clause-6 fail; F-8 swaps `Authoritative source` ↔ `Audience` → clause-6 order fail. F-1..F-6 carried.
+- **Live disk**: `OK: §26 diagram parity gate clean (--check=all)` on first re-run after refactor repair.
+- **Spec doc**: §26 §97 AC-DG-23 gained a `**Mechanically enforced by:** linter-scripts/check-diagram-parity.py clause-6 (narrative-header-schema mode, gate #41 / Slot 63)` paragraph pinning the constant↔AC reflexivity rule (Lesson #36) — any change to the 4-key schema or canonical directive list MUST update both script constants and AC body in the same commit.
+- **Workflow wire**: No change — `.github/workflows/spec-health.yml` step "§26 diagram parity gate (#41 / G-6x / slot 63)" already runs `--self-test` + `--check=all`; both now exercise 6 clauses.
+- **Backlog**: G-8 ticket `§26 R-band lift 116 → 118+` retired.
+- **Lockstep**: §27 §00 4.77.0 → 4.78.0; §27 §98 4.77.0 → 4.78.0; §99 3.16.0 → 3.17.0.
+- **Scorecard**: §26 R-band C3 +1 (clause-6 self-test extends machine-checked floor to narrative-header surface — pairs with gate #28 §97 hygiene as second self-citing mechanism), C5 +1 (constant↔AC reflexivity is the cite-mechanism, not external prose); §27 R-band C6 +1 (G-8 retired).
+
 
 ### 4.77.0 — 2026-05-11 — Sess-67 G-T-22: closed `ac-status-tag-and-parent-taxonomy-check` (slot 47 deferred clauses 4+5)
 - **Action — clause-4**: `linter-scripts/check-ac-section-orphan-header.py` (slot 47, gate #28) gained `STATUS_TAG_VOCABULARY = ('active','critical','high','medium','low','deferred','deprecated','draft')` constant + per-AC `STATUS_TAG_RE` validation. When an `### AC-…` header carries a trailing `` `[xxx]` `` tag, `xxx` MUST be in the vocabulary (untagged ACs remain permitted — heterogeneity is real per T-21 disk survey). Vocabulary derived from full real-disk survey of all 7 §97 files (`grep -rohE '\`\[[a-z]+\]\`' spec/2[2-8]*/97-acceptance-criteria.md | sort -u`).
