@@ -210,8 +210,8 @@ def self_test() -> int:
     # F-7: Go companion (G-6y) — .go Source line resolves; workflow references
     # the .go path inside a comment/name, so I-2 wiring substring-matches
     make_case("F-7 go-companion",
-              {"51-validate-guidelines-go.md":
-               "**Status:** Active gate #45\n"
+              {"01-validate-guidelines-go.md":
+               "**Status:** Active gate #1\n"
                "**Source:** [`linter-scripts/validate-guidelines.go`](../../linter-scripts/validate-guidelines.go)\n"},
               {"validate-guidelines.go"},
               "- name: validate-guidelines.go static-surface gate\n"
