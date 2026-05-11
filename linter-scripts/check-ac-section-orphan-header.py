@@ -283,6 +283,29 @@ F4 = """# AC
 """
 F5 = """# Empty file with no ACs and no sections
 """
+# F-6: clause-4 status-tag-vocabulary failure (unknown `[wip]` tag)
+F6 = """# AC
+## Group A
+### AC-01 — Alpha  `[critical]`
+### AC-02 — Beta  `[wip]`
+"""
+# F-7: clause-5 empty-parent-taxonomy failure (`## Mutations` has no
+# AC children and is NOT on the EMPTY_PARENT_ALLOWLIST)
+F7 = """# AC
+## Group A
+### AC-01 — Alpha
+## Mutations
+## Group B
+### AC-02 — Beta
+"""
+# F-8: clause-4 + clause-5 happy path (allowlist parent + canonical tag)
+F8 = """# AC
+## Module Summary
+## Group A
+### AC-01 — Alpha  `[critical]`
+### AC-02 — Beta  `[active]`
+## Cross-References
+"""
 
 
 def self_test() -> int:
@@ -292,6 +315,9 @@ def self_test() -> int:
         ("F-3", F3, False),
         ("F-4", F4, False),
         ("F-5", F5, False),
+        ("F-6", F6, False),
+        ("F-7", F7, False),
+        ("F-8", F8, True),
     ]
     failures: List[str] = []
     with tempfile.TemporaryDirectory() as td:
@@ -323,8 +349,9 @@ def self_test() -> int:
         for f in failures:
             print(f"self-test FAIL: {f}", file=sys.stderr)
         return 3
-    print("check-ac-section-orphan-header: self-test OK (5 fixtures)")
+    print("check-ac-section-orphan-header: self-test OK (8 fixtures)")
     return 0
+
 
 
 def main() -> int:
