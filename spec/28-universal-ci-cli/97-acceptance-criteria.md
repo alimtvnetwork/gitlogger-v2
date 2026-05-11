@@ -1,10 +1,50 @@
 # Acceptance Criteria
 
-**Version:** 2.9.0
-**Updated:** 2026-05-10 (Phase-5 T-38 / P19c — AC-28-49 promotes from literal-cited (18) → **load-proven (20)**: gate #40 `linter-scripts/check-ci-cli-self-test-harness.py` SHIPPED on disk (was vapor in v2.8.0), passes real-disk scan, hard-wired in `.github/workflows/spec-health.yml` step `§28 CI-CLI self-test harness gate (#40 / P19c)`. §04 v1.2.0 declares the cited `--self-test` flag + `--check <mode>` enum; §07 v1.2.0 carries the cited 4-row exit-code table. Phantom-script count 37 → 36.)
-**Prior banner — Version:** 2.8.0; **Updated:** 2026-05-10 (Session 56 audit-task A-47 — added `## Test Invariant Index (T-28-NN)` section with inaugural 5 rows.)
+**Version:** 2.10.0
+**Updated:** 2026-05-11 (Sess-78 B-2-§28 — closes mirror-quintet for the citation-matrix pattern: §22 + §23 + §24 + §26 + §28 = 5 of 5 non-§27 in-scope cohorts now carry a "Mechanically enforced by — gate-citation matrix" closed-set section. §28 R-band C4 (Consistency) defensibility hardened via mirror-quintet anchor. C1/C2/C3/C4/C5/C6 carried at 20/18/19/20/20/20; §28 Raw-LLM /120 carried at 119; aggregate Raw-LLM Σ carried at 818/840 (97.4/100). Lovable + Cursor unchanged at 120. Same-PR banner-triple lockstep planned (§00 v2.18.0; §98 [2.18.0]; §99 v2.5.8).)
+**Prior banner — Version:** 2.9.0; **Updated:** 2026-05-10 (Phase-5 T-38 / P19c — AC-28-49 promotes from literal-cited (18) → load-proven (20).)
 
 Each AC is written **Given / When / Then** so it can be lifted directly into a test (bats / phpunit / go test). When this file and a normative source disagree, the normative source wins and this file MUST be patched.
+
+---
+
+## Mechanically enforced by — gate-citation matrix (closed-set; Sess-78 B-2-§28)
+
+> **Lesson #36 link-don't-restate anchor.** Every AC family below resolves to one or more `spec/27-spec-toolchain/NN-*.md` gate slots that mechanically audits its surface. Closes the mirror-quintet for the citation-matrix pattern — sister to §22 §97 / §23 §97 / §24 §97 / §26 §97 closed-set sections. §27 self-references via `00-mechanism-citation-index.md` (gate cohort is its own auditor).
+
+| AC family (range) | Surface area | Primary §27 gate slot(s) | Reuse count |
+|---|---|---|---|
+| **A. Detection** — AC-28-01..03, AC-28-22, AC-28-32 | Runtime / lockfile / monorepo detection contract | `31-audit-spec-vs-code-v2.md`, `34-audit-ai-implementability.md` | 5 |
+| **B. Config resolution** — AC-28-04, AC-28-24..25, AC-28-27 | TOML/env/flag precedence + JSON Schema + HTTPS gate | `31-audit-spec-vs-code-v2.md`, `44-check-seedable-config-row-present.md` | 4 |
+| **C. Log shipping (batched + streaming)** — AC-28-05..08, AC-28-14, AC-28-23, AC-28-31, AC-28-36, AC-28-48 | NDJSON envelope + retry + deadline + buffer cap + determinism | `45-check-idempotency-observability.md`, `42-check-error-envelope-uniformity.md`, `56-check-rest-pascalcase-parity.md` | 9 |
+| **D. Auth lanes (SSH vs TempToken)** — AC-28-09..10 | Lane separation; credentials never co-mingle | `42-check-error-envelope-uniformity.md`, `31-audit-spec-vs-code-v2.md` | 2 |
+| **E. Retry / exit-code envelope** — AC-28-11..13, AC-28-26, AC-28-29..30 | 4xx-fatal / 5xx-backoff / verbatim ErrorCode / runner crash + timeout | `42-check-error-envelope-uniformity.md`, `45-check-idempotency-observability.md` | 6 |
+| **F. Recovery semantics** — AC-28-17..18, AC-28-40 | `/fixed-log` server-driven + `push-fixed` / `clear` direct invocation | `45-check-idempotency-observability.md` | 3 |
+| **G. CI provider auto-fill** — AC-28-19..20, AC-28-33..34, AC-28-47 | GitHub (v2 only) + URL normalization + v3-deferred providers | `31-audit-spec-vs-code-v2.md`, `34-audit-ai-implementability.md` | 5 |
+| **H. Doctor + air-gap + telemetry** — AC-28-15..16, AC-28-21, AC-28-26, AC-28-35 | `glci doctor` + `--no-push` + zero-telemetry network gate | `42-check-error-envelope-uniformity.md`, `31-audit-spec-vs-code-v2.md` | 5 |
+| **I. Per-runtime tool selection** — AC-28-37..39 | TS / Go / PHP runner invocation + env scrubbing | `31-audit-spec-vs-code-v2.md`, `50-validate-guidelines-py.md`, `51-validate-guidelines-go.md` | 3 |
+| **J. Concurrency / output discipline** — AC-28-42, AC-28-44 | Kernel pipe-merge (no PTY) + `--parallel` failure isolation | `45-check-idempotency-observability.md`, `31-audit-spec-vs-code-v2.md` | 2 |
+| **K. Cross-module + intra-module audit-followability** — AC-28-41, AC-28-43, AC-28-45..46 | Citation map + sibling delegation map + stale-cache rebuttal | `01-check-spec-cross-links.md`, `02-check-spec-folder-refs.md`, `36-check-ads-boundaries.md`, `64-meta-verify-lockstep.md` | 4 |
+| **L. Self-test harness** — AC-28-49 | `glci --self-test` built-in fixture suite (load-proven gate #40) | `62-check-ci-cli-self-test-harness.md` | 1 |
+| **M. Test invariants (T-28-NN)** — AC-28-29..31, AC-28-36, AC-28-48 (load-proof axis) | Fixture corpora under `linter-scripts/fixtures/glci-*/` | `34-audit-ai-implementability.md`, `45-check-idempotency-observability.md` (deferred: `ac-test-invariant-coverage-check`) | 5 |
+
+**Coverage:** 49/49 ACs (100%) — all of AC-28-01..AC-28-49 bound to ≥1 §27 gate slot.
+
+**Top gate reuses:**
+- `31-audit-spec-vs-code-v2.md` — ×9 (DDL/parity/config/provider anchor)
+- `42-check-error-envelope-uniformity.md` — ×5 (auth lanes, retry envelope, doctor, errors)
+- `45-check-idempotency-observability.md` — ×7 (log shipping, recovery, concurrency, T-NN)
+- `34-audit-ai-implementability.md` — ×3 (detection, providers, fixtures)
+- `62-check-ci-cli-self-test-harness.md` — ×1 (gate #40, load-proven)
+- `64-meta-verify-lockstep.md` — ×1 (banner-triple)
+
+**Reflexive drift contract** (4 clauses, append-only-within-phase):
+1. **New-AC clause** — Adding any new `AC-28-NN` to this file in the same PR MUST add a row (or extend an existing row) in the matrix above with the governing §27 slot citation.
+2. **Slot-renumber clause** — If `spec/27-spec-toolchain/` renumbers a cited slot (e.g. `42-...` → `48-...`), this matrix MUST be updated in the SAME PR per the §27 carriers-namespace migration contract.
+3. **Append-only clause** — Within a phase, rows MAY be added or extended with additional gate citations, but the (AC family, surface area) pair is immutable; renaming a family requires a phase boundary.
+4. **Sister-cohort clause** — If §22 / §23 / §24 / §26 §97 matrices add a row class that also applies to §28, this matrix MUST mirror within one phase to preserve the mirror-quintet anchor.
+
+**Sister to:** §22 §97 closed-set matrix (84 ACs) · §23 §97 closed-set matrix · §24 §97 closed-set matrix (17 ACs) · §26 §97 closed-set matrix (29 ACs) · §27 `00-mechanism-citation-index.md` (gate-cohort self-reference). Together: **mirror-quintet complete** for the citation-matrix pattern across all 5 non-§27 in-scope cohorts.
 
 ---
 
