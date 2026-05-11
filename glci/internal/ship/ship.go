@@ -26,6 +26,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/example/glci/internal/auth"
 )
 
 // Body is the §06 batched payload.
@@ -60,6 +62,7 @@ type Options struct {
 	BackoffBaseMS     int      // push.backoff_ms,         default 1000
 	MaxRetries        int      // push.max_retries,        default 5
 	HTTPClient        *http.Client
+	Auth              *auth.Config // Lane B (Ed25519) or App Password; nil = unauth
 	Now               func() time.Time
 	Sleep             func(time.Duration)
 	Rand              func() float64 // returns [0,1); allow deterministic tests
@@ -140,6 +143,15 @@ func Ship(ctx context.Context, opts Options, body Body) *Result {
 			time.Duration(o.RequestTimeoutMS)*time.Millisecond)
 		req, _ := http.NewRequestWithContext(attemptCtx, http.MethodPost, url, bytes.NewReader(payload))
 		req.Header.Set("Content-Type", "application/json")
+		if o.Auth != nil {
+			if err := o.Auth.Apply(req); err != nil {
+				cancel()
+				res.OurCode = ""
+				res.ExitCode = 2
+				res.Err = fmt.Errorf("GLCI-AUTH-APPLY: %w", err)
+				return res
+			}
+		}
 
 		resp, herr := o.HTTPClient.Do(req)
 		if herr != nil {
@@ -239,6 +251,11 @@ func Reach(ctx context.Context, opts Options, repoUrl, tempToken, token string) 
 	}
 	if token != "" {
 		req.Header.Set("X-GL-Token", token)
+	}
+	if o.Auth != nil {
+		if err := o.Auth.Apply(req); err != nil {
+			return 0, fmt.Errorf("GLCI-AUTH-APPLY: %w", err)
+		}
 	}
 	resp, err := o.HTTPClient.Do(req)
 	if err != nil {
