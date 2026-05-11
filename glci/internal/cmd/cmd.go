@@ -39,6 +39,8 @@ func Run(args []string, version string) error {
 		return RunCmd(args[1:], "")
 	case "doctor":
 		return Doctor(args[1:])
+	case "self-update":
+		return SelfUpdate(args[1:], version)
 	case "config":
 		if len(args) < 2 || args[1] != "print" {
 			return errors.New("usage: glci config print [--cwd <dir>] [--config <file>]")
@@ -66,6 +68,7 @@ func printUsage(version string) {
 	fmt.Println("  lint|build|test Run a single phase across detected runtimes")
 	fmt.Println("  run             CI/CD entry point (lint, build, test in one process)")
 	fmt.Println("  doctor          Pre-flight environment checks")
+	fmt.Println("  self-update     Download + install latest glci release")
 	fmt.Println("  config print    Print resolved config with provenance (secrets redacted)")
 	fmt.Println("  ping            Probe a Git Logs plugin /health endpoint")
 	fmt.Println("  whoami          Authenticated identity probe (App Password OR Ed25519)")

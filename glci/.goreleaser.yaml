@@ -1,0 +1,46 @@
+# GoReleaser config — produces glci binaries for linux/macOS/windows on
+# amd64 + arm64. SHA256SUMS file is consumed by `glci self-update` for
+# integrity verification (see internal/selfupdate/selfupdate.go).
+version: 2
+
+project_name: glci
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: glci
+    main: ./main.go
+    binary: glci
+    env:
+      - CGO_ENABLED=0
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+    ldflags:
+      - -s -w -X main.version={{ .Version }}
+
+archives:
+  - id: raw
+    formats: [binary]
+    name_template: "glci_{{ .Os }}_{{ .Arch }}{{ if eq .Os \"windows\" }}.exe{{ end }}"
+
+checksum:
+  name_template: "SHA256SUMS"
+  algorithm: sha256
+
+release:
+  github:
+    owner: git-logs
+    name: glci
+  draft: false
+  prerelease: auto
+
+changelog:
+  use: github
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
