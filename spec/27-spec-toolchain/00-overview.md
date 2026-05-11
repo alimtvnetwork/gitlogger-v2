@@ -8,9 +8,9 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.80.0  
-**Updated:** 2026-05-11 (Sess-67 B-9 — added `00-gate-slot-binding.md` flat gate-#↔slot-file binding table for all 26 active gates (#20..#46). Closes the gap where §00 §"CI Gate Enumeration" stopped at gate #30 in narrative form while the on-disk `**Status:** Active gate #` headers extended to #46. Pure navigation-aid surface: zero edits to existing slot files, zero new gates, zero new ACs. Reflexive Lesson #15 anchor — adding a gate without a row in the binding table fails `meta-verify-lockstep` (gate #42) clause-5 on next CI cycle. Closes B-9 from Sess-67 scorecard remaining-tasks list.  
-**Prior banner — Version:** 4.79.0; **Updated:** 2026-05-11 (Sess-67 B-6 — `00-tier1-bundle.md` Raw-LLM navigation manifest; G-8 / G-T-22 prior carried.)
+**Version:** 4.81.0  
+**Updated:** 2026-05-11 (Sess-67 B-10 — added AC-T-37 binding `00-gate-slot-binding.md` four-way parity contract (disk grep ↔ table row count ↔ §00/§98/§99 banner gate-count). Mechanically enforced by gate #42 clause-5 today + gate #43 extension in next backlog cycle. Completes the §27 navigation quartet: AC-T-30 (Slot Delegation Map) + AC-T-31 (AC-family-prefix binding) + AC-T-36 (slot-range numbering) + **AC-T-37** (gate-#↔slot binding). §97 v2.18.0 → v2.19.0 (AC count 36 → 37). Lifts §27 C1/C5 from 19 → 20 (cited mechanism: gate #42 clause-5 four-way parity recount). Closes B-10 from Sess-67 remaining-tasks list. Pure spec-text surface: zero new code, zero new gates beyond the AC binding existing gate #42 to the new file.  
+**Prior banner — Version:** 4.80.0; **Updated:** 2026-05-11 (Sess-67 B-9 — added `00-gate-slot-binding.md` flat 26-row gate↔slot binding table; B-6 / G-8 prior carried.)
 
 > **Total active gates: 26** (Phase-5 G-4 banner-triple normalization — canonical phrasing required by `meta-verify-lockstep.py` clause-5 `GATE_COUNT_RE`. Recount via `grep -lE '^\*\*Status:\*\*\s+Active\s+gate\s+#' spec/27-spec-toolchain/*.md | wc -l`. Three banner blocks (§00 / §98 / §99) MUST agree on this integer.)
 >
