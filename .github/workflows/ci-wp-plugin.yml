@@ -27,10 +27,12 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: sodium, json, mbstring
+          extensions: sodium, json, mbstring, pdo_sqlite
           coverage: none
-      - name: Run plugin test suite
+      - name: Run plugin test suite (auth + REST)
         run: php git-logs-plugin/tests/run.php
+      - name: Run plugin DB-layer test suite
+        run: php git-logs-plugin/tests/run-db.php
 
   lint:
     name: PHP syntax lint
