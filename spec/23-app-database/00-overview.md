@@ -25,8 +25,8 @@ consumes:
 # App Database
 
 <!-- h10-verified-phase: 153 -->
-**Version:** 4.6.0
-**Updated:** 2026-05-10 (Session 66 / Phase-5 T-19 / F-03 closure — added `## Settings Persistence (Normative — Phase-5 T-19 / F-03 closure)` section: byte-shape DDL for `Setting` (8 columns + enum CHECK + scope index) and `UserSettingOverride` (composite PK + dual ON DELETE CASCADE), R-09 `COALESCE(o.Value, s.Value)` query template, replay-safe seed-row migration template, 5-row forbidden-storage-pattern list, REFERENCE-lane PG mirror (DO NOT MATERIALISE), 3 new in-spec ACs AC-ADB-SETTING-01..03 wired to §24 gate #25 clauses 3+4. Materialises §24 §00 S-5 line 456 follow-up; closes audit F-03; lifts Raw-LLM persona §23+§24 by ~5 each.)
+**Version:** 4.7.0
+**Updated:** 2026-05-11 (Sess-69 B-12 — R-1 Idempotent column closed-enumeration self-citation block + bash worked-example verifier sketch + reverse-coverage `comm -23` pin appended directly under the matrix; Lesson #15 reflexivity (the contract row IS the fixture row); cited mechanism = `rest-idempotency-parity-check` (slot pending §27 backlog roster). §98 v4.8.0 → v4.9.0; §99 v2.1.6 → v2.1.7. Closes §23 C5 Implementability band-anchor 18 → 20 per `spec/27-spec-toolchain/00-raw-llm-bottleneck-decomposition.md` v1.5.0 cohort floor analysis.)
 
 > 🤖 **Raw-LLM Auditor Pin (Lesson #36 link-don't-restate, applied to memory resolution — P16 friction sweep, T-37)**
 >
