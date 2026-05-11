@@ -8,7 +8,7 @@ axis_rationale: "Decomposes a single-folder Raw-LLM gap into per-criterion lift 
 
 # §27 Raw-LLM Bottleneck Decomposition
 
-**Version:** 1.4.0
+**Version:** 1.5.0
 **Updated:** 2026-05-11 (Sess-69 B-16 same-PR refresh — C4 row updated 13 → 14 (partial lift; cited mechanism: 5-clause inline-cross-reference convention authored into `00-tier1-bundle.md` v1.2.0); B-16 lift candidate moves to "spec-only authored / mass-edit pending B-20-impl" (NOT "closed" — full +3 lift gated on impl turn per `mem://constraints/no-implementation-suggestions`); Σ R-band 103 → 104; aggregate projection updated. Refresh executed under this file's clause-1 reviewer-attestation rule (≤ 1 session drift allowed; same-PR keeps incurred drift at 0). Prior version v1.3.0 (Sess-69 B-20) shifted B-20 to "spec-only authored" pending implement turn.)
 **Authoritative:** No — this is a hand-scored navigation/audit aid. The authoritative scorecard ritual lives in `mem://preferences/scorecard-ritual` and is rendered per session. Per-criterion scores below are this turn's hand-attestation, subject to revision as new mechanisms ship.
 
