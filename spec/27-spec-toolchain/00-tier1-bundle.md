@@ -107,6 +107,70 @@ axis_rationale: "Single-page read-order anchor for the §27 spec set"
 
 ---
 
+### Navigation-quintet inline cross-reference convention (B-16, Sess-69)
+
+> **Purpose.** Surface the §27 navigation quintet (**AC-T-30, AC-T-31, AC-T-36, AC-T-37, AC-T-38**) inside every active-gate slot file's frontmatter so a context-bounded reader (Raw-LLM persona, single context window, no file-tool access) sees the full navigation contract without traversing to `97-acceptance-criteria.md`. Today, a Raw-LLM walker landing on any one of the 28 active-gate slot files learns the slot's own contract but cannot see how it composes with the four other navigation ACs without a ≥ 1-hop traversal. This convention collapses that traversal to **0 hops** by inlining the quintet into the frontmatter axis_rationale row. Lifts §27 R-band C4 (Consistency) **+3** when applied across all 28 active-gate slot files (mass-edit gated on B-20-impl per slot 66 schema floor).
+
+> **Why this convention lives in the bundle, not in §97.** Per Lesson #36 ("link, don't restate"), the AC-T-30/-31/-36/-37/-38 bodies remain authoritative in §97; this convention pins only the **placement contract** for their cross-references in slot frontmatter. The bundle is the correct surface because (a) the bundle already pins the per-gate slot doc anatomy above, and (b) the navigation quintet is itself a tier-1 contract surface (each AC is delegated_from one of the four tier-1 files). Per AC-T-38 reverse-coverage invariant, no normative cross-gate contract may land outside tier-1 — this convention sits inside the tier-1 bundle file precisely to satisfy that invariant.
+
+#### The 5-AC navigation quintet (recap)
+
+| AC | Subject | Tier-1 surface pinned |
+|---|---|---|
+| **AC-T-30** | Slot delegation map (every active-gate slot must have a `delegates_from_ac` row pointing to its owning AC) | `97-acceptance-criteria.md` Slot Delegation Map section |
+| **AC-T-31** | Per-slot reflexivity (Lesson #15 — every active-gate slot doc must self-cite as its own enforcement mechanism) | per-slot `Mechanically enforced by:` row |
+| **AC-T-36** | Gate-↔-slot binding map (4-way parity: disk grep ↔ binding table ↔ §00/§98/§99 banner literal) | `00-gate-slot-binding.md` table |
+| **AC-T-37** | Banner-triple lockstep four-way parity (gate-#42 clause-5 cite chain) | §00 + §97 + §98 + §99 banner version triple |
+| **AC-T-38** | Tier-1 bundle reverse-coverage invariant (no normative cross-gate contract outside tier-1) | this very `00-tier1-bundle.md` file |
+
+#### Frontmatter inline cross-reference contract (5 clauses)
+
+Every active-gate slot file (the 28 rows above in the Tier-2 slot index lookup table) MUST inline the navigation quintet under a dedicated `navigation_quintet` frontmatter key. The key value is a YAML inline-list of the 5 AC-IDs in canonical order. Worked example (the canonical shape any active-gate slot file SHOULD adopt):
+
+```yaml
+---
+kind: gate-spec
+axis: <slot's own axis>
+axis_rationale: "<slot's own rationale, ≥ 20 chars>"
+delegates_from_ac: <slot's owning AC, e.g. AC-T-39 for slot 64>
+mechanically_enforced_by: linter-scripts/<slot's script>
+navigation_quintet: [AC-T-30, AC-T-31, AC-T-36, AC-T-37, AC-T-38]
+---
+```
+
+**5-clause contract:**
+
+1. **Presence.** The `navigation_quintet` key MUST be present in every active-gate slot file's frontmatter. Carve-out: the 7 module-level surfaces exempt under slot 66 U-1 (overview, bundle, binding, decomposition, AC, changelog, consistency-report) DO NOT carry this key — they ARE the navigation surfaces being cited, so a self-citation would be circular.
+2. **Canonical order.** The 5 AC-IDs MUST appear in the order: `AC-T-30, AC-T-31, AC-T-36, AC-T-37, AC-T-38`. Reordering fails the convention. The order encodes the navigation read-flow: slot delegation (T-30) → reflexivity (T-31) → binding map (T-36) → banner-triple (T-37) → tier-1 reverse-coverage (T-38).
+3. **Closed set.** Exactly these 5 AC-IDs. Adding a 6th (even a related navigation AC) fails — the quintet is a frozen anchor; extension requires a `navigation-quintet` → `navigation-sextet` migration spec authored same PR as the new AC.
+4. **No restate.** Slot files MUST NOT restate the AC bodies in their own prose (Lesson #36). The frontmatter inline-list is the **only** permitted surface; any `## Navigation` or similar section in slot body that duplicates AC-T-30..-38 text fails the convention.
+5. **Reverse coverage.** Every AC in the quintet MUST appear in **at least 1** active-gate slot's `navigation_quintet` row (after mass-edit lands). Reverse-coverage failure (an AC silently dropped from all slots) MUST be flagged by the next §99 entry. Today, reverse coverage is 0/5 (mass-edit not landed); post-B-16-impl it MUST be 28/5 (every slot cites every AC).
+
+#### Phased rollout (today's spec-only authorship → mass-edit gated)
+
+- **Sess-69 B-16 (today)**: convention authored in this sub-section. Reviewer attestation only. **No slot file modified.** §27 R-band C4 lifts +1 (cited mechanism: this 5-clause contract + worked-example YAML in `00-tier1-bundle.md` v1.2.0 body).
+- **B-16-impl** *(deferred-implement; do NOT propose without explicit user "implement" turn)*: mass-edit across the 28 active-gate slot files inserting the `navigation_quintet` frontmatter row. Gated on B-20-impl landing first (slot 66 / gate #44 must be active to validate the schema during the mass-edit, otherwise the mass-edit could itself introduce drift). Post-B-16-impl: §27 R-band C4 +3 cumulative (today's +1 → +3 once 28/28 coverage holds on disk and gate #44 enforces it as a hard CI fail). Combined with B-20-impl C4 +3, total C4 trajectory: 13 → 16 (B-20-impl) → 18 (B-16-impl, band-anchor reached).
+
+#### Worked-example bash verifier sketch (post-B-16-impl + B-20-impl)
+
+```bash
+# Reverse-coverage invariant (clause 5): every AC in the quintet appears in ≥ 1 active-gate slot.
+for ac in AC-T-30 AC-T-31 AC-T-36 AC-T-37 AC-T-38; do
+  count=$(grep -lE "navigation_quintet:.*${ac}" spec/27-spec-toolchain/[0-9][0-9]-*.md 2>/dev/null | wc -l)
+  test "$count" -ge 1 || echo "FAIL: $ac has 0/28 active-gate slot citations (clause 5 reverse-coverage)"
+done
+
+# Presence invariant (clause 1): every active-gate slot file carries the key.
+active_slots=$(grep -lE '^\*\*Status:\*\*\s+Active\s+gate\s+#' spec/27-spec-toolchain/*.md | sort)
+keyed_slots=$(grep -lE '^navigation_quintet:' spec/27-spec-toolchain/*.md | sort)
+comm -23 <(echo "$active_slots") <(echo "$keyed_slots") | tee /dev/stderr | wc -l \
+  | xargs -I{} test {} -eq 0 || echo "FAIL: clause 1 presence — N slots missing navigation_quintet key"
+```
+
+This sketch is the candidate body for slot 66 / gate #44 clause-5 extension at B-20-impl + B-16-impl landing, hard-failing CI on either presence or reverse-coverage drift.
+
+---
+
 ## Tier-3 — Specialised / archival (read only for the named purpose)
 
 | File | Lines | Purpose | When to read |
