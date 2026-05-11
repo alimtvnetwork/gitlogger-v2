@@ -1,7 +1,7 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.81.0
-**Updated:** 2026-05-11 (Sess-67 B-10 — AC-T-37 added: binds `00-gate-slot-binding.md` four-way parity contract)
+**Version:** 4.82.0
+**Updated:** 2026-05-11 (Sess-68 B-8 — AC-T-38 added: binds `00-tier1-bundle.md` Raw-LLM tier-1 partition manifest with line-budget + tier-promotion drift contract; completes navigation quintet)
 **Total active gates: 26**
 
 ### 4.81.0 — 2026-05-11 — Sess-67 B-10: AC-T-37 added — binds `00-gate-slot-binding.md` into §97 as four-way parity contract
