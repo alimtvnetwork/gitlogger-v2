@@ -1,8 +1,8 @@
 # Acceptance Criteria — App Issues
 
-**Version:** 1.8.0  
-**Updated:** 2026-05-11 (Sess-69 B-13 — AC-AI-000 reword in `00-overview.md` + AC-AI-19 added (verifier-misroute pin: declares that `check-spec-cross-links.py` is a link-target verifier, NOT a finding-structure verifier; the AC-AI-000 inline Python grep is the canonical structural check). §99 `## Module Health` table sync'd in same PR (Health Score 85/100 → 96/100; §97/§98 rows ⚠️ → ✅). AC count 18 → 19. Prior: 1.7.0 — AC-AI-18 parent/child AC-prefix contract.)  
-**Updated-prev:** 2026-05-10 (Phase-5 T-14 — added **AC-AI-18** Parent/child AC-prefix contract for `kind: index` + `kind: tracker` modules.)  
+**Version:** 1.9.0  
+**Updated:** 2026-05-11 (Sess-70 B-23 — banner-mirror bump for new `00-finding-template.md` surface that AC-AI-000 + AC-AI-19 self-cite. AC count unchanged at 19; no AC body edits. The new template makes the AC-AI-000 verifier's target shape explicit (T1/T2 file triggers, four-section body contract, F1..F6 fixture matrix, D1..D5 finding-class taxonomy) — Lesson #15 reflexivity: template's §3 reproduces the verifier source verbatim, template's §4 is the fixture self-test set. Prior: 1.8.0 — Sess-69 B-13 AC-AI-000 reword + AC-AI-19 added.)  
+**Updated-prev:** 2026-05-11 (Sess-69 B-13 — AC-AI-000 reword in `00-overview.md` + AC-AI-19 added.)
 **Scope:** `spec/25-app-issues/`
 
 ---
