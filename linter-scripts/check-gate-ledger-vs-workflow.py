@@ -70,7 +70,7 @@ def collect(slot_files: list[Path], workflow_text: str, scripts_on_disk: set[str
             if not script:
                 # Fall back to filename convention: NN-check-foo.md -> check-foo.py
                 stem = slot.stem.split("-", 1)[1] if "-" in slot.stem else slot.stem
-                for ext in (".py", ".sh", ".cjs", ".mjs"):
+                for ext in (".py", ".sh", ".cjs", ".mjs", ".go"):
                     if (SCRIPTS_DIR / f"{stem}{ext}").exists():
                         script = f"{stem}{ext}"
                         break
