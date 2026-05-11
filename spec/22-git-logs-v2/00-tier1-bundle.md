@@ -19,18 +19,18 @@ axis_rationale: "Single-page read-order anchor for the §22 spec set"
 
 ## Tier-1 — Implementable minimum (read in order)
 
-| # | File | Lines | Role | Why tier-1 |
-|---|---|---|---|---|
-| 1 | [`00-overview.md`](./00-overview.md) | 273 | Module pin + Raw-LLM auditor pin + cross-cohort gate map | Fixes vocabulary (`profile`, `applink`, `pipeline`, `repo`, `app`) and the locked-7 perimeter. |
-| 2 | [`01-glossary-and-enums.md`](./01-glossary-and-enums.md) | 313 | Closed enum catalogue (12 enum types, 11 active + 1 forbidden) | Every status / kind / role token an implementer emits MUST be drawn from this file. Forbids free-text. |
-| 3 | [`19-permission-matrix.md`](./19-permission-matrix.md) | 73 | Role × endpoint × verb permission matrix | Tiny, but every endpoint handler depends on it. Read before §17/§18. |
-| 4 | [`18-schema.sql`](./18-schema.sql) | 485 | Authoritative SQLite DDL (CREATE TABLE × N + indexes + triggers + seed-id locks) | Machine-readable single source of truth for the database surface. Supersedes prose in `02-database-schema.md` per Lesson #36. |
-| 5 | [`16-seed-data.md`](./16-seed-data.md) | 235 | Locked seed rows (AppLinkType id=1/2, RolePermission grid, MigrationState bootstrap) | Required to bring the schema in §18 into a working initial state. |
-| 6 | [`17-openapi.yaml`](./17-openapi.yaml) | 562 | Authoritative OpenAPI 3.1 spec for all 8 REST endpoints + request/response schemas | Machine-readable single source of truth for the REST surface. Supersedes prose in `04-rest-api-endpoints.md` per Lesson #36. |
-| 7 | [`05-auth-and-validation.md`](./05-auth-and-validation.md) | 124 | Auth pipeline ordering (parse → GitProfile → Acceptance → Branch → TempToken → Token → Profile → App) + GL-* reject codes | Every endpoint runs this pipeline before its handler. Read after §17. |
-| 8 | [`14-endpoint-examples.md`](./14-endpoint-examples.md) | 177 | Concrete request + response transcripts per endpoint | Disambiguates §17 schema choices the OpenAPI cannot encode (header casing, body framing). |
-| 9 | [`15-error-codes.md`](./15-error-codes.md) | 142 | Closed GL-* error code catalogue with HTTP-status, retryability, audit category | Required for every endpoint reject branch + §22 observability surface. |
-| **Σ** | **9 files** | **~2,384** | **Tier-1 footprint** | Below the 8K-token "single context window" comfort threshold for most LLMs at default prompt budgets. |
+| # | File | Lines | Walker-cost (KB) | Role | Why tier-1 |
+|---|---|---|---|---|---|
+| 1 | [`00-overview.md`](./00-overview.md) | 273 | ~22 | Module pin + Raw-LLM auditor pin + cross-cohort gate map | Fixes vocabulary (`profile`, `applink`, `pipeline`, `repo`, `app`) and the locked-7 perimeter. |
+| 2 | [`01-glossary-and-enums.md`](./01-glossary-and-enums.md) | 313 | ~14 | Closed enum catalogue (12 enum types, 11 active + 1 forbidden) | Every status / kind / role token an implementer emits MUST be drawn from this file. Forbids free-text. |
+| 3 | [`19-permission-matrix.md`](./19-permission-matrix.md) | 73 | ~4 | Role × endpoint × verb permission matrix | Tiny, but every endpoint handler depends on it. Read before §17/§18. |
+| 4 | [`18-schema.sql`](./18-schema.sql) | 485 | ~23 | Authoritative SQLite DDL (CREATE TABLE × N + indexes + triggers + seed-id locks) | Machine-readable single source of truth for the database surface. Supersedes prose in `02-database-schema.md` per Lesson #36. |
+| 5 | [`16-seed-data.md`](./16-seed-data.md) | 235 | ~7 | Locked seed rows (AppLinkType id=1/2, RolePermission grid, MigrationState bootstrap) | Required to bring the schema in §18 into a working initial state. |
+| 6 | [`17-openapi.yaml`](./17-openapi.yaml) | 562 | ~27 | Authoritative OpenAPI 3.1 spec for all 8 REST endpoints + request/response schemas | Machine-readable single source of truth for the REST surface. Supersedes prose in `04-rest-api-endpoints.md` per Lesson #36. |
+| 7 | [`05-auth-and-validation.md`](./05-auth-and-validation.md) | 124 | ~6 | Auth pipeline ordering (parse → GitProfile → Acceptance → Branch → TempToken → Token → Profile → App) + GL-* reject codes | Every endpoint runs this pipeline before its handler. Read after §17. |
+| 8 | [`14-endpoint-examples.md`](./14-endpoint-examples.md) | 177 | ~4 | Concrete request + response transcripts per endpoint | Disambiguates §17 schema choices the OpenAPI cannot encode (header casing, body framing). |
+| 9 | [`15-error-codes.md`](./15-error-codes.md) | 142 | ~12 | Closed GL-* error code catalogue with HTTP-status, retryability, audit category | Required for every endpoint reject branch + §22 observability surface. |
+| **Σ** | **9 files** | **~2,384** | **~119** | **Tier-1 footprint** | Below the 8K-token "single context window" comfort threshold for most LLMs at default prompt budgets. |
 
 **Read-order rationale:** vocabulary (1, 2) → access control (3) → state shape (4, 5) → API surface (6, 7, 8) → failure surface (9). An implementer who follows this order can author every endpoint handler, every storage call, and every error path without needing tier-2 or tier-3.
 
