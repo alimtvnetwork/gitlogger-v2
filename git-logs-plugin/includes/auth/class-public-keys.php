@@ -17,6 +17,10 @@ namespace GitLogs\Auth;
 
 defined( 'ABSPATH' ) || exit;
 
+if ( class_exists( __NAMESPACE__ . '\\PublicKeys', false ) ) {
+	return; // allow tests to pre-load an in-memory stub
+}
+
 final class PublicKeys {
 
 	private const META_KEY = 'git_logs_public_keys';
