@@ -15,6 +15,10 @@ namespace GitLogs\DB;
 
 defined( 'ABSPATH' ) || exit;
 
+if ( class_exists( __NAMESPACE__ . '\\EventStore', false ) ) {
+	return; // allow tests to pre-load an in-memory stub
+}
+
 require_once __DIR__ . '/class-database.php';
 require_once __DIR__ . '/class-run-store.php';
 
