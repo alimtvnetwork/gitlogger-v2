@@ -9,6 +9,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/example/glci/internal/auth"
 	"github.com/example/glci/internal/ci"
 	"github.com/example/glci/internal/classify"
 	"github.com/example/glci/internal/config"
