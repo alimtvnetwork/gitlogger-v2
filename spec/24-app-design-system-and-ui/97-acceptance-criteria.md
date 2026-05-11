@@ -1,7 +1,8 @@
 # Acceptance Criteria — 24 App Design System & UI
 
-**Version:** 3.8.0
-**Updated:** 2026-05-11 (Sess-75 B-27-§24 — banner-mirror bump for `00-tier1-bundle.md` v1.0.0 → v1.1.0 walker-cost reflexivity extension (per-file walker-cost (KB) column on Tier-1 table + NEW load-budget pin section with 5 pre-budget recipes; mirror of §27 B-27 / §25 B-27-§25 C6 friction lever). AC count unchanged at 17; **no AC body edits**. Prior: 3.7.0 — Phase-5 T-39 P18 §24 floor-lift; 3.6.x — A-41 per-AC test invariants.)
+**Version:** 3.9.0
+**Updated:** 2026-05-11 (Sess-82 B-2-§24 — minted closed-set "Mechanically enforced by — gate-citation matrix" between Inlined Contracts and Acceptance Criteria. Maps all 17 AC-ADS-NN families to their §27 gate slot with 4-clause reflexive drift contract. Slot `36-check-ads-boundaries.md` cited 6× — primary §24 boundary auditor (35% reuse density) reflecting strict-additive-overlay relationship to §07. Coverage 17/17 (100%). Sister to §27 `00-cross-cohort-read-order-dag.md` edge **E-5**. Mirror of §23 §97 Sess-81 matrix. AC count unchanged; no AC body edits.)
+**Updated-prev:** 2026-05-11 (Sess-75 B-27-§24 — banner-mirror bump for `00-tier1-bundle.md` v1.0.0 → v1.1.0 walker-cost reflexivity extension. AC count unchanged at 17; **no AC body edits**.)
 **Updated-prev:** 2026-05-10 (Session 55 audit-task A-41 — added per-AC Test invariant blocks (T-ADS-NN-NN) to AC-ADS-06, AC-ADS-09, AC-ADS-10 mirroring AC-ADS-15/16 format. Each AC gains 2-3 mechanical test stubs incl. negative-fixture proofs. No AC semantics change; minor version bump because new normative test surface.)
 **Updated-prev:** 2026-05-06 (Phase 154 C-Sweep — added **AC-ADS-14** `[critical]` Cross-Module Externalized Citation Map per Lessons #36 + #37; explicit normative anchor table for 2 externalized citations: spec/07 (primitive token registry), spec/27 (script gates). Mirror of spec/22 AC-79 pattern. AC count 13 → 14. spec/24's small citation surface reflects the strict-additive-overlay relationship to spec/07 — almost all design-system contracts already live in spec/07 by construction.)
 **Scope:** `spec/24-app-design-system-and-ui/`
@@ -48,6 +49,40 @@ Regex of forbidden substrings in `*.tsx` / `*.ts` / `*.css` under `src/component
 
 - `npm run lint` — ESLint config enforces the forbidden-literal regexes above.
 - `npm run test` — Vitest snapshot suite renders AppShell in light + dark.
+
+---
+
+## Mechanically enforced by — gate-citation matrix (Sess-82 B-2-§24)
+
+**Closed-set inventory** mapping each AC family in this file to the §27 active gate slot that audits it. Sister to §27 `00-cross-cohort-read-order-dag.md` edge **E-5** (§27 → §24 audit-surface coverage). Pinned closed-set: every AC-ADS-NN MUST appear in exactly one row below; new ACs require a same-PR row addition (reflexive drift contract clause-1). Mirror of §23 §97 gate-citation matrix (Sess-81 B-2-§23).
+
+| AC | Surface audited | **Mechanically enforced by** (§27 slot) | Status |
+|---|---|---|---|
+| AC-ADS-01 | App tokens never redefine §07 primitives | `36-check-ads-boundaries.md` (gate active — namespace overlap audit) | active |
+| AC-ADS-02 | App tokens derive from §07 primitives via `var()` | `36-check-ads-boundaries.md` (sister-clause derivation audit) | active |
+| AC-ADS-03 | No raw color literals in app components | `03-check-forbidden-strings.md` (forbidden-strings toml `60-forbidden-strings-toml.md` clause for `#RRGGBB` / `rgb(` / `hsl(` outside §07-managed files) | active |
+| AC-ADS-04 | Light/dark parity for every `--app-*` token | `36-check-ads-boundaries.md` (sister-clause `:root`/`.dark` parity sweep) | active |
+| AC-ADS-05 | AppShell fixed-region geometry | `53-check-appshell-route-matrix.md` (gate active — geometry invariants) | active |
+| AC-ADS-06 | Marketing routes do not import AppShell | `53-check-appshell-route-matrix.md` (sister-clause route-matrix import audit) | active |
+| AC-ADS-07 | Sidebar collapses below `md` breakpoint | `49-check-ui-component-binding-matrix.md` (gate active — Sidebar binding row) | active |
+| AC-ADS-08 | Lint + test pipeline passes | `31-audit-spec-vs-code-v2.md` (gate active — deterministic spec-vs-code audit) | active |
+| AC-ADS-09 | Ownership matrix has no overlap with §07 | `36-check-ads-boundaries.md` (sister-clause ownership-matrix sweep) | active |
+| AC-ADS-10 | Status tokens are app-scoped only | `36-check-ads-boundaries.md` (sister-clause `--app-status-*` namespace audit) | active |
+| AC-ADS-11 | §07 primitive token registry — inlined snippet | `01-check-spec-cross-links.md` (gate #01 active — link presence to §07 source) | active |
+| AC-ADS-12 | Sidebar collapse — concurrency of breakpoint vs manual toggle | `49-check-ui-component-binding-matrix.md` (sister-clause Sidebar concurrency row) | active |
+| AC-ADS-13 | Linter-script references resolve to canonical §27 slots | `02-check-spec-folder-refs.md` (gate #02 active — slot-anchor resolution) | active |
+| AC-ADS-14 | Cross-Module Externalized Citation Map (Lesson #36/37) | `01-check-spec-cross-links.md` (gate #01 active) + `02-check-spec-folder-refs.md` (gate #02 active) | active |
+| AC-ADS-15 | §22 operational-pattern inheritance (ErrorEnvelope `ADS-*` namespace + AuditTrail emission) | `42-check-error-envelope-uniformity.md` (gate active) + `46-check-audit-quoted-evidence-marker.md` (gate active) | active |
+| AC-ADS-16 | §07 dependency boundary `restate_forbidden` | `36-check-ads-boundaries.md` (boundary audit) + `03-check-forbidden-strings.md` (restate-forbidden phrase sweep) | active |
+| AC-ADS-17 | §24 folder owns ZERO DDL surface (single-source-of-truth = §23) | `58-check-no-sql-ddl-in-ui-folder.md` (gate active — DDL-in-UI-folder fail) | active |
+
+**Reflexive drift contract (this matrix):**
+1. Every new AC-ADS-NN MUST add a row here in the same PR (mechanically enforced by `47-check-ac-section-orphan-header.md` + reviewer-attestation).
+2. If a §27 gate slot in column 3 is renumbered or retired, this matrix MUST refresh in the same PR (mechanically enforced by `64-meta-verify-lockstep.md` clause-3 banner-triple lockstep).
+3. The "Status" column MUST stay as `active` for all rows; if any drops to `proposed` or `deferred`, the same-PR change MUST also bump §99 with a downgrade banner explaining why.
+4. Cross-cohort consistency: this matrix MUST cite gate slots from §27 only — never from §28 or other cohorts (mechanically enforced by edge **E-5** in `spec/27-spec-toolchain/00-cross-cohort-read-order-dag.md`).
+
+**Coverage**: 17/17 ACs cited (100 %). Gate-slot reuse-count distribution: `36` (×6 — primary §24 boundary auditor), `53` (×2), `49` (×2), `01` (×2), `03` (×2), `02` (×2), all others (×1). The `36-check-ads-boundaries.md` reuse density (6/17 = 35 %) reflects that §24 is by design a strict-additive overlay on §07 — most ACs guard the same boundary surface.
 
 ---
 
