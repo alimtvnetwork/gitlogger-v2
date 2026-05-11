@@ -852,6 +852,27 @@ jobs:
         run: |
           bash linter-scripts/check-axios-version.sh --self-test
           bash linter-scripts/check-axios-version.sh
+
+      - name: §23 AppLink XOR clause gate (#22 / G-6w / slot 39)
+        # Sess-67 G-6w — phantom-clearing for slot 39 / gate #22. Promotes
+        # spec/23 AC-ADB-05 + AC-ADB-13 from contract-proven to load-proven
+        # by walking spec/23-app-database/00-overview.md and asserting:
+        # (1) AppLink XOR CHECK with two SELECT-discriminator disjuncts
+        #     joined by OR (no AND, no third disjunct);
+        # (2) disconnect-invariant CHECK (IsActive=1↔DisconnectedAt IS NULL,
+        #     IsActive=0↔DisconnectedAt IS NOT NULL);
+        # (3) locked-ID seed `INSERT OR IGNORE INTO AppLinkType(AppLinkTypeId,
+        #     Name) VALUES (1,'GitProfile'),(2,'Repo')` — bare seed rejected;
+        # (4) partial indexes IX_AppLink_TargetRepoId / _TargetGitProfileId
+        #     with `WHERE Target… IS NOT NULL` clauses on both lanes.
+        # `--self-test` runs 6 in-memory fixtures (F-1 unique-passing +
+        # F-2..F-5 clause failures + F-6 R5 vacuous-pass guard). §22
+        # `18-schema.sql` mirror coverage deferred (G-6w-mirror) — §22 currently
+        # carries the pre-rename column shape; rebase is a separate work item.
+        # Spec: spec/27-spec-toolchain/39-check-applink-xor-clause.md
+        run: |
+          python3 linter-scripts/check-applink-xor-clause.py --self-test
+          python3 linter-scripts/check-applink-xor-clause.py
         # Phase H7: codifies the H6 lesson "runtime > source verification" as
         # a standing CI gate. importlib-loads 3 critical spec-traversing
         # linters (check-99-summary-freshness, audit-spec-vs-code-v2,
