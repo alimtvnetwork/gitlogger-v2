@@ -1,7 +1,7 @@
 # Log Shipping Contract
 
-**Version:** 1.1.1  
-**Updated:** 2026-05-10  
+**Version:** 1.2.0  
+**Updated:** 2026-05-11 (Sess-69 B-14 — Retry classification table inserted into §"Request Timeout & Retry Discipline" with 5 closed-enumeration retry classes (R1 transient / R2 rate-limited / R3 permanent client / R4 signature-canonicalization / R5 pre-flight). Per-class pins: trigger set, retry yes/no, backoff base, jitter, cap, budget, exit code, ErrorCode. R2 NEW — splits 429/503-with-Retry-After from R1 transient (server-hint-dominates floor + new `GLCI-PUSH-RATE-LIMIT-EXHAUSTED` exit code so dashboards can separate "server overload" from "transient fault" patterns). R4 NEW — pins single conditional retry on signature mismatch per existing line 202 contract (was prose-only; now bound to the table). Reverse-coverage invariant + worked-example bash verifier sketch (`comm -23` between §07 and §06 retry-class column MUST output zero lines) + cross-folder lockstep (new retry class requires §07 entry in same PR). Lifts §28 R-band C2 (Completeness) **+2** (closed enumeration replaces scattered prose paragraphs 53-55); cumulative §28 Raw-LLM 117 → 119/120 (band-anchor 18 reached on C2; 20 deferred to a future cross-cohort gate that machine-checks the §06 ↔ §07 ↔ §97 retry-class triplet). Prior: 1.1.1.)  
 **Server contract:** [`spec/22-git-logs-v2/04-rest-api-endpoints.md`](../22-git-logs-v2/04-rest-api-endpoints.md)
 
 The CLI is a *client* of Git Logs v2. Wire shapes here MUST stay byte-compatible with the server spec — when they conflict, the server wins and this file is patched.
