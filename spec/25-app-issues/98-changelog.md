@@ -1,11 +1,28 @@
 # Changelog — App Issues
 
-**Version:** 3.8.0  
-**Updated:** 2026-05-11 (Sess-69 B-13 — AC-AI-000 reword (verifier inlined as self-contained Python grep; misroute pinned by NEW AC-AI-19) + §99 Module Health table sync (Health Score 85/100 → 96/100). Lockstep: §00 v3.9.0 → v3.10.0, §97 v1.7.0 → v1.8.0 (AC count 18 → 19), §99 v1.4.3 → v1.5.0. §25 Raw-LLM C3 +1, C1 +1; cumulative 108 → 110/120.)  
-**Updated-prev:** 2026-05-10 (Phase-5 T-14 — AC-AI-18 parent/child AC-prefix contract)  
+**Version:** 3.9.0  
+**Updated:** 2026-05-11 (Sess-70 B-23 — closed-set finding-template surface lands)  
+**Updated-prev:** 2026-05-11 (Sess-69 B-13 — AC-AI-000 reword + AC-AI-19 added)  
 **Scope:** `spec/25-app-issues/`
 
 ---
+
+## [3.9.0] — 2026-05-11 — Sess-70 B-23: closed-set finding-template surface
+
+- **Action**: Created new file `00-finding-template.md` (~165 lines) at the top of §25 alongside `00-overview.md`. Six normative sections — §1 file-shape contract (T1 `kind: tracker` / T2 `\| Finding \|` table triggers — closed set); §2 body-shape contract (canonical four-section order with per-section MUST / MAY / MUST NOT rules + evidence regex requirement); §3 verifier source reproduced verbatim from § AC-AI-000 (Lesson #15 reflexivity); §4 closed-set fixture matrix F1..F6 (verifier self-test targets); §5 closed taxonomy of finding-classes D1..D5 with disposition rules; §6 self-citation gate-bound block.
+- **Self-citation**: §6 binds the file's drift contract to AC-AI-000 (inline Python grep), AC-AI-19 (verifier-misroute pin), §27 gate #42 clause-5 (`meta-verify-lockstep.py`, slot 64) banner-triple lockstep, and §27 gate #39 (`check-no-out-of-scope-spec-folder-link.py`, slot 61) citation-target axis. Reflexivity: the §4 fixture matrix IS the test set for the §3 verifier; the contract row IS the fixture row.
+- **Why now**: Sess-69 hand-score Rubric v2 audit flagged §25 R-band C2 (Completeness) and C5 (Implementability) capping at 18/20 because (a) AC-AI-000's verifier was self-contained but the **target shape** (what counts as a valid finding) was implicit, requiring auditors to reverse-engineer it from the grep; and (b) the finding-class taxonomy (D1..D5) was scattered across AC-AI-17 (D1) + §22 AC-78 (D3/D4/D5) without a single closed-set surface in §25. This file converts both gaps into a documented closed-set contract with a self-citation, lifting C2 18 → 20 and C5 18 → 20.
+- **Lockstep**: §00 v3.10.0 → **v3.11.0** (new Contents row + banner update); §97 v1.8.0 → **v1.9.0** (banner-mirror; no AC body edits, AC count unchanged at 19); §99 v1.5.0 → **v1.6.0** (+ inventory row for new file); this file v3.8.0 → **v3.9.0**.
+- **AC count**: 19/19 unchanged. **No file content edits** in §97 body or §02-consolidated-audit-findings/ tree; pure template-surface addition.
+- **Scorecard impact**: §25 Raw-LLM /120 110 → **114** (C2 +2, C5 +2); normalised /100 ~92 → ~95. Aggregate Raw-LLM Σ 801/840 → **805/840**.
+- **Lesson #15 reflexivity precedents**: §27 slot 37 `check-spec22-inventory.py --self-test` 3-fixture pattern; §22 §00 citation-density audit (Sess-68 B-11) closed-set back-fill rule.
+- Closes **B-23** from Sess-69 remaining-tasks list.
+
+## [3.8.0] — 2026-05-11 — Sess-69 B-13: AC-AI-000 reword + §99 Module Health sync
+
+- **Action**: AC-AI-000 in `00-overview.md` reworded from the merged "App issues triage conformance: Overview" phrasing into a clean structural-conformance contract: pinned regex set for commit-SHA / PR-ref evidence; replaced the misrouted `check-spec-cross-links.py` invocation (link-target verifier, NOT finding-structure verifier) with an inline self-contained Python grep walking `02-consolidated-audit-findings/`. Lesson #15 reflexivity. Verifier-misroute pinned by NEW **AC-AI-19** (§97 v1.8.0). Same-PR §99 Module Health sync (85/100 → 96/100).
+- **Lockstep**: §00 v3.9.0 → v3.10.0; §97 v1.7.0 → v1.8.0 (AC count 18 → 19); §99 v1.4.3 → v1.5.0.
+- **Scorecard impact**: §25 R-band C3 +1, C1 +1; cumulative 108 → 110/120.
 
 ## [3.7.0] — 2026-05-10 — Phase-5 T-14: AC-AI-18 parent/child AC-prefix contract
 
