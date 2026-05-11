@@ -29,6 +29,8 @@ declare -A THRESHOLDS=(
   [selfupdate]=30
   [auth]=40
   [classify]=60
+  [cmd]=15
+
 )
 
 # Aggregate per-package coverage from `go tool cover -func`.
