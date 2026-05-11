@@ -1,10 +1,17 @@
 # Changelog — App Design System & UI
 
-**Version:** 4.16.0
-**Updated:** 2026-05-11 (Sess-75 B-27-§24 — walker-cost reflexivity lever applied to tier-1 manifest)
+**Version:** 4.17.0
+**Updated:** 2026-05-11 (Sess-82 B-2-§24 — minted §97 gate-citation matrix; banner-mirror)
 **Scope:** `spec/24-app-design-system-and-ui/`
 
 ---
+
+### 4.17.0 — 2026-05-11 — Sess-82 B-2-§24: closed-set gate-citation matrix in §97
+- **Action**: Inserted "Mechanically enforced by — gate-citation matrix" between Inlined Contracts and Acceptance Criteria in `97-acceptance-criteria.md` (v3.8.0 → **v3.9.0**). Maps all 17 AC-ADS-NN families to their auditing §27 gate slot. Sister to §27 `00-cross-cohort-read-order-dag.md` edge **E-5**. Mirror of §23 §97 Sess-81 B-2-§23 matrix.
+- **Slot reuse distribution**: `36-check-ads-boundaries.md` ×6 (35% — primary §24 boundary auditor, reflecting strict-additive-overlay relationship to §07), `53` ×2 (AppShell), `49` ×2 (Sidebar), `01` ×2, `03` ×2, `02` ×2, all others ×1. Coverage 17/17 (100%).
+- **Reflexive drift contract** (4 clauses): same-PR row addition for new ACs (enforced by `47-check-ac-section-orphan-header.md`); §27 slot renumber refresh (enforced by `64-meta-verify-lockstep.md`); status-column floor at `active` with §99 downgrade banner if regressed; cross-cohort consistency citing §27 only (enforced by edge **E-5**).
+- **Banners**: §97 v3.8.0 → **v3.9.0**; §00 v4.13.0 → **v4.14.0**; §99 v2.2.8 → **v2.2.9**; this file v4.16.0 → **v4.17.0**.
+- **Scorecard impact (Sess-82 B-2-§24)**: §24 R-band C4 (Consistency) defensibility hardened (citation-closure mechanism now sister to §23 closure); C4 carried at 20 (already at ceiling per Sess-69 baseline). C3 (Testability) remains the sole below-ceiling criterion at 19/20 — addressed by deferred B-29 lever. §24 Raw-LLM /120 **carried at 119**. Lovable + Cursor unchanged at 120.
 
 ### 4.16.0 — 2026-05-11 — Sess-75 B-27-§24: walker-cost reflexivity lever (mirror of §27 B-27 / §25 B-27-§25)
 - **Action**: Extended `00-tier1-bundle.md` v1.0.0 → **v1.1.0** with two additions mirroring the §27 B-27 (Sess-71) and §25 B-27-§25 (Sess-74) walker-cost-on-its-own-table reflexivity lever: (a) per-file **walker-cost (KB)** column inserted into the Tier-1 table (column 4), with `wc -c`-derived sizes (§00 ~47 / §97 ~37 / §99 ~11 / §98 ~53 KB; Σ ~148 KB); (b) NEW **"Walker-cost reflexivity (load-budget pin)"** section between Tier-3 and the per-persona checklist, with a closed-set per-tier byte-cost table (5 rows including Tier-3 `.mmd` ~0.5 KB) and 5 pre-budget recipes for the common auditor workflows.
