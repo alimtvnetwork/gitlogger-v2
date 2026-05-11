@@ -101,37 +101,11 @@ if ( ! function_exists( 'get_current_user_id' ) ) {
 }
 
 // --- Stub for PublicKeys (auth classes require it) -----------------------
-// We replace the real class loader with an in-memory key registry so tests
-// can swap keys without touching wpdb. The Ed25519Resolver references
-// \GitLogs\Auth\PublicKeys; we satisfy that via the same namespace below.
-namespace GitLogs\Auth {
-	if ( ! class_exists( __NAMESPACE__ . '\\PublicKeys' ) ) {
-		final class PublicKeys {
-			/** @var array<string,array{user_id:int,pubkey:string}> */
-			public static array $keys = [];
-			public static array $touched = [];
-
-			public static function reset(): void {
-				self::$keys    = [];
-				self::$touched = [];
-			}
-			public static function register( string $key_id, string $pubkey, int $user_id = 7 ): void {
-				self::$keys[ $key_id ] = [ 'user_id' => $user_id, 'pubkey' => $pubkey ];
-			}
-			/** @return array{user_id:int,pubkey:string}|null */
-			public static function find_by_key_id( string $key_id ): ?array {
-				return self::$keys[ $key_id ] ?? null;
-			}
-			public static function touch_last_used( int $user_id, string $key_id ): void {
-				self::$touched[] = [ $user_id, $key_id ];
-			}
-		}
-	}
-}
+// We pre-load an in-memory key registry under \GitLogs\Auth\PublicKeys so
+// the resolver doesn't try to touch wpdb. Loaded BEFORE the auth classes.
+require_once __DIR__ . '/stubs/public-keys-stub.php';
 
 // --- Load the system under test ------------------------------------------
-namespace {
-	require_once __DIR__ . '/../includes/auth/class-nonce-store.php';
-	require_once __DIR__ . '/../includes/auth/class-ed25519-resolver.php';
-	require_once __DIR__ . '/../includes/auth/class-auth-context.php';
-}
+require_once __DIR__ . '/../includes/auth/class-nonce-store.php';
+require_once __DIR__ . '/../includes/auth/class-ed25519-resolver.php';
+require_once __DIR__ . '/../includes/auth/class-auth-context.php';
