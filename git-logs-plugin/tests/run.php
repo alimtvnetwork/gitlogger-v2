@@ -66,10 +66,18 @@ sort( $tests );
 $pass = 0;
 foreach ( $tests as $fn ) {
 	// reset between tests
-	$GLOBALS['__transients'] = [];
-	$GLOBALS['__current_user_id'] = 0;
+	$GLOBALS['__transients']            = [];
+	$GLOBALS['__current_user_id']       = 0;
+	$GLOBALS['__current_user_login']    = null;
+	$GLOBALS['__current_user_display']  = null;
+	$GLOBALS['__current_user_roles']    = [];
+	$GLOBALS['__user_caps']             = [];
 	if ( class_exists( '\\GitLogs\\Auth\\PublicKeys' ) ) {
 		\GitLogs\Auth\PublicKeys::reset();
+	}
+	foreach ( [ 'RepoStore', 'RunStore', 'EventStore', 'BranchStore', 'AuditLog' ] as $cls ) {
+		$fq = "\\GitLogs\\DB\\$cls";
+		if ( class_exists( $fq ) ) { $fq::reset(); }
 	}
 	try {
 		$fn();
