@@ -20,6 +20,10 @@
 
 ## [3.8.0] — 2026-05-11 — Sess-69 B-13: AC-AI-000 reword + §99 Module Health sync
 
+- **Action**: AC-AI-000 in `00-overview.md` reworded from the merged "App issues triage conformance: Overview" phrasing into a clean structural-conformance contract: pinned regex set for commit-SHA / PR-ref evidence; replaced the misrouted `check-spec-cross-links.py` invocation (link-target verifier, NOT finding-structure verifier) with an inline self-contained Python grep walking `02-consolidated-audit-findings/`. Lesson #15 reflexivity. Verifier-misroute pinned by NEW **AC-AI-19** (§97 v1.8.0). Same-PR §99 Module Health sync (85/100 → 96/100).
+- **Lockstep**: §00 v3.9.0 → v3.10.0; §97 v1.7.0 → v1.8.0 (AC count 18 → 19); §99 v1.4.3 → v1.5.0.
+- **Scorecard impact**: §25 R-band C3 +1, C1 +1; cumulative 108 → 110/120.
+
 ## [3.7.0] — 2026-05-10 — Phase-5 T-14: AC-AI-18 parent/child AC-prefix contract
 
 - **Action**: §97 gains **AC-AI-18** `[critical]` codifying the 4-clause prefix discipline already practised across the §25 tree: (1) `AC-01..AC-08` generic-floor band byte-identical across parent + both children; (2) `AC-AI-NN` parent-only band; (3) bare `AC-NN >= AC-09` child-extension band, folder-scoped (cross-child collisions on `AC-09` EXPECTED and NOT a defect); (4) forbidden ID patterns (children minting `AC-AI-NN`, parent minting bare `AC-NN > AC-08`, foreign-prefix reuse, evidence-quoted IDs counted as minted).
