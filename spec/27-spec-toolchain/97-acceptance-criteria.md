@@ -355,7 +355,7 @@ The following map enumerates every occupied slot in the range 01–79 with its g
 |---|------|------|----------------|----------------------------|
 | 50 | [50-validate-guidelines-py.md](./50-validate-guidelines-py.md) | `linter-scripts/validate-guidelines.py` | `AC-VG-*` | AC-T-03, AC-T-18 (twin) |
 | 51 | [51-validate-guidelines-go.md](./51-validate-guidelines-go.md) | `linter-scripts/validate-guidelines.go` | `AC-VG-*` | AC-T-03, AC-T-18 (twin) |
-| 52 | [52-check-axios-version.md](./52-check-axios-version.md) | `linter-scripts/check-axios-version.py` | `AC-CAV-*` | AC-T-03 |
+| 52 | [52-check-axios-version.md](./52-check-axios-version.md) | `linter-scripts/check-axios-version.sh` | `AC-CAV-*` | AC-T-03 |
 | 53–59 | _(reserved)_ | _(reserved)_ | _(reserved)_ | _(reserved)_ |
 
 ### Configuration (60–69)
