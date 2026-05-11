@@ -91,7 +91,7 @@ if ( ! function_exists( '__' ) ) {
 	function __( string $s, string $domain = '' ): string { return $s; }
 }
 if ( ! function_exists( 'is_user_logged_in' ) ) {
-	function is_user_logged_in(): bool { return $GLOBALS['__current_user_id'] ?? 0 > 0; }
+	function is_user_logged_in(): bool { return ( $GLOBALS['__current_user_id'] ?? 0 ) > 0; }
 }
 if ( ! function_exists( 'wp_set_current_user' ) ) {
 	function wp_set_current_user( int $id ): void { $GLOBALS['__current_user_id'] = $id; }
