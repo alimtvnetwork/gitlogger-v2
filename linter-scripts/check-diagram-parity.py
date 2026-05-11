@@ -46,6 +46,27 @@ EMOJI_RANGES = (
 PARITY_LITERAL_A = "Diagram parity with §22 is mechanically enforced"
 PARITY_LITERAL_SELF = "Self-enforcing via §27 backlog gate `diagram-parity-check`"
 
+# AC-DG-23 narrative-header schema (clause-6, Sess-67 G-8).
+# 4 ordered keys MUST appear (in this order) BEFORE the first non-comment
+# Mermaid directive. Continuation lines (`%%   …` indented) and other
+# `%% …` comment lines between keys are permitted; only the order and
+# presence of the canonical key spellings is enforced.
+NARRATIVE_HEADER_KEYS = (
+    "Diagram type:",
+    "What this answers:",
+    "Authoritative source:",
+    "Audience:",
+)
+# Mermaid directive line patterns (start of diagram body); used to bound
+# the header-scan window. Matched by `startswith` against the lstripped
+# line so leading whitespace inside frontmatter is tolerated.
+MERMAID_DIRECTIVES = (
+    "flowchart", "erDiagram", "sequenceDiagram", "mindmap",
+    "classDiagram", "stateDiagram", "stateDiagram-v2",
+    "gantt", "pie", "journey", "gitGraph", "quadrantChart",
+    "requirementDiagram", "C4Context", "timeline",
+)
+
 # Files exempt from clause-1 walk (per slot doc "Out of scope").
 EXEMPT_FILE_PREFIXES = ("lifecycle-26-",)
 EXEMPT_SUBDIRS = ("01-diagram-conventions",)
