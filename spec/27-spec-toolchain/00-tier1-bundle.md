@@ -8,8 +8,8 @@ axis_rationale: "Single-page read-order anchor for the §27 spec set"
 
 # Spec Toolchain — Tier-1 Essential Bundle
 
-**Version:** 1.2.0
-**Updated:** 2026-05-11 (Sess-69 B-16 — added "Navigation-quintet inline cross-reference convention" sub-section pinning 5-clause frontmatter contract requiring every active-gate slot file to inline AC-T-30/-31/-36/-37/-38 under a `navigation_quintet` frontmatter key in canonical order. Carve-out: 7 module-level surfaces exempt (would be circular self-citation). Worked-example YAML + worked-example bash verifier sketch included for the post-mass-edit verifier (candidate body for slot 66 / gate #44 clause-5 extension). Phased rollout: today = spec-only authorship + reviewer-attestation; B-16-impl mass-edit across 28 active-gate slots gated on B-20-impl per slot 66 schema floor. Lifts §27 R-band C4 (Consistency) **+1** today (reviewer-attestation only); +3 cumulative post-impl. v1.1.0 → v1.2.0 — additive only; no tier partition changes.)
+**Version:** 1.3.0
+**Updated:** 2026-05-11 (Sess-80 B-33 — closes the §27 walker-cost asymmetry: §27 was the originating cohort for the walker-cost reflexivity lever (Sess-71 B-27 introduced it on `00-raw-llm-bottleneck-decomposition.md`) but did NOT carry the column on this file's Tier-1 table until now. Adds: (a) per-file **Walker-cost (KB)** column to the Tier-1 table (Σ ~419 KB across the 4 normative tier-1 files: §00 ~83 KB / trace-map ~50 KB / §97 ~101 KB / §99 ~185 KB; computed via `wc -c` 2026-05-11 / 1024 rounded — §27 is the largest in-scope cohort by tier-1 KB); (b) NEW **§ "Walker-cost reflexivity (load-budget pin)"** section between Tier-3 and the Drift contract, with closed-set per-tier byte-cost table and 4 pre-budget recipes (verify-an-AC ~15-25 KB via §97 section anchor / trace-a-gate-dependency ~50 KB / decode-current-state ~10 KB via §99 newest-banner-block sub-slice / full-tier-1 read ~419 KB) plus reflexive drift contract (≥10 KB `wc -c` change triggers same-PR refresh, with §99 special cadence: every 5th `-stamp-bump` OR any bump crossing a 10 KB bucket). Cites mirror-septet anchor closure (Sess-79 B-27-§26) — every spec/22..28 cohort now carries the column, §27 closes its asymmetry. Lifts §27 R-band C6 (Friction) **16 → 17** band-anchor advance (cited mechanisms: this file's walker-cost column + mirror-septet anchor closure citation; total 5 cited mechanisms for C6 now including prior 3 from B-27). Cumulative §27 R-band 110 → **111/120**. Aggregate Raw-LLM Σ 820 → **821/840** (97.7/100). v1.2.0 → v1.3.0 — additive only; no tier partition changes. Same-PR banner-triple lockstep (§00 / §98 / §99) + bottleneck-decomposition C6 row refresh (16 → 17).)
 **Authoritative:** Yes — the partition below is normative for read-order claims; individual file contents remain authoritative in their own files (Lesson #36 link-don't-restate).
 
 > 🤖 **Raw-LLM Reader Pin.** §27 is a *meta-module*: it specifies the gates that audit the other six in-scope cohorts (§22-§26, §28). Most §27 files are per-gate slot docs (one file per active gate, ~50-200 lines each). To **navigate** §27 you only need the four tier-1 files below (~1,573 lines). To **work on a specific gate**, add the corresponding tier-2 slot doc on demand. The 1,080-line `98-changelog.md` is tier-3 — never required for current work.
@@ -20,13 +20,13 @@ axis_rationale: "Single-page read-order anchor for the §27 spec set"
 
 ## Tier-1 — Navigable minimum (read in order)
 
-| # | File | Lines | Role | Why tier-1 |
-|---|---|---|---|---|
-| 1 | [`00-overview.md`](./00-overview.md) | 465 | Module pin + active-gate count (26) + invariants triple (I-1 EXISTS, I-2 WIRED, I-3 NUMBERED) + slot-numbering scheme + retired-gate frozen list (INV-03 anchor) | Establishes the toolchain's vocabulary, the gate-counting rule, and the perimeter for slot numbers. Read first. |
-| 2 | [`trace-map.md`](./trace-map.md) | 419 | Gate dependency DAG: which gates are prerequisites for which others; per-gate `consumes` / `produced_for` rows | The single source for "which gate to consult / extend first". Without this, an implementer cannot order changes correctly. |
-| 3 | [`97-acceptance-criteria.md`](./97-acceptance-criteria.md) | 429 | 36 ACs for the toolchain itself (AC-T-* family — gate hygiene, slot reflexivity, ledger lockstep) | Every gate-side contract is here. Read after the trace map so each AC's `Verifies:` cell already names a known gate slot. |
-| 4 | [`99-consistency-report.md`](./99-consistency-report.md) | 260 | Newest banner block + per-version scorecard delta + current Sess-NN tasks | Tells the reader where the toolchain is **right now** (versions, last-shipped gate, open tickets). Read last in tier-1. |
-| **Σ** | **4 files** | **~1,573** | **Tier-1 footprint** | Below the 8K-token "single context window" comfort threshold. |
+| # | File | Lines | Walker-cost (KB) | Role | Why tier-1 |
+|---|---|---|---|---|---|
+| 1 | [`00-overview.md`](./00-overview.md) | 465 | ~83 | Module pin + active-gate count (26) + invariants triple (I-1 EXISTS, I-2 WIRED, I-3 NUMBERED) + slot-numbering scheme + retired-gate frozen list (INV-03 anchor) | Establishes the toolchain's vocabulary, the gate-counting rule, and the perimeter for slot numbers. Read first. |
+| 2 | [`trace-map.md`](./trace-map.md) | 419 | ~50 | Gate dependency DAG: which gates are prerequisites for which others; per-gate `consumes` / `produced_for` rows | The single source for "which gate to consult / extend first". Without this, an implementer cannot order changes correctly. |
+| 3 | [`97-acceptance-criteria.md`](./97-acceptance-criteria.md) | 429 | ~101 | 36 ACs for the toolchain itself (AC-T-* family — gate hygiene, slot reflexivity, ledger lockstep) | Every gate-side contract is here. Read after the trace map so each AC's `Verifies:` cell already names a known gate slot. |
+| 4 | [`99-consistency-report.md`](./99-consistency-report.md) | 260 | ~185 | Newest banner block + per-version scorecard delta + current Sess-NN tasks | Tells the reader where the toolchain is **right now** (versions, last-shipped gate, open tickets). Read last in tier-1. |
+| **Σ** | **4 files** | **~1,573** | **~419** | **Tier-1 footprint** | Below the 8K-token "single context window" comfort threshold by line-count; **far above** any reasonable byte-budget by KB-count (see Walker-cost reflexivity section below). |
 
 **Read-order rationale:** vocabulary + invariants (1) → gate dependency graph (2) → contracts (3) → current state (4). After tier-1 the reader knows: how many active gates exist, which slot file owns each gate, what each gate guarantees, and which gate(s) are currently open work.
 
@@ -197,6 +197,37 @@ This sketch is the candidate body for slot 66 / gate #44 clause-5 extension at B
 | **Raw-LLM** (single context window) | Tier-1 only | After file 4 (`99-consistency-report.md`) | High for "what is §27, what gates exist, what is open right now". To work on a specific gate, request a follow-up turn that loads only the relevant slot doc + the cohort it audits. |
 | **Cursor / Claude-Code** (file access + shell) | Tier-1 in order, then load tier-2 slot doc(s) on demand | When the gate under work is covered | Very high; meta-gates (slots 64, 65) catch drift in real time. |
 | **Lovable** (full agent + Cloud + UI preview) | Tier-1 as primer, jump to whichever tier-2 the current sub-task names | n/a — agent re-loads files on demand | Very high; same as Cursor. |
+
+---
+
+## Walker-cost reflexivity (load-budget pin)
+
+**Mirror-septet anchor closure citation.** As of Sess-79 B-27-§26, all 7 in-scope cohorts (§22 + §23 + §24 + §25 + §26 + §27 + §28) cite walker-cost reflexivity in their tier-1 manifests. §27 was the originating cohort (Sess-71 B-27 introduced the lever on `00-raw-llm-bottleneck-decomposition.md` per-criterion table) but did NOT carry the column on this file's Tier-1 table until this turn — Sess-80 B-33 closes that asymmetry.
+
+**Reflexive claim.** This manifest is itself the load-proven artefact for its own friction claim: a Raw-LLM auditor walking §27 with a Tier-1 bundle cap (~30 KB per `mem://constraints/...` Tier-1 budget heuristics) can pre-budget which files to open against the per-file byte-costs in the Tier-1 table (column 4) before opening any cited surface. The Σ ~419 KB total is **far above** any single-walker 30 KB cap (the largest in-scope cohort by tier-1 KB; §27 §99 alone is ~185 KB ≈ 617% of cap). Sub-task pre-budgeting is therefore mandatory, not optional, for the Raw-LLM persona.
+
+| Tier | Files | Σ KB | Role |
+|---|---|---|---|
+| Tier-1 #1 | `00-overview.md` | ~83 | Module pin + invariants — ~277% of cap → mandatory 3-pass walk on its own |
+| Tier-1 #2 | `trace-map.md` | ~50 | Gate dependency DAG — ~167% of cap → 2-pass walk |
+| Tier-1 #3 | `97-acceptance-criteria.md` | ~101 | AC aggregator — ~337% of cap → mandatory 4-pass walk |
+| Tier-1 #4 | `99-consistency-report.md` | ~185 | Per-session ledger tail (largest §99 in any cohort) — ~617% of cap → mandatory 7-pass walk on its own |
+| **Σ tier-1** | **(4 normative files)** | **~419** | **~1397% of cap → mandatory 14-pass walk, ordered §00 → trace-map → §97 → §99 per Tier-1 read-order rationale** |
+
+**Pre-budget recipes** (closed set, mirror of §22/§23/§24/§25/§26/§28):
+
+- **Verify-an-AC** (auditor confirming a single `AC-T-*` clause): load Tier-1 #3 sub-slice via section anchor (~5-15 KB per AC body) + #1 invariants tail (~10 KB) ≈ **~15-25 KB** (1-pass walk; the section-anchor sub-slice is the dominant friction-reducer here since §97 alone is 337% of cap).
+- **Trace-a-gate-dependency** (auditor tracking which gate runs before which): load Tier-1 #2 ≈ **~50 KB** (~167% of cap → 2-pass walk; the trace-map is self-contained).
+- **Decode-current-state** (auditor checking spec-version frontier or open tickets): load Tier-1 #4 newest-banner block (~10 KB sub-slice via "Module version:" anchor) ≈ **~10 KB** (~33% of cap → 1-pass walk; the §99 tail is the only safe sub-slice — full §99 read is forbidden by walker-cap).
+- **Full tier-1 read** (new contributor onboarding): load entire tier-1 set ≈ **~419 KB** (~1397% of cap → mandatory 14-pass walk, ordered §00 → trace-map → §97 → §99 per Tier-1 read-order rationale; **§27 is the largest in-scope cohort by tier-1 KB and the most acute pre-budgeting target**).
+
+**Why this lifts C6, not C4** (mirror of all prior B-27-§N explanations): friction is the cost of finding the right surface; C6 measures that cost. The byte-cost annotations on each tier-1 file reduce guess-cost — the textbook C6 lever per the Rubric v2 band-anchor definition. C4 (Consistency) is unaffected — the AC source remains the single source of truth.
+
+**§27-specific note:** §27 has the **most extreme byte-distribution** of any in-scope cohort: §99 alone (~185 KB) is larger than the entire tier-1 footprint of §22 (~119 KB) or §28 (~136 KB). This is structural — §27 is the meta-cohort and accumulates per-session ledger entries from every other cohort's banner-triple lockstep. The "decode-current-state" recipe is therefore the highest-frequency Raw-LLM walk and **mandatorily** uses the §99 newest-banner-block sub-slice anchor (~10 KB) rather than a full §99 load (forbidden by walker-cap).
+
+**Long-tail ceiling (16 → 17 mirror-septet anchor citation lever)**: §27 C6 was at 16 from Sess-71 B-27 (Tier-2 slot-index lookup table + drift-contract clause + walker-cost column on the bottleneck-decomposition file). This turn adds a **fourth cited mechanism**: walker-cost reflexivity column on this file's Tier-1 table itself (was previously only on the bottleneck-decomposition per-criterion table) **plus** the mirror-septet anchor closure citation as a **fifth cited mechanism** (the cross-cohort lever is now fully anchored — every spec/22..28 cohort has the column, and §27 closes its asymmetry by carrying the column itself). C6 16 → **17** band-anchor advance. C6 → 18 ceiling deferred to a future cross-cohort gate that mechanically verifies the carriers-exclusion glob across all 7 spec cohorts (long-tail `-impl`, out of scope per `mem://constraints/no-implementation-suggestions`); C6 → 19/20 deferred to a per-criterion walker-cost drift gate extending gate #42 clause-5 to recompute KB-costs against on-disk file sizes (long-tail `-impl`, also out of scope).
+
+**Drift contract** (reflexive): if any tier-1 file's `wc -c` changes by ≥10 KB, the per-file byte-cost column above MUST be refreshed in the same PR. Reviewer-attestation today; gate #42 banner-triple lockstep already detects banner-version drift on §00 / §98 / §99 (this manifest's banner is bumped manually in the same PR). Note: §27 §99 grows on every session (per-session ledger tail) — the byte-cost column above is a **moving target** more than for any other cohort. Refresh cadence: every 5th `-stamp-bump` on §99 OR any single bump that pushes §99 past a 10 KB bucket boundary, whichever first.
 
 ---
 
