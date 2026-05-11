@@ -46,6 +46,10 @@ jobs:
         working-directory: glci
         run: |
           go test ./... -race -coverprofile=coverage.out -covermode=atomic
+      - name: Per-package coverage gate
+        working-directory: glci
+        run: |
+          bash scripts/coverage-gate.sh coverage.out
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
