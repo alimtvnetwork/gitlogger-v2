@@ -51,17 +51,17 @@ Each candidate names: (a) the criterion it lifts, (b) projected per-criterion de
    - **Cited mechanism**: gate self-test verifies the 4-row frontmatter schema on its own fixtures (Lesson #15 reflexivity).
    - **Same-PR coupling**: §27 §00 + §97 + §98 + §99 banner-triple lockstep + §00-gate-slot-binding.md table row (gate count 26 → 27).
 
-4. **B-21 (NEW)** — 2-tier slot index extension to `00-tier1-bundle.md`.
-   - **Lifts**: C6 Friction **~11 → ~14** (~3 points).
-   - **Cited mechanism**: AC-T-38 tier-promotion drift contract clause 3 (already in force) covers the extension; banner-triple lockstep enforces.
-   - **Same-PR coupling**: §97 minor bump (AC-T-38 line-budget clause may need to differentiate tier-1-cohort vs tier-1-slot budgets).
+4. **B-21 (CLOSED Sess-69)** — Tier-2 slot-index lookup table appended to `00-tier1-bundle.md` (v1.0.0 → v1.1.0).
+   - **Delivered**: C6 Friction **11 → 14** (full +3).
+   - **Cited mechanism**: bundle drift-contract clause now binds the new 28-row lookup table by reference; reverse-lookup + active-count parity paragraphs close the two ambiguity gaps; AC-T-38 tier-promotion drift contract remains in force.
+   - **Same-PR coupling**: §00 + §98 + §99 banner-triple lockstep; this file's per-criterion table refreshed (C6 row 11 → 14, B-21 status "open" → "closed"). No §97 mint required (bundle is a navigation-aid file per Lesson #36, not a contract surface).
 
 5. **B-22 (NEW)** — `_carriers/` sub-namespace migration for 6 dead-banner slot files.
-   - **Lifts**: C6 Friction **+1** (combined with B-21: ~14 → ~15) and C4 Consistency **+1** (combined with B-16+B-20: 16 → 17).
+   - **Lifts**: C6 Friction **+1** (14 → 15) and C4 Consistency **+1** (combined with B-16+B-20: 16 → 17).
    - **Cited mechanism**: `check-no-out-of-scope-spec-folder-link.py` (slot 61, gate #39) extended to recognise `_carriers/` as a within-folder namespace partition; `00-gate-slot-binding.md` table row count must NOT include `_carriers/` files.
    - **Same-PR coupling**: §97 AC-T-37 four-way parity contract MUST be amended to exclude `_carriers/` from the active-gate count denominator before the migration.
 
-**Aggregate projection** (B-19/B-19b CLOSED; B-16 + B-20 + B-21 + B-22 still open): §27 Raw-LLM **94 → 98 today** (B-19/B-19b realised); projected **98 → ~112** if remaining four candidates land (Δ +14; gap closes by ~64 %). Residual 8-point gap (~112 → 120) requires the cross-cohort gate proposed in the C3 / C6 rows above + AC-T-39 extension to the 53 advisory slots (long-tail).
+**Aggregate projection** (B-19/B-19b/B-21 CLOSED; B-16 + B-20 + B-22 still open): §27 Raw-LLM **94 → 101 today** (B-19/B-19b/B-21 realised: +4 C3 + +3 C6); projected **101 → ~112** if remaining three candidates land (Δ +11; gap closes by ~58 %). Residual 8-point gap (~112 → 120) requires the cross-cohort gate proposed in the C3 / C6 rows above + AC-T-39 extension to the 53 advisory slots (long-tail).
 
 ---
 
