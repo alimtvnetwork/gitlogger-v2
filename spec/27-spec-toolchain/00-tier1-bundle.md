@@ -8,8 +8,8 @@ axis_rationale: "Single-page read-order anchor for the §27 spec set"
 
 # Spec Toolchain — Tier-1 Essential Bundle
 
-**Version:** 1.1.0
-**Updated:** 2026-05-11 (Sess-67 B-21 — added Tier-2 slot index lookup table mapping all 28 active-gate slot files → gate # → category, so a Raw-LLM reader can resolve "which slot owns gate #N?" in a single pass without paging through the categorical inventory in `00-overview.md`. Lifts §27 C6 Friction +3. v1.0.0 → v1.1.0 — additive only; no tier partition changes.)
+**Version:** 1.2.0
+**Updated:** 2026-05-11 (Sess-69 B-16 — added "Navigation-quintet inline cross-reference convention" sub-section pinning 5-clause frontmatter contract requiring every active-gate slot file to inline AC-T-30/-31/-36/-37/-38 under a `navigation_quintet` frontmatter key in canonical order. Carve-out: 7 module-level surfaces exempt (would be circular self-citation). Worked-example YAML + worked-example bash verifier sketch included for the post-mass-edit verifier (candidate body for slot 66 / gate #44 clause-5 extension). Phased rollout: today = spec-only authorship + reviewer-attestation; B-16-impl mass-edit across 28 active-gate slots gated on B-20-impl per slot 66 schema floor. Lifts §27 R-band C4 (Consistency) **+1** today (reviewer-attestation only); +3 cumulative post-impl. v1.1.0 → v1.2.0 — additive only; no tier partition changes.)
 **Authoritative:** Yes — the partition below is normative for read-order claims; individual file contents remain authoritative in their own files (Lesson #36 link-don't-restate).
 
 > 🤖 **Raw-LLM Reader Pin.** §27 is a *meta-module*: it specifies the gates that audit the other six in-scope cohorts (§22-§26, §28). Most §27 files are per-gate slot docs (one file per active gate, ~50-200 lines each). To **navigate** §27 you only need the four tier-1 files below (~1,573 lines). To **work on a specific gate**, add the corresponding tier-2 slot doc on demand. The 1,080-line `98-changelog.md` is tier-3 — never required for current work.
