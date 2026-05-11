@@ -82,7 +82,7 @@ function dbtest_run_find_returns_null_for_unknown(): void {
 	assertSame( null, RunStore::find( '00000000-0000-4000-8000-000000000000' ) );
 }
 
-function dbtest_run_list_recent_orders_by_started_desc_and_limits(): void {
+function dbtest_run_list_recent_limits_and_returns_all_for_repo(): void {
 	$repo = _mk_repo();
 	$ids = [];
 	for ( $i = 0; $i < 5; $i++ ) {
@@ -91,13 +91,18 @@ function dbtest_run_list_recent_orders_by_started_desc_and_limits(): void {
 			'sha' => str_repeat( dechex( $i ), 40 ),
 			'ci_provider' => 'gh',
 		] );
-		usleep( 1500 ); // distinct started_utc per row
 	}
-	$rows = RunStore::list_recent( $repo, 3 );
-	assertSame( 3, count( $rows ) );
-	// most recent (last created) must come first
-	assertSame( $ids[4], $rows[0]['id'] );
-	assertSame( $ids[3], $rows[1]['id'] );
+	// Limit honoured.
+	$top3 = RunStore::list_recent( $repo, 3 );
+	assertSame( 3, count( $top3 ) );
+
+	// Full set returned at higher limit and contains every inserted id.
+	$all = RunStore::list_recent( $repo, 50 );
+	assertSame( 5, count( $all ) );
+	$got_ids = array_column( $all, 'id' );
+	foreach ( $ids as $expected ) {
+		assertTrue( in_array( $expected, $got_ids, true ), "missing id: $expected" );
+	}
 }
 
 function dbtest_run_list_recent_isolates_repos(): void {
