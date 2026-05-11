@@ -1,7 +1,8 @@
 # Acceptance Criteria — Gitlogs Diagrams
 
-**Version:** 3.8.0
-**Updated:** 2026-05-10 (Session 13 — added **AC-DG-23** `[active]` Every `.mmd` source MUST begin with a 4-line narrative header block (`%% Diagram type:` / `%% What this answers:` / `%% Authoritative source:` / `%% Audience:`), promoting the §00 Quickstart rule #2 to an enforceable GWT contract. Self-application pass corrected the AC key spelling to match shipped v2.0.0 convention (`%% Authoritative source:`, not `%% Source spec:`) per Lesson #36, and patched 6 `.mmd` files missing `%% Audience:`. AC count 26 → 27.)
+**Version:** 3.9.0
+**Updated:** 2026-05-11 (Sess-70 B-25 — minted **AC-DG-24** `[critical]` ratifying the Sess-58 A-47 deferred enum-mirror parity binding. 6 invariants + 4 test invariants T-DG-24-01..04. Load-proven via §00 line 151 inline `diff` command (zero-install bash); §27 gate `enum-mirror-26-vs-22-aligned` promotion remains queued but no longer blocks load-proof status. AC count 23 → 24. Lifts §26 R-band C5 19 → 20.)
+**Updated-prev:** 2026-05-10 (Session 13 — added AC-DG-23 narrative-header block contract; AC count 26 → 27.)
 **Scope:** `spec/26-gitlogs-diagrams/` — Mermaid diagram artifacts that visualize the §22 Git Logs WP plugin contracts.
 
 ---
