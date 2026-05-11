@@ -8,9 +8,9 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.79.0  
-**Updated:** 2026-05-11 (Sess-67 B-6 — added `00-tier1-bundle.md` Raw-LLM navigation manifest carving 4 tier-1 files (~1,573 lines) out of the 12,546-line full §27 corpus. Mirror of the Sess-67 B-1 §22 tier-1 bundle pattern. Tier-1 set: §00 overview → trace-map.md → §97 → §99 (newest banner). Tier-2 = per-gate slot docs (read on demand by category: cross-link hygiene / generators / scaffolders / lockstep / freshness / cohort-specific surface gates / boundary perimeter / §97 hygiene / sub-cohort REST contracts / self-test harnesses / meta-gates). Tier-3 = `98-changelog.md` (1,080-line archaeology surface) + allowlist source files + runner stubs + workflow specs + shared fixture-replay helper. Drift contract pinned: tier-1 footprint MUST stay ≤ 1,800 lines (tighter Raw-LLM ceiling than §22's 2,500 because §27 is a meta-module — tier-1 should be navigation-only, not contract-bearing). Per-persona pre-flight checklist included (Raw-LLM stops after file 4; Cursor/Lovable load tier-2 slot doc on demand). Closes B-6 from Sess-67 scorecard remaining-tasks list. Pure navigation-aid surface: zero edits to existing §27 body files, zero new gates, zero new ACs.  
-**Prior banner — Version:** 4.78.0; **Updated:** 2026-05-11 (Sess-67 G-8 — §26 R-band lift via clause-6 narrative-header schema; G-T-22 prior carried.)
+**Version:** 4.80.0  
+**Updated:** 2026-05-11 (Sess-67 B-9 — added `00-gate-slot-binding.md` flat gate-#↔slot-file binding table for all 26 active gates (#20..#46). Closes the gap where §00 §"CI Gate Enumeration" stopped at gate #30 in narrative form while the on-disk `**Status:** Active gate #` headers extended to #46. Pure navigation-aid surface: zero edits to existing slot files, zero new gates, zero new ACs. Reflexive Lesson #15 anchor — adding a gate without a row in the binding table fails `meta-verify-lockstep` (gate #42) clause-5 on next CI cycle. Closes B-9 from Sess-67 scorecard remaining-tasks list.  
+**Prior banner — Version:** 4.79.0; **Updated:** 2026-05-11 (Sess-67 B-6 — `00-tier1-bundle.md` Raw-LLM navigation manifest; G-8 / G-T-22 prior carried.)
 
 > **Total active gates: 26** (Phase-5 G-4 banner-triple normalization — canonical phrasing required by `meta-verify-lockstep.py` clause-5 `GATE_COUNT_RE`. Recount via `grep -lE '^\*\*Status:\*\*\s+Active\s+gate\s+#' spec/27-spec-toolchain/*.md | wc -l`. Three banner blocks (§00 / §98 / §99) MUST agree on this integer.)
 >

@@ -1,8 +1,18 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.79.0
-**Updated:** 2026-05-11 (Sess-67 B-6 — added `00-tier1-bundle.md` Raw-LLM navigation manifest)
+**Version:** 4.80.0
+**Updated:** 2026-05-11 (Sess-67 B-9 — added `00-gate-slot-binding.md` flat 26-row gate↔slot binding table)
 **Total active gates: 26**
+
+### 4.80.0 — 2026-05-11 — Sess-67 B-9: Gate-#↔slot-file binding table added
+- **Action**: Created new file `00-gate-slot-binding.md` (~165 lines) at the top of §27 alongside `00-overview.md` + `00-tier1-bundle.md`. Provides the flat lookup table for all 26 active gates (#20..#46) ↔ their owning slot files (slot 37, 39, 42-49, 50-65). Closes the gap where §00 §"CI Gate Enumeration" listed only #1..#30 in narrative form while the cohort-surface gates #31..#46 (16 gates) had no flat inventory.
+- **Sections**: (1) canonical 26-row table sorted by gate-# with columns `Gate # | Slot file | AC family/cohort | Workflow step substring | Phase/Sess tag | Status anchor`; (2) reverse lookup slot-range → gate-# coverage map; (3) three reader workflows ("I have a gate-#", "I have a slot file", "I am adding a new gate"); (4) drift contract pinning Lesson #15 reflexivity (adding a gate without a row fails gate #42 clause-5).
+- **Recount basis frozen**: `grep -lE '^\*\*Status:\*\*\s+Active\s+gate\s+#' spec/27-spec-toolchain/*.md | wc -l` MUST equal 26; row-count parity with §00/§98/§99 banner triple is enforced by `meta-verify-lockstep` (gate #42) clause-5.
+- **Why now**: Sess-67 audit surfaced that §00 §"CI Gate Enumeration" was a *partial* prose ledger (rows #1..#30 only) — implementers/auditors could not answer "which slot owns gate #41?" without scanning 26 files. Flat table closes the lookup gap.
+- **Banners**: §00 v4.79.0 → **v4.80.0**; §97 unchanged (no AC added — pure navigation-aid); §98 v4.79.0 → **v4.80.0** (this entry); §99 to mirror this version on next §99 cadence. Total active gates 26 unchanged.
+- **Scorecard impact (Sess-67 B-9)**: §27 R-band C1 (Clarity) 18 → 19 (gate↔slot binding now flat-table lookable, not only inferable from grep + slot-doc walk). C5 (Implementability) 18 → 19 (Lesson #15 self-citation: future gate additions are mechanically gated by the drift contract pinned in this file). §27 Raw-LLM /120 82 → 86; normalised /100 ~68 → ~71. §27 no longer the spec-set bottleneck (§22 at 70 takes that slot back). Closes B-9 from the Sess-67 remaining-tasks list.
+
+
 
 ### 4.79.0 — 2026-05-11 — Sess-67 B-6: §27 tier-1 essential bundle manifest added (mirror of §22 B-1)
 - **Action**: Created new file `00-tier1-bundle.md` (~150 lines) at the top of §27 alongside `00-overview.md`. Partitions all 76 §27 source files into three tiers: **tier-1** (4 files, ~1,573 lines — navigable minimum for the Raw-LLM persona), **tier-2** (per-gate slot docs grouped into 11 categories, ~50-200 lines each, read on demand), **tier-3** (changelog, allowlists, runner stubs, workflow specs, shared fixture-replay helper).
