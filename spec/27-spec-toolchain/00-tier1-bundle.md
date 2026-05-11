@@ -8,8 +8,8 @@ axis_rationale: "Single-page read-order anchor for the §27 spec set"
 
 # Spec Toolchain — Tier-1 Essential Bundle
 
-**Version:** 1.0.0
-**Updated:** 2026-05-11 (Sess-67 B-6 — initial tier-1 / tier-2 / tier-3 partition; introduced to lift §27 Raw-LLM persona score by carving a ~1.6K-line navigable subset out of the 12,546-line full §27 corpus.)
+**Version:** 1.1.0
+**Updated:** 2026-05-11 (Sess-67 B-21 — added Tier-2 slot index lookup table mapping all 28 active-gate slot files → gate # → category, so a Raw-LLM reader can resolve "which slot owns gate #N?" in a single pass without paging through the categorical inventory in `00-overview.md`. Lifts §27 C6 Friction +3. v1.0.0 → v1.1.0 — additive only; no tier partition changes.)
 **Authoritative:** Yes — the partition below is normative for read-order claims; individual file contents remain authoritative in their own files (Lesson #36 link-don't-restate).
 
 > 🤖 **Raw-LLM Reader Pin.** §27 is a *meta-module*: it specifies the gates that audit the other six in-scope cohorts (§22-§26, §28). Most §27 files are per-gate slot docs (one file per active gate, ~50-200 lines each). To **navigate** §27 you only need the four tier-1 files below (~1,573 lines). To **work on a specific gate**, add the corresponding tier-2 slot doc on demand. The 1,080-line `98-changelog.md` is tier-3 — never required for current work.
