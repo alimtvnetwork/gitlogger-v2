@@ -8,9 +8,9 @@ axis_rationale: "Specs the linter-scripts/ contract (validators, generators, gat
 
 # Spec Toolchain
 
-**Version:** 4.71.0  
-**Updated:** 2026-05-11 (Sess-67 G-6y — gate-ledger companion-resolver patched in `linter-scripts/check-gate-ledger-vs-workflow.py` to recognise `.go` companion scripts. Four coordinated touches: (a) `SCRIPT_RE` extension whitelist `(?:py|sh|cjs|mjs|js|go)`; (b) `SOURCE_LINE_RE` mirrors that whitelist; (c) `scripts_on_disk` set in `run_real()` accepts `.go` suffix; (d) filename-fallback resolver tries `.go` after `.mjs`. Slot 51 `validate-guidelines.go` (Active-gate slot 51, gate number forty-five) now resolves end-to-end: `**Source:** [`linter-scripts/validate-guidelines.go`]` parses → script present on disk → workflow text substring-matches the gate-name line `validate-guidelines.go static-surface gate (#45 / G-6s / slot 51)` already wired since Sess-66 G-6s. `--self-test` 7/7 (F-7 `go-companion` added — Active gate cites `.go` Source; `.go` script in scripts_on_disk; workflow text contains substring → exit 0). Live ledger: I-1 EXISTS 0 (carried — zero phantoms, milestone preserved); **I-2 WIRED 1 → 0 — FIRST ZERO-WIRED MILESTONE** (every Active-gate slot now has a workflow-resolvable companion); I-3 NUMBERED 20-gap remains (separate task G-6aa). No new gate added; existing gate #45 simply transitions from "wired but unresolvable by ledger walker" to "wired AND resolvable". `meta-verify-lockstep.py` still 0 violations; banner-triple still 26. Scorecard: §27 R-band C2 +1 (linter robustness across language-extension diversity), C5 +1 (Go companions on equal footing with Python/Shell/Node).  
-**Prior banner — Version:** 4.69.0; **Updated:** 2026-05-11 (Sess-67 G-6x — slot 63 `check-diagram-parity.py` shipped as load-proven gate #41; I-1 1 → 0; I-2 2 → 1.)
+**Version:** 4.73.0  
+**Updated:** 2026-05-11 (Sess-67 G-6aa — gate-number ledger reaches FULLY GREEN. Patched `linter-scripts/check-gate-ledger-vs-workflow.py` to introduce a frozen `RETIRED_GATE_NUMBERS = frozenset({*range(1,20), 21})` constant + I-3 NUMBERED carve-out: the missing-set computation now subtracts the retired set BEFORE the >5-gap threshold check, so the 20 legitimate pre-Phase-5 retired holes (#1..#19, #21) no longer mask as failures while genuinely new numbering errors still trigger exit-3. Anchor lives in §27 §00 new "Retired Gate Numbers (frozen list — INV-03 anchor)" subsection inserted between Invariants and Resilience, with explicit row-table + 4-step extension protocol (table-row + constant-row + §98 row + self-test re-run). Two new self-test fixtures: F-8 `retired-set-tolerated` (only #20 + #22 assigned, 20 retired holes excluded → exit 0) and F-9 `new-gap-still-fails` (only #50 assigned, 29 NEW gaps beyond retired set → exit 3) — guarantees the carve-out cannot silently absorb fresh numbering errors. `--self-test` 7/7 → 9/9. **Live disk: ALL 3 INVARIANTS PASS** for the first time since `check-gate-ledger-vs-workflow.py` shipped: I-1 EXISTS 0 (carried), I-2 WIRED 0 (carried from G-6y), I-3 NUMBERED 0 → 0 (NEW — was 20-gap failure since gate #43 first ran). The slot 65 gate now reports `OK — all 3 invariants pass` end-to-end. `meta-verify-lockstep.py` still 0 violations; banner-triple still 26. Scorecard: §27 R-band C2 +1 (frozen-set + extension-protocol patterns), C3 +1 (F-8/F-9 prove tolerance + non-absorption simultaneously), C5 +1 (table ↔ constant ↔ self-test 3-way bind), C6 +1 (last gate-ledger failure class cleared — gate #43 now a self-clean self-citing gate).  
+**Prior banner — Version:** 4.71.0; **Updated:** 2026-05-11 (Sess-67 G-6y — gate-ledger companion-resolver patched to recognise `.go`; gate #45 resolves; I-2 WIRED 1 → 0.)
 
 > **Total active gates: 26** (Phase-5 G-4 banner-triple normalization — canonical phrasing required by `meta-verify-lockstep.py` clause-5 `GATE_COUNT_RE`. Recount via `grep -lE '^\*\*Status:\*\*\s+Active\s+gate\s+#' spec/27-spec-toolchain/*.md | wc -l`. Three banner blocks (§00 / §98 / §99) MUST agree on this integer.)
 >
@@ -272,6 +272,21 @@ FAIL-05: lockstep break (§00 vs §98 vs §99 mismatch)  -> exit 1 (via §24 che
 3. **Exit-code contract**: every validator section MUST document its exit codes (`0=pass`, `1=fail`, `2=error` is the canonical contract).
 4. **Idempotency**: every filler section MUST state explicitly that re-runs on a satisfied tree are no-ops.
 5. **No silent orphan code**: a script without a spec is a CI failure (see [`05-check-tree-health.md`](./05-check-tree-health.md) future extension). **Exception (Phase 108 / INV-08):** code MAY be tracked transitionally in the Phase 107 orphan ledger at `.lovable/memory/audit/v2-deterministic/phase-107-overview-inventory-drift-audit.md` — `linter-scripts/test/test-overview-inventory-parity.sh` (Phase 112) accepts ledger acknowledgement as valid INV-01 satisfaction. Ledger entries SHOULD migrate to a real `NN-*.md` spec within two release cycles; sustained ledger growth without migration MUST trigger a Phase-108-style cleanup. The ledger is **acknowledgement, not absolution**.
+
+---
+
+## Retired Gate Numbers (frozen list — INV-03 anchor)
+
+Per **INV-03** (slot-immutability) above, gate numbers are assigned monotonically and never reused. The current Active-gate ledger spans **#20 → #46** (26 active gates). Numbers **#1..#19 and #21** are the **frozen historical-retired set** — they were assigned in pre-Phase-5 cycles to scripts that have since been retired, merged, or renumbered, and MUST NOT be reused.
+
+This list is the on-disk anchor for `RETIRED_GATE_NUMBERS` in [`linter-scripts/check-gate-ledger-vs-workflow.py`](../../linter-scripts/check-gate-ledger-vs-workflow.py) (gate #43, slot 65). The I-3 NUMBERED check excludes the retired set from the missing-gap computation, so legitimate historical holes do not trigger a CI failure while genuinely new gaps still do.
+
+| Range / number | Status | Disposition |
+|---|---|---|
+| `#1` .. `#19` | retired | Pre-Phase-5 numbering; superseded scripts merged into the current contract surface or removed entirely. |
+| `#21` | retired | Single-number hole between #20 (`check-spec22-inventory`, slot 37) and #22 (`check-applink-xor-clause`, slot 39); reserved for future renumbering audit. |
+
+**Extension protocol:** to retire an additional gate number (e.g. when a current gate is decommissioned), in the same PR (a) add a row to the table above, (b) extend `RETIRED_GATE_NUMBERS` in `check-gate-ledger-vs-workflow.py`, (c) add a §98 changelog row, (d) re-run `python3 linter-scripts/check-gate-ledger-vs-workflow.py --self-test` (must stay 9/9). Any divergence between the table and the constant fails this gate's I-3 NUMBERED clause on next run. **Self-enforcing via §27 backlog gate `gate-ledger-vs-workflow-check`** (Lesson #15 reflexivity anchor).
 
 ---
 

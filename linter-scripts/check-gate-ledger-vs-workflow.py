@@ -35,6 +35,15 @@ SLOT_DIR = REPO / "spec" / "27-spec-toolchain"
 WORKFLOW = REPO / ".github" / "workflows" / "spec-health.yml"
 SCRIPTS_DIR = REPO / "linter-scripts"
 
+# Per INV-03 (`spec/27-spec-toolchain/00-overview.md` line 239):
+#   "number_slot once_assigned -> immutable (retired slots may not be re-used)"
+# Gate numbers #1..#19 and #21 were assigned in pre-Phase-5 cycles to scripts
+# that have since been retired or merged. The current Active-gate ledger is
+# contiguous from #20..#46 with one tolerated hole at #21. The set below is
+# the FROZEN historical-retired list — extending it requires a §27 §00
+# "Retired Gate Numbers" subsection update + §98 changelog row in the same PR.
+RETIRED_GATE_NUMBERS: frozenset[int] = frozenset({*range(1, 20), 21})
+
 SCRIPT_RE = re.compile(r"linter-scripts/([a-z0-9_.-]+\.(?:py|sh|cjs|mjs|js|go))")
 ACTIVE_GATE_RE = re.compile(
     r"^\*\*Status:\*\*\s+Active gate #(\d+)", re.MULTILINE
@@ -101,13 +110,17 @@ def collect(slot_files: list[Path], workflow_text: str, scripts_on_disk: set[str
     if dups:
         errors.append((3, f"I-3 NUMBERED: duplicate gate numbers: {sorted(set(dups))}"))
     if nums:
-        expected = set(range(1, max(nums) + 1))
+        expected = set(range(1, max(nums) + 1)) - RETIRED_GATE_NUMBERS
         missing = sorted(expected - set(nums))
         if missing:
-            # Gaps are warnings only when small; >5 is a failure
+            # NEW gaps are warnings when small (≤5), failure otherwise.
+            # Pre-existing retired holes are excluded via RETIRED_GATE_NUMBERS.
             if len(missing) > 5:
                 errors.append((3, f"I-3 NUMBERED: gate-number ledger has "
-                                  f"{len(missing)} gaps (e.g. {missing[:5]})"))
+                                  f"{len(missing)} NEW gaps (e.g. {missing[:5]}); "
+                                  f"either assign the next slot to one of these "
+                                  f"or extend RETIRED_GATE_NUMBERS + §27 §00 "
+                                  f"\"Retired Gate Numbers\" subsection in the same PR"))
 
     return errors, cited, active
 
@@ -214,9 +227,28 @@ def self_test() -> int:
                "**Status:** Active gate #1\n"
                "**Source:** [`linter-scripts/validate-guidelines.go`](../../linter-scripts/validate-guidelines.go)\n"},
               {"validate-guidelines.go"},
-              "- name: validate-guidelines.go static-surface gate\n"
-              "  run: bash linter-scripts/test/test-validate-guidelines-go-surface.sh\n",
+               "- name: validate-guidelines.go static-surface gate\n"
+               "  run: bash linter-scripts/test/test-validate-guidelines-go-surface.sh\n",
+               0)
+
+    # F-8: retired-set tolerance (G-6aa) — only gate #20+ assigned; the 20
+    # historical retired holes (#1..#19, #21) are excluded from the
+    # missing-set computation, so the ledger passes I-3 NUMBERED.
+    make_case("F-8 retired-set-tolerated",
+              {"20-real.md": "**Status:** Active gate #20\n**Source:** [`linter-scripts/r.py`](../../linter-scripts/r.py)\n",
+               "22-next.md": "**Status:** Active gate #22\n**Source:** [`linter-scripts/n.py`](../../linter-scripts/n.py)\n"},
+              {"r.py", "n.py"},
+              "linter-scripts/r.py linter-scripts/n.py",
               0)
+
+    # F-9: NEW gap beyond the retired set still fails — guarantees the
+    # retired-set carve-out does not silently absorb fresh numbering errors.
+    # Gate #50 alone yields ≥29 NEW gaps (>5 ⇒ exit 3).
+    make_case("F-9 new-gap-still-fails",
+              {"50-far.md": "**Status:** Active gate #50\n**Source:** [`linter-scripts/f.py`](../../linter-scripts/f.py)\n"},
+              {"f.py"},
+              "linter-scripts/f.py",
+              3)
 
     failed = 0
     for name, slot_docs, scripts, workflow_text, expected in fixtures:
