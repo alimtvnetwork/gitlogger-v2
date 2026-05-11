@@ -100,12 +100,23 @@ if ( ! function_exists( 'get_current_user_id' ) ) {
 	function get_current_user_id(): int { return (int) ( $GLOBALS['__current_user_id'] ?? 0 ); }
 }
 
-// --- Stub for PublicKeys (auth classes require it) -----------------------
-// We pre-load an in-memory key registry under \GitLogs\Auth\PublicKeys so
-// the resolver doesn't try to touch wpdb. Loaded BEFORE the auth classes.
+// --- Stubs for PublicKeys + DB stores + REST shims -----------------------
+// Loaded BEFORE the production classes so their `require_once` calls become
+// no-ops (the namespaced class is already declared).
 require_once __DIR__ . '/stubs/public-keys-stub.php';
+require_once __DIR__ . '/stubs/db-stubs.php';
+require_once __DIR__ . '/stubs/wp-rest-stubs.php';
 
 // --- Load the system under test ------------------------------------------
 require_once __DIR__ . '/../includes/auth/class-nonce-store.php';
 require_once __DIR__ . '/../includes/auth/class-ed25519-resolver.php';
 require_once __DIR__ . '/../includes/auth/class-auth-context.php';
+
+// REST controllers (their internal require_once for db/* and auth/* are
+// satisfied by the already-loaded stubs).
+require_once __DIR__ . '/../includes/rest/class-rest-whoami.php';
+require_once __DIR__ . '/../includes/rest/class-rest-repos.php';
+require_once __DIR__ . '/../includes/rest/class-rest-runs.php';
+require_once __DIR__ . '/../includes/rest/class-rest-events.php';
+require_once __DIR__ . '/../includes/rest/class-rest-keys.php';
+require_once __DIR__ . '/../includes/rest/class-rest-audit.php';
