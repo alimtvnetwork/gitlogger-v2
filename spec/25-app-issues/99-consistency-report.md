@@ -1,6 +1,6 @@
 # Consistency Report — 25-app-issues
 
-**Version:** 1.4.3  
+**Version:** 1.5.0  
 
 > **v1.4.3 update (Phase-5 T-14 — AC-AI-18 parent/child AC-prefix contract closes recurring audit-v? MEDIUM D2 `Inconsistent AC-ID prefixes across §25 tree`):** Walkers previously misclassified the bare-`AC-09`-in-both-children pattern as a duplicate-ID defect AND the absence of `AC-AI-NN` from children as a child contract gap. AC-AI-18 `[critical]` codifies the 4-clause prefix discipline (AC-01..AC-08 generic floor byte-identical across all 3 §97 files; `AC-AI-NN` parent-only; bare `AC-NN >= AC-09` child-extension folder-scoped — collisions EXPECTED; forbidden ID patterns enumerated) into a single tier-1 readable clause. Self-enforcing via in-spec catalogue (un-conditional) + §27 backlog gate `ac-prefix-contract-check` (NEW T-14, 3-turn ship-decay clause). Banners: §97 v1.6.0 → **v1.7.0** (AC count 17 → 18); §98 v3.6.0 → **v3.7.0** (release row); §99 v1.4.2 → **v1.4.3** (this audit row). §00 unchanged (no new section). **No CI workflow change · no RUBRIC bump · no AC-31-31 cascade · no shipped gate-count change** (backlog +1). Scorecard: §25 C1 +1, C4 +1 (conditional on §27 gate within 3 turns).
 
