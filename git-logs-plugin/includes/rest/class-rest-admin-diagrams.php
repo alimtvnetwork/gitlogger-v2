@@ -26,6 +26,11 @@ class Admin_Diagrams {
 	/** Diagrams folder, relative to the plugin's parent (repo root). */
 	private const DIAGRAM_DIR = 'spec/26-gitlogs-diagrams';
 
+	/** Static entry — matches the convention used by other Rest\* classes. */
+	public static function register(): void {
+		( new self() )->routes();
+	}
+
 	public function register(): void {
 		add_action( 'rest_api_init', [ $this, 'routes' ] );
 	}
