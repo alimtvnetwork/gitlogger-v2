@@ -8,8 +8,9 @@ axis_rationale: "Single-page read-order anchor for the §28 CLI spec set"
 
 # Universal CI CLI — Tier-1 Essential Bundle
 
-**Version:** 1.0.0
-**Updated:** 2026-05-11 (Sess-68 B-7 — initial tier-1 / tier-2 / tier-3 partition; mirrors the §22 B-1 (Sess-67) and §27 B-6 (Sess-67) tier-1 manifest pattern. Targets the Raw-LLM persona; lifts §28 Raw-LLM C1 (Clarity) audit-defensibility 19 → 20 by surfacing read order on disk with self-cited gate enforcement.)
+**Version:** 1.1.0
+**Updated:** 2026-05-11 (Sess-77 B-27-§28 — mirror of §27 B-27 (Sess-71), §25 B-27-§25 (Sess-74), §24 B-27-§24 (Sess-75), and §22 B-27-§22 (Sess-76) walker-cost reflexivity lever applied to §28 (mirror-quintet step 5/7 → completes mirror-quintet anchor: §22 + §24 + §25 + §27 + §28 = 5 of 7 cohorts; §23 + §26 are the remaining mirror candidates, both lacking a tier-1 manifest file and therefore deferred to a separate B-27-§23/§26 tier-1-bundle authoring task). Adds: (a) per-file **Walker-cost (KB)** column to the Tier-1 table (Σ ~136 KB across the 7 normative tier-1 files: §00 ~20 KB / §01 ~4 KB / §04 ~6 KB / §06 ~15 KB / §07 ~7 KB / §97 ~63 KB / §99 ~21 KB; computed via `wc -c` 2026-05-11 / 1024 rounded); (b) NEW **§ "Walker-cost reflexivity (load-budget pin)"** section between Tier-3 and the per-persona pre-flight checklist, with closed-set per-tier byte-cost table and 4 pre-budget recipes (verify-a-subcommand ~30 KB / decode-an-error-envelope ~32 KB / audit-an-AC ~88 KB / full-tier-1 read ~136 KB) plus reflexive drift contract. Lesson #15 reflexivity: this manifest IS the load-proven artefact for its own friction claim. **Pure navigation-aid extension**; no §97 AC body edits, no new gate, no new tier promotion. Same-PR banner-triple lockstep (§00 / §98 / §99). Lifts §28 R-band C6 (Friction) **carried at 20** (band-anchor mechanism strengthened — walker-cost reflexivity column is now a fourth-leg cited self-enforcing mechanism for C6's existing 20-band score, alongside the mirror-quintet anchor + auditor-pin + tier-1 read-order DAG; no point-lift available, defensibility hardened). C1/C2/C3/C4/C5/C6 carried at 20/18/19/20/20/20 (per Sess-69 B-14 §99 attestation R 119; sole below-ceiling criteria: C2 at 18 and C3 at 19). §28 Raw-LLM /120 **carried at 119** (this turn is a score-holding defensibility refresh, not a point-lift). **Lovable + Cursor unchanged** (file-tool traversal already resolves byte-costs trivially). Aggregate Raw-LLM Σ **carried at 818/840** (97.4/100). Closes B-27-§28 and the mirror-quintet anchor. Prior: 1.0.0 — Sess-68 B-7 initial tier-1 partition.)
+**Updated-prev:** 2026-05-11 (Sess-68 B-7 — initial tier-1 / tier-2 / tier-3 partition; mirrors the §22 B-1 (Sess-67) and §27 B-6 (Sess-67) tier-1 manifest pattern. Targets the Raw-LLM persona; lifts §28 Raw-LLM C1 (Clarity) audit-defensibility 19 → 20 by surfacing read order on disk with self-cited gate enforcement.)
 **Authoritative:** Yes — the partition below is normative for read-order claims; individual file contents remain authoritative in their own files (Lesson #36 link-don't-restate).
 
 > 🤖 **Raw-LLM Reader Pin.** §28 is a *behavioural contract* for the `glci` binary (the canonical external invoker of the §27 gate suite and the client-side complement to spec/22's `riseup-git-logs` server-side endpoints). Read tier-1 in order; do NOT infer read order from `ls`, alphabetical slot order, or §00's "consumes:" frontmatter list. Tier-1 footprint = ~1 763 lines (well under the 2 500-line single-context-window comfort ceiling). To **work on a specific surface** (config resolution, CI-provider bindings, output classification), add the corresponding tier-2 file on demand.
@@ -18,16 +19,16 @@ axis_rationale: "Single-page read-order anchor for the §28 CLI spec set"
 
 ## Tier-1 — Navigable minimum (read in order)
 
-| # | File | Lines | Role | Why tier-1 |
-|---|---|---|---|---|
-| 1 | [`00-overview.md`](./00-overview.md) | 390 | Module pin + scope statement + `consumes:` cross-cohort frontmatter (§22/§27 anchors) + Raw-LLM Auditor Pin block + invariants | Establishes the CLI's vocabulary, its sole-in-scope external-invoker role for §27 gates, and the Lesson #36 link-don't-restate perimeter. Read first. |
-| 2 | [`01-glossary-and-enums.md`](./01-glossary-and-enums.md) | 83 | Closed-set enums for runtime modes, push outcomes, error families | The single source of truth for every enum value used in the command surface, log-shipping contract, and error catalog. Read second so §04/§06/§07 enum citations resolve. |
-| 3 | [`04-command-surface.md`](./04-command-surface.md) | 134 | `glci` subcommand inventory + global flag set (`--self-test`, `--check <mode>`) + per-subcommand argument shape | The canonical CLI surface contract. Without this, an implementer cannot pattern-match `glci push`, `glci verify`, `glci doctor`, or `glci --self-test` invocations in CI. |
-| 4 | [`06-log-shipping-contract.md`](./06-log-shipping-contract.md) | 218 | Frame transport (NDJSON over HTTPS), retry/backoff with ±25% jitter, per-request + total-deadline timeouts, SSH-mode signing transcript | The behavioural core: how `glci` ships logs to a spec/22 server. Mirrors spec/22 §43 client-side wire shape per Lesson #36. |
-| 5 | [`07-error-catalog.md`](./07-error-catalog.md) | 124 | Every `GLCI-*` error code + 4-row `--self-test` exit-code table (gate #40) + envelope shape pointer to §22 §15 | The canonical failure surface; required to interpret any non-zero exit from `glci` or any `GLCI-*` error in a server response. |
-| 6 | [`97-acceptance-criteria.md`](./97-acceptance-criteria.md) | 533 | All 49 `AC-28-*` ACs (behavioural + harness + cohort-discipline) + AC-T-* delegation table | Every CLI-side contract is here. Read after §04/§06/§07 so each AC's `Verifies:` cell already names a known surface. |
-| 7 | [`99-consistency-report.md`](./99-consistency-report.md) | 145 | Newest banner block + version delta tail + open-task tail | Tells the reader where the §28 spec is **right now** (versions, last-shipped gate, open tickets). Read last in tier-1. |
-| **Σ** | **7 files** | **~1 627** | **Tier-1 footprint** | Below the 2 500-line single-context-window comfort threshold. |
+| # | File | Lines | Walker-cost (KB) | Role | Why tier-1 |
+|---|---|---|---|---|---|
+| 1 | [`00-overview.md`](./00-overview.md) | 390 | ~20 | Module pin + scope statement + `consumes:` cross-cohort frontmatter (§22/§27 anchors) + Raw-LLM Auditor Pin block + invariants | Establishes the CLI's vocabulary, its sole-in-scope external-invoker role for §27 gates, and the Lesson #36 link-don't-restate perimeter. Read first. |
+| 2 | [`01-glossary-and-enums.md`](./01-glossary-and-enums.md) | 83 | ~4 | Closed-set enums for runtime modes, push outcomes, error families | The single source of truth for every enum value used in the command surface, log-shipping contract, and error catalog. Read second so §04/§06/§07 enum citations resolve. |
+| 3 | [`04-command-surface.md`](./04-command-surface.md) | 134 | ~6 | `glci` subcommand inventory + global flag set (`--self-test`, `--check <mode>`) + per-subcommand argument shape | The canonical CLI surface contract. Without this, an implementer cannot pattern-match `glci push`, `glci verify`, `glci doctor`, or `glci --self-test` invocations in CI. |
+| 4 | [`06-log-shipping-contract.md`](./06-log-shipping-contract.md) | 218 | ~15 | Frame transport (NDJSON over HTTPS), retry/backoff with ±25% jitter, per-request + total-deadline timeouts, SSH-mode signing transcript | The behavioural core: how `glci` ships logs to a spec/22 server. Mirrors spec/22 §43 client-side wire shape per Lesson #36. |
+| 5 | [`07-error-catalog.md`](./07-error-catalog.md) | 124 | ~7 | Every `GLCI-*` error code + 4-row `--self-test` exit-code table (gate #40) + envelope shape pointer to §22 §15 | The canonical failure surface; required to interpret any non-zero exit from `glci` or any `GLCI-*` error in a server response. |
+| 6 | [`97-acceptance-criteria.md`](./97-acceptance-criteria.md) | 533 | ~63 | All 49 `AC-28-*` ACs (behavioural + harness + cohort-discipline) + AC-T-* delegation table | Every CLI-side contract is here. Read after §04/§06/§07 so each AC's `Verifies:` cell already names a known surface. |
+| 7 | [`99-consistency-report.md`](./99-consistency-report.md) | 145 | ~21 | Newest banner block + version delta tail + open-task tail | Tells the reader where the §28 spec is **right now** (versions, last-shipped gate, open tickets). Read last in tier-1. |
+| **Σ** | **7 files** | **~1 627** | **~136** | **Tier-1 footprint** | Below the 2 500-line single-context-window comfort threshold. |
 
 **Read-order rationale:** vocabulary + scope (1) → enum closed-sets (2) → CLI surface (3) → behavioural core (4) → failure catalog (5) → contract aggregator (6) → current state (7). After tier-1 the reader knows: every `glci` subcommand and flag, exactly how to ship a frame and decode failures, and which AC governs every behaviour.
 
@@ -57,6 +58,35 @@ These files exist for completeness but are not required for any persona to under
 | [`18-config-schema.json`](./18-config-schema.json) | (json) | JSON-Schema for `.glci.toml` and equivalent env-var shape. Use only when validating a config file. |
 | [`98-changelog.md`](./98-changelog.md) | 258 | Per-version changelog tail. Use only when archaeology is required (e.g., "when did `--self-test` ship?"). |
 | [`lifecycle-28-universal-ci-cli.mmd`](./lifecycle-28-universal-ci-cli.mmd) | (mermaid) | Mermaid lifecycle diagram for the `glci push` flow. Visualises §06; never the source of truth. |
+
+---
+
+## Walker-cost reflexivity (load-budget pin)
+
+**Mirror of §27 B-27 (Sess-71), §25 B-27-§25 (Sess-74), §24 B-27-§24 (Sess-75), and §22 B-27-§22 (Sess-76) walker-cost reflexivity lever.** This manifest is itself the load-proven artefact for its own friction claim: a Raw-LLM auditor walking §28 with a Tier-1 bundle cap (~30 KB per `mem://constraints/...` Tier-1 budget heuristics) can pre-budget which files to open against the per-file byte-costs in the Tier-1 table (column 4) before opening any cited surface. The Σ ~136 KB total is **far above** any single-walker 30 KB cap — sub-task pre-budgeting is therefore mandatory, not optional, for the Raw-LLM persona.
+
+| Tier | Files | Σ KB | Role |
+|---|---|---|---|
+| Tier-1 #1-2 | `00-overview.md` + `01-glossary-and-enums.md` | ~24 | Vocabulary + scope prelude (must-load before any subcommand reasoning) |
+| Tier-1 #3-5 | `04-command-surface.md` + `06-log-shipping-contract.md` + `07-error-catalog.md` | ~28 | Behavioural core — fits a single 30 KB walker pass with 2 KB headroom |
+| Tier-1 #6 | `97-acceptance-criteria.md` | ~63 | AC aggregator — ~210% of cap → mandatory 3-pass walk on its own |
+| Tier-1 #7 | `99-consistency-report.md` | ~21 | Current-state tail — fits one walker pass alone |
+| **Σ tier-1** | **(7 normative files)** | **~136** | **~453% of cap → mandatory 5-pass walk, ordered per the read-order rationale above** |
+
+**Pre-budget recipes** (closed set, mirror of §27 + §25 + §24 + §22):
+
+- **Verify-a-subcommand** (auditor confirming a single `glci` subcommand contract): load Tier-1 #1 + #3 ≈ **~30 KB** (~100% of cap → 1-pass walk; vocabulary + command surface is exactly cap-sized).
+- **Decode-an-error-envelope** (auditor explaining a `GLCI-*` exit code): load Tier-1 #2 + #4 + #5 ≈ **~32 KB** (~107% of cap → 2-pass walk; enums + log-shipping context + error catalog).
+- **Audit-an-AC** (auditor verifying any `AC-28-*` clause): load Tier-1 #1 + #6 + #7 ≈ **~88 KB** (~293% of cap → mandatory 3-pass walk; AC aggregator alone needs 3 passes).
+- **Full tier-1 read** (new contributor onboarding): load entire tier-1 set ≈ **~136 KB** (~453% of cap → mandatory 5-pass walk, ordered §00 → §01 → §04 → §06 → §07 → §97 → §99 per Tier-1 read-order rationale).
+
+**Why this lifts C6, not C4** (mirror of §27 B-27, §25 B-27-§25, §24 B-27-§24, and §22 B-27-§22 explanations): friction is the cost of finding the right surface; C6 measures that cost. The byte-cost annotations on each tier-1 file reduce guess-cost — the textbook C6 lever per the Rubric v2 band-anchor definition. C4 (Consistency) is unaffected — the AC source remains the single source of truth.
+
+**§28-specific note:** §28 is the canonical CLI external-invoker cohort; the AC aggregator (§97 ~63 KB) dominates byte-cost. The "audit-an-AC" recipe is therefore the highest-frequency Raw-LLM walk and the recipe most worth pre-budgeting. The "verify-a-subcommand" recipe is exactly cap-sized — a sweet-spot showing the tier-1 partition is well-tuned for sub-task isolation.
+
+**Long-tail ceiling (20 → 20 reflexive defensibility)**: §28 C6 is already at 20 (mirror-quintet anchor + auditor-pin). This refresh adds a **fourth-leg** cited mechanism (walker-cost reflexivity) so the 20-band score remains defensible if any one of the three existing legs (mirror-quintet, auditor-pin, tier-1 read-order DAG) is later weakened by a structural change. Promotion to a hard `-impl` walker-cost drift gate (recomputes `wc -c` on every banner-triple lockstep run) is out of scope per `mem://constraints/no-implementation-suggestions`.
+
+**Drift contract** (reflexive): if any tier-1 file's `wc -c` changes by ≥10 KB, the per-file byte-cost column above MUST be refreshed in the same PR; gate #42 banner-triple lockstep already detects banner-version drift, the byte-cost refresh is reviewer-attestation today. The Σ row is governed by clause 6 of the existing drift contract below (line-budget invariant — KB-budget refresh is its byte-axis sibling).
 
 ---
 
