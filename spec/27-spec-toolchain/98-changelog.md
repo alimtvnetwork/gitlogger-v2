@@ -1,8 +1,18 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.82.0
-**Updated:** 2026-05-11 (Sess-68 B-8 — AC-T-38 added: binds `00-tier1-bundle.md` Raw-LLM tier-1 partition manifest with line-budget + tier-promotion drift contract; completes navigation quintet)
+**Version:** 4.83.0
+**Updated:** 2026-05-11 (Sess-69 B-18 — Raw-LLM bottleneck decomposition `00-raw-llm-bottleneck-decomposition.md` shipped; per-criterion R-band hand-score + 5 named lift candidates with cited mechanisms)
 **Total active gates: 26**
+
+### 4.83.0 — 2026-05-11 — Sess-69 B-18: §27 Raw-LLM bottleneck decomposition
+- **Action**: Created `00-raw-llm-bottleneck-decomposition.md` (v1.0.0). Hand-scores §27 Raw-LLM per Rubric v2: C1=20, C2=20, C3≈12, C4≈11, C5=20, C6≈11; sum 94/120 ✓ matches cohort scorecard total. Identifies five named lift candidates: **B-19** inline red-green test pairs into 20 active-gate slot files (lifts C3 +4); **B-16** navigation-quintet inline cross-reference (lifts C4 +3); **B-20** new `check-slot-frontmatter-uniformity.py` slot 66 / gate #43-promotion (lifts C4 +2); **B-21** 2-tier slot index extension to `00-tier1-bundle.md` (lifts C6 +3); **B-22** `_carriers/` sub-namespace migration for 6 dead-banner slots (lifts C6 +1, C4 +1). Each candidate cites its self-enforcing mechanism + same-PR cohort-discipline coupling. Aggregate projection: 94 → ~110 if all five land (~62 % of the 26-point gap closes).
+- **Why**: After Sess-68 B-8 closed C1+C2 to 20, §27 R 94/120 stopped being a single-line "lift §27" task — the remaining 34-point gap (across C3+C4+C6) needs decomposition before the next batch is tractable. Per scorecard ritual, "score of 20 on any criterion REQUIRES citing the self-enforcing mechanism", so each lift candidate names its mechanism upfront — pre-empting band-anchor friction in subsequent sessions.
+- **Mechanical enforcement**: gate #42 clause-5 banner-triple lockstep (today, against §00/§98/§99); gate #39 (slot 61) link-target axis (closed-set perimeter — file links only to `mem://`, `spec/27-…`, and within-cohort relative paths).
+- **Banners**: §00 v4.82.0 → **v4.83.0** (this entry tail); this file v4.82.0 → **v4.83.0** (this entry); §99 v3.21.0 → **v3.22.0** (audit-row tail). **No** §97 bump (decomposition is a navigation/audit aid, not a contract — explicit in the file's "Gating checks" section). **No** new slot file. **No** new gate (the named candidates B-20 / B-22 *would* introduce slots / gates if promoted; they are not promoted by listing). Total active gates 26 unchanged.
+- **Scorecard impact (Sess-69 B-18)**: §27 Raw-LLM totals **carried at 94/120** (this turn ships an audit aid, not a lift). However the file unblocks subsequent sessions: B-19 / B-16 / B-20 / B-21 / B-22 are now first-class actionable tasks with cited mechanisms, where previously "lift §27" was speculative. Cohort Raw-LLM mean carried at 112.0.
+- **Audit-trail**: Closes B-18 from Sess-68 remaining-tasks list. Adds B-19 / B-20 / B-21 / B-22 to the backlog (B-16 already on backlog).
+
+---
 
 ### 4.82.0 — 2026-05-11 — Sess-68 B-8: AC-T-38 added — binds `00-tier1-bundle.md` Raw-LLM tier-1 partition manifest into §97
 - **Action**: Added AC-T-38 (`[critical]`) to `97-acceptance-criteria.md` immediately after AC-T-37, before the Slot Delegation Map section. Pins the canonical 4-file Raw-LLM tier-1 read-order (`00-overview.md` → `trace-map.md` → `97-acceptance-criteria.md` → `99-consistency-report.md`, footprint ~1 573 lines, ceiling 2 500 lines = single-context-window comfort threshold).
