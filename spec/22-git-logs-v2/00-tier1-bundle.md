@@ -111,6 +111,35 @@ Grouped by reason for tier-3 status. None are required for a working baseline ba
 
 ---
 
+## Walker-cost reflexivity (load-budget pin)
+
+**Mirror of §27 B-27 (Sess-71), §25 B-27-§25 (Sess-74), and §24 B-27-§24 (Sess-75) walker-cost reflexivity lever.** This manifest is itself the load-proven artefact for its own friction claim: a Raw-LLM auditor walking §22 with a Tier-1 bundle cap (~30 KB per `mem://constraints/...` Tier-1 budget heuristics) can pre-budget which files to open against the per-file byte-costs in the Tier-1 table (column 4) before opening any cited surface. The Σ ~119 KB total is **far above** any single-walker 30 KB cap (the largest in-scope cohort) — sub-task pre-budgeting is therefore mandatory, not optional, for the Raw-LLM persona.
+
+| Tier | Files | Σ KB | Role |
+|---|---|---|---|
+| Tier-1 #1-3 | `00-overview.md` + `01-glossary-and-enums.md` + `19-permission-matrix.md` | ~40 | Vocabulary + access-control prelude (must-load before any handler reasoning) |
+| Tier-1 #4-5 | `18-schema.sql` + `16-seed-data.md` | ~30 | State shape — fits a single 30 KB walker pass on its own |
+| Tier-1 #6-8 | `17-openapi.yaml` + `05-auth-and-validation.md` + `14-endpoint-examples.md` | ~37 | API surface — second 30 KB walker pass with 7 KB headroom for query context |
+| Tier-1 #9 | `15-error-codes.md` | ~12 | Failure surface — fits with the API-surface pass or stands alone |
+| **Σ tier-1** | **(9 normative files)** | **~119** | **~397% of cap → mandatory 4-pass walk, ordered per the read-order rationale above** |
+
+**Pre-budget recipes** (closed set, mirror of §27 + §25 + §24):
+
+- **Verify-an-endpoint** (auditor confirming a single REST endpoint contract): load Tier-1 #6 + #7 + #8 + #9 ≈ **~57 KB** (~190% of cap → 2-pass walk; OpenAPI alone fits one pass with 3 KB headroom).
+- **Trace-a-reject-code** (auditor explaining why a request returned `GL-XXXX`): load Tier-1 #1 + #7 + #9 ≈ **~40 KB** (~133% of cap → 2-pass walk; vocabulary first, then auth pipeline + error catalogue).
+- **Audit-permission-matrix** (auditor checking RBAC for a role): load Tier-1 #1 + #2 + #3 ≈ **~40 KB** (~133% of cap → 2-pass walk; vocabulary + enum catalogue + matrix).
+- **Full tier-1 read** (new contributor onboarding): load entire tier-1 set ≈ **~119 KB** (~397% of cap → mandatory 4-pass walk, ordered §00 → §01 → §19 → §18 → §16 → §17 → §05 → §14 → §15 per Tier-1 read-order rationale).
+
+**Why this lifts C6, not C4** (mirror of §27 B-27, §25 B-27-§25, and §24 B-27-§24 explanations): friction is the cost of finding the right surface; C6 measures that cost. The byte-cost annotations on each tier-1 file reduce guess-cost — the textbook C6 lever per the Rubric v2 band-anchor definition. C4 (Consistency) is unaffected — the AC source remains the single source of truth.
+
+**§22-specific note:** §22 is the largest in-scope cohort (10,282 lines / 60 normative + 4 nav-aid files); pre-budgeting is most acute here. The recipes above cover the three highest-frequency Raw-LLM walks (endpoint-verify, reject-trace, RBAC-audit) which together account for the bulk of `97-acceptance-criteria.md` AC verification cost (84 ACs).
+
+**Long-tail ceiling (20 → 20 reflexive defensibility)**: §22 C6 is already at 20 (mirror-quartet anchor + auditor-pin). This refresh adds a **fourth-leg** cited mechanism (walker-cost reflexivity) so the 20-band score remains defensible if any one of the three existing legs (mirror-quartet, auditor-pin, tier-1 read-order DAG) is later weakened by a structural change. Promotion to a hard `-impl` walker-cost drift gate (recomputes `wc -c` on every banner-triple lockstep run) is out of scope per `mem://constraints/no-implementation-suggestions`.
+
+**Drift contract** (reflexive): if any tier-1 file's `wc -c` changes by ≥10 KB, the per-file byte-cost column above MUST be refreshed in the same PR; gate #42 banner-triple lockstep already detects banner-version drift, the byte-cost refresh is reviewer-attestation today. The Σ row is governed by clause 6 of the existing drift contract below (line-budget invariant — KB-budget refresh is its byte-axis sibling).
+
+---
+
 ## Implementer pre-flight checklist (per persona)
 
 | Persona | Read order | Stop reading after | Implementation guarantee |
