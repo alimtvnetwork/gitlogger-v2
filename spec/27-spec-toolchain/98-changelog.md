@@ -1,18 +1,16 @@
 # Changelog — Spec Toolchain
 
-**Version:** 4.69.0
-**Updated:** 2026-05-11 (Sess-67 G-6x — slot 63 `check-diagram-parity.py` shipped as load-proven gate #41; ledger I-1 1 → 0 zero-phantom milestone; I-2 2 → 1)
+**Version:** 4.71.0
+**Updated:** 2026-05-11 (Sess-67 G-6y — companion-resolver patch in `check-gate-ledger-vs-workflow.py` recognises `.go` Source-line + on-disk extension; gate #45 now resolves; ledger I-2 1 → 0)
 **Total active gates: 26**
 
-### 4.69.0 — 2026-05-11 — Sess-67 G-6x: slot 63 `check-diagram-parity.py` shipped (gate #41 load-proven)
-- **Action**: Created `linter-scripts/check-diagram-parity.py` (~280 LOC, 5 clauses + R5 anchor + built-in `--self-test`). Walks `spec/26-gitlogs-diagrams/`. Clause-1 `.mmd` ↔ `consumes:` bidirectional binding; clause-2 ER core-entity superset `{Profile, GitProfile, Repo, App, AppLink, AppLinkType, ShaRegistry, Pipeline}`; clause-3 endpoint-mindmap App-write baseline `{append-log, fixed-log, clear-log}`; clause-4 emoji-free lexer compliance; clause-5 §26 §00 parity-declaration + Lesson #15 reflexivity literals.
-- **Self-test**: 6/6 fixtures pass.
-- **§26 source edit**: `spec/26-gitlogs-diagrams/00-overview.md` line 57 gained parity-declaration normative blockquote.
-- **Live disk**: clean after the §26 §00 edit.
-- **Workflow wire**: New step `§26 diagram parity gate (#41 / G-6x / slot 63)` after gate #22.
-- **Ledger**: I-1 EXISTS 1 → 0 (zero-phantom-script milestone); I-2 WIRED 2 → 1.
-- **Lockstep**: §27 §00 4.67.0 → 4.69.0; §27 §98 4.67.0 → 4.69.0; §99 3.06.0 → 3.08.0.
-- **Scorecard**: §26 C2 +2, C3 +3, C5 +3, C6 +2; §22/§23 C4 +1; §27 C4 +1.
+### 4.71.0 — 2026-05-11 — Sess-67 G-6y: gate-ledger companion resolver patched for `.go` companions (gate #45 resolves; I-2 1 → 0)
+- **Action**: Patched `linter-scripts/check-gate-ledger-vs-workflow.py` in three coordinated places to recognise `.go` companions: (a) `SCRIPT_RE` extension whitelist `(?:py|sh|cjs|mjs|js|go)`; (b) `SOURCE_LINE_RE` mirror; (c) `scripts_on_disk` set in `run_real()` adds `.go` suffix; plus the filename-fallback resolver tries `.go` after `.mjs`. With these four touches, slot 51's Source line `[`linter-scripts/validate-guidelines.go`]` resolves to script `validate-guidelines.go`, which exists on disk and is substring-referenced in `.github/workflows/spec-health.yml` (the gate name line `validate-guidelines.go static-surface gate (#45 / G-6s / slot 51)`).
+- **Self-test**: 7/7 fixtures pass — F-7 `go-companion` added (Active gate cites `.go` Source line; `.go` script in scripts_on_disk; workflow text contains `validate-guidelines.go` substring → exit 0).
+- **Live disk**: I-1 EXISTS 0 (unchanged, zero phantom citations); I-2 WIRED 1 → 0 (gate #45 now resolved); I-3 NUMBERED 20-gap remains (separate task G-6aa).
+- **Workflow wire**: No change required — gate #45 was already wired via static-surface probe step at line 819 since Sess-66 G-6s; the resolver simply now sees the wire it could not previously parse.
+- **Lockstep**: §27 §00 4.69.0 → 4.71.0; §27 §98 4.69.0 → 4.71.0; §99 3.08.0 → 3.10.0.
+- **Scorecard**: §27 C2 +1 (linter robustness against extension diversity), C5 +1 (consistency: now treats Go on equal footing with Python/Shell/Node companion scripts).
 
 
 ### 4.67.0 — 2026-05-11 — Sess-67 G-6w: slot 39 `check-applink-xor-clause.py` shipped (gate #22 load-proven; AC-ADB-05/13 + WE-2/3/4 now machine-checked)

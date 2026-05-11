@@ -35,12 +35,12 @@ SLOT_DIR = REPO / "spec" / "27-spec-toolchain"
 WORKFLOW = REPO / ".github" / "workflows" / "spec-health.yml"
 SCRIPTS_DIR = REPO / "linter-scripts"
 
-SCRIPT_RE = re.compile(r"linter-scripts/([a-z0-9_.-]+\.(?:py|sh|cjs|mjs|js))")
+SCRIPT_RE = re.compile(r"linter-scripts/([a-z0-9_.-]+\.(?:py|sh|cjs|mjs|js|go))")
 ACTIVE_GATE_RE = re.compile(
     r"^\*\*Status:\*\*\s+Active gate #(\d+)", re.MULTILINE
 )
 SOURCE_LINE_RE = re.compile(
-    r"^\*\*Source:\*\*\s*\[`linter-scripts/([a-z0-9_.-]+\.(?:py|sh|cjs|mjs|js))`",
+    r"^\*\*Source:\*\*\s*\[`linter-scripts/([a-z0-9_.-]+\.(?:py|sh|cjs|mjs|js|go))`",
     re.MULTILINE,
 )
 
@@ -70,7 +70,7 @@ def collect(slot_files: list[Path], workflow_text: str, scripts_on_disk: set[str
             if not script:
                 # Fall back to filename convention: NN-check-foo.md -> check-foo.py
                 stem = slot.stem.split("-", 1)[1] if "-" in slot.stem else slot.stem
-                for ext in (".py", ".sh", ".cjs", ".mjs"):
+                for ext in (".py", ".sh", ".cjs", ".mjs", ".go"):
                     if (SCRIPTS_DIR / f"{stem}{ext}").exists():
                         script = f"{stem}{ext}"
                         break
@@ -124,7 +124,7 @@ def run_real() -> int:
     workflow_text = WORKFLOW.read_text(encoding="utf-8", errors="replace")
     scripts_on_disk = {
         p.name for p in SCRIPTS_DIR.iterdir()
-        if p.is_file() and p.suffix in {".py", ".sh", ".cjs", ".mjs", ".js"}
+        if p.is_file() and p.suffix in {".py", ".sh", ".cjs", ".mjs", ".js", ".go"}
     }
 
     errors, cited, active = collect(slot_files, workflow_text, scripts_on_disk)
@@ -205,6 +205,17 @@ def self_test() -> int:
                "02-b.md": "**Status:** Active gate #2\n**Source:** [`linter-scripts/b.py`](../../linter-scripts/b.py)\n"},
               {"a.py", "b.py"},
               "linter-scripts/a.py linter-scripts/b.py",
+              0)
+
+    # F-7: Go companion (G-6y) — .go Source line resolves; workflow references
+    # the .go path inside a comment/name, so I-2 wiring substring-matches
+    make_case("F-7 go-companion",
+              {"01-validate-guidelines-go.md":
+               "**Status:** Active gate #1\n"
+               "**Source:** [`linter-scripts/validate-guidelines.go`](../../linter-scripts/validate-guidelines.go)\n"},
+              {"validate-guidelines.go"},
+              "- name: validate-guidelines.go static-surface gate\n"
+              "  run: bash linter-scripts/test/test-validate-guidelines-go-surface.sh\n",
               0)
 
     failed = 0
