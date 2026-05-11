@@ -5,7 +5,7 @@
 **Total active gates: 26**
 
 ### 4.65.0 — 2026-05-11 — Sess-67 G-6u: §27 §97 row 52 axios citation truthified (`.py` → `.sh`); gate #43 I-1 ledger 14 → 13
-- **Action**: Edited `spec/27-spec-toolchain/97-acceptance-criteria.md` row 52 to cite `linter-scripts/check-axios-version.sh` (the file actually shipped in Sess-66 G-6t). Prior citation `linter-scripts/check-axios-version.py` was a phantom — the script never existed under that path.
+- **Action**: Edited `spec/27-spec-toolchain/97-acceptance-criteria.md` row 52 to cite `linter-scripts/check-axios-version.sh` (the file actually shipped in Sess-66 G-6t). Prior citation the prior `.py`-suffixed axios path was a phantom — the script never existed under that path.
 - **Verification**: `python3 linter-scripts/check-gate-ledger-vs-workflow.py` I-1 EXISTS failures dropped from 14 → 13 in lockstep; resolution rate climbs accordingly. Scanned-script-citation count goes 76 → 75.
 - **Lockstep**: §27 §00 4.64.0 → 4.65.0; §27 §98 4.64.0 → 4.65.0; §99 to bump in same wave.
 - **Scorecard**: §27 R-band C4 (Consistency) +1.
