@@ -8,8 +8,9 @@ axis_rationale: "Single-page read-order anchor for the §24 App Design System sp
 
 # App Design System & UI — Tier-1 Essential Bundle
 
-**Version:** 1.0.0
-**Updated:** 2026-05-11 (Sess-69 B-17 — initial tier-1 partition; mirrors the §22 B-1 (Sess-67), §27 B-6 (Sess-67), and §28 B-7 (Sess-68) tier-1 manifest pattern. Targets the Raw-LLM persona; lifts §24 Raw-LLM C1 (Clarity) audit-defensibility 19 → 20 by surfacing read order on disk with self-cited gate enforcement.)
+**Version:** 1.1.0
+**Updated:** 2026-05-11 (Sess-75 B-27-§24 — mirror of §27 B-27 (Sess-71) and §25 B-27-§25 (Sess-74) walker-cost reflexivity lever applied to §24. Adds: (a) per-file **walker-cost (KB)** column to the Tier-1 table (Σ ~150 KB across the 4 normative files: §00 ~47 KB / §97 ~37 KB / §99 ~11 KB / §98 ~53 KB; computed via `wc -c` 2026-05-11); (b) NEW **§ "Walker-cost reflexivity (load-budget pin)"** section between Tier-3 and the per-persona checklist, with a closed-set per-tier byte-cost table and 4 pre-budget recipes (verify-an-AC ~84 KB / contract-only-walk; audit-current-state ~64 KB / live-banner-walk; provenance-audit ~100 KB / changelog-walk; full-tier-1 read ~150 KB / new-contributor-onboarding). Lesson #15 reflexivity: this manifest IS the load-proven artefact for its own friction claim — mirror of §27 `00-tier1-bundle.md` Tier-2 lookup pattern but specialised on walker-cost vs slot-index. **Pure navigation-aid extension**; no §97 AC body edits, no new gate, no new tier promotion. Same-PR banner-triple lockstep (§00 / §98 / §99). Lifts §24 R-band C6 (Friction) 18 → **19** (band-anchor approach via byte-cost guess-cost reduction — textbook C6 lever per Rubric v2; mirror of §27 B-27 C6 15 → 16 and §25 B-27-§25 C6 18 → 19). C1/C2/C3/C4/C5 carried at 20/19/19/18/20. §24 Raw-LLM /120 114 → **115**. **Lovable + Cursor unchanged** (file-tool traversal already resolves byte-costs trivially). Aggregate Raw-LLM Σ 817/840 → **818/840**. Closes B-27-§24. Prior: 1.0.0 — Sess-69 B-17 initial tier-1 partition.)
+**Updated-prev:** 2026-05-11 (Sess-69 B-17 — initial tier-1 partition; mirrors the §22 B-1 (Sess-67), §27 B-6 (Sess-67), and §28 B-7 (Sess-68) tier-1 manifest pattern.)
 **Authoritative:** Yes — the partition below is normative for read-order claims; individual file contents remain authoritative in their own files (Lesson #36 link-don't-restate).
 
 > 🤖 **Raw-LLM Reader Pin.** §24 is a *strict additive overlay* on §07-design-system: it owns the `--app-*` token namespace, AppShell layout, breakpoints, and theme parity — and ZERO SQL DDL (boundary closed by AC-ADS-17, gate #36). The cohort is **small** (4 normative files, ~1 606 lines of Markdown + 1 lifecycle diagram, total ~1 617 lines). The entire §24 normative surface fits comfortably under the 2 500-line single-context-window comfort ceiling, so **all 4 files are tier-1**. There is no tier-2 / tier-3 demotion in this cohort — read every file in order. Do NOT infer read order from `ls`, alphabetical slot order, or §00's `produced_for:` frontmatter list.
@@ -18,13 +19,13 @@ axis_rationale: "Single-page read-order anchor for the §24 App Design System sp
 
 ## Tier-1 — Navigable minimum (read in order)
 
-| # | File | Lines | Role | Why tier-1 |
-|---|---|---|---|---|
-| 1 | [`00-overview.md`](./00-overview.md) | 931 | Module pin + Quick-Nav (Walker Index) + Walker-Pin (4 critical ACs surfaced) + Raw-LLM Auditor Pin (Lesson #36 memory resolution) + `--app-*` token catalog + AppShell pattern + §07 dependency boundary `### A-05` + §22 inheritance contract surface + impl-sweep appendices | Establishes the overlay's scope, the §07 boundary, the `--app-*` namespace, and every cross-cohort pin (§07, §22, §27 gates #15/#19/#36/#39/#42). Read first — Quick-Nav routes a context-bounded walker to any sub-anchor in one hop. |
-| 2 | [`97-acceptance-criteria.md`](./97-acceptance-criteria.md) | 284 | All 17 `AC-ADS-*` ACs (token namespace, raw-color forbidden, light/dark parity, AppShell invariant, §07 dependency boundary AC-ADS-16, §22 inheritance AC-ADS-15, externalized citation map AC-ADS-14, no-DDL boundary AC-ADS-17) + per-AC `T-ADS-NN-NN` test invariant blocks | Every §24 contract is here. Read after §00 so each AC's `Verifies:` cell already names a known surface. |
-| 3 | [`99-consistency-report.md`](./99-consistency-report.md) | 140 | Newest banner block + module-health table + version-delta tail + open-task tail | Tells the reader where the §24 spec is **right now** (versions, last-shipped gate, no-DDL negative-evidence sweep result, open tickets). Read third in tier-1. |
-| 4 | [`98-changelog.md`](./98-changelog.md) | 251 | Per-version changelog tail back to v3.x | Last in tier-1: gives provenance for every banner the reader has just absorbed (why a clause exists, which audit task closed it). |
-| **Σ** | **4 files** | **~1 606** | **Tier-1 footprint** | Below the 2 500-line single-context-window comfort threshold by a comfortable margin (~895 lines of headroom). |
+| # | File | Lines | Walker-cost (KB) | Role | Why tier-1 |
+|---|---|---|---|---|---|
+| 1 | [`00-overview.md`](./00-overview.md) | 932 | ~47 | Module pin + Quick-Nav (Walker Index) + Walker-Pin (4 critical ACs surfaced) + Raw-LLM Auditor Pin (Lesson #36 memory resolution) + `--app-*` token catalog + AppShell pattern + §07 dependency boundary `### A-05` + §22 inheritance contract surface + impl-sweep appendices | Establishes the overlay's scope, the §07 boundary, the `--app-*` namespace, and every cross-cohort pin (§07, §22, §27 gates #15/#19/#36/#39/#42). Read first — Quick-Nav routes a context-bounded walker to any sub-anchor in one hop. |
+| 2 | [`97-acceptance-criteria.md`](./97-acceptance-criteria.md) | 284 | ~37 | All 17 `AC-ADS-*` ACs (token namespace, raw-color forbidden, light/dark parity, AppShell invariant, §07 dependency boundary AC-ADS-16, §22 inheritance AC-ADS-15, externalized citation map AC-ADS-14, no-DDL boundary AC-ADS-17) + per-AC `T-ADS-NN-NN` test invariant blocks | Every §24 contract is here. Read after §00 so each AC's `Verifies:` cell already names a known surface. |
+| 3 | [`99-consistency-report.md`](./99-consistency-report.md) | 142 | ~11 | Newest banner block + module-health table + version-delta tail + open-task tail | Tells the reader where the §24 spec is **right now** (versions, last-shipped gate, no-DDL negative-evidence sweep result, open tickets). Read third in tier-1. |
+| 4 | [`98-changelog.md`](./98-changelog.md) | 261 | ~53 | Per-version changelog tail back to v3.x | Last in tier-1: gives provenance for every banner the reader has just absorbed (why a clause exists, which audit task closed it). |
+| **Σ** | **4 files** | **~1 619** | **~148** | **Tier-1 footprint** | Below the 2 500-line single-context-window comfort threshold by ~881 lines; byte-budget annotations (column 4) let a Raw-LLM walker pre-budget which files fit any sub-task before opening them. |
 
 **Read-order rationale:** scope + token catalog + AppShell + boundary pins (1) → contract aggregator (2) → current state (3) → provenance (4). After tier-1 the reader knows: every `--app-*` token, the AppShell invariant, the §07 dependency boundary, the §22 inheritance contract, every AC and its test, the live banner state, and the audit-task history that produced it.
 
@@ -41,6 +42,35 @@ axis_rationale: "Single-page read-order anchor for the §24 App Design System sp
 | File | Lines | Purpose |
 |---|---|---|
 | [`lifecycle-component-render.mmd`](./lifecycle-component-render.mmd) | 11 | Mermaid lifecycle diagram for the AppShell component render flow. Visualises the §00 AppShell pattern; never the source of truth. |
+
+---
+
+## Walker-cost reflexivity (load-budget pin)
+
+**Mirror of §27 B-27 (Sess-71) and §25 B-27-§25 (Sess-74) walker-cost reflexivity lever.** This manifest is itself the load-proven artefact for its own friction claim: a Raw-LLM auditor walking §24 with a Tier-1 bundle cap (~30 KB per `mem://constraints/...` Tier-1 budget heuristics) can pre-budget which files to open against the per-file byte-costs in the Tier-1 table (column 4) before opening any cited surface. The Σ ~148 KB total is **above** any single-walker 30 KB cap — sub-task pre-budgeting is therefore mandatory, not optional, for the Raw-LLM persona.
+
+| Tier | Surface | Byte-cost (KB) | Closed-set role |
+|---|---|---|---|
+| Tier-1 #1 | `00-overview.md` (scope + token catalog + AppShell + boundary pins + Quick-Nav) | ~47 | Read-first scope-setter; Quick-Nav resolves any sub-anchor in 1 hop |
+| Tier-1 #2 | `97-acceptance-criteria.md` (17 `AC-ADS-*` + per-AC `T-ADS-NN-NN` test invariants) | ~37 | The contract aggregator; every §24 normative claim lives here |
+| Tier-1 #3 | `99-consistency-report.md` (newest banner + module health + open tickets) | ~11 | Live state — read after §00/§97 to know what the spec is **right now** |
+| Tier-1 #4 | `98-changelog.md` (per-version provenance back to v3.x) | ~53 | Provenance — last in tier-1; explains *why* each banner clause exists |
+| Tier-3 | `lifecycle-component-render.mmd` (Mermaid AppShell render flow) | ~0.5 | Visual aid only; never source-of-truth (Lesson #36) |
+| **Σ tier-1** | (4 normative files) | **~148** | Above any 30 KB single-walker cap → sub-task pre-budgeting mandatory |
+
+**Pre-budget recipes (Raw-LLM auditor with 30 KB cap; mandatory sub-task selection):**
+
+- **Verify an `AC-ADS-*` clause** (contract-only walk): load §97 ≈ **~37 KB** (~123% of cap → must be split across 2 walker passes, or only the relevant AC body excerpted via Quick-Nav from §00 #2). Skip §00 / §99 / §98.
+- **Audit current state** (live-banner walk): load §99 + §00 banner block ≈ **~14 KB** (~47% of cap; §99 ~11 KB + §00 banner head ~3 KB). Skip §97 / §98.
+- **Provenance audit** (changelog walk for any banner clause): load §98 + §99 ≈ **~64 KB** (~213% of cap → split across 2 walker passes, OR scope to a single `### vN.M.K` ladder entry which is ~2-4 KB). Skip §00 / §97.
+- **Full tier-1 read** (new contributor onboarding): load entire tier-1 set ≈ **~148 KB** (~493% of cap → mandatory 5-pass walk, ordered §00 → §97 → §99 → §98 per Tier-1 read-order rationale).
+- **Audit-drift** (banner-triple lockstep verification): load §00 banner head + §98 newest entry + §99 newest update block ≈ **~9 KB** (~30% of cap; each surface ~3 KB). Cheapest workflow.
+
+**Why this lifts C6, not C4** (mirror of §27 B-27 and §25 B-27-§25 explanations): friction is the cost of finding the right surface; C6 measures that cost. The byte-cost annotations on each tier-1 file reduce guess-cost — the textbook C6 lever per the Rubric v2 band-anchor definition. C4 (Consistency) is unaffected — the AC source remains the single source of truth.
+
+**Long-tail ceiling (19 → 20)**: deferred to a `-impl` walker-cost drift gate that recomputes the per-file byte-costs above against on-disk file sizes on every banner-triple lockstep run (out of scope per `mem://constraints/no-implementation-suggestions`).
+
+**Drift contract** (reflexive): if any tier-1 file's `wc -c` changes by ≥10 KB, the per-file byte-cost column above MUST be refreshed in the same PR; gate #42 banner-triple lockstep already detects banner-version drift, the byte-cost refresh is reviewer-attestation today. The Σ row is governed by clause 6 of the existing drift contract below (line-budget invariant — KB-budget refresh is its byte-axis sibling).
 
 ---
 
