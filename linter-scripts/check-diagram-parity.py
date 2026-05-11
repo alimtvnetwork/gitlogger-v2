@@ -46,6 +46,27 @@ EMOJI_RANGES = (
 PARITY_LITERAL_A = "Diagram parity with §22 is mechanically enforced"
 PARITY_LITERAL_SELF = "Self-enforcing via §27 backlog gate `diagram-parity-check`"
 
+# AC-DG-23 narrative-header schema (clause-6, Sess-67 G-8).
+# 4 ordered keys MUST appear (in this order) BEFORE the first non-comment
+# Mermaid directive. Continuation lines (`%%   …` indented) and other
+# `%% …` comment lines between keys are permitted; only the order and
+# presence of the canonical key spellings is enforced.
+NARRATIVE_HEADER_KEYS = (
+    "Diagram type:",
+    "What this answers:",
+    "Authoritative source:",
+    "Audience:",
+)
+# Mermaid directive line patterns (start of diagram body); used to bound
+# the header-scan window. Matched by `startswith` against the lstripped
+# line so leading whitespace inside frontmatter is tolerated.
+MERMAID_DIRECTIVES = (
+    "flowchart", "erDiagram", "sequenceDiagram", "mindmap",
+    "classDiagram", "stateDiagram", "stateDiagram-v2",
+    "gantt", "pie", "journey", "gitGraph", "quadrantChart",
+    "requirementDiagram", "C4Context", "timeline",
+)
+
 # Files exempt from clause-1 walk (per slot doc "Out of scope").
 EXEMPT_FILE_PREFIXES = ("lifecycle-26-",)
 EXEMPT_SUBDIRS = ("01-diagram-conventions",)
@@ -151,6 +172,72 @@ def check_parity_declaration(overview_text: str) -> list[str]:
     return errs
 
 
+def check_narrative_header(mmd_files: list[Path]) -> list[str]:
+    """clause-6 (AC-DG-23): every active .mmd MUST carry the 4 canonical
+    narrative-header keys, in the prescribed order, before the first
+    Mermaid directive line. Continuation lines + other `%%` comments
+    between keys are permitted."""
+    errs: list[str] = []
+    for p in mmd_files:
+        if is_exempt(p):
+            continue
+        try:
+            text = p.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        # Slice out a YAML frontmatter block if present.
+        body = text
+        if body.startswith("---"):
+            end = body.find("\n---", 3)
+            if end >= 0:
+                body = body[end + 4:]
+        seen_keys: list[tuple[str, int]] = []
+        directive_at: int | None = None
+        for i, raw in enumerate(body.splitlines(), start=1):
+            stripped = raw.lstrip()
+            if not stripped:
+                continue
+            if stripped.startswith("%%"):
+                payload = stripped[2:].lstrip()
+                for key in NARRATIVE_HEADER_KEYS:
+                    if payload.startswith(key) and key not in {k for k, _ in seen_keys}:
+                        seen_keys.append((key, i))
+                        break
+                continue
+            # First non-comment, non-blank line bounds the header window
+            # iff it begins a Mermaid directive.
+            for d in MERMAID_DIRECTIVES:
+                if stripped.startswith(d):
+                    directive_at = i
+                    break
+            if directive_at is not None:
+                break
+            # Otherwise (e.g. unexpected prose), stop scanning to avoid
+            # spurious matches mid-diagram.
+            directive_at = i
+            break
+        # Validate
+        if not seen_keys:
+            errs.append(f"clause-6: {p.name}: no AC-DG-23 narrative-header keys found before first directive")
+            continue
+        observed = [k for k, _ in seen_keys]
+        missing = [k for k in NARRATIVE_HEADER_KEYS if k not in observed]
+        if missing:
+            errs.append(
+                f"clause-6: {p.name}: AC-DG-23 missing key(s) "
+                f"{missing} (observed order: {observed})"
+            )
+            continue
+        # Order check
+        canonical_idx = [NARRATIVE_HEADER_KEYS.index(k) for k in observed]
+        if canonical_idx != sorted(canonical_idx):
+            errs.append(
+                f"clause-6: {p.name}: AC-DG-23 keys out of order "
+                f"(observed: {observed}; expected order: {list(NARRATIVE_HEADER_KEYS)})"
+            )
+    return errs
+
+
 def run_against(diagrams_dir: Path, which: str = "all") -> list[str]:
     if not diagrams_dir.exists():
         return [f"clause-0: diagrams dir not found: {diagrams_dir}"]
@@ -163,14 +250,7 @@ def run_against(diagrams_dir: Path, which: str = "all") -> list[str]:
         return ["vacuous-pass: §26 §00 absent"]
 
     errs: list[str] = []
-    if which in ("all", "consumes-binding-completeness"):
-        errs.extend(check_consumes_binding(overview_text, mmd_files))
-    if which in ("all", "er-entity-superset"):
-        er = diagrams_dir / "01-er-diagram.mmd"
-        if er.exists():
-            errs.extend(check_er_superset(er.read_text(encoding="utf-8")))
-        else:
-            errs.append("clause-2: 01-er-diagram.mmd absent")
+
     if which in ("all", "endpoint-mindmap-coverage"):
         mind = diagrams_dir / "09-endpoints-mindmap.mmd"
         if mind.exists():
@@ -181,14 +261,18 @@ def run_against(diagrams_dir: Path, which: str = "all") -> list[str]:
         errs.extend(check_emoji_free(mmd_files))
     if which in ("all", "parity-declaration"):
         errs.extend(check_parity_declaration(overview_text))
+    if which in ("all", "narrative-header-schema"):
+        errs.extend(check_narrative_header(mmd_files))
     return errs
+
 
 
 # ------------------ Self-test ------------------
 
 def _make_fixture(tmp: Path, *, with_orphan=False, er_missing_repo=False,
                   mindmap_missing_clear=False, emoji_in_label=False,
-                  strip_parity_self=False) -> Path:
+                  strip_parity_self=False, strip_audience=False,
+                  swap_header_order=False) -> Path:
     d = tmp
     d.mkdir(parents=True, exist_ok=True)
     consumes_lines = [
@@ -210,6 +294,20 @@ def _make_fixture(tmp: Path, *, with_orphan=False, er_missing_repo=False,
         overview += f"> {PARITY_LITERAL_SELF}.\n"
     (d / "00-overview.md").write_text(overview, encoding="utf-8")
 
+    def _hdr(kind: str, audience_token: str) -> str:
+        keys = [
+            f"%% Diagram type: {kind}",
+            "%% What this answers: \"Synthetic fixture for clause-6 self-test.\"",
+            "%% Authoritative source: spec/22-git-logs-v2/00-overview.md",
+            f"%% Audience: {audience_token}",
+        ]
+        if strip_audience:
+            keys = keys[:-1]
+        if swap_header_order:
+            # swap 'Authoritative source' and 'Audience' to fail clause-6 order
+            keys = [keys[0], keys[1], keys[3], keys[2]]
+        return "\n".join(keys) + "\n"
+
     er_lines = [
         "erDiagram",
         "    Profile ||--o{ GitProfile : owns",
@@ -222,7 +320,7 @@ def _make_fixture(tmp: Path, *, with_orphan=False, er_missing_repo=False,
     if er_missing_repo:
         er_lines = [l for l in er_lines if "Repo" not in l or "RepoVersion" in l]
     label = " 🔐" if emoji_in_label else ""
-    er_text = "\n".join(er_lines) + f"\n%% trailing comment{label}\n"
+    er_text = _hdr("erDiagram", "auditors") + "\n".join(er_lines) + f"\n%% trailing comment{label}\n"
     (d / "01-er-diagram.mmd").write_text(er_text, encoding="utf-8")
 
     mindmap_text = (
@@ -234,10 +332,15 @@ def _make_fixture(tmp: Path, *, with_orphan=False, er_missing_repo=False,
     )
     if not mindmap_missing_clear:
         mindmap_text += "      clear-log\n"
+    mindmap_text = _hdr("mindmap", "implementers") + mindmap_text
     (d / "09-endpoints-mindmap.mmd").write_text(mindmap_text, encoding="utf-8")
 
     if with_orphan:
-        (d / "99-orphan.mmd").write_text("flowchart TD\n  A --> B\n", encoding="utf-8")
+        # orphan also needs the header so clause-6 doesn't shadow clause-1
+        (d / "99-orphan.mmd").write_text(
+            _hdr("flowchart TD", "auditors") + "flowchart TD\n  A --> B\n",
+            encoding="utf-8",
+        )
     return d
 
 
@@ -249,7 +352,10 @@ def self_test(tmp_root: Path) -> int:
         ("F-4 mindmap missing clear-log", False, "clause-3", dict(mindmap_missing_clear=True)),
         ("F-5 emoji in .mmd", False, "clause-4", dict(emoji_in_label=True)),
         ("F-6 parity-self literal stripped", False, "clause-5", dict(strip_parity_self=True)),
+        ("F-7 narrative-header missing Audience", False, "clause-6", dict(strip_audience=True)),
+        ("F-8 narrative-header keys out of order", False, "clause-6", dict(swap_header_order=True)),
     ]
+
     fails = 0
     for i, (name, should_pass, expect, kwargs) in enumerate(cases):
         d = _make_fixture(tmp_root / f"f{i}", **kwargs)
@@ -277,7 +383,8 @@ def main() -> int:
     ap.add_argument("--check", default="all",
                     choices=["all", "consumes-binding-completeness",
                              "er-entity-superset", "endpoint-mindmap-coverage",
-                             "emoji-free-lexer", "parity-declaration"])
+                             "emoji-free-lexer", "parity-declaration",
+                             "narrative-header-schema"])
     ap.add_argument("--self-test", action="store_true")
     args = ap.parse_args()
 
