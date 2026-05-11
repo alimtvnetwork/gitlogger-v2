@@ -8,8 +8,8 @@ axis_rationale: "Decomposes a single-folder Raw-LLM gap into per-criterion lift 
 
 # §27 Raw-LLM Bottleneck Decomposition
 
-**Version:** 1.2.0
-**Updated:** 2026-05-11 (Sess-69 B-21 same-PR refresh — C6 row updated 11 → 14; B-21 lift candidate moves to "closed"; Σ R-band 98 → 101; aggregate projection updated (B-19/B-19b/B-21 realised; B-16 + B-20 + B-22 remain open). Refresh executed under this file's clause-1 reviewer-attestation rule (drift between this file and the cohort scorecard is allowed for ≤ 1 session — refresh same-PR keeps incurred drift at 0). Prior version v1.1.0 (Sess-69 B-19b) closed B-19/B-19b on the C3 row.)
+**Version:** 1.3.0
+**Updated:** 2026-05-11 (Sess-69 B-20 same-PR refresh — C4 row updated 11 → 13 (partial lift; cited mechanism: slot 66 spec doc body + F-7 reflexive fixture); B-20 lift candidate moves to "spec-only authored / promotion pending" (NOT "closed" — full +5 lift gated on implement turn per `mem://constraints/no-implementation-suggestions`); Σ R-band 101 → 103; aggregate projection updated. Refresh executed under this file's clause-1 reviewer-attestation rule (≤ 1 session drift allowed; same-PR keeps incurred drift at 0). Prior version v1.2.0 (Sess-69 B-21) closed B-21 on the C6 row.)
 **Authoritative:** No — this is a hand-scored navigation/audit aid. The authoritative scorecard ritual lives in `mem://preferences/scorecard-ritual` and is rendered per session. Per-criterion scores below are this turn's hand-attestation, subject to revision as new mechanisms ship.
 
 > 🤖 **Why this file exists.** After Sess-68 B-8 closed the §27 navigation-quintet, §27 reached **C1=20, C2=20, C5=20** for the Raw-LLM persona but the cohort total remained at **R 94/120**, leaving **34 points across C3 (Testability) + C4 (Consistency) + C6 (Friction)**. A single-line "lift §27" task is no longer tractable — the remaining gap requires per-criterion decomposition with named lift candidates, each citing the self-enforcing mechanism that would close the band-anchor gap. This file is that decomposition.
