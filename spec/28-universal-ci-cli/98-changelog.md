@@ -1,9 +1,19 @@
 # Changelog
 
-**Updated:** 2026-05-11 (Sess-77 B-27-§28 — mirror-quintet step 5/7 walker-cost reflexivity lever applied to `00-tier1-bundle.md` (v1.0.0 → v1.1.0); see [2.17.0] entry below. Prior: Sess-69 B-14 — §06 retry-policy table.)
+**Updated:** 2026-05-11 (Sess-78 B-2-§28 — closes mirror-quintet for citation-matrix pattern: §97 v2.10.0 adds gate-citation matrix binding all 49 ACs to ≥1 §27 gate slot. See [2.18.0] entry below. Prior: Sess-77 B-27-§28 — walker-cost reflexivity lever.)
 
 
 All notable changes to `spec/28-universal-ci-cli/`.
+
+## [2.18.0] — 2026-05-11 — Sess-78 B-2-§28: gate-citation matrix (mirror-quintet step 5/5 closes B-2 sweep)
+
+- **Action**: Edited `97-acceptance-criteria.md` (v2.9.0 → **v2.10.0**) — inserted new `## Mechanically enforced by — gate-citation matrix (closed-set; Sess-78 B-2-§28)` section between the prelude `---` and `## v1.0 Core Acceptance Criteria` heading. The matrix maps all 49 ACs (AC-28-01..AC-28-49) to ≥1 `spec/27-spec-toolchain/NN-*.md` gate slot via 13 family rows (A. Detection / B. Config / C. Log shipping / D. Auth lanes / E. Retry envelope / F. Recovery / G. CI providers / H. Doctor + air-gap / I. Per-runtime tools / J. Concurrency / K. Audit-followability / L. Self-test harness / M. Test invariants).
+- **Top gate reuses**: `45-check-idempotency-observability.md` ×7 (log shipping/recovery/concurrency/T-NN anchor); `31-audit-spec-vs-code-v2.md` ×9 (DDL/parity/config/provider anchor); `42-check-error-envelope-uniformity.md` ×5 (auth/retry/doctor/errors anchor); `34-audit-ai-implementability.md` ×3; `62-check-ci-cli-self-test-harness.md` ×1 (gate #40, load-proven via Phase-5 T-38).
+- **Reflexive drift contract (4 clauses, append-only-within-phase)**: (1) New-AC clause — adding any new `AC-28-NN` MUST add/extend a matrix row in same PR; (2) Slot-renumber clause — §27 slot renumbering propagates same-PR per carriers-namespace migration; (3) Append-only — (AC family, surface) pair immutable within a phase; (4) Sister-cohort — §22/§23/§24/§26 §97 matrix additions mirror within one phase.
+- **Mirror-quintet COMPLETE**: §22 §97 (84 ACs) + §23 §97 + §24 §97 (17 ACs) + §26 §97 (29 ACs) + §28 §97 (49 ACs) = 5 of 5 non-§27 in-scope cohorts now carry the closed-set citation-matrix section. §27 self-references via `00-mechanism-citation-index.md` (gate cohort is its own auditor).
+- **Why now**: B-2 sweep started Sess-72 (§24), continued §22/§23/§26; §28 closes the sweep across all in-scope cohorts and anchors the mirror-quintet for cross-folder consistency defensibility.
+- **Banners**: §00 v2.17.0 → **v2.18.0**; §97 v2.9.0 → **v2.10.0**; §98 [2.17.0] → **[2.18.0]** (this entry); §99 v2.5.7 → **v2.5.8** (lockstep audit-row tail). AC count 49/49 unchanged. No new gate.
+- **Scorecard impact (Sess-78 B-2-§28)**: §28 R-band C4 (Consistency) defensibility hardened — gate-citation matrix is the third-leg cited self-enforcing mechanism for C4's existing 20-band score (alongside mirror-quintet walker-cost anchor + cross-cohort read-order DAG). C1/C2/C3/C4/C5/C6 carried at 20/18/19/20/20/20. §28 Raw-LLM /120 **carried at 119**. Aggregate Raw-LLM Σ **carried at 818/840** (97.4/100). Lovable + Cursor unchanged at 120 ceiling. **B-2 sweep COMPLETE across all in-scope cohorts.**
 
 ## [2.17.0] — 2026-05-11 — Sess-77 B-27-§28: walker-cost reflexivity mirror (mirror-quintet step 5/7)
 
