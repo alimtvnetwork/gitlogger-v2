@@ -1,10 +1,156 @@
-/* Phase 1 minimal styles. Real design system arrives with spec/24 in P7. */
-.gl-admin { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; max-width: 720px; }
-.gl-admin h1 { margin-top: 0.5rem; }
-.gl-tag { color: #646970; font-size: 0.9rem; }
-.gl-card { background: #fff; border: 1px solid #c3c4c7; border-radius: 4px; padding: 1rem 1.25rem; margin-top: 1rem; }
-.gl-card h2 { margin-top: 0; font-size: 1.05rem; }
-.gl-dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; margin: 0; }
-.gl-dl dt { font-weight: 600; color: #1d2327; }
-.gl-dl dd { margin: 0; color: #50575e; }
-.gl-err { color: #b32d2e; }
+/* Git Logs admin UI — design tokens scoped under .gl-admin so they
+   never leak into the WP admin chrome. Tokens follow spec/24 conventions. */
+
+.gl-admin {
+  --gl-bg: oklch(0.985 0.005 240);
+  --gl-surface: oklch(1 0 0);
+  --gl-surface-2: oklch(0.97 0.005 240);
+  --gl-border: oklch(0.9 0.01 240);
+  --gl-text: oklch(0.22 0.02 250);
+  --gl-text-muted: oklch(0.5 0.02 250);
+  --gl-primary: oklch(0.55 0.18 255);
+  --gl-primary-fg: oklch(0.99 0 0);
+  --gl-ok: oklch(0.65 0.16 150);
+  --gl-warn: oklch(0.78 0.16 80);
+  --gl-err: oklch(0.6 0.22 25);
+  --gl-info: oklch(0.65 0.14 235);
+
+  --gl-radius: 10px;
+  --gl-radius-sm: 6px;
+  --gl-shadow: 0 1px 2px oklch(0 0 0 / 0.06), 0 6px 18px oklch(0 0 0 / 0.04);
+  --gl-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  background: var(--gl-bg);
+  color: var(--gl-text);
+  font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  padding: 24px clamp(16px, 4vw, 40px) 64px;
+  max-width: 1200px;
+}
+
+.gl-admin h1 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+.gl-admin h2 { font-size: 16px; margin: 0; letter-spacing: -0.01em; }
+.gl-admin code { font-family: var(--gl-mono); font-size: 0.92em; }
+
+.gl-header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.gl-header-brand { display: flex; align-items: baseline; gap: 10px; }
+.gl-tag {
+  font-size: 11px; padding: 2px 8px; border-radius: 999px;
+  background: var(--gl-surface-2); color: var(--gl-text-muted);
+  border: 1px solid var(--gl-border);
+}
+.gl-nav { display: flex; gap: 4px; }
+.gl-nav a {
+  padding: 6px 12px; border-radius: var(--gl-radius-sm);
+  color: var(--gl-text-muted); text-decoration: none; font-weight: 500;
+}
+.gl-nav a:hover { color: var(--gl-text); background: var(--gl-surface-2); }
+.gl-nav a.is-active { color: var(--gl-primary-fg); background: var(--gl-primary); }
+
+.gl-stack { display: flex; flex-direction: column; gap: 16px; }
+
+.gl-card {
+  background: var(--gl-surface);
+  border: 1px solid var(--gl-border);
+  border-radius: var(--gl-radius);
+  box-shadow: var(--gl-shadow);
+  padding: 18px 20px;
+}
+.gl-card-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; margin-bottom: 14px; flex-wrap: wrap;
+}
+.gl-err-card { border-color: oklch(from var(--gl-err) l c h / 0.4); }
+
+.gl-muted { color: var(--gl-text-muted); font-size: 12px; }
+.gl-mono  { font-family: var(--gl-mono); font-size: 0.92em; }
+.gl-link  {
+  color: var(--gl-primary); text-decoration: none; background: none;
+  border: 0; padding: 0; cursor: pointer; font: inherit;
+}
+.gl-link:hover { text-decoration: underline; }
+.gl-list-btn { text-align: left; width: 100%; padding: 6px 8px; border-radius: var(--gl-radius-sm); }
+.gl-list-btn.is-active { background: var(--gl-surface-2); color: var(--gl-text); }
+
+.gl-table { width: 100%; border-collapse: collapse; }
+.gl-table th, .gl-table td {
+  padding: 8px 10px; border-bottom: 1px solid var(--gl-border);
+  text-align: left; vertical-align: middle;
+}
+.gl-table th { font-weight: 600; color: var(--gl-text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+.gl-table tr:last-child td { border-bottom: 0; }
+
+.gl-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.gl-list-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 8px; border-bottom: 1px solid var(--gl-border); gap: 12px;
+}
+.gl-list-row:last-child { border-bottom: 0; }
+
+.gl-dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; margin: 0; }
+.gl-dl dt { color: var(--gl-text-muted); font-size: 12px; }
+.gl-dl dd { margin: 0; }
+
+.gl-empty { color: var(--gl-text-muted); margin: 8px 0; }
+
+.gl-banner {
+  padding: 10px 14px; border-radius: var(--gl-radius); border: 1px solid;
+  display: flex; gap: 8px; align-items: baseline;
+}
+.gl-banner-err {
+  background: oklch(from var(--gl-err) l c h / 0.06);
+  border-color: oklch(from var(--gl-err) l c h / 0.3);
+  color: oklch(from var(--gl-err) 0.35 c h);
+}
+
+.gl-badge {
+  display: inline-block; padding: 2px 8px; border-radius: 999px;
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.gl-badge-ok    { background: oklch(from var(--gl-ok)   l c h / 0.15); color: oklch(from var(--gl-ok)   0.35 c h); }
+.gl-badge-err   { background: oklch(from var(--gl-err)  l c h / 0.15); color: oklch(from var(--gl-err)  0.35 c h); }
+.gl-badge-info  { background: oklch(from var(--gl-info) l c h / 0.15); color: oklch(from var(--gl-info) 0.35 c h); }
+.gl-badge-muted { background: var(--gl-surface-2); color: var(--gl-text-muted); }
+
+.gl-toolbar { display: flex; gap: 12px; align-items: center; }
+.gl-checkbox { display: inline-flex; gap: 6px; align-items: center; font-size: 12px; color: var(--gl-text-muted); }
+.gl-tabs { display: inline-flex; gap: 2px; background: var(--gl-surface-2); border-radius: var(--gl-radius-sm); padding: 2px; }
+.gl-tabs button {
+  border: 0; background: transparent; padding: 4px 10px; border-radius: 4px;
+  font-size: 12px; cursor: pointer; color: var(--gl-text-muted); text-transform: capitalize;
+}
+.gl-tabs button.is-active { background: var(--gl-surface); color: var(--gl-text); box-shadow: var(--gl-shadow); }
+
+.gl-events {
+  list-style: none; padding: 0; margin: 0;
+  font-family: var(--gl-mono); font-size: 12px; line-height: 1.55;
+  background: var(--gl-surface-2); border-radius: var(--gl-radius-sm);
+  max-height: 60vh; overflow: auto;
+}
+.gl-event { display: grid; grid-template-columns: 90px 56px 1fr auto; gap: 8px; padding: 4px 12px; border-bottom: 1px solid var(--gl-border); }
+.gl-event:last-child { border-bottom: 0; }
+.gl-event-ts    { color: var(--gl-text-muted); }
+.gl-event-level { text-transform: uppercase; font-size: 10px; letter-spacing: 0.06em; padding-top: 1px; }
+.gl-event-line  { white-space: pre-wrap; word-break: break-word; }
+.gl-event-path  { color: var(--gl-text-muted); }
+.gl-event-warn  .gl-event-level { color: oklch(from var(--gl-warn) 0.4 c h); }
+.gl-event-error .gl-event-level { color: oklch(from var(--gl-err)  0.4 c h); }
+.gl-event-error { background: oklch(from var(--gl-err) l c h / 0.04); }
+
+.gl-skeleton-stack { display: flex; flex-direction: column; gap: 8px; }
+.gl-skeleton-row { height: 28px; border-radius: var(--gl-radius-sm); background: linear-gradient(90deg, var(--gl-surface-2), var(--gl-bg), var(--gl-surface-2)); background-size: 200% 100%; animation: gl-shimmer 1.4s infinite linear; }
+@keyframes gl-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+.gl-diagram-grid { display: grid; grid-template-columns: 220px 1fr; gap: 16px; }
+.gl-diagram-stage { margin: 0; padding: 12px; background: var(--gl-surface-2); border-radius: var(--gl-radius-sm); display: flex; flex-direction: column; gap: 8px; min-height: 320px; }
+.gl-diagram-svg { width: 100%; min-height: 320px; }
+
+@media (max-width: 720px) {
+  .gl-diagram-grid { grid-template-columns: 1fr; }
+  .gl-event { grid-template-columns: 80px 56px 1fr; }
+  .gl-event-path { grid-column: 3; }
+}
+
+.gl-err { color: oklch(from var(--gl-err) 0.35 c h); }
