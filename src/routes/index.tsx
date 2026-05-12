@@ -30,6 +30,167 @@ function Index() {
       <Features />
       <HowItWorks />
       <Screenshots />
+      <Install />
+    </div>
+  );
+}
+
+function Install() {
+  const tabs = [
+    { id: "wp", label: "1. WordPress plugin" },
+    { id: "cli", label: "2. glci CLI" },
+    { id: "ci", label: "3. Wire up CI" },
+  ] as const;
+  type T = (typeof tabs)[number]["id"];
+  const [tab, setTab] = useState<T>("wp");
+
+  return (
+    <section id="install" className="border-t border-border bg-muted/30">
+      <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Install in 2 minutes</h2>
+          <p className="mt-4 text-pretty text-muted-foreground md:text-lg">
+            Three steps. Each one stands alone — finish it, verify, move on.
+          </p>
+        </div>
+
+        <div className="mx-auto mt-10 max-w-3xl">
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {tabs.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setTab(t.id)}
+                className={`inline-flex h-9 items-center justify-center rounded-full border px-4 text-sm transition-colors ${
+                  tab === t.id
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-card text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-8">
+            {tab === "wp" && <InstallWP />}
+            {tab === "cli" && <InstallCli />}
+            {tab === "ci" && <InstallCi />}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function InstallWP() {
+  return (
+    <div className="space-y-4">
+      <Step n={1} title="Download the plugin ZIP">
+        <CodeBlock>{`curl -LO https://github.com/git-logs/wp-plugin/releases/latest/download/git-logs.zip`}</CodeBlock>
+      </Step>
+      <Step n={2} title="Upload via WP-Admin">
+        Go to <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">Plugins › Add New › Upload</code>,
+        pick the ZIP, click Install Now, then Activate.
+      </Step>
+      <Step n={3} title="Generate an Ed25519 keypair">
+        Open <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">Settings › Git Logs › Keys</code>{" "}
+        and click <strong>Generate</strong>. Copy the private key — you'll paste it into your CI secrets next.
+      </Step>
+    </div>
+  );
+}
+
+function InstallCli() {
+  return (
+    <div className="space-y-4">
+      <Step n={1} title="Install glci">
+        <div className="space-y-2">
+          <div className="text-xs text-muted-foreground">macOS / Linux (Homebrew):</div>
+          <CodeBlock>{`brew install git-logs/tap/glci`}</CodeBlock>
+          <div className="pt-2 text-xs text-muted-foreground">Or with Go ≥ 1.22:</div>
+          <CodeBlock>{`go install github.com/git-logs/glci@latest`}</CodeBlock>
+          <div className="pt-2 text-xs text-muted-foreground">Or download a binary from GitHub Releases.</div>
+        </div>
+      </Step>
+      <Step n={2} title="Verify it runs">
+        <CodeBlock>{`glci version
+glci doctor`}</CodeBlock>
+      </Step>
+      <Step n={3} title="Smoke-test against your site">
+        <CodeBlock>{`glci ping --server-url=https://yoursite.com/wp-json/git-logs/v1
+# expects: { "ok": true, "version": "0.4.0" }`}</CodeBlock>
+      </Step>
+    </div>
+  );
+}
+
+function InstallCi() {
+  const yaml = `# .github/workflows/ci.yml
+name: ci
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm ci
+
+      # Install glci once per job
+      - uses: git-logs/setup-glci@v1
+        with: { version: latest }
+
+      # Stream lint + test + build to your WordPress dashboard
+      - run: glci run --stream \\
+          --server-url=https://yoursite.com/wp-json/git-logs/v1 \\
+          -- npm test
+        env:
+          GLCI_TOKEN: \${{ secrets.GLCI_TOKEN }}`;
+
+  return (
+    <div className="space-y-4">
+      <Step n={1} title="Add the private key to repo secrets">
+        <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">Settings › Secrets and variables › Actions</code>,
+        new secret <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">GLCI_TOKEN</code>.
+      </Step>
+      <Step n={2} title="Drop this workflow into your repo">
+        <CodeBlock filename=".github/workflows/ci.yml">{yaml}</CodeBlock>
+      </Step>
+      <Step n={3} title="Push a commit">
+        Watch it appear at <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">/wp-admin/admin.php?page=git-logs</code>{" "}
+        within ~3 seconds.
+      </Step>
+    </div>
+  );
+}
+
+function Step({ n, title, children }: { n: number; title: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-xl border border-border bg-card p-5">
+      <div className="mb-3 flex items-center gap-3">
+        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 font-mono text-xs text-primary">
+          {n}
+        </span>
+        <h3 className="text-sm font-semibold">{title}</h3>
+      </div>
+      <div className="pl-10 text-sm text-muted-foreground">{children}</div>
+    </div>
+  );
+}
+
+function CodeBlock({ children, filename }: { children: string; filename?: string }) {
+  return (
+    <div className="overflow-hidden rounded-lg border border-border bg-background">
+      {filename && (
+        <div className="border-b border-border bg-muted/40 px-3 py-1.5 font-mono text-[11px] text-muted-foreground">
+          {filename}
+        </div>
+      )}
+      <pre className="overflow-x-auto p-3 font-mono text-[12px] leading-relaxed text-foreground">
+        <code>{children}</code>
+      </pre>
     </div>
   );
 }
