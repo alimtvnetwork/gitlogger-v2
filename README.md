@@ -7,7 +7,7 @@
 [![Release — WP plugin](https://github.com/git-logs/git-logs/actions/workflows/release-wp-plugin.yml/badge.svg)](https://github.com/git-logs/git-logs/actions/workflows/release-wp-plugin.yml)
 [![Plugin GPL-2.0](https://img.shields.io/badge/plugin-GPL--2.0-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 [![CLI MIT](https://img.shields.io/badge/glci-MIT-blue.svg)](./glci/LICENSE)
-![Version](https://img.shields.io/badge/version-0.4.0-informational)
+![Version](https://img.shields.io/badge/version-0.5.0-informational)
 
 
 Self-hosted CI run capture, audit, and diff — built as two halves that talk

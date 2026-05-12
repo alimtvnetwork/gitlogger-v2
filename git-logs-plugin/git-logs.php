@@ -3,7 +3,7 @@
  * Plugin Name:       Git Logs
  * Plugin URI:        https://github.com/git-logs/wp-plugin
  * Description:       Git Logs v2 — CI run ingestion, audit, and diagram surfaces (spec/22..26).
- * Version:           0.4.0
+ * Version:           0.5.0
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Author:            Git Logs Contributors
@@ -19,7 +19,7 @@ namespace GitLogs;
 
 defined( 'ABSPATH' ) || exit;
 
-const GIT_LOGS_VERSION    = '0.4.0';
+const GIT_LOGS_VERSION    = '0.5.0';
 const GIT_LOGS_REST_NS    = 'git-logs/v1';
 const GIT_LOGS_PLUGIN_DIR = __DIR__;
 
