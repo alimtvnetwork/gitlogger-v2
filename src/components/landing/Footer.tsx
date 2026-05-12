@@ -1,4 +1,5 @@
 import { Github, BookOpen, Bug, Scale } from "lucide-react";
+import { LINKS } from "@/config/site";
 
 export function Footer() {
   return (
@@ -20,7 +21,7 @@ export function Footer() {
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
               <li>
                 <a
-                  href="https://github.com/your-org/git-logs"
+                  href={LINKS.github}
                   className="inline-flex items-center gap-1.5 hover:text-foreground"
                 >
                   <Github className="h-4 w-4" /> GitHub
@@ -28,7 +29,7 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="https://github.com/your-org/git-logs/issues"
+                  href={LINKS.issues}
                   className="inline-flex items-center gap-1.5 hover:text-foreground"
                 >
                   <Bug className="h-4 w-4" /> Issues
@@ -36,7 +37,7 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="https://github.com/your-org/git-logs/releases"
+                  href={LINKS.releases}
                   className="inline-flex items-center gap-1.5 hover:text-foreground"
                 >
                   <BookOpen className="h-4 w-4" /> Releases
