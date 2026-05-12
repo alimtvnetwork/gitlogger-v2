@@ -7,6 +7,9 @@ import { HowItWorks } from "@/components/landing/HowItWorks";
 import { Screenshots } from "@/components/landing/Screenshots";
 import { QuickStart } from "@/components/landing/QuickStart";
 import { Requirements } from "@/components/landing/Requirements";
+import { Footer } from "@/components/landing/Footer";
+
+const SITE_URL = "https://15bba2cc-3c74-4134-aa1e-6340608435e8.lovable.app";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -24,6 +27,34 @@ export const Route = createFileRoute("/")({
         content:
           "One dashboard for every repo's builds, tests, and deploys — hosted on your own WordPress.",
       },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: SITE_URL },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Git Logs — Self-hosted CI/CD dashboard for WordPress" },
+      {
+        name: "twitter:description",
+        content:
+          "One dashboard for every repo's builds, tests, and deploys — hosted on your own WordPress.",
+      },
+    ],
+    links: [{ rel: "canonical", href: SITE_URL }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          name: "Git Logs",
+          description:
+            "Self-hosted CI/CD dashboard for WordPress. Multi-repo runs, live log streaming, Ed25519-signed ingestion.",
+          applicationCategory: "DeveloperApplication",
+          operatingSystem: "WordPress 6.5+, PHP 8.1+",
+          softwareVersion: "0.4.0",
+          url: SITE_URL,
+          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          license: "https://www.gnu.org/licenses/gpl-2.0.html",
+        }),
+      },
     ],
   }),
 });
@@ -37,6 +68,7 @@ function Index() {
       <Screenshots />
       <QuickStart />
       <Requirements />
+      <Footer />
     </main>
   );
 }

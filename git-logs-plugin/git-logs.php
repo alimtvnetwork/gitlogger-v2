@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Git Logs
- * Plugin URI:        https://example.com/git-logs
+ * Plugin URI:        https://15bba2cc-3c74-4134-aa1e-6340608435e8.lovable.app
  * Description:       Git Logs v2 — CI run ingestion, audit, and diagram surfaces (spec/22..26).
  * Version:           0.4.0
  * Requires at least: 6.5
