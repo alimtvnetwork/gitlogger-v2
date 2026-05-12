@@ -27,7 +27,103 @@ function Index() {
       <Header />
       <Hero />
       <Features />
+      <HowItWorks />
     </div>
+  );
+}
+
+function HowItWorks() {
+  const steps = [
+    {
+      n: "01",
+      title: "Push a commit",
+      body:
+        "Your normal git push triggers GitHub Actions (or any CI runner). Nothing about your existing workflow changes.",
+    },
+    {
+      n: "02",
+      title: "glci streams the run",
+      body:
+        "The glci CLI runs your build, captures every stdout/stderr line, signs the batch with Ed25519, and POSTs incrementally to your WP site.",
+    },
+    {
+      n: "03",
+      title: "Your team watches in WP-Admin",
+      body:
+        "Open /wp-admin/admin.php?page=git-logs. The run appears within ~3 seconds, logs stream live, and the result is permanent in the audit log.",
+    },
+  ];
+
+  const yaml = `# .github/workflows/ci.yml
+name: ci
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm ci
+
+      # The one line that wires CI \u2192 your WordPress dashboard
+      - run: glci run --stream \\
+          --server-url=https://yoursite.com/wp-json/git-logs/v1
+        env:
+          GLCI_TOKEN: \${{ secrets.GLCI_TOKEN }}`;
+
+  return (
+    <section id="how" className="border-t border-border bg-muted/30">
+      <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">How it works</h2>
+          <p className="mt-4 text-pretty text-muted-foreground md:text-lg">
+            Three moving pieces. One line of CI config. No new dashboards to learn.
+          </p>
+        </div>
+
+        <ol className="mt-14 grid gap-6 md:grid-cols-3">
+          {steps.map((s, i) => (
+            <li
+              key={s.n}
+              className="relative rounded-xl border border-border bg-card p-6"
+            >
+              <div className="mb-4 flex items-center gap-3">
+                <span className="font-mono text-xs text-muted-foreground">{s.n}</span>
+                <span className="h-px flex-1 bg-border" />
+                {i < steps.length - 1 && (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden className="text-muted-foreground">
+                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </div>
+              <h3 className="text-base font-semibold">{s.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
+            </li>
+          ))}
+        </ol>
+
+        <div className="mx-auto mt-12 max-w-3xl">
+          <div className="mb-3 flex items-center justify-between">
+            <h3 className="text-sm font-semibold">Concrete example — drop this into your repo</h3>
+            <span className="font-mono text-xs text-muted-foreground">.github/workflows/ci.yml</span>
+          </div>
+          <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+            <div className="flex items-center gap-2 border-b border-border bg-muted/50 px-4 py-2">
+              <span className="h-2.5 w-2.5 rounded-full bg-destructive/70" />
+              <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+            </div>
+            <pre className="overflow-x-auto p-5 font-mono text-[12px] leading-relaxed text-foreground">
+              <code>{yaml}</code>
+            </pre>
+          </div>
+          <p className="mt-3 text-center text-xs text-muted-foreground">
+            That single <code className="rounded bg-muted px-1 py-0.5 font-mono">glci run --stream</code> line is the entire integration.
+          </p>
+        </div>
+      </div>
+    </section>
   );
 }
 
