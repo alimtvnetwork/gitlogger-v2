@@ -8,8 +8,7 @@ import { Screenshots } from "@/components/landing/Screenshots";
 import { QuickStart } from "@/components/landing/QuickStart";
 import { Requirements } from "@/components/landing/Requirements";
 import { Footer } from "@/components/landing/Footer";
-
-const SITE_URL = "https://15bba2cc-3c74-4134-aa1e-6340608435e8.lovable.app";
+import { SITE_URL, LINKS } from "@/config/site";
 
 export const Route = createFileRoute("/")({
   component: Index,

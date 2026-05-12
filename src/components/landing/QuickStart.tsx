@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Check, Copy } from "lucide-react";
+import { LINKS } from "@/config/site";
 
 type Tab = { id: string; label: string; code: string; intro: string };
 
@@ -10,7 +11,7 @@ const tabs: Tab[] = [
     label: "WordPress plugin",
     intro: "Upload the ZIP from your WP admin → Plugins → Add New → Upload Plugin.",
     code: `# 1. Download the latest release
-curl -LO https://github.com/your-org/git-logs/releases/latest/download/git-logs.zip
+curl -LO ${LINKS.pluginZip}
 
 # 2. In WP Admin → Plugins → Add New → Upload Plugin
 # 3. Activate "Git Logs"
@@ -21,13 +22,13 @@ curl -LO https://github.com/your-org/git-logs/releases/latest/download/git-logs.
     label: "glci CLI",
     intro: "Install the Go CLI on your dev machine or CI runner.",
     code: `# Homebrew (macOS / Linux)
-brew install your-org/tap/glci
+brew install ${LINKS.glciTap}
 
 # Or with Go
-go install github.com/your-org/glci@latest
+go install ${LINKS.glciGo}
 
 # Or download a prebuilt binary
-curl -L https://github.com/your-org/glci/releases/latest/download/glci_linux_amd64.tar.gz | tar xz`,
+curl -L ${LINKS.glciTarball} | tar xz`,
   },
   {
     id: "ci",
@@ -41,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: your-org/setup-glci@v1
+      - uses: ${LINKS.setupGlciAction}
       - run: glci run -- npm test
         env:
           GLCI_ENDPOINT: \${{ secrets.GLCI_ENDPOINT }}
