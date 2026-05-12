@@ -44,7 +44,7 @@ wp plugin activate git-logs
 
 ```sh
 curl https://your-site.example.com/wp-json/git-logs/v1/health
-# → {"status":"ok","plugin_version":"0.5.0"}
+# → {"status":"ok","plugin_version":"0.4.0"}
 ```
 
 ### 2. Register a CI key (recommended)
