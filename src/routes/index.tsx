@@ -44,7 +44,7 @@ export const Route = createFileRoute("/")({
             "Self-hosted WordPress plugin that streams every CI build, test, and deploy into a private WP-Admin dashboard with a permanent audit log.",
           url: SITE_URL,
           downloadUrl: REPO_URL + "/releases/latest",
-          softwareVersion: "0.4.0",
+          softwareVersion: "0.5.0",
           license: "https://www.gnu.org/licenses/gpl-2.0.html",
           author: { "@type": "Organization", name: "Git Logs Contributors", url: REPO_URL },
         }),
@@ -132,7 +132,7 @@ function Footer() {
         </div>
         <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center">
           <span>© {new Date().getFullYear()} Git Logs Contributors. GPL-2.0.</span>
-          <span className="font-mono">v0.4.0</span>
+          <span className="font-mono">v0.5.0</span>
         </div>
       </div>
     </footer>
@@ -327,7 +327,7 @@ glci doctor`}</CodeBlock>
       </Step>
       <Step n={3} title="Smoke-test against your site">
         <CodeBlock>{`glci ping --server-url=https://yoursite.com/wp-json/git-logs/v1
-# expects: { "ok": true, "version": "0.4.0" }`}</CodeBlock>
+# expects: { "ok": true, "version": "0.5.0" }`}</CodeBlock>
       </Step>
     </div>
   );
@@ -899,7 +899,7 @@ function Hero() {
         <div className="mx-auto max-w-3xl text-center">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden />
-            v0.4 — WordPress 6.5+ · PHP 8.1+ · Self-hosted
+            v0.5 — WordPress 6.5+ · PHP 8.1+ · Self-hosted
           </div>
 
           <h1 className="text-balance text-4xl font-bold tracking-tight md:text-6xl">
