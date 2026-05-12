@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
+const SITE_URL = "https://gitlogs.dev";
+const REPO_URL = "https://github.com/git-logs/wp-plugin";
+const GLCI_URL = "https://github.com/git-logs/glci";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -17,6 +21,34 @@ export const Route = createFileRoute("/")({
           "Push a commit, watch it run live in WP Admin. Multi-repo dashboard with full audit log. Self-hosted, Ed25519-signed.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: SITE_URL },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Git Logs — CI/CD dashboard for WordPress" },
+      {
+        name: "twitter:description",
+        content: "Watch your CI runs live, inside WordPress. Self-hosted, Ed25519-signed.",
+      },
+    ],
+    links: [{ rel: "canonical", href: SITE_URL }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          name: "Git Logs",
+          applicationCategory: "DeveloperApplication",
+          operatingSystem: "WordPress 6.5+, PHP 8.1+",
+          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          description:
+            "Self-hosted WordPress plugin that streams every CI build, test, and deploy into a private WP-Admin dashboard with a permanent audit log.",
+          url: SITE_URL,
+          downloadUrl: REPO_URL + "/releases/latest",
+          softwareVersion: "0.4.0",
+          license: "https://www.gnu.org/licenses/gpl-2.0.html",
+          author: { "@type": "Organization", name: "Git Logs Contributors", url: REPO_URL },
+        }),
+      },
     ],
   }),
   component: Index,
@@ -32,7 +64,78 @@ function Index() {
       <Screenshots />
       <Install />
       <RequirementsFaq />
+      <Footer />
     </div>
+  );
+}
+
+function Footer() {
+  const cols = [
+    {
+      title: "Product",
+      links: [
+        { label: "Features", href: "#features" },
+        { label: "How it works", href: "#how" },
+        { label: "Install", href: "#install" },
+        { label: "FAQ", href: "#faq" },
+      ],
+    },
+    {
+      title: "Project",
+      links: [
+        { label: "WP plugin (GitHub)", href: REPO_URL, ext: true },
+        { label: "glci CLI (GitHub)", href: GLCI_URL, ext: true },
+        { label: "Releases", href: REPO_URL + "/releases", ext: true },
+        { label: "Issues", href: REPO_URL + "/issues", ext: true },
+      ],
+    },
+    {
+      title: "Legal",
+      links: [
+        { label: "GPL-2.0 (plugin)", href: "https://www.gnu.org/licenses/gpl-2.0.html", ext: true },
+        { label: "MIT (glci CLI)", href: GLCI_URL + "/blob/main/LICENSE", ext: true },
+        { label: "Changelog", href: REPO_URL + "/blob/main/CHANGELOG.md", ext: true },
+      ],
+    },
+  ];
+  return (
+    <footer className="border-t border-border bg-muted/30">
+      <div className="mx-auto max-w-6xl px-6 py-14">
+        <div className="grid gap-10 md:grid-cols-[2fr_1fr_1fr_1fr]">
+          <div>
+            <div className="flex items-center gap-2 font-semibold tracking-tight">
+              <span className="inline-block h-6 w-6 rounded-md bg-primary" aria-hidden />
+              Git Logs
+            </div>
+            <p className="mt-3 max-w-sm text-sm text-muted-foreground">
+              The CI/CD dashboard that lives inside the WordPress you already trust.
+            </p>
+          </div>
+          {cols.map((c) => (
+            <div key={c.title}>
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{c.title}</h4>
+              <ul className="mt-3 space-y-2 text-sm">
+                {c.links.map((l) => (
+                  <li key={l.label}>
+                    <a
+                      href={l.href}
+                      {...("ext" in l && l.ext ? { target: "_blank", rel: "noreferrer" } : {})}
+                      className="text-muted-foreground hover:text-foreground"
+                    >
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center">
+          <span>© {new Date().getFullYear()} Git Logs Contributors. GPL-2.0.</span>
+          <span className="font-mono">v0.4.0</span>
+        </div>
+      </div>
+    </footer>
   );
 }
 

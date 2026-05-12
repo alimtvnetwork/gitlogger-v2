@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Git Logs
- * Plugin URI:        https://example.com/git-logs
+ * Plugin URI:        https://github.com/git-logs/wp-plugin
  * Description:       Git Logs v2 — CI run ingestion, audit, and diagram surfaces (spec/22..26).
  * Version:           0.4.0
  * Requires at least: 6.5
