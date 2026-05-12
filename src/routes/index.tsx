@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Github, Download, GitBranch, Activity } from "lucide-react";
 import { Features } from "@/components/landing/Features";
 import { HowItWorks } from "@/components/landing/HowItWorks";
+import { Screenshots } from "@/components/landing/Screenshots";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -31,6 +32,7 @@ function Index() {
       <Hero />
       <Features />
       <HowItWorks />
+      <Screenshots />
     </main>
   );
 }
