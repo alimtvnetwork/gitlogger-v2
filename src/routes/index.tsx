@@ -105,13 +105,17 @@ function Hero() {
         </p>
 
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Button size="lg" className="gap-2">
-            <Download className="h-4 w-4" />
-            Download plugin
+          <Button size="lg" className="gap-2" asChild>
+            <a href={LINKS.pluginZip}>
+              <Download className="h-4 w-4" />
+              Download plugin
+            </a>
           </Button>
-          <Button size="lg" variant="outline" className="gap-2">
-            <Github className="h-4 w-4" />
-            View on GitHub
+          <Button size="lg" variant="outline" className="gap-2" asChild>
+            <a href={LINKS.github} target="_blank" rel="noreferrer">
+              <Github className="h-4 w-4" />
+              View on GitHub
+            </a>
           </Button>
         </div>
 
