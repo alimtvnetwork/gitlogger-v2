@@ -5,6 +5,7 @@ import { Github, Download, GitBranch, Activity } from "lucide-react";
 import { Features } from "@/components/landing/Features";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { Screenshots } from "@/components/landing/Screenshots";
+import { QuickStart } from "@/components/landing/QuickStart";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -33,6 +34,7 @@ function Index() {
       <Features />
       <HowItWorks />
       <Screenshots />
+      <QuickStart />
     </main>
   );
 }
