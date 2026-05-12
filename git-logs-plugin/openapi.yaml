@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Git Logs Plugin API
-  version: 0.4.0
+  version: 0.5.0
   description: |
     REST surface exposed by the WordPress Git Logs plugin (spec/22).
     All endpoints (except /health) require authentication via either:
