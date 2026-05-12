@@ -26,7 +26,90 @@ function Index() {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <Hero />
+      <Features />
     </div>
+  );
+}
+
+function Features() {
+  const items = [
+    {
+      title: "Live log streaming",
+      body:
+        "glci streams stdout/stderr line-by-line over HTTPS while the job runs. Your team watches builds finish in real time — no refresh, no polling.",
+      icon: (
+        <path d="M4 7h16M4 12h10M4 17h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      ),
+    },
+    {
+      title: "Multi-repo dashboard",
+      body:
+        "One WP-Admin page shows every repo, every branch, every run. Filter by status, drill into any commit SHA, compare runs side-by-side.",
+      icon: (
+        <path d="M4 6h7v6H4zM13 6h7v6h-7zM4 14h7v6H4zM13 14h7v6h-7z" stroke="currentColor" strokeWidth="2" />
+      ),
+    },
+    {
+      title: "Ed25519-signed ingest",
+      body:
+        "Every batch is signed with libsodium Ed25519. The plugin verifies signatures before writing to the DB — no shared secrets in CI variables.",
+      icon: (
+        <path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+      ),
+    },
+    {
+      title: "Permanent audit log",
+      body:
+        "Every run, every key rotation, every config change is recorded with actor + timestamp. When something breaks next week, the trail is already there.",
+      icon: (
+        <path d="M9 5h6l4 4v10a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2zM9 13h6M9 17h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      ),
+    },
+    {
+      title: "WordPress auth, reused",
+      body:
+        "Permissions piggyback on WP roles you already manage. No new user system, no second SSO to wire up. Editors read, admins manage keys.",
+      icon: (
+        <path d="M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      ),
+    },
+    {
+      title: "100% self-hosted",
+      body:
+        "Runs on the WordPress you already pay for. SQLite-backed, zero external services, your logs never leave your server. GPL-2.0, no SaaS lock-in.",
+      icon: (
+        <path d="M4 7l8-4 8 4-8 4-8-4zM4 12l8 4 8-4M4 17l8 4 8-4" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+      ),
+    },
+  ];
+
+  return (
+    <section id="features" className="border-t border-border">
+      <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+            Everything you need to trust your pipeline
+          </h2>
+          <p className="mt-4 text-pretty text-muted-foreground md:text-lg">
+            A focused dashboard for teams that want CI visibility without handing logs to a third party.
+          </p>
+        </div>
+
+        <div className="mt-14 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+          {items.map((it) => (
+            <div key={it.title} className="bg-card p-6 transition-colors hover:bg-accent/40">
+              <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  {it.icon}
+                </svg>
+              </div>
+              <h3 className="text-base font-semibold">{it.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{it.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
