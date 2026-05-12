@@ -28,7 +28,284 @@ function Index() {
       <Hero />
       <Features />
       <HowItWorks />
+      <Screenshots />
     </div>
+  );
+}
+
+function Screenshots() {
+  const tabs = [
+    { id: "dashboard", label: "Dashboard" },
+    { id: "run", label: "Run detail" },
+    { id: "repos", label: "Repos" },
+    { id: "diagrams", label: "Diagrams" },
+    { id: "audit", label: "Audit log" },
+  ] as const;
+  type TabId = (typeof tabs)[number]["id"];
+  const [active, setActive] = useState<TabId>("dashboard");
+
+  return (
+    <section id="screenshots" className="border-t border-border">
+      <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+            Built into the WordPress you already use
+          </h2>
+          <p className="mt-4 text-pretty text-muted-foreground md:text-lg">
+            Five focused views. No new tab to keep open, no new login to remember.
+          </p>
+        </div>
+
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => setActive(t.id)}
+              className={`inline-flex h-9 items-center justify-center rounded-full border px-4 text-sm transition-colors ${
+                active === t.id
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-card text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="mx-auto mt-10 max-w-5xl">
+          <div className="overflow-hidden rounded-xl border border-border bg-card shadow-2xl">
+            <div className="flex items-center gap-2 border-b border-border bg-muted/50 px-4 py-2.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-destructive/70" />
+              <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+              <span className="ml-3 truncate text-xs text-muted-foreground">
+                yoursite.com/wp-admin/admin.php?page=git-logs
+                {active !== "dashboard" && ` › ${tabs.find((t) => t.id === active)?.label.toLowerCase()}`}
+              </span>
+            </div>
+            <div className="min-h-[420px]">
+              {active === "dashboard" && <ShotDashboard />}
+              {active === "run" && <ShotRun />}
+              {active === "repos" && <ShotRepos />}
+              {active === "diagrams" && <ShotDiagrams />}
+              {active === "audit" && <ShotAudit />}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ShotDashboard() {
+  const rows = [
+    { repo: "acme/api", branch: "main", sha: "9f3a21e", status: "running", time: "12s ago" },
+    { repo: "acme/web", branch: "feat/checkout", sha: "1b8c402", status: "passed", time: "3m" },
+    { repo: "acme/infra", branch: "main", sha: "7d11ff9", status: "failed", time: "11m" },
+    { repo: "acme/api", branch: "main", sha: "84a90bd", status: "passed", time: "22m" },
+    { repo: "acme/docs", branch: "main", sha: "30ea7c2", status: "passed", time: "1h" },
+  ] as const;
+  return (
+    <div className="p-5">
+      <div className="mb-4 flex items-center justify-between">
+        <h4 className="text-sm font-semibold">Recent runs</h4>
+        <div className="flex gap-2">
+          <FakeChip>All repos</FakeChip>
+          <FakeChip>Last 24h</FakeChip>
+        </div>
+      </div>
+      <div className="overflow-hidden rounded-lg border border-border">
+        <table className="w-full text-left text-xs">
+          <thead className="bg-muted/50 text-muted-foreground">
+            <tr>
+              <th className="px-3 py-2 font-medium">Repo</th>
+              <th className="px-3 py-2 font-medium">Branch</th>
+              <th className="px-3 py-2 font-medium">SHA</th>
+              <th className="px-3 py-2 font-medium">Status</th>
+              <th className="px-3 py-2 font-medium text-right">When</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r, i) => (
+              <tr key={i} className="border-t border-border">
+                <td className="px-3 py-2 font-mono">{r.repo}</td>
+                <td className="px-3 py-2 font-mono text-muted-foreground">{r.branch}</td>
+                <td className="px-3 py-2 font-mono text-muted-foreground">{r.sha}</td>
+                <td className="px-3 py-2"><StatusPill status={r.status} /></td>
+                <td className="px-3 py-2 text-right text-muted-foreground">{r.time}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function ShotRun() {
+  const lines = [
+    { lvl: "info", t: "› npm ci" },
+    { lvl: "info", t: "added 421 packages in 6.2s" },
+    { lvl: "info", t: "› npm run lint" },
+    { lvl: "info", t: "✓ no problems" },
+    { lvl: "info", t: "› npm test" },
+    { lvl: "warn", t: "WARN  deprecated lifecycle hook in user.test.ts" },
+    { lvl: "info", t: "PASS  src/auth.test.ts (12 tests)" },
+    { lvl: "info", t: "PASS  src/api.test.ts (25 tests)" },
+    { lvl: "info", t: "Tests:  37 passed, 37 total" },
+    { lvl: "info", t: "› glci ship" },
+    { lvl: "info", t: "✓ uploaded 1.2k log lines to git-logs" },
+  ];
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-[220px_1fr]">
+      <aside className="border-b border-border bg-muted/30 p-4 text-xs md:border-b-0 md:border-r">
+        <div className="mb-1 font-mono text-muted-foreground">acme/api</div>
+        <div className="mb-3 font-mono text-[11px] text-muted-foreground">main · 9f3a21e</div>
+        <StatusPill status="running" />
+        <dl className="mt-4 space-y-2 text-[11px]">
+          <div className="flex justify-between"><dt className="text-muted-foreground">Triggered</dt><dd>jane@acme</dd></div>
+          <div className="flex justify-between"><dt className="text-muted-foreground">Duration</dt><dd>00:42</dd></div>
+          <div className="flex justify-between"><dt className="text-muted-foreground">Lines</dt><dd>1,204</dd></div>
+          <div className="flex justify-between"><dt className="text-muted-foreground">Warnings</dt><dd>1</dd></div>
+        </dl>
+      </aside>
+      <div className="p-4 font-mono text-[11px] leading-relaxed">
+        {lines.map((l, i) => (
+          <div key={i} className="flex gap-3">
+            <span className="w-8 shrink-0 text-right text-muted-foreground/60">{i + 1}</span>
+            <span className={l.lvl === "warn" ? "text-amber-500" : "text-foreground"}>{l.t}</span>
+          </div>
+        ))}
+        <div className="mt-2 inline-flex items-center gap-2 text-[11px] text-emerald-600">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
+          streaming…
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ShotRepos() {
+  const repos = [
+    { name: "acme/api", runs: 412, last: "12s ago", health: "ok" },
+    { name: "acme/web", runs: 386, last: "3m ago", health: "ok" },
+    { name: "acme/infra", runs: 98, last: "11m ago", health: "fail" },
+    { name: "acme/docs", runs: 54, last: "1h ago", health: "ok" },
+  ] as const;
+  return (
+    <div className="p-5">
+      <div className="grid gap-4 sm:grid-cols-2">
+        {repos.map((r) => (
+          <div key={r.name} className="rounded-lg border border-border p-4">
+            <div className="flex items-center justify-between">
+              <div className="font-mono text-sm">{r.name}</div>
+              <span className={`h-2 w-2 rounded-full ${r.health === "ok" ? "bg-emerald-500" : "bg-destructive"}`} />
+            </div>
+            <div className="mt-3 flex justify-between text-xs text-muted-foreground">
+              <span>{r.runs} runs</span>
+              <span>last {r.last}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ShotDiagrams() {
+  return (
+    <div className="p-5">
+      <div className="mb-4 text-xs text-muted-foreground">
+        Auto-rendered Mermaid pipeline diagrams shipped with each repo
+      </div>
+      <div className="rounded-lg border border-border bg-muted/20 p-8">
+        <svg viewBox="0 0 600 220" className="mx-auto block w-full max-w-2xl">
+          {[
+            { x: 30, label: "push" },
+            { x: 165, label: "lint" },
+            { x: 300, label: "build" },
+            { x: 435, label: "test" },
+          ].map((n, i, arr) => (
+            <g key={n.label}>
+              <rect x={n.x} y={90} width={100} height={40} rx={8} className="fill-card stroke-border" strokeWidth={1.5} />
+              <text x={n.x + 50} y={115} textAnchor="middle" className="fill-foreground font-mono text-[12px]">{n.label}</text>
+              {i < arr.length - 1 && (
+                <path d={`M${n.x + 100} 110 L${arr[i + 1].x} 110`} className="stroke-muted-foreground" strokeWidth={1.5} markerEnd="url(#arr)" />
+              )}
+            </g>
+          ))}
+          <g>
+            <rect x={300} y={170} width={100} height={40} rx={8} className="fill-card stroke-border" strokeWidth={1.5} />
+            <text x={350} y={195} textAnchor="middle" className="fill-foreground font-mono text-[12px]">deploy</text>
+            <path d="M350 130 L350 170" className="stroke-muted-foreground" strokeWidth={1.5} markerEnd="url(#arr)" />
+          </g>
+          <defs>
+            <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" className="fill-muted-foreground" />
+            </marker>
+          </defs>
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+function ShotAudit() {
+  const events = [
+    { t: "2026-05-12 14:22:01", actor: "jane@acme", action: "run.created", target: "acme/api @ 9f3a21e" },
+    { t: "2026-05-12 14:18:44", actor: "system", action: "key.rotated", target: "ed25519 #4" },
+    { t: "2026-05-12 13:02:11", actor: "tom@acme", action: "run.failed", target: "acme/infra @ 7d11ff9" },
+    { t: "2026-05-12 11:41:09", actor: "jane@acme", action: "repo.added", target: "acme/docs" },
+    { t: "2026-05-11 22:10:55", actor: "ci-bot", action: "run.passed", target: "acme/web @ 1b8c402" },
+  ];
+  return (
+    <div className="p-5">
+      <div className="overflow-hidden rounded-lg border border-border">
+        <table className="w-full text-left font-mono text-[11px]">
+          <thead className="bg-muted/50 text-muted-foreground">
+            <tr>
+              <th className="px-3 py-2 font-medium">Timestamp</th>
+              <th className="px-3 py-2 font-medium">Actor</th>
+              <th className="px-3 py-2 font-medium">Action</th>
+              <th className="px-3 py-2 font-medium">Target</th>
+            </tr>
+          </thead>
+          <tbody>
+            {events.map((e, i) => (
+              <tr key={i} className="border-t border-border">
+                <td className="px-3 py-2 text-muted-foreground">{e.t}</td>
+                <td className="px-3 py-2">{e.actor}</td>
+                <td className="px-3 py-2 text-primary">{e.action}</td>
+                <td className="px-3 py-2 text-muted-foreground">{e.target}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function FakeChip({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="inline-flex h-7 items-center rounded-full border border-border bg-card px-3 text-[11px] text-muted-foreground">
+      {children}
+    </span>
+  );
+}
+
+function StatusPill({ status }: { status: "running" | "passed" | "failed" }) {
+  const map = {
+    running: { c: "bg-emerald-500/10 text-emerald-600", dot: "bg-emerald-500 animate-pulse", label: "running" },
+    passed: { c: "bg-emerald-500/10 text-emerald-600", dot: "bg-emerald-500", label: "passed" },
+    failed: { c: "bg-destructive/10 text-destructive", dot: "bg-destructive", label: "failed" },
+  } as const;
+  const s = map[status];
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-medium ${s.c}`}>
+      <span className={`h-1.5 w-1.5 rounded-full ${s.dot}`} />
+      {s.label}
+    </span>
   );
 }
 
