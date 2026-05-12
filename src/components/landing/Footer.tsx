@@ -1,4 +1,5 @@
-import { Github, BookOpen, Bug, Scale } from "lucide-react";
+import { Github, BookOpen, Bug, Scale, FileText } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { LINKS } from "@/config/site";
 
 export function Footer() {
