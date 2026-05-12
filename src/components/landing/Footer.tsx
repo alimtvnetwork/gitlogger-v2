@@ -1,4 +1,5 @@
-import { Github, BookOpen, Bug, Scale } from "lucide-react";
+import { Github, BookOpen, Bug, Scale, FileText } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { LINKS } from "@/config/site";
 
 export function Footer() {
@@ -50,17 +51,25 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-foreground">Learn</h3>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#how-it-works" className="hover:text-foreground">
+                <Link
+                  to="/docs"
+                  className="inline-flex items-center gap-1.5 hover:text-foreground"
+                >
+                  <FileText className="h-4 w-4" /> Documentation
+                </Link>
+              </li>
+              <li>
+                <a href="/#how-it-works" className="hover:text-foreground">
                   How it works
                 </a>
               </li>
               <li>
-                <a href="#install" className="hover:text-foreground">
+                <a href="/#install" className="hover:text-foreground">
                   Quick start
                 </a>
               </li>
               <li>
-                <a href="#requirements" className="hover:text-foreground">
+                <a href="/#requirements" className="hover:text-foreground">
                   Requirements
                 </a>
               </li>
