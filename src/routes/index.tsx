@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import heroDashboard from "@/assets/hero-dashboard.jpg";
 import { Button } from "@/components/ui/button";
 import { Github, Download, GitBranch, Activity } from "lucide-react";
+import { Features } from "@/components/landing/Features";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -27,6 +28,7 @@ function Index() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <Hero />
+      <Features />
     </main>
   );
 }
