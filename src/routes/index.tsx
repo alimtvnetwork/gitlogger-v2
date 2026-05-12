@@ -3,6 +3,7 @@ import heroDashboard from "@/assets/hero-dashboard.jpg";
 import { Button } from "@/components/ui/button";
 import { Github, Download, GitBranch, Activity } from "lucide-react";
 import { Features } from "@/components/landing/Features";
+import { HowItWorks } from "@/components/landing/HowItWorks";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -29,6 +30,7 @@ function Index() {
     <main className="min-h-screen bg-background text-foreground">
       <Hero />
       <Features />
+      <HowItWorks />
     </main>
   );
 }
