@@ -31,7 +31,113 @@ function Index() {
       <HowItWorks />
       <Screenshots />
       <Install />
+      <RequirementsFaq />
     </div>
+  );
+}
+
+function RequirementsFaq() {
+  const reqs = [
+    { k: "WordPress", v: "6.5 or newer" },
+    { k: "PHP", v: "8.1+ with pdo_sqlite + sodium" },
+    { k: "Disk", v: "~50 MB for the SQLite log DB (configurable)" },
+    { k: "CI runner", v: "GitHub Actions, GitLab CI, CircleCI, or any shell" },
+    { k: "Network", v: "CI must reach your WP site over HTTPS" },
+    { k: "License", v: "GPL-2.0 (plugin) · MIT (glci CLI)" },
+  ];
+
+  const faqs = [
+    {
+      q: "How does the live streaming actually work?",
+      a: "glci buffers stdout/stderr into small batches (default: 50 lines or 1 second, whichever first) and POSTs them to /wp-json/git-logs/v1/events. The plugin appends to SQLite and the admin UI long-polls every 2 seconds. End-to-end latency is typically 2–4 seconds — fast enough to watch, light enough to not flood your server.",
+    },
+    {
+      q: "What happens if my WordPress site is down when CI runs?",
+      a: "glci retries each batch with exponential backoff for up to 5 minutes, then writes the full run to a local .glci/queue/ file. Next time glci runs successfully, queued runs are flushed in order. Your CI job never fails because of a flaky dashboard.",
+    },
+    {
+      q: "Who can see the logs?",
+      a: "Permissions reuse WordPress roles. By default, anyone with edit_posts can read runs; only manage_options (admins) can rotate keys, add repos, or purge history. You can override the capability map in wp-config.php — see the docs.",
+    },
+    {
+      q: "Why Ed25519 instead of an API token?",
+      a: "Tokens leak. A leaked token lets an attacker forge runs forever until you rotate. With Ed25519 the CI side only ever holds a private signing key — the WP side stores the public key. Compromise of the WP database does not expose anything that can be used to inject false runs.",
+    },
+    {
+      q: "Does it work with private repos / monorepos?",
+      a: "Yes. glci doesn't read your repo — it only captures the output of commands you run. Public, private, monorepo, polyrepo all work the same.",
+    },
+    {
+      q: "How big can the log DB get?",
+      a: "Each run averages ~30 KB compressed. The plugin auto-prunes runs older than 90 days by default (configurable). 1,000 runs/month for a year = under 400 MB.",
+    },
+    {
+      q: "Is there a hosted version?",
+      a: "No, and there won't be. The whole point is that your build logs stay on infrastructure you control. If you want a SaaS dashboard, use GitHub Actions, CircleCI, or Datadog CI — they're great at it.",
+    },
+    {
+      q: "What about non-GitHub CI?",
+      a: "v0.4 ships a generic glci run that works in any shell — GitLab CI, CircleCI, Jenkins, Drone, even cron. The CI-provider-aware integrations (auto-detected branch / SHA / actor) are GitHub-first; GitLab + CircleCI helpers are on the roadmap for v0.5.",
+    },
+  ];
+
+  return (
+    <section id="faq" className="border-t border-border">
+      <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+        <div className="grid gap-12 lg:grid-cols-[320px_1fr]">
+          <div>
+            <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Requirements</h2>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Boring, well-supported defaults — almost any modern shared host qualifies.
+            </p>
+            <dl className="mt-6 overflow-hidden rounded-xl border border-border bg-card text-sm">
+              {reqs.map((r, i) => (
+                <div
+                  key={r.k}
+                  className={`grid grid-cols-[110px_1fr] gap-3 px-4 py-3 ${i > 0 ? "border-t border-border" : ""}`}
+                >
+                  <dt className="font-medium text-muted-foreground">{r.k}</dt>
+                  <dd className="text-foreground">{r.v}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <div>
+            <h2 className="text-3xl font-bold tracking-tight md:text-4xl">FAQ</h2>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Practical answers to the questions teams actually ask.
+            </p>
+            <div className="mt-6 divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
+              {faqs.map((f) => (
+                <FaqItem key={f.q} q={f.q} a={f.a} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FaqItem({ q, a }: { q: string; a: string }) {
+  return (
+    <details className="group">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-sm font-medium hover:bg-accent/30">
+        <span>{q}</span>
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden
+          className="shrink-0 text-muted-foreground transition-transform group-open:rotate-180"
+        >
+          <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </summary>
+      <div className="px-5 pb-5 text-sm leading-relaxed text-muted-foreground">{a}</div>
+    </details>
   );
 }
 
